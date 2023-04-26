@@ -1,9 +1,11 @@
 #pragma once
 
-#include <QRegularExpression>
 #include <QStringList>
 
+#include <filesystem>
+#include <regex>
 #include <string>
+#include <type_traits>
 
 inline QString operator%(const QString& lhs, const QString& rhs)
 {
@@ -26,5 +28,60 @@ inline QString operator/(const std::string& lhs, const QString& rhs) { return QS
 
 namespace HtmlString
 {
-	//
+	namespace StdFs = std::filesystem;
+
+	template<typename T>
+	inline T multiply(T character, int defaultArgument = 1)
+	{
+		if (defaultArgument < 1)
+			defaultArgument = 1;
+		if constexpr (std::is_same<T, QString>::value)
+			return QString(defaultArgument, character[0]);
+		return std::string(defaultArgument, character);
+	}
+
+	template<typename T>
+	inline T tableColumnSpacing(int columns = 9)
+	{
+		return multiply("<td>\n</td>", columns);
+	}
+
+	template <class T>
+	inline const T table(const std::vector<T>& columns)
+	{
+		T result = "<table><td>";
+		for (auto& column : columns) {
+			result += column + "</td>" + tableColumnSpacing<T>();
+			result += (column != columns.back())
+				? "<td>"
+				: "</table>";
+		}
+		return result;
+	}
+
+	template<typename T>
+	inline T bold(const T& text)
+	{
+		return T("<b>") + text + T("</b>");
+	}
+
+	template<typename T>
+	inline T heading(const T& text)
+	{
+		return T("<h3><b>") + text + T("</b></h3>");
+	}
+
+	template<typename T1, typename T2>
+	inline auto link(const T1& url, T2 displayName = T2())
+	{
+		if (displayName.empty())
+			displayName = T2(url).replace(std::regex("(https:\\/\\/|www.)"), "");
+		return T1("<a href='") + url + T1("'>") + displayName + T1("</a>");
+	}
+
+	template<typename T>
+	inline auto link(const StdFs::path& url, T displayName = T())
+	{
+		return link(url.generic_string(), displayName);
+	}
 }

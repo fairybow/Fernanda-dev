@@ -1,5 +1,7 @@
 #pragma once
 
+#include "common/HtmlString.hpp"
+
 #include <QMenuBar>
 
 class MenuBar : public QMenuBar
