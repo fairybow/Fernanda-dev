@@ -110,6 +110,7 @@
   <ItemGroup>
     <QtMoc Include="source\editor\Editor.hpp" />
     <QtMoc Include="source\editor\TrueEditor.h" />
+    <ClInclude Include="source\common\Io.hpp" />
     <ClInclude Include="source\common\Layout.hpp" />
     <ClInclude Include="source\editor\LineNumberArea.h" />
     <ClInclude Include="source\preview\Preview.hpp" />
