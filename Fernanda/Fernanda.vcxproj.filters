@@ -117,6 +117,9 @@
     <ClInclude Include="source\StatusBar.hpp">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="source\common\HtmlString.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">
