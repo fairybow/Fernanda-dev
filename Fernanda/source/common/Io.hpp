@@ -1,7 +1,7 @@
 #pragma once
 
+#include <QDir>
 #include <QFile>
-#include <QString>
 #include <QTextStream>
 
 #include <filesystem>
@@ -21,9 +21,13 @@ namespace Io
 		return text;
 	}
 
-	inline bool writeFile(StdFs::path filePath, QString text)
+	inline bool writeFile(StdFs::path filePath, QString text, bool createDirectories = true)
 	{
-		//Path::makeParent(filePath);
+		if (createDirectories) {
+			auto parent = filePath.parent_path();
+			if (!QDir(parent).exists())
+				StdFs::create_directories(parent);
+		}
 		QFile file(filePath);
 		if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
 			QTextStream out(&file);

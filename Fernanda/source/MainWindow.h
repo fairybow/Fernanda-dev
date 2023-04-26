@@ -2,13 +2,15 @@
 
 #include "common/Layout.hpp"
 #include "editor/Editor.hpp"
+#include "Indicator.hpp"
+#include "MenuBar.hpp"
+#include "Meter.hpp"
 #include "preview/Preview.hpp"
 #include "splitter/Splitter.h"
+#include "StatusBar.hpp"
 #include "tree/Tree.hpp"
 
 #include <QMainWindow>
-#include <QMenuBar>
-#include <QStatusBar>
 
 class MainWindow : public QMainWindow
 {
@@ -18,10 +20,12 @@ public:
 	MainWindow(const char* name, QWidget* parent = nullptr);
 
 private:
-	QMenuBar* m_menuBar = new QMenuBar(this);
-	QStatusBar* m_statusBar = new QStatusBar(this);
+	MenuBar* m_menuBar = new MenuBar("MenuBar", this);
+	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
+	Indicator* m_indicator = new Indicator("Indicator", this);
 	Tree* m_tree = new Tree("Tree");
 	Editor* m_editor = new Editor("Editor");
 	Preview* m_preview = new Preview("Preview");
 	Splitter* m_splitter = new Splitter("Splitter", Qt::Horizontal, { m_tree, m_editor, m_preview }, this);
+	Meter* m_meter = new Meter("Meter", m_statusBar);
 };

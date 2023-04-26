@@ -53,6 +53,9 @@
     <QtMoc Include="source\editor\TrueEditor.h">
       <Filter>Source\Editor</Filter>
     </QtMoc>
+    <QtMoc Include="source\Indicator.hpp">
+      <Filter>Source</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -104,6 +107,15 @@
     </ClInclude>
     <ClInclude Include="source\common\Io.hpp">
       <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Meter.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\MenuBar.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\StatusBar.hpp">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

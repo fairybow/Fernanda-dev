@@ -11,7 +11,7 @@ TrueEditor::TrueEditor(QWidget* parent)
 		if (m_lineNumberArea == nullptr) return;
 		updateLineNumberArea(rect, dy);
 		});
-	connect(this, &TrueEditor::cursorPositionChanged, this, [&]() {
+	connect(this, &TrueEditor::cursorPositionChanged, this, [&] {
 		if (m_lineNumberArea == nullptr) return;
 		highlightCurrentLine();
 		});
