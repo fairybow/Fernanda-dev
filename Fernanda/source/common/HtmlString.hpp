@@ -66,9 +66,12 @@ namespace HtmlString
 	}
 
 	template<typename T>
-	inline T heading(const T& text)
+	inline T heading(const T& text, int level = 1)
 	{
-		return T("<h3><b>") + text + T("</b></h3>");
+		if (level < 1 || level > 6)
+			level = 1;
+		auto level_string = std::to_string(level);
+		return T("<h") + level_string + T("><b>") + text + T("</b></h") + level_string + T(">");
 	}
 
 	template<typename T1, typename T2>
