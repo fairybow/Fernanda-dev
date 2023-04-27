@@ -22,7 +22,8 @@ class StartCop : public QObject
 	Q_OBJECT
 
 public:
-	inline StartCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow") : m_lockString(lockString), m_windowName(mainWindowObjectName) {}
+	inline StartCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow")
+		: m_lockString(lockString), m_windowName(mainWindowObjectName) {}
 
 	inline bool exists() const
 	{
