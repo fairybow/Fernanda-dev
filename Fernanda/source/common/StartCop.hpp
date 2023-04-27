@@ -22,8 +22,8 @@ class StartCop : public QObject
 	Q_OBJECT
 
 public:
-	inline StartCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow")
-		: m_lockString(lockString), m_windowName(mainWindowObjectName) {}
+	inline StartCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow", bool forceFocus = false)
+		: m_lockString(lockString), m_windowName(mainWindowObjectName), m_forceFocus(forceFocus) {}
 
 	inline bool exists() const
 	{
@@ -36,6 +36,7 @@ public:
 private:
 	const QString m_lockString;
 	const QString m_windowName;
+	bool m_forceFocus = false;
 
 	inline bool serverExists() const
 	{
@@ -67,11 +68,12 @@ private slots:
 
 #ifdef Q_OS_WINDOWS
 
-		/*auto name = main_window->windowTitle().toStdWString();
-		auto handle = FindWindow(0, name.c_str());
-		SwitchToThisWindow(handle, FALSE);*/
-
-		/*[This function is not intended for general use. It may be altered or unavailable in subsequent versions of Windows.]*/
+		if (m_forceFocus) {
+			auto name = main_window->windowTitle().toStdWString();
+			auto handle = FindWindow(0, name.c_str());
+			SwitchToThisWindow(handle, FALSE);
+			/* [This function is not intended for general use. It may be altered or unavailable in subsequent versions of Windows.] */
+		}
 
 #endif
 
