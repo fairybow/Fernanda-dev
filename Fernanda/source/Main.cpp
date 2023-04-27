@@ -1,5 +1,5 @@
-#include "common/StartCop.hpp"
 #include "MainWindow.h"
+#include "StartCop.hpp"
 
 #include <QApplication>
 

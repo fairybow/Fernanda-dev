@@ -56,8 +56,8 @@
     <QtMoc Include="source\Indicator.hpp">
       <Filter>Source</Filter>
     </QtMoc>
-    <QtMoc Include="source\common\StartCop.hpp">
-      <Filter>Source\Common</Filter>
+    <QtMoc Include="source\StartCop.hpp">
+      <Filter>Source</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -117,10 +117,13 @@
     <ClInclude Include="source\StatusBar.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\HtmlString.hpp">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
     <ClInclude Include="source\menu\MenuBar.hpp">
+      <Filter>Source\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\HtmlString.hpp">
+      <Filter>Source\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\LiveFontDialog.hpp">
       <Filter>Source\Menu</Filter>
     </ClInclude>
   </ItemGroup>

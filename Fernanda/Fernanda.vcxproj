@@ -110,12 +110,12 @@
   <ItemGroup>
     <QtMoc Include="source\editor\Editor.hpp" />
     <QtMoc Include="source\editor\TrueEditor.h" />
-    <ClInclude Include="source\common\HtmlString.hpp" />
     <ClInclude Include="source\common\Io.hpp" />
     <ClInclude Include="source\common\Layout.hpp" />
-    <QtMoc Include="source\common\StartCop.hpp" />
     <ClInclude Include="source\editor\LineNumberArea.h" />
     <QtMoc Include="source\Indicator.hpp" />
+    <ClInclude Include="source\menu\HtmlString.hpp" />
+    <ClInclude Include="source\menu\LiveFontDialog.hpp" />
     <ClInclude Include="source\menu\MenuBar.hpp" />
     <ClInclude Include="source\Meter.hpp" />
     <ClInclude Include="source\preview\Preview.hpp" />
@@ -123,6 +123,7 @@
     <ClInclude Include="source\preview\WebEnginePage.hpp" />
     <ClInclude Include="source\preview\WebEngineView.hpp" />
     <ClInclude Include="source\splitter\SplitterHandle.hpp" />
+    <QtMoc Include="source\StartCop.hpp" />
     <ClInclude Include="source\StatusBar.hpp" />
     <ClInclude Include="source\tree\Tree.hpp" />
     <ClInclude Include="source\tree\StyledItemDelegate.hpp" />

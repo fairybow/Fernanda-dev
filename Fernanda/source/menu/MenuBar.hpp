@@ -1,6 +1,7 @@
 #pragma once
 
-#include "common/HtmlString.hpp"
+#include "HtmlString.hpp"
+#include "LiveFontDialog.hpp"
 
 #include <QMenuBar>
 
