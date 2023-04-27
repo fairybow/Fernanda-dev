@@ -10,8 +10,7 @@ public:
 		: QWidget(parent)
 	{
 		setObjectName(name);
-		setContentsMargins(0, 0, 0, 0);
-		Layout::set(this, m_view);
+		Layout::box(this, m_view);
 	}
 
 private:
