@@ -16,7 +16,6 @@ inline QString operator%(const char* lhs, const QString& rhs) { return QString(l
 inline QString operator%(const QString& lhs, const std::string& rhs) { return lhs % QString::fromStdString(rhs); }
 inline QString operator%(const std::string& lhs, const QString& rhs) { return QString::fromStdString(lhs) % rhs; }
 
-
 inline QString operator/(const QString& lhs, const QString& rhs)
 {
 	return lhs + QStringLiteral("<br>") + rhs;
@@ -46,7 +45,7 @@ namespace HtmlString
 		return multiply("<td>\n</td>", columns);
 	}
 
-	template <class T>
+	template<typename T>
 	inline const T table(const std::vector<T>& columns)
 	{
 		T result = "<table><td>";
@@ -74,12 +73,12 @@ namespace HtmlString
 		return T("<h") + level_string + T("><b>") + text + T("</b></h") + level_string + T(">");
 	}
 
-	template<typename T1, typename T2>
-	inline auto link(const T1& url, T2 displayName = T2())
+	template<typename T, typename U>
+	inline auto link(const T& url, U displayName = U())
 	{
 		if (displayName.empty())
-			displayName = T2(url).replace(std::regex("(https:\\/\\/|www.)"), "");
-		return T1("<a href='") + url + T1("'>") + displayName + T1("</a>");
+			displayName = U(url).replace(std::regex("(https:\\/\\/|www.)"), "");
+		return T("<a href='") + url + T("'>") + displayName + T("</a>");
 	}
 
 	template<typename T>
