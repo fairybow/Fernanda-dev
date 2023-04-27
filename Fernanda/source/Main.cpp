@@ -1,18 +1,18 @@
+#include "common/StartCop.hpp"
 #include "MainWindow.h"
-#include "StartCop.hpp"
 
 #include <QApplication>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-	StartCop x("Fernanda");
-	if (x.exists())
+	auto window_name = "MainWindow";
+	StartCop start_cop("Fernanda", window_name);
+	if (start_cop.exists())
 		return 0;
-
 	QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 	QApplication::setDesktopSettingsAware(true);
 	QApplication fernanda(argc, argv);
-	MainWindow main_window("MainWindow");
+	MainWindow main_window(window_name);
 	main_window.show();
 	return fernanda.exec();
 }

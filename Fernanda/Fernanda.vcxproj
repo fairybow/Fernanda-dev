@@ -113,9 +113,10 @@
     <ClInclude Include="source\common\HtmlString.hpp" />
     <ClInclude Include="source\common\Io.hpp" />
     <ClInclude Include="source\common\Layout.hpp" />
+    <QtMoc Include="source\common\StartCop.hpp" />
     <ClInclude Include="source\editor\LineNumberArea.h" />
     <QtMoc Include="source\Indicator.hpp" />
-    <ClInclude Include="source\MenuBar.hpp" />
+    <ClInclude Include="source\menu\MenuBar.hpp" />
     <ClInclude Include="source\Meter.hpp" />
     <ClInclude Include="source\preview\Preview.hpp" />
     <ClInclude Include="source\preview\WebDocument.hpp" />
@@ -126,7 +127,6 @@
     <ClInclude Include="source\tree\Tree.hpp" />
     <ClInclude Include="source\tree\StyledItemDelegate.hpp" />
     <ClInclude Include="source\Version.hpp" />
-    <QtMoc Include="source\StartCop.hpp" />
     <QtMoc Include="source\splitter\TrueSplitter.hpp" />
     <QtMoc Include="source\splitter\Splitter.h" />
   </ItemGroup>

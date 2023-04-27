@@ -28,6 +28,9 @@
     <Filter Include="Source\Common">
       <UniqueIdentifier>{fd287913-ab0b-46c5-9b7f-2afd98a423e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Menu">
+      <UniqueIdentifier>{cf7edd88-3cc2-40a1-ae98-d087bc88fa10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Cpp.hint" />
@@ -44,9 +47,6 @@
     <QtMoc Include="source\splitter\TrueSplitter.hpp">
       <Filter>Source\Splitter</Filter>
     </QtMoc>
-    <QtMoc Include="source\StartCop.hpp">
-      <Filter>Source</Filter>
-    </QtMoc>
     <QtMoc Include="source\editor\Editor.hpp">
       <Filter>Source\Editor</Filter>
     </QtMoc>
@@ -55,6 +55,9 @@
     </QtMoc>
     <QtMoc Include="source\Indicator.hpp">
       <Filter>Source</Filter>
+    </QtMoc>
+    <QtMoc Include="source\common\StartCop.hpp">
+      <Filter>Source\Common</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -111,14 +114,14 @@
     <ClInclude Include="source\Meter.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="source\MenuBar.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="source\StatusBar.hpp">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="source\common\HtmlString.hpp">
       <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\MenuBar.hpp">
+      <Filter>Source\Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

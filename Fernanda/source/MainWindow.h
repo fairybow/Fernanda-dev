@@ -3,7 +3,7 @@
 #include "common/Layout.hpp"
 #include "editor/Editor.hpp"
 #include "Indicator.hpp"
-#include "MenuBar.hpp"
+#include "menu/MenuBar.hpp"
 #include "Meter.hpp"
 #include "preview/Preview.hpp"
 #include "splitter/Splitter.h"
