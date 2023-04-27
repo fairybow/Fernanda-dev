@@ -29,20 +29,22 @@ namespace HtmlString
 {
 	namespace StdFs = std::filesystem;
 
-	template<typename T>
-	inline T multiply(T character, int defaultArgument = 1)
-	{
-		if (defaultArgument < 1)
-			defaultArgument = 1;
-		if constexpr (std::is_same<T, QString>::value)
-			return QString(defaultArgument, character[0]);
-		return std::string(defaultArgument, character);
-	}
+	namespace {
+		template<typename T>
+		inline T multiply(T character, int defaultArgument = 1)
+		{
+			if (defaultArgument < 1)
+				defaultArgument = 1;
+			if constexpr (std::is_same<T, QString>::value)
+				return QString(defaultArgument, character[0]);
+			return std::string(defaultArgument, character);
+		}
 
-	template<typename T>
-	inline T tableColumnSpacing(int columns = 9)
-	{
-		return multiply("<td>\n</td>", columns);
+		template<typename T>
+		inline T tableColumnSpacing(int columns = 9)
+		{
+			return multiply("<td>\n</td>", columns);
+		}
 	}
 
 	template<typename T>
