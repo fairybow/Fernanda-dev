@@ -9,5 +9,6 @@ public:
 		: QStatusBar(parent)
 	{
 		setObjectName(name);
+		setMaximumHeight(22);
 	}
 };

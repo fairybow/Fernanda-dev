@@ -4,7 +4,7 @@
 #include "editor/Editor.hpp"
 #include "Indicator.hpp"
 #include "menu/MenuBar.hpp"
-#include "Meter.hpp"
+#include "Meter.h"
 #include "preview/Preview.hpp"
 #include "splitter/Splitter.h"
 #include "StatusBar.hpp"
@@ -27,5 +27,5 @@ private:
 	Editor* m_editor = new Editor("Editor");
 	Preview* m_preview = new Preview("Preview");
 	Splitter* m_splitter = new Splitter("Splitter", Qt::Horizontal, { m_tree, m_editor, m_preview }, this);
-	Meter* m_meter = new Meter("Meter", m_statusBar);
+	Meter* m_meter = new Meter("Meter");
 };

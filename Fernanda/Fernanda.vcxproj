@@ -105,6 +105,7 @@
     <ClCompile Include="source\editor\TrueEditor.cpp" />
     <ClCompile Include="source\Main.cpp" />
     <ClCompile Include="source\MainWindow.cpp" />
+    <ClCompile Include="source\Meter.cpp" />
     <ClCompile Include="source\splitter\Splitter.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -118,7 +119,7 @@
     <ClInclude Include="source\menu\HtmlString.hpp" />
     <ClInclude Include="source\menu\LiveFontDialog.hpp" />
     <ClInclude Include="source\menu\MenuBar.hpp" />
-    <ClInclude Include="source\Meter.hpp" />
+    <ClInclude Include="source\Meter.h" />
     <ClInclude Include="source\preview\Preview.hpp" />
     <ClInclude Include="source\preview\WebDocument.hpp" />
     <ClInclude Include="source\preview\WebEnginePage.hpp" />
