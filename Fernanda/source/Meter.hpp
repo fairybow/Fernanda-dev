@@ -1,6 +1,10 @@
 #pragma once
 
-#include <QWidget>
+#include "common/Layout.hpp"
+#include "common/StatusBarButton.hpp"
+
+#include <QLabel>
+#include <QRegularExpression>
 
 class Meter : public QWidget
 {

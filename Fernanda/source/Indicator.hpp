@@ -4,7 +4,6 @@
 
 #include <QProgressBar>
 #include <QTimer>
-#include <QWidget>
 
 class Indicator : public QWidget
 {
@@ -17,7 +16,7 @@ public:
 		m_progressBar->setObjectName(name);
 		setAttribute(Qt::WA_TransparentForMouseEvents);
 		m_progressBar->setAttribute(Qt::WA_TransparentForMouseEvents);
-		Layout::setVBoxLayout(this, m_progressBar);
+		Layout::box(this, m_progressBar);
 
 		m_progressBar->setMaximumHeight(3);
 		m_progressBar->setTextVisible(false);

@@ -112,6 +112,7 @@
     <QtMoc Include="source\editor\TrueEditor.h" />
     <ClInclude Include="source\common\Io.hpp" />
     <ClInclude Include="source\common\Layout.hpp" />
+    <QtMoc Include="source\common\StatusBarButton.hpp" />
     <ClInclude Include="source\editor\LineNumberArea.h" />
     <QtMoc Include="source\Indicator.hpp" />
     <ClInclude Include="source\menu\HtmlString.hpp" />
