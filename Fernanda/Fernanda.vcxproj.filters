@@ -53,7 +53,7 @@
     <QtMoc Include="source\editor\TrueEditor.h">
       <Filter>Source\Editor</Filter>
     </QtMoc>
-    <QtMoc Include="source\Indicator.hpp">
+    <QtMoc Include="source\Indicator.h">
       <Filter>Source</Filter>
     </QtMoc>
     <QtMoc Include="source\StartCop.hpp">
@@ -82,6 +82,15 @@
     <ClCompile Include="source\Meter.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\Indicator.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\tree\Tree.cpp">
+      <Filter>Source\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\MenuBar.cpp">
+      <Filter>Source\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\preview\WebDocument.hpp">
@@ -108,7 +117,7 @@
     <ClInclude Include="source\tree\StyledItemDelegate.hpp">
       <Filter>Source\Tree</Filter>
     </ClInclude>
-    <ClInclude Include="source\tree\Tree.hpp">
+    <ClInclude Include="source\tree\Tree.h">
       <Filter>Source\Tree</Filter>
     </ClInclude>
     <ClInclude Include="source\common\Layout.hpp">
@@ -123,7 +132,7 @@
     <ClInclude Include="source\StatusBar.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="source\menu\MenuBar.hpp">
+    <ClInclude Include="source\menu\MenuBar.h">
       <Filter>Source\Menu</Filter>
     </ClInclude>
     <ClInclude Include="source\menu\HtmlString.hpp">

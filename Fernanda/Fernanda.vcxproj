@@ -103,10 +103,13 @@
   <ItemGroup>
     <ClCompile Include="source\editor\LineNumberArea.cpp" />
     <ClCompile Include="source\editor\TrueEditor.cpp" />
+    <ClCompile Include="source\Indicator.cpp" />
     <ClCompile Include="source\Main.cpp" />
     <ClCompile Include="source\MainWindow.cpp" />
+    <ClCompile Include="source\menu\MenuBar.cpp" />
     <ClCompile Include="source\Meter.cpp" />
     <ClCompile Include="source\splitter\Splitter.cpp" />
+    <ClCompile Include="source\tree\Tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="source\editor\Editor.hpp" />
@@ -115,10 +118,10 @@
     <ClInclude Include="source\common\Layout.hpp" />
     <QtMoc Include="source\common\StatusBarButton.hpp" />
     <ClInclude Include="source\editor\LineNumberArea.h" />
-    <QtMoc Include="source\Indicator.hpp" />
+    <QtMoc Include="source\Indicator.h" />
     <ClInclude Include="source\menu\HtmlString.hpp" />
     <ClInclude Include="source\menu\LiveFontDialog.hpp" />
-    <ClInclude Include="source\menu\MenuBar.hpp" />
+    <ClInclude Include="source\menu\MenuBar.h" />
     <ClInclude Include="source\Meter.h" />
     <ClInclude Include="source\preview\Preview.hpp" />
     <ClInclude Include="source\preview\WebDocument.hpp" />
@@ -127,7 +130,7 @@
     <ClInclude Include="source\splitter\SplitterHandle.hpp" />
     <QtMoc Include="source\StartCop.hpp" />
     <ClInclude Include="source\StatusBar.hpp" />
-    <ClInclude Include="source\tree\Tree.hpp" />
+    <ClInclude Include="source\tree\Tree.h" />
     <ClInclude Include="source\tree\StyledItemDelegate.hpp" />
     <ClInclude Include="source\Version.hpp" />
     <QtMoc Include="source\splitter\TrueSplitter.hpp" />

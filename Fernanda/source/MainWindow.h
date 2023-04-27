@@ -2,13 +2,13 @@
 
 #include "common/Layout.hpp"
 #include "editor/Editor.hpp"
-#include "Indicator.hpp"
-#include "menu/MenuBar.hpp"
+#include "Indicator.h"
+#include "menu/MenuBar.h"
 #include "Meter.h"
 #include "preview/Preview.hpp"
 #include "splitter/Splitter.h"
 #include "StatusBar.hpp"
-#include "tree/Tree.hpp"
+#include "tree/Tree.h"
 
 #include <QMainWindow>
 
