@@ -30,24 +30,18 @@ namespace HtmlString
 	namespace StdFs = std::filesystem;
 
 	namespace {
-		inline QString multiply(const QString& character, int defaultArgument = 1)
+		inline QString multiply(const char* character, int defaultArgument = 1)
 		{
 			if (defaultArgument < 1)
 				defaultArgument = 1;
 			QString result;
-			for (int i = 0; i < defaultArgument; ++i)
-				result += character;
+			if (character[1] == '\0')
+				result = QString(defaultArgument, character[0]);
+			else {
+				for (int i = 0; i < defaultArgument; ++i)
+					result += character;
+			}
 			return result;
-		}
-
-		inline QString multiply(const char* character, int defaultArgument = 1)
-		{
-			return multiply(QString(character), defaultArgument);
-		}
-
-		inline QString multiply(QChar character, int defaultArgument = 1)
-		{
-			return QString(defaultArgument, character);
 		}
 
 		inline QString tableColumnSpacing(int columns = 9)
