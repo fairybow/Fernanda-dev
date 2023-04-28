@@ -30,29 +30,38 @@ namespace HtmlString
 	namespace StdFs = std::filesystem;
 
 	namespace {
-		template<typename T>
-		inline T multiply(T character, int defaultArgument = 1)
+		inline QString multiply(const QString& character, int defaultArgument = 1)
 		{
 			if (defaultArgument < 1)
 				defaultArgument = 1;
-			if constexpr (std::is_same<T, QString>::value)
-				return QString(defaultArgument, character[0]);
-			return std::string(defaultArgument, character);
+			QString result;
+			for (int i = 0; i < defaultArgument; ++i)
+				result += character;
+			return result;
 		}
 
-		template<typename T>
-		inline T tableColumnSpacing(int columns = 9)
+		inline QString multiply(const char* character, int defaultArgument = 1)
+		{
+			return multiply(QString(character), defaultArgument);
+		}
+
+		inline QString multiply(QChar character, int defaultArgument = 1)
+		{
+			return QString(defaultArgument, character);
+		}
+
+		inline QString tableColumnSpacing(int columns = 9)
 		{
 			return multiply("<td>\n</td>", columns);
 		}
 	}
 
 	template<typename T>
-	inline const T table(const std::vector<T>& columns)
+	inline QString table(const std::vector<T>& columns)
 	{
-		T result = "<table><td>";
+		QString result = "<table><td>";
 		for (auto& column : columns) {
-			result += column + "</td>" + tableColumnSpacing<T>();
+			result += column + "</td>" + tableColumnSpacing();
 			result += (column != columns.back())
 				? "<td>"
 				: "</table>";
