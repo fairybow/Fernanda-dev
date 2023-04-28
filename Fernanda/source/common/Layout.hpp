@@ -13,7 +13,8 @@ namespace Layout
 		Vertically
 	};
 
-	namespace {
+	namespace
+	{
 		inline void setBoxProperties(QBoxLayout* box, QVector<QWidget*> widgets)
 		{
 			box->setContentsMargins(0, 0, 0, 0);

@@ -39,17 +39,18 @@ namespace HtmlString
 	{
 		if (defaultArgument < 1)
 			defaultArgument = 1;
-		QString result;
+		QString multiplied;
 		if (character[1] == '\0')
-			result = QString(defaultArgument, character[0]);
+			multiplied = QString(defaultArgument, character[0]);
 		else {
 			for (int i = 0; i < defaultArgument; ++i)
-				result += character;
+				multiplied += character;
 		}
-		return result;
+		return multiplied;
 	}
 
-	namespace {
+	namespace
+	{
 		inline QString tableColumnSpacing(int columns = 9)
 		{
 			return multiply("<td>\n</td>", columns);
@@ -59,14 +60,14 @@ namespace HtmlString
 	template<typename T>
 	inline QString table(const std::vector<T>& columns)
 	{
-		QString result = "<table><td>";
+		QString table = "<table><td>";
 		for (auto& column : columns) {
-			result += column + "</td>" + tableColumnSpacing();
-			result += (column != columns.back())
+			table += column + "</td>" + tableColumnSpacing();
+			table += (column != columns.back())
 				? "<td>"
 				: "</table>";
 		}
-		return result;
+		return table;
 	}
 
 	template<typename T>
@@ -98,6 +99,6 @@ namespace HtmlString
 
 	inline QString link(const StdFs::path& url, QString displayName = QString())
 	{
-		return link(QString::fromStdString(url.generic_string()), displayName); // Path::
+		return link(QString::fromStdString(url.generic_string()), displayName);
 	}
 }

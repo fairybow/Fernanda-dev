@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../Version.hpp"
 #include "HtmlString.hpp"
 
 #include <QEventLoop>
@@ -10,39 +9,42 @@
 #include <QProgressDialog>
 #include <QVariantMap>
 
+#include <utility>
+
 class VersionChecker : public QObject
 {
 	Q_OBJECT
 
 public:
-	static inline const QString check(const QUrl& gitHubReleasesApi, const QUrl& gitHubReleases, QWidget* parent)
+	static inline const QString check(const QString& user, const QString& repo, const QString& version, QWidget* parent)
 	{
+		auto urls = makeGitHubUrls(user, repo);
 		QString text = {
 			HtmlString::heading("Version") %
 			HtmlString::bold("Current version:") /
-			VER_FILEVERSION_STR
+			version
 		};
-		auto map = latestVersion(gitHubReleasesApi, parent);
+		auto map = latestVersion(urls.first, parent);
 		if (!map.isEmpty()) {
 			auto latest = map["tag_name"].toString();
-			if (latest == QString(VER_FILEVERSION_STR))
-				text += QStringLiteral("You have the latest version.");
+			if (latest == QString(version))
+				text += "You have the latest version.";
 			else {
 				QString message = {
 					HtmlString::bold("New version:") /
 					latest %
-					QStringLiteral("You do not have the latest version.") %
+					"You do not have the latest version." %
 					HtmlString::bold("Download:") /
-					HtmlString::link(gitHubReleases)
+					HtmlString::link(urls.second)
 				};
 				text %= message;
 			}
 		}
 		else {
 			QString message = {
-				QStringLiteral("Unable to verify version.") %
+				"Unable to verify version." %
 				HtmlString::bold("Check:") /
-				HtmlString::link(gitHubReleases)
+				HtmlString::link(urls.second)
 			};
 			text %= message;
 		}
@@ -50,6 +52,13 @@ public:
 	}
 
 private:
+	static inline std::pair<QUrl, QUrl> makeGitHubUrls(const QString& user, const QString& repo)
+	{
+		auto releases_api = QUrl("https://api.github.com/repos/" + user + "/" + repo + "/releases");
+		auto releases = QUrl("https://github.com/" + user + "/" + repo + "/releases");
+		return std::make_pair(releases_api, releases);
+	}
+
 	static inline QVariantMap latestVersion(const QUrl& url, QWidget* parent)
 	{
 		QEventLoop loop;
