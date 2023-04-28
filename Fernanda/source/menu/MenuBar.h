@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LiveFontDialog.hpp"
+#include "MenuPopup.hpp"
 
 #include <QMenuBar>
 

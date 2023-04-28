@@ -114,15 +114,15 @@
   <ItemGroup>
     <QtMoc Include="source\editor\Editor.hpp" />
     <QtMoc Include="source\editor\TrueEditor.h" />
+    <ClInclude Include="source\common\HtmlString.hpp" />
     <ClInclude Include="source\common\Io.hpp" />
     <ClInclude Include="source\common\Layout.hpp" />
     <QtMoc Include="source\common\StatusBarButton.hpp" />
     <ClInclude Include="source\editor\LineNumberArea.h" />
     <QtMoc Include="source\Indicator.h" />
-    <ClInclude Include="source\menu\HtmlString.hpp" />
     <ClInclude Include="source\menu\LiveFontDialog.hpp" />
     <ClInclude Include="source\menu\MenuBar.h" />
-    <ClInclude Include="source\menu\MenuPopup.hpp" />
+    <QtMoc Include="source\menu\MenuPopup.hpp" />
     <ClInclude Include="source\menu\PopupText.hpp" />
     <QtMoc Include="source\menu\VersionChecker.hpp" />
     <ClInclude Include="source\Meter.h" />
@@ -141,6 +141,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="resources\MenuBar.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

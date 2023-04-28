@@ -65,6 +65,9 @@
     <QtMoc Include="source\menu\VersionChecker.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
+    <QtMoc Include="source\menu\MenuPopup.hpp">
+      <Filter>Source\Menu</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -138,22 +141,24 @@
     <ClInclude Include="source\menu\MenuBar.h">
       <Filter>Source\Menu</Filter>
     </ClInclude>
-    <ClInclude Include="source\menu\HtmlString.hpp">
-      <Filter>Source\Menu</Filter>
-    </ClInclude>
     <ClInclude Include="source\menu\LiveFontDialog.hpp">
       <Filter>Source\Menu</Filter>
     </ClInclude>
     <ClInclude Include="source\menu\PopupText.hpp">
       <Filter>Source\Menu</Filter>
     </ClInclude>
-    <ClInclude Include="source\menu\MenuPopup.hpp">
-      <Filter>Source\Menu</Filter>
+    <ClInclude Include="source\common\HtmlString.hpp">
+      <Filter>Source\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="resources\MenuBar.qrc">
+      <Filter>Resources</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HtmlString.hpp"
+#include "../common/HtmlString.hpp"
 
 #include <QEventLoop>
 #include <QJsonDocument>
@@ -20,9 +20,9 @@ public:
 	{
 		auto urls = makeGitHubUrls(user, repo);
 		QString text = {
-			HtmlString::heading("Version") %
-			HtmlString::bold("Current version:") /
-			version
+			HtmlString::heading("Version")
+			% HtmlString::bold("Current version:")
+			/ version
 		};
 		auto map = latestVersion(urls.first, parent);
 		if (!map.isEmpty()) {
@@ -31,20 +31,20 @@ public:
 				text += "You have the latest version.";
 			else {
 				QString message = {
-					HtmlString::bold("New version:") /
-					latest %
-					"You do not have the latest version." %
-					HtmlString::bold("Download:") /
-					HtmlString::link(urls.second)
+					HtmlString::bold("New version:")
+					/ latest
+					% "You do not have the latest version."
+					% HtmlString::bold("Download:")
+					/ HtmlString::link(urls.second)
 				};
 				text %= message;
 			}
 		}
 		else {
 			QString message = {
-				"Unable to verify version." %
-				HtmlString::bold("Check:") /
-				HtmlString::link(urls.second)
+				"Unable to verify version."
+				% HtmlString::bold("Check:")
+				/ HtmlString::link(urls.second)
 			};
 			text %= message;
 		}

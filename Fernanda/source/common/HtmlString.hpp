@@ -1,15 +1,14 @@
 #pragma once
 
 #include <QRegularExpression>
+#include <QString>
 #include <QUrl>
 
-#include <filesystem>
 #include <string>
-#include <type_traits>
 
 inline QString operator%(const QString& lhs, const QString& rhs)
 {
-	return lhs + QStringLiteral("<p>") + rhs;
+	return lhs + "<p>" + rhs;
 }
 inline QString operator%(const QString& lhs, const char* rhs) { return lhs % QString(rhs); }
 inline QString operator%(const char* lhs, const QString& rhs) { return QString(lhs) % rhs; }
@@ -24,7 +23,7 @@ inline QString operator%=(QString& lhs, const QString& rhs)
 
 inline QString operator/(const QString& lhs, const QString& rhs)
 {
-	return lhs + QStringLiteral("<br>") + rhs;
+	return lhs + "<br>" + rhs;
 }
 inline QString operator/(const QString& lhs, const char* rhs) { return lhs / QString(rhs); }
 inline QString operator/(const char* lhs, const QString& rhs) { return QString(lhs) / rhs; }
@@ -80,7 +79,7 @@ namespace HtmlString
 	inline QString heading(const T& text, int level = 1)
 	{
 		level = qBound(1, level, 6);
-		return QString("<h%1><b>%2</b></h%1>").arg(level).arg(text);
+		return QString("<h%1>%2</h%1>").arg(level).arg(text);
 	}
 
 	inline QString link(const QString& url, QString displayName = QString())
@@ -97,8 +96,8 @@ namespace HtmlString
 		return link(url.toString(), displayName);
 	}
 
-	inline QString link(const StdFs::path& url, QString displayName = QString())
+	inline QString link(const char* url, QString displayName = QString())
 	{
-		return link(QString::fromStdString(url.generic_string()), displayName);
+		return link(QString(url), displayName);
 	}
 }
