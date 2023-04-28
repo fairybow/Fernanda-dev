@@ -60,20 +60,32 @@ namespace HtmlString
 		return result;
 	}
 
-	template<typename T>
-	inline T bold(const T& text)
+	template<typename T, typename U = QString>
+	inline U bold(const T& text)
 	{
-		return T("<b>") + text + T("</b>");
+		return QString("<b>") + text + QString("</b>");
 	}
 
-	template<typename T>
-	inline T heading(const T& text, int level = 1)
+	/*template<typename U>
+	inline U bold(const std::string& text)
+	{
+		return bold(QString::fromStdString(text));
+	}*/
+
+	template<typename T, typename U = QString>
+	inline U heading(const T& text, int level = 1)
 	{
 		if (level < 1 || level > 6)
 			level = 1;
-		auto level_string = std::to_string(level);
-		return T("<h") + level_string + T("><b>") + text + T("</b></h") + level_string + T(">");
+		auto level_string = QString::number(level);
+		return QString("<h") + level_string + QString("><b>") + text + QString("</b></h") + level_string + QString(">");
 	}
+
+	/*template<typename U>
+	inline U heading(const std::string& text, int level)
+	{
+		return heading(QString::fromStdString(text), level);
+	}*/
 
 	template<typename T, typename U>
 	inline auto link(const T& url, U displayName = U())

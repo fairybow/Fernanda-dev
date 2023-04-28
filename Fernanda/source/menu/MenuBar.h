@@ -1,6 +1,5 @@
 #pragma once
 
-#include "HtmlString.hpp"
 #include "LiveFontDialog.hpp"
 
 #include <QMenuBar>
