@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QString>
+#include <QRegularExpression>
+#include <QUrl>
 
 #include <filesystem>
-#include <regex>
 #include <string>
 #include <type_traits>
 
@@ -82,16 +82,20 @@ namespace HtmlString
 		return QString("<h%1><b>%2</b></h%1>").arg(level).arg(text);
 	}
 
-	template<typename T>
-	inline QString link(const T& url, QString displayName = QString())
+	inline QString link(QString url, QString displayName = QString())
 	{
-		if (displayName.empty())
-			displayName = QString(url).replace(std::regex("(https:\\/\\/|www.)"), "");
+		if (displayName.isEmpty())
+			displayName = url.replace(QRegularExpression("(https:\\/\\/|www.)"), "");
 		return QString("<a href='%1'>%2</a>").arg(url).arg(displayName);
+	}
+
+	inline QString link(const QUrl& url, QString displayName = QString())
+	{
+		return link(url.toString(), displayName);
 	}
 
 	inline QString link(const StdFs::path& url, QString displayName = QString())
 	{
-		return link(url.generic_string(), displayName);
+		return link(QString::fromStdString(url.generic_string()), displayName); // Path::
 	}
 }
