@@ -1,7 +1,8 @@
 #include "LineNumberArea.h"
 #include "TrueEditor.h"
 
-LineNumberArea::LineNumberArea(TrueEditor* parent) : QWidget(parent), m_parent(parent) {}
+LineNumberArea::LineNumberArea(TrueEditor* parent)
+	: QWidget(parent), m_parent(parent) {}
 
 QSize LineNumberArea::sizeHint() const
 {

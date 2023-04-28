@@ -16,7 +16,8 @@ public:
 		Shown
 	};
 
-	inline TrueSplitter(QWidget* parent) : QSplitter(parent) {}
+	inline TrueSplitter(QWidget* parent)
+		: QSplitter(parent) {}
 
 signals:
 	void resized();
