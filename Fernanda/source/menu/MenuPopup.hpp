@@ -17,7 +17,8 @@ public:
 		auto perform_update = false;
 		QMessageBox box(parent);
 		standardize(box, PopupText::about(), true, true);
-		auto update = box.addButton(tr(PopupText::Buttons::update().toLocal8Bit()), QMessageBox::AcceptRole);
+		auto update_text = PopupText::Buttons::update().toLocal8Bit();
+		auto update = box.addButton(tr(update_text), QMessageBox::AcceptRole);
 		auto qt = box.addButton(tr("About Qt"), QMessageBox::AcceptRole);
 		connect(qt, &QPushButton::clicked, parent, QApplication::aboutQt);
 		box.exec();
