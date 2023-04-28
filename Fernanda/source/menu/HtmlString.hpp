@@ -35,7 +35,7 @@ namespace HtmlString
 {
 	namespace StdFs = std::filesystem;
 
-	inline QString multiply(const char* character, int defaultArgument = 1)
+	inline QString multiply(const char* character, int defaultArgument = 2)
 	{
 		if (defaultArgument < 1)
 			defaultArgument = 1;
@@ -82,10 +82,12 @@ namespace HtmlString
 		return QString("<h%1><b>%2</b></h%1>").arg(level).arg(text);
 	}
 
-	inline QString link(QString url, QString displayName = QString())
+	inline QString link(const QString& url, QString displayName = QString())
 	{
-		if (displayName.isEmpty())
-			displayName = url.replace(QRegularExpression("(https:\\/\\/|www.)"), "");
+		if (displayName.isEmpty()) {
+			QString url_copy = url;
+			displayName = url_copy.replace(QRegularExpression("(https:\\/\\/|www.)"), "");
+		}
 		return QString("<a href='%1'>%2</a>").arg(url).arg(displayName);
 	}
 
