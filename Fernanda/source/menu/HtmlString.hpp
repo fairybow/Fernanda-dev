@@ -60,43 +60,29 @@ namespace HtmlString
 		return result;
 	}
 
-	template<typename T, typename U = QString>
-	inline U bold(const T& text)
+	template<typename T>
+	inline QString bold(const T& text)
 	{
-		return QString("<b>") + text + QString("</b>");
-	}
-
-	/*template<typename U>
-	inline U bold(const std::string& text)
-	{
-		return bold(QString::fromStdString(text));
-	}*/
-
-	template<typename T, typename U = QString>
-	inline U heading(const T& text, int level = 1)
-	{
-		if (level < 1 || level > 6)
-			level = 1;
-		auto level_string = QString::number(level);
-		return QString("<h") + level_string + QString("><b>") + text + QString("</b></h") + level_string + QString(">");
-	}
-
-	/*template<typename U>
-	inline U heading(const std::string& text, int level)
-	{
-		return heading(QString::fromStdString(text), level);
-	}*/
-
-	template<typename T, typename U>
-	inline auto link(const T& url, U displayName = U())
-	{
-		if (displayName.empty())
-			displayName = U(url).replace(std::regex("(https:\\/\\/|www.)"), "");
-		return T("<a href='") + url + T("'>") + displayName + T("</a>");
+		return QString("<b>%1</b>").arg(text);
 	}
 
 	template<typename T>
-	inline auto link(const StdFs::path& url, T displayName = T())
+	inline QString heading(const T& text, int level = 1)
+	{
+		level = qBound(1, level, 6);
+		return QString("<h%1><b>%2</b></h%1>").arg(level).arg(text);
+	}
+
+	template<typename T, typename U>
+	inline QString link(const T& url, U displayName = U())
+	{
+		if (displayName.empty())
+			displayName = U(url).replace(std::regex("(https:\\/\\/|www.)"), "");
+		return QString("<a href='%1'>%2</a>").arg(url).arg(displayName);
+	}
+
+	template<typename T>
+	inline QString link(const StdFs::path& url, T displayName = T())
 	{
 		return link(url.generic_string(), displayName);
 	}
