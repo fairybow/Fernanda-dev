@@ -150,6 +150,9 @@
     <ClInclude Include="source\common\HtmlString.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
+    <ClInclude Include="source\Stylist.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">

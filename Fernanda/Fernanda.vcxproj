@@ -133,6 +133,7 @@
     <ClInclude Include="source\splitter\SplitterHandle.hpp" />
     <QtMoc Include="source\StartCop.hpp" />
     <ClInclude Include="source\StatusBar.hpp" />
+    <ClInclude Include="source\Stylist.hpp" />
     <ClInclude Include="source\tree\Tree.h" />
     <ClInclude Include="source\tree\StyledItemDelegate.hpp" />
     <ClInclude Include="source\Version.hpp" />

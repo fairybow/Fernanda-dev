@@ -8,7 +8,7 @@
 class MenuBar : public QMenuBar
 {
 public:
-	MenuBar(const char* name, QWidget* parent);
+	MenuBar(QWidget* parent);
 
 	void makeSubmenus();
 

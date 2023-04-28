@@ -1,11 +1,11 @@
 #include "Meter.h"
 
-Meter::Meter(const char* name, QWidget* parent)
+Meter::Meter(QWidget* parent)
 	: QWidget(parent)
 {
-	setObjectName(name);
-	for (auto& widget : { m_positions, m_separator, m_counts })
-		widget->setObjectName(name);
+	//setObjectName(name);
+	//for (auto& widget : { m_positions, m_separator, m_counts })
+		//widget->setObjectName(name);
 	Layout::box(this, { m_positions, m_separator, m_counts, m_refresh }, Layout::Line::Horizontally);
 	m_separator->setText(QStringLiteral("/"));
 	m_positions->setGraphicsEffect(opacify(0.8));

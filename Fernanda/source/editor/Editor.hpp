@@ -11,11 +11,11 @@ class Editor : public QWidget
 	Q_OBJECT
 
 public:
-	inline Editor(const char* name, QWidget* parent = nullptr)
+	inline Editor(QWidget* parent = nullptr)
 		: QWidget(parent)
 	{
-		m_trueEditor->setObjectName(name);
-		m_lineNumberArea->setObjectName(name + QString("-line-number-area"));
+		//m_trueEditor->setObjectName(name);
+		//m_lineNumberArea->setObjectName(name + QString("-line-number-area"));
 		m_trueEditor->setLineNumberArea(m_lineNumberArea);
 		Layout::stack(this, { m_trueEditor }); // shadow, overlay, trueEditor, underlay
 	}

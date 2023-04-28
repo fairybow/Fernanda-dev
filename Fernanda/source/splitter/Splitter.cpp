@@ -1,9 +1,9 @@
 #include "Splitter.h"
 
-Splitter::Splitter(const char* name, Qt::Orientation orientation, QVector<QWidget*> widgets, QWidget* parent)
+Splitter::Splitter(Qt::Orientation orientation, QVector<QWidget*> widgets, QWidget* parent)
 	: QWidget(parent)
 {
-	m_trueSplitter->setObjectName(name);
+	//m_trueSplitter->setObjectName(name);
 	Layout::box(this, m_trueSplitter);
 	m_trueSplitter->setOrientation(orientation);
 	for (auto& widget : widgets)

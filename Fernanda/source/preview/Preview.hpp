@@ -6,10 +6,10 @@
 class Preview : public QWidget
 {
 public:
-	inline Preview(const char* name, QWidget* parent = nullptr)
+	inline Preview(QWidget* parent = nullptr)
 		: QWidget(parent)
 	{
-		setObjectName(name);
+		//setObjectName(name);
 		Layout::box(this, m_view);
 	}
 

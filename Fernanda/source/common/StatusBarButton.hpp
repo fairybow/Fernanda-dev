@@ -9,10 +9,10 @@ class StatusBarButton : public QPushButton
 	Q_OBJECT
 
 public:
-	inline StatusBarButton(const char* name, const QString& text, QWidget* parent, double defaultOpacity = 0.5)
+	inline StatusBarButton(const QString& text, QWidget* parent, double defaultOpacity = 0.5)
 		: QPushButton(parent), m_opacity(defaultOpacity)
 	{
-		setObjectName(name);
+		//setObjectName(name);
 		installEventFilter(this);
 		setText(text);
 		m_effect->setOpacity(m_opacity);

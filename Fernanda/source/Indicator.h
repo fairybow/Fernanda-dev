@@ -10,10 +10,10 @@ class Indicator : public QWidget
 	Q_OBJECT
 
 public:
-	inline Indicator(const char* name, QWidget* parent)
+	inline Indicator(QWidget* parent)
 		: QWidget(parent)
 	{
-		m_progressBar->setObjectName(name);
+		//m_progressBar->setObjectName(name);
 		setAttribute(Qt::WA_TransparentForMouseEvents);
 		m_progressBar->setAttribute(Qt::WA_TransparentForMouseEvents);
 		Layout::box(this, m_progressBar);

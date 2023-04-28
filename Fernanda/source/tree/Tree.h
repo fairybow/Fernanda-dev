@@ -8,10 +8,10 @@
 class Tree : public QTreeView
 {
 public:
-	inline Tree(const char* name, QWidget* parent = nullptr)
+	inline Tree(QWidget* parent = nullptr)
 		: QTreeView(parent)
 	{
-		setObjectName(name);
+		//setObjectName(name);
 		setItemDelegate(m_delegate);
 		setModel(m_itemModel);
 	}

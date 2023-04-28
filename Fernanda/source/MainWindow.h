@@ -17,15 +17,15 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	MainWindow(const char* name, QWidget* parent = nullptr);
+	MainWindow(QWidget* parent = nullptr);
 
 private:
-	MenuBar* m_menuBar = new MenuBar("MenuBar", this);
-	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
-	Indicator* m_indicator = new Indicator("Indicator", this);
-	Tree* m_tree = new Tree("Tree");
-	Editor* m_editor = new Editor("Editor");
-	Preview* m_preview = new Preview("Preview");
-	Splitter* m_splitter = new Splitter("Splitter", Qt::Horizontal, { m_tree, m_editor, m_preview }, this);
-	Meter* m_meter = new Meter("Meter");
+	MenuBar* m_menuBar = new MenuBar(this);
+	StatusBar* m_statusBar = new StatusBar(this);
+	Indicator* m_indicator = new Indicator(this);
+	Tree* m_tree = new Tree;
+	Editor* m_editor = new Editor;
+	Preview* m_preview = new Preview;
+	Splitter* m_splitter = new Splitter(Qt::Horizontal, { m_tree, m_editor, m_preview }, this);
+	Meter* m_meter = new Meter;
 };

@@ -1,9 +1,9 @@
 #include "MenuBar.h"
 
-MenuBar::MenuBar(const char* name, QWidget* parent)
+MenuBar::MenuBar(QWidget* parent)
 	: QMenuBar(parent)
 {
-	setObjectName(name);
+	//setObjectName(name);
 }
 
 void MenuBar::makeSubmenus()
