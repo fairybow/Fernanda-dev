@@ -31,11 +31,26 @@
     <Filter Include="Source\Menu">
       <UniqueIdentifier>{cf7edd88-3cc2-40a1-ae98-d087bc88fa10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\Stylist">
+      <UniqueIdentifier>{e0d401ed-2981-400b-bdc3-f88077792799}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Cpp.hint" />
     <None Include="..\README.md" />
     <None Include="..\.gitignore" />
+    <None Include="resources\stylist\MainWindowBase.qss">
+      <Filter>Resources\Stylist</Filter>
+    </None>
+    <None Include="resources\stylist\Editor.qss">
+      <Filter>Resources\Stylist</Filter>
+    </None>
+    <None Include="resources\stylist\EditorBase.qss">
+      <Filter>Resources\Stylist</Filter>
+    </None>
+    <None Include="resources\stylist\MainWindow.qss">
+      <Filter>Resources\Stylist</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="source\MainWindow.h">
@@ -91,7 +106,7 @@
     <ClCompile Include="source\Indicator.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="source\tree\Tree.cpp">
+    <ClCompile Include="source\tree\TreeView.cpp">
       <Filter>Source\Tree</Filter>
     </ClCompile>
     <ClCompile Include="source\menu\MenuBar.cpp">
@@ -123,7 +138,7 @@
     <ClInclude Include="source\tree\StyledItemDelegate.hpp">
       <Filter>Source\Tree</Filter>
     </ClInclude>
-    <ClInclude Include="source\tree\Tree.h">
+    <ClInclude Include="source\tree\TreeView.h">
       <Filter>Source\Tree</Filter>
     </ClInclude>
     <ClInclude Include="source\common\Layout.hpp">
@@ -153,6 +168,9 @@
     <ClInclude Include="source\Stylist.hpp">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="source\common\Path.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">
@@ -161,6 +179,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="resources\MenuBar.qrc">
+      <Filter>Resources</Filter>
+    </QtRcc>
+    <QtRcc Include="resources\Stylist.qrc">
       <Filter>Resources</Filter>
     </QtRcc>
   </ItemGroup>

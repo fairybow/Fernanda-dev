@@ -5,10 +5,10 @@
 #include <QStandardItemModel>
 #include <QTreeView>
 
-class Tree : public QTreeView
+class TreeView : public QTreeView
 {
 public:
-	inline Tree(const char* name, QWidget* parent = nullptr)
+	inline TreeView(const char* name, QWidget* parent = nullptr)
 		: QTreeView(parent)
 	{
 		setObjectName(name);

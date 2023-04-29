@@ -96,6 +96,10 @@
     <None Include="..\.gitignore" />
     <None Include="..\README.md" />
     <None Include="Cpp.hint" />
+    <None Include="resources\stylist\Editor.qss" />
+    <None Include="resources\stylist\EditorBase.qss" />
+    <None Include="resources\stylist\MainWindow.qss" />
+    <None Include="resources\stylist\MainWindowBase.qss" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="source\MainWindow.h" />
@@ -109,7 +113,7 @@
     <ClCompile Include="source\menu\MenuBar.cpp" />
     <ClCompile Include="source\Meter.cpp" />
     <ClCompile Include="source\splitter\Splitter.cpp" />
-    <ClCompile Include="source\tree\Tree.cpp" />
+    <ClCompile Include="source\tree\TreeView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="source\editor\Editor.hpp" />
@@ -118,6 +122,7 @@
     <ClInclude Include="source\common\Io.hpp" />
     <ClInclude Include="source\common\Layout.hpp" />
     <QtMoc Include="source\common\StatusBarButton.hpp" />
+    <ClInclude Include="source\common\Path.hpp" />
     <ClInclude Include="source\editor\LineNumberArea.h" />
     <QtMoc Include="source\Indicator.h" />
     <ClInclude Include="source\menu\LiveFontDialog.hpp" />
@@ -134,7 +139,7 @@
     <QtMoc Include="source\StartCop.hpp" />
     <ClInclude Include="source\StatusBar.hpp" />
     <ClInclude Include="source\Stylist.hpp" />
-    <ClInclude Include="source\tree\Tree.h" />
+    <ClInclude Include="source\tree\TreeView.h" />
     <ClInclude Include="source\tree\StyledItemDelegate.hpp" />
     <ClInclude Include="source\Version.hpp" />
     <QtMoc Include="source\splitter\TrueSplitter.hpp" />
@@ -145,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="resources\MenuBar.qrc" />
+    <QtRcc Include="resources\Stylist.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -1,0 +1,24 @@
+Cursor
+{
+	color = #000;
+	under-color = #f0f0f0;
+}
+
+#Editor
+{
+	background-color: transparent;
+}
+
+#Editor-overlay, #Editor-underlay
+{
+	background: transparent;
+	background-image: url(none);
+	background-repeat: repeat-xy;
+	margin-right: 16px;
+}
+
+#Editor-line-number-area
+{
+	background-color: rgba(88, 88, 88, 0.5);
+	color: rgba(255, 255, 255, 1);
+}

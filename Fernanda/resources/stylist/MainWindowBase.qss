@@ -1,0 +1,62 @@
+#Editor, #TreeView
+{
+	border: none;
+}
+
+#HScrollBar:horizontal
+{
+	height: 10px;
+}
+
+#MenuBar, #Meter, QDialog, QDialog QLabel, QDialog QPushButton, QMenu, #ScrollPrevious, #ScrollUp, #ScrollDown, #ScrollNext, #StatusBar, #TreeView
+{
+	font-size: 9pt;
+}
+
+#Meter
+{
+	padding-left: 1px;
+	padding-right: 1px;
+}
+
+#ScrollNext
+{
+	text-decoration: underline;
+}
+
+#ScrollNext, #ScrollPrevious
+{
+	font-size: 7pt;
+	font-weight: normal;
+	width: 16px;
+}
+
+#ScrollPrevious
+{
+	text-decoration: overline;
+}
+
+#StatusBarButton
+{
+	font-size: 9pt;
+	min-width: 33px;
+	padding-bottom: 1px;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 1px;
+}
+
+#StatusBarButton:hover
+{
+	font-size: 10pt;
+}
+
+#TreeViewVScrollBar:vertical
+{
+	width: 10px;
+}
+
+#VScrollBar:vertical
+{
+	width: 16px;
+}

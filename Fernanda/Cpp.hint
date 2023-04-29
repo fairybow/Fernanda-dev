@@ -5,3 +5,5 @@
 #define Q_OBJECT
 #define signals
 #define slots
+#define qDebug QMessageLogger(QT_MESSAGELOG_FILE, QT_MESSAGELOG_LINE, QT_MESSAGELOG_FUNC).debug
+#define qDebug

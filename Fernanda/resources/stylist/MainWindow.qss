@@ -1,0 +1,219 @@
+#Indicator
+{
+	background: transparent;
+	border: none;
+}
+
+#HScrollBar:horizontal, #TreeViewVScrollBar:vertical, #VScrollBar:vertical
+{
+	background: @scrollBg;
+	margin: 0px 0 0px 0;
+}
+
+#HScrollBar::handle:horizontal
+{
+	min-width: 16px;
+}
+
+#HScrollBar::handle:horizontal, #TreeViewVScrollBar::handle:vertical, #VScrollBar::handle:vertical
+{
+	background: @scrollHandle;
+	border-left: 2px solid @scrollBg;
+	border-right: 2px solid @scrollBg;
+}
+
+#HScrollBar::handle:horizontal:hover, #TreeViewVScrollBar::handle:vertical:hover, #VScrollBar::handle:vertical:hover
+{
+	background: @scrollHandleHover;
+}
+
+#HScrollBar::handle:horizontal:pressed, #TreeViewVScrollBar::handle:vertical:pressed, #VScrollBar::handle:vertical:pressed
+{
+	background: @scrollHandlePress;
+}
+
+#HScrollBar::add-line:horizontal, #HScrollBar::sub-line:horizontal, #TreeViewVScrollBar::add-line:vertical, #TreeViewVScrollBar::sub-line:vertical, #VScrollBar::add-line:vertical, #VScrollBar::sub-line:vertical
+{
+	border: none;
+	height: 0px;
+}
+
+#HScrollBar::left-arrow:horizontal, #HScrollBar::right-arrow:horizontal, #TreeViewVScrollBar::up-arrow:vertical, #TreeViewVScrollBar::down-arrow:vertical, #VScrollBar::up-arrow:vertical, #VScrollBar::down-arrow:vertical
+{
+	border: none;
+	height: 0px;
+	width: 0px;
+}
+
+#HScrollBar::add-page:horizontal, #HScrollBar::sub-page:horizontal, #TreeViewVScrollBar::add-page:vertical, #TreeViewVScrollBar::sub-page:vertical, #VScrollBar::add-page:vertical, #VScrollBar::sub-page:vertical
+{
+	background: none;
+}
+
+#MenuBar, QMenu
+{
+	background: @menuBg;
+	color: @menuFont;
+}
+
+#MenuBar::item:selected, QMenu::item:selected, #MenuBar-slider:hover
+{
+	background: @menuHover;
+	color: @menuFontHover;
+}
+
+#MenuBar-slider::groove:horizontal
+{
+	border: 1px solid #fff;
+	background: transparent;
+	height: 6px;
+	margin-left: 18px;
+	margin-right: 18px;
+}
+
+#MenuBar-slider::sub-page:horizontal
+{
+	background: qlineargradient(
+		x1: 0,
+		y1: 0,
+		x2: 1,
+		y2: 0,
+		stop: 0 #7ce1f9,
+		stop: 0.25 #3bb0f3,
+		stop: 0.75 #9194f2,
+		stop: 1 #f9b3f9
+	);
+	border: 1px solid #777;
+	height: 6px;
+	margin-left: 18px;
+}
+
+#MenuBar-slider::add-page:horizontal
+{
+	background: transparent;
+	border: 1px solid #777;
+	height: 6px;
+	margin-right: 18px;
+}
+
+#MenuBar-slider::handle:horizontal
+{
+	background: qlineargradient(
+		x1:0,
+		y1:0,
+		x2:1,
+		y2:1,
+		stop:0 #eee,
+		stop:1 #ccc
+	);
+	border: none;
+	width: 8px;
+	margin-top: -6px;
+	margin-bottom: -6px;
+}
+
+#MenuBar-slider::handle:horizontal:hover
+{
+	background: qlineargradient(
+		x1:0,
+		y1:0,
+		x2:1,
+		y2:1,
+		stop:0 #fff,
+		stop:1 #ddd
+	);
+}
+
+#MenuBar-slider::sub-page:horizontal:disabled
+{
+	background: #bbb;
+	border-color: #999;
+}
+
+#MenuBar-slider::add-page:horizontal:disabled
+{
+	background: #eee;
+	border-color: #999;
+}
+
+#MenuBar-slider::handle:horizontal:disabled
+{
+	background: #eee;
+}
+
+#Meter
+{
+	color: @meterFont;
+}
+
+QSizeGrip
+{
+	image: url(none);
+}
+
+#ScrollPrevious, #ScrollUp, #ScrollDown, #ScrollNext
+{
+	background: @scrollButtonBg;
+	border: none;
+	color: @scrollButtonFont;
+}
+
+#ScrollUp, #ScrollDown
+{
+	font-size: 7pt;
+	font-weight: normal;
+	width: 16px;
+}
+
+#ScrollPrevious:hover, #ScrollUp:hover, #ScrollDown:hover, #ScrollNext:hover
+{
+	background: @scrollButtonHover;
+	color: @scrollButtonFontHover;
+}
+
+#ScrollPrevious:pressed, #ScrollUp:pressed, #ScrollDown:pressed, #ScrollNext:pressed
+{
+	background: @scrollButtonPress;
+	color: @scrollButtonFontPress;
+}
+
+#Splitter::handle
+{
+	background: @splitterHandle;
+}
+
+#StatusBar
+{
+	background-color: @statusBarBg;
+	border: none;
+}
+
+#StatusBar::item
+{
+	border: none;
+}
+
+#StatusBarButton
+{
+	background: @statusBarButton;
+	border: transparent;
+	border-radius: 3px;
+	color: @statusBarButtonFont;
+}
+
+#StatusBarButton:hover
+{
+	background: @statusBarButtonHover;
+	color: @statusBarButtonFontHover;
+}
+
+#TreeView
+{
+	background: @treeViewBg;
+	color: @treeViewFont;
+}
+
+#TreeViewVScrollBar::handle:vertical, #VScrollBar::handle:vertical
+{
+	min-height: 16px;
+}

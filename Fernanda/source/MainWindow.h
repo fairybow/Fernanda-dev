@@ -8,8 +8,8 @@
 #include "preview/Preview.hpp"
 #include "splitter/Splitter.h"
 #include "StatusBar.hpp"
-//#include "Stylist.hpp"
-#include "tree/Tree.h"
+#include "Stylist.hpp"
+#include "tree/TreeView.h"
 
 #include <QMainWindow>
 
@@ -21,13 +21,13 @@ public:
 	MainWindow(const char* name, QWidget* parent = nullptr);
 
 private:
-	//Stylist* m_stylist = new Stylist(this);
 	MenuBar* m_menuBar = new MenuBar("MenuBar", this);
 	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
 	Indicator* m_indicator = new Indicator("Indicator", this);
-	Tree* m_tree = new Tree("Tree");
+	TreeView* m_treeView = new TreeView("TreeView");
 	Editor* m_editor = new Editor("Editor");
 	Preview* m_preview = new Preview("Preview");
-	Splitter* m_splitter = new Splitter("Splitter", Qt::Horizontal, { m_tree, m_editor, m_preview }, this);
+	Splitter* m_splitter = new Splitter("Splitter", Qt::Horizontal, { m_treeView, m_editor, m_preview }, this);
 	Meter* m_meter = new Meter("Meter");
+	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 };
