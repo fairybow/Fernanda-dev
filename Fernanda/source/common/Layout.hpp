@@ -43,7 +43,10 @@ namespace Layout
 		parent->setLayout(layout);
 	}
 
-	inline void box(QWidget* parent, QWidget* widget, Line alignment = Line::Vertically) { box(parent, QVector<QWidget*>{ widget }, alignment); }
+	inline void box(QWidget* parent, QWidget* widget, Line alignment = Line::Vertically)
+	{
+		box(parent, QVector<QWidget*>{ widget }, alignment);
+	}
 
 	inline void setCentralWidgets(QMainWindow* parentWindow, QVector<QWidget*> widgets)
 	{
@@ -53,7 +56,10 @@ namespace Layout
 		parentWindow->setCentralWidget(container);
 	}
 
-	inline void setCentralWidget(QMainWindow* parentWindow, QWidget* widget) { setCentralWidgets(parentWindow, QVector<QWidget*>{ widget }); }
+	inline void setCentralWidget(QMainWindow* parentWindow, QWidget* widget)
+	{
+		setCentralWidgets(parentWindow, QVector<QWidget*>{ widget });
+	}
 
 	inline void stack(QWidget* parent, QVector<QWidget*> widgets)
 	{
@@ -62,5 +68,8 @@ namespace Layout
 		parent->setLayout(layout);
 	}
 
-	inline void stack(QWidget* parent, QWidget* widget) { stack(parent, QVector<QWidget*>{ widget }); }
+	inline void stack(QWidget* parent, QWidget* widget)
+	{
+		stack(parent, QVector<QWidget*>{ widget });
+	}
 }

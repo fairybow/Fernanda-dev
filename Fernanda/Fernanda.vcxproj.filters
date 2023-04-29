@@ -112,6 +112,9 @@
     <ClCompile Include="source\menu\MenuBar.cpp">
       <Filter>Source\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="source\Stylist.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\preview\WebDocument.hpp">
@@ -165,7 +168,7 @@
     <ClInclude Include="source\common\HtmlString.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
-    <ClInclude Include="source\Stylist.hpp">
+    <ClInclude Include="source\Stylist.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="source\common\Path.hpp">
