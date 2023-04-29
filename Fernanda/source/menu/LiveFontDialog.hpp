@@ -5,7 +5,7 @@
 class LiveFontDialog : public QFontDialog
 {
 public:
-	using QFontDialog::QFontDialog;
+	using QFontDialog::QFontDialog; // Needed?
 
 	void accept() override {}
 };

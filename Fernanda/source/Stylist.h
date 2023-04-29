@@ -13,7 +13,7 @@
 class Stylist : public QObject
 {
 	using StdFsPath = std::filesystem::path;
-	using PathPair = std::pair<StdFsPath, StdFsPath>;
+	using StdPathPair = std::pair<StdFsPath, StdFsPath>;
 	using QStringPair = std::pair<QString, QString>;
 
 public:
@@ -43,7 +43,7 @@ private:
 	const QString& m_extension;
 	QVector<Stylee> m_stylees;
 
-	PathPair sheetPathsFromClass(QWidget* widget);
+	StdPathPair sheetPathsFromClass(QWidget* widget);
 	void apply(std::function<void(Stylee&)> function);
 	void styleAll(Mode mode = Mode::Style);
 	void setCurrentThemeSheet(QWidget* styleeWidget, const StdFsPath& themeSheetPath);

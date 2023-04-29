@@ -38,7 +38,7 @@ void Stylist::setThemeEnabled(QWidget* styleeWidget, bool hasTheme)
 	styleAll();
 }
 
-Stylist::PathPair Stylist::sheetPathsFromClass(QWidget* widget)
+Stylist::StdPathPair Stylist::sheetPathsFromClass(QWidget* widget)
 {
 	QString class_name = widget->metaObject()->className();
 	auto root = Path::toStdFs(":/stylist");
