@@ -77,7 +77,8 @@ QString Stylist::buildFullStyleSheet(const Stylee& stylee)
 	auto full_style_sheet = Io::readFile(stylee.baseSheet);
 	if (stylee.hasTheme && stylee.currentThemeSheet != StdFsPath()) {
 		auto theme_sheet = Io::readFile(stylee.currentThemeSheet);
-		full_style_sheet += "\n" + buildThemedStyleSheet(Io::readFile(stylee.styleSheet), theme_sheet);
+		full_style_sheet += "\n"
+			+ buildThemedStyleSheet(Io::readFile(stylee.styleSheet), theme_sheet);
 	}
 	return full_style_sheet;
 }

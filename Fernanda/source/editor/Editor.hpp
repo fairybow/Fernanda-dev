@@ -47,7 +47,7 @@ private:
 		m_trueEditor->addScrollBarWidget(m_scrollPrevious, Qt::AlignTop);
 		m_trueEditor->addScrollBarWidget(m_scrollNext, Qt::AlignBottom);
 		m_trueEditor->addScrollBarWidget(m_scrollDown, Qt::AlignBottom);
-		for (const auto& button : { m_scrollUp, m_scrollDown }) {
+		for (auto& button : { m_scrollUp, m_scrollDown }) {
 			button->setAutoRepeat(true);
 			button->setAutoRepeatDelay(500);
 		}
@@ -57,7 +57,7 @@ private:
 		m_scrollPrevious->setText(up_arrow);
 		m_scrollNext->setText(down_arrow);
 		m_scrollDown->setText(down_arrow);
-		for (const auto& button : { m_scrollUp, m_scrollPrevious, m_scrollNext, m_scrollDown })
+		for (auto& button : { m_scrollUp, m_scrollPrevious, m_scrollNext, m_scrollDown })
 			button->setMinimumHeight(30);
 	}
 };

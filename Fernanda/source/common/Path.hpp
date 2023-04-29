@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QDir>
 #include <QString>
 #include <QVariant>
 
@@ -30,5 +31,12 @@ namespace Path
 		if (sanitize)
 			qpath.replace(R"(\)", R"(/)");
 		return qpath;
+	}
+
+	inline void makeDirectories(StdFs::path path, bool pathIncludesFile = false)
+	{
+		auto directory = pathIncludesFile ? path.parent_path() : path;
+		if (!QDir(directory).exists())
+			StdFs::create_directories(directory);
 	}
 }

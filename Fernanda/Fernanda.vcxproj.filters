@@ -34,6 +34,9 @@
     <Filter Include="Resources\Stylist">
       <UniqueIdentifier>{e0d401ed-2981-400b-bdc3-f88077792799}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\User">
+      <UniqueIdentifier>{2b037859-aa2a-44e5-a02f-b50dc09f1bc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Cpp.hint" />
@@ -173,6 +176,12 @@
     </ClInclude>
     <ClInclude Include="source\common\Path.hpp">
       <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\user\User.hpp">
+      <Filter>Source\User</Filter>
+    </ClInclude>
+    <ClInclude Include="source\user\Settings.hpp">
+      <Filter>Source\User</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
