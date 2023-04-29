@@ -13,9 +13,9 @@ void Stylist::add(QWidget* widget)
 	m_stylees << Stylee{ widget, base_path, style_path };
 }
 
-void Stylist::style(QWidget* stylee, const StdFsPath& themeSheet)
+void Stylist::style(QWidget* styleeWidget, const StdFsPath& themeSheet)
 {
-	setCurrentThemeSheet(stylee, themeSheet);
+	setCurrentThemeSheet(styleeWidget, themeSheet);
 	styleAll();
 }
 

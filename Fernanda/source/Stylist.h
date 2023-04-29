@@ -20,7 +20,7 @@ public:
 	Stylist(QVector<QWidget*> widgets = {}, QObject* parent = nullptr, const QString& baseSuffix = "Base", const QString& extension = ".qss");
 
 	void add(QWidget* widget);
-	void style(QWidget* stylee, const StdFsPath& themeSheet);
+	void style(QWidget* styleeWidget, const StdFsPath& themeSheet);
 	void style();
 	void unStyle();
 	void setThemeEnabled(QWidget* styleeWidget, bool hasTheme);
