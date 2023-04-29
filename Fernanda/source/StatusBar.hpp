@@ -5,10 +5,10 @@
 class StatusBar : public QStatusBar
 {
 public:
-	inline StatusBar(QWidget* parent)
+	inline StatusBar(const char* name, QWidget* parent)
 		: QStatusBar(parent)
 	{
-		//setObjectName(name);
+		setObjectName(name);
 		setMaximumHeight(22);
 	}
 };

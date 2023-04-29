@@ -16,7 +16,7 @@ class Splitter : public QWidget
 	Q_OBJECT
 
 public:
-	Splitter(Qt::Orientation orientation, QVector<QWidget*> widgets, QWidget* parent);
+	Splitter(const char* name, Qt::Orientation orientation, QVector<QWidget*> widgets, QWidget* parent);
 
 	void initialize(QVector<double> fallbacks, int centralWidgetIndex);
 

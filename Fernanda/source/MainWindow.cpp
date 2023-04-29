@@ -1,9 +1,9 @@
 #include "MainWindow.h"
 
-MainWindow::MainWindow(QWidget* parent)
+MainWindow::MainWindow(const char* name, QWidget* parent)
 	: QMainWindow(parent)
 {
-	//setObjectName(name);
+	setObjectName(name);
 	setGeometry(0, 0, 1000, 600);
 	Layout::setCentralWidget(this, m_splitter);
 	setMenuBar(m_menuBar);

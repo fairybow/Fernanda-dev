@@ -14,8 +14,7 @@ int main(int argc, char* argv[])
 	QApplication::setDesktopSettingsAware(true);
 
 	QApplication fernanda(argc, argv);
-	MainWindow main_window;
-	main_window.setObjectName(window_name);
+	MainWindow main_window(window_name);
 	main_window.show();
 	return fernanda.exec();
 }
