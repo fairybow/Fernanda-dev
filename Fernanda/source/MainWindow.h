@@ -8,7 +8,7 @@
 #include "preview/Preview.hpp"
 #include "splitter/Splitter.h"
 #include "StatusBar.hpp"
-#include "Stylist.hpp"
+//#include "Stylist.hpp"
 #include "tree/Tree.h"
 
 #include <QMainWindow>
