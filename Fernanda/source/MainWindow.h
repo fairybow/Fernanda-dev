@@ -32,4 +32,9 @@ private:
 	Meter* m_meter = new Meter("Meter");
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 	User* m_user = new User(QCoreApplication::applicationName(), this);
+
+	void connections();
+	void treeViewConnections();
+	void editorConnections();
+	void previewConnections();
 };

@@ -13,3 +13,23 @@ MainWindow::MainWindow(const char* name, QWidget* parent)
 	connect(m_splitter, &Splitter::askWindowSize, this, [&]() { return geometry(); });
 	m_splitter->initialize({ 0.2, 0.4, 0.4 }, 1);
 }
+
+void MainWindow::connections()
+{
+	//
+}
+
+void MainWindow::treeViewConnections()
+{
+	//
+}
+
+void MainWindow::editorConnections()
+{
+	//
+}
+
+void MainWindow::previewConnections()
+{
+	//
+}
