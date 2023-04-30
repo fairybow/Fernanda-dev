@@ -37,6 +37,9 @@
     <Filter Include="Source\User">
       <UniqueIdentifier>{2b037859-aa2a-44e5-a02f-b50dc09f1bc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Notes">
+      <UniqueIdentifier>{7779faed-9209-4cf7-98f8-545bb5e086c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Cpp.hint" />
@@ -53,6 +56,9 @@
     </None>
     <None Include="resources\stylist\MainWindow.qss">
       <Filter>Resources\Stylist</Filter>
+    </None>
+    <None Include="notes\Snippets.md">
+      <Filter>Notes</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

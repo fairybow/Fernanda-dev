@@ -14,9 +14,6 @@
 
 #include <QMainWindow>
 
-// testing
-#include <tuple>
-
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -25,10 +22,9 @@ public:
 	MainWindow(const char* name, QWidget* parent = nullptr);
 
 signals:
-	// testing
 	void testSignal1();
-	void testSignal2(int i);
-	void testSignal3(QString str, int i, bool checked);
+	void testSignal2(QString text);
+	void testSignal3(int i);
 
 private:
 	MenuBar* m_menuBar = new MenuBar("MenuBar", this);
@@ -48,16 +44,6 @@ private:
 	void editorConnections();
 	void previewConnections();
 
-	// testing
-
-	template<typename... Args>
-	struct SignalArgs
-	{
-		std::tuple<Args...> args;
-		SignalArgs(Args... args)
-			: args(std::make_tuple(args...)) {}
-	};
-
 	template<typename T>
 	inline void emitAndSave(void (MainWindow::* signal)(T), T value)
 	{
@@ -71,12 +57,5 @@ private:
 		if (pointerCheck == nullptr) return;
 		emit(this->*signal)(value);
 		m_user->save(value);
-	}
-
-	template<typename... Args>
-	inline void emitAndSave(void (MainWindow::* signal)(Args...), SignalArgs<Args...> signalArgs)
-	{
-		std::apply([&, signal](Args... args) { emit(this->*signal)(args...); }, signalArgs.args);
-		std::apply([&](Args... args) { m_user->save(args...); }, signalArgs.args);
 	}
 };

@@ -30,18 +30,11 @@ public:
 		connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &User::destroyTemp);
 	}
 
-	// testing
-
-	/*template<typename T>
+	template<typename T>
 	inline void save(T value)
 	{
-		qDebug() << value;
-	}*/
-
-	template<typename... Args>
-	inline void save(Args... args)
-	{
-		(qDebug() << ... << args);
+		m_settings->saveConfig(
+			m_folders["data"] / "Settings.ini", QVariant::fromValue(value));
 	}
 
 private:

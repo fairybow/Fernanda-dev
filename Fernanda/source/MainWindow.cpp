@@ -16,13 +16,13 @@ MainWindow::MainWindow(const char* name, QWidget* parent)
 	// testing
 
 	auto button = new QPushButton;
+	button->setText("Signal");
 	m_statusBar->addPermanentWidget(button, 0);
 	connect(button, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
 	connect(this, &MainWindow::testSignal1, this, [&]()
 		{
-			emitAndSave(&MainWindow::testSignal2, 69);
-			emitAndSave(&MainWindow::testSignal2, 420, this);
-			emitAndSave(&MainWindow::testSignal3, SignalArgs{ QString("Test"), 666, true });
+			emitAndSave(&MainWindow::testSignal2, QString("Signal received by m_settings"));
+			emitAndSave(&MainWindow::testSignal3, 666, this);
 		});
 }
 
