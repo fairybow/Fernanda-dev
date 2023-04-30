@@ -31,10 +31,17 @@ public:
 	}
 
 	// testing
-	template<typename T>
+
+	/*template<typename T>
 	inline void save(T value)
 	{
 		qDebug() << value;
+	}*/
+
+	template<typename... Args>
+	inline void save(Args... args)
+	{
+		(qDebug() << ... << args);
 	}
 
 private:

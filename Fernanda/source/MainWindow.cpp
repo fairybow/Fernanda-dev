@@ -14,10 +14,16 @@ MainWindow::MainWindow(const char* name, QWidget* parent)
 	m_splitter->initialize({ 0.2, 0.4, 0.4 }, 1);
 
 	// testing
+
 	auto button = new QPushButton;
 	m_statusBar->addPermanentWidget(button, 0);
 	connect(button, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
-	connect(this, &MainWindow::testSignal1, this, [&]() { emitAndSave(&MainWindow::testSignal2, true); });
+	connect(this, &MainWindow::testSignal1, this, [&]()
+		{
+			emitAndSave(&MainWindow::testSignal2, 69);
+			emitAndSave(&MainWindow::testSignal2, 420, this);
+			emitAndSave(&MainWindow::testSignal3, SignalArgs{ QString("Test"), 666, true });
+		});
 }
 
 void MainWindow::connections()
