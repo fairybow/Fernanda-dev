@@ -30,6 +30,13 @@ public:
 		connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &User::destroyTemp);
 	}
 
+	// testing
+	template<typename T>
+	inline void save(T value)
+	{
+		qDebug() << value;
+	}
+
 private:
 	Settings* m_settings = new Settings(this);
 	QMap<QString, StdFsPath> m_folders;

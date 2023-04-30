@@ -21,6 +21,10 @@ class MainWindow : public QMainWindow
 public:
 	MainWindow(const char* name, QWidget* parent = nullptr);
 
+signals:
+	void testSignal1();
+	void testSignal2(bool checked);
+
 private:
 	MenuBar* m_menuBar = new MenuBar("MenuBar", this);
 	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
@@ -38,12 +42,12 @@ private:
 	void editorConnections();
 	void previewConnections();
 
-	template<typename T, typename U>
-	inline void emitAndSave(T signal, U value)
+	// testing
+	template<typename T>
+	inline void emitAndSave(void (MainWindow::* signal)(T), T value)
 	{
-		(this->*signal)(value);
-		//m_user->saveValue(value);
-
-		//emitAndSave(&MainWindow::testSignal, "Text");
+		emit (this->*signal)(value);
+		m_user->save(value);
 	}
+
 };

@@ -12,6 +12,12 @@ MainWindow::MainWindow(const char* name, QWidget* parent)
 	m_statusBar->addPermanentWidget(m_meter, 0);
 	connect(m_splitter, &Splitter::askWindowSize, this, [&]() { return geometry(); });
 	m_splitter->initialize({ 0.2, 0.4, 0.4 }, 1);
+
+	// testing
+	auto button = new QPushButton;
+	m_statusBar->addPermanentWidget(button, 0);
+	connect(button, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
+	connect(this, &MainWindow::testSignal1, this, [&]() { emitAndSave(&MainWindow::testSignal2, true); });
 }
 
 void MainWindow::connections()
