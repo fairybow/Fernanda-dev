@@ -23,7 +23,8 @@ public:
 		m_folders["data"] = data_folder_path;
 		m_folders["tempFiles"] = data_folder_path / ".temp";
 		m_folders["backup"] = data_folder_path / "backup";
-		auto system_documents = Path::toStdFs(QStandardPaths::locate(QStandardPaths::DocumentsLocation, nullptr, QStandardPaths::LocateDirectory));
+		auto system_documents = Path::toStdFs(QStandardPaths::locate(
+			QStandardPaths::DocumentsLocation, nullptr, QStandardPaths::LocateDirectory));
 		m_folders["documents"] = system_documents / Path::toStdFs(applicationName);
 		for (auto& data_folder : m_folders.values())
 			Path::make(data_folder);
