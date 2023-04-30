@@ -37,4 +37,13 @@ private:
 	void treeViewConnections();
 	void editorConnections();
 	void previewConnections();
+
+	template<typename T, typename U>
+	inline void emitAndSave(T signal, U value)
+	{
+		(this->*signal)(value);
+		//m_user->saveValue(value);
+
+		//emitAndSave(&MainWindow::testSignal, "Text");
+	}
 };
