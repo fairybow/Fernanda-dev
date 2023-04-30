@@ -53,7 +53,8 @@ private:
 	struct SignalArgs
 	{
 		std::tuple<Args...> args;
-		SignalArgs(Args... args) : args(std::make_tuple(args...)) {}
+		SignalArgs(Args... args)
+			: args(std::make_tuple(args...)) {}
 	};
 
 	template<typename T>
