@@ -10,6 +10,14 @@ namespace Path
 {
 	namespace StdFs = std::filesystem;
 
+	namespace
+	{
+		inline StdFs::path pathOrParentBasedOnFileName(StdFs::path path, bool includes)
+		{
+			return includes ? path.parent_path() : path;
+		}
+	}
+
 	inline StdFs::path toStdFs(QString qStringPath)
 	{
 		return StdFs::path(qStringPath.toStdString());
@@ -31,14 +39,6 @@ namespace Path
 		if (sanitize)
 			qpath.replace(R"(\)", R"(/)");
 		return qpath;
-	}
-
-	namespace
-	{
-		inline StdFs::path pathOrParentBasedOnFileName(StdFs::path path, bool includes)
-		{
-			return includes ? path.parent_path() : path;
-		}
 	}
 
 	inline void make(StdFs::path path, bool includesFileName = false)

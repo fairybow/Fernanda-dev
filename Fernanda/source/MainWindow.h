@@ -31,6 +31,5 @@ private:
 	Splitter* m_splitter = new Splitter("Splitter", Qt::Horizontal, { m_treeView, m_editor, m_preview }, this);
 	Meter* m_meter = new Meter("Meter");
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
-	//
-	User* m_user = new User;
+	User* m_user = new User(QCoreApplication::applicationName(), this);
 };

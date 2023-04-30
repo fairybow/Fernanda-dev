@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common/Path.hpp"
+#include "Settings.hpp"
 
 #include <QCoreApplication>
 #include <QMap>
@@ -14,7 +15,8 @@ class User : public QObject
 	Q_OBJECT
 
 public:
-	inline User(const QString& applicationName = QCoreApplication::applicationName())
+	inline User(const QString& applicationName = QCoreApplication::applicationName(), QObject* parent = nullptr)
+		: QObject(parent)
 	{
 		auto data_folder_name = "." + applicationName.toLower();
 		auto data_folder_path = Path::toStdFs(QDir::homePath()) / Path::toStdFs(data_folder_name);
@@ -29,6 +31,7 @@ public:
 	}
 
 private:
+	Settings* m_settings = new Settings(this);
 	QMap<QString, StdFsPath> m_folders;
 
 private slots:
