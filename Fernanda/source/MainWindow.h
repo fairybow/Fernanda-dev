@@ -37,7 +37,8 @@ private:
 	TreeView* m_treeView = new TreeView("TreeView");
 	Editor* m_editor = new Editor("Editor");
 	Preview* m_preview = new Preview("Preview");
-	Splitter* m_splitter = new Splitter("Splitter", Qt::Horizontal, { m_treeView, m_editor, m_preview }, this);
+	Splitter* m_splitter = new Splitter("Splitter",
+		Qt::Horizontal, { m_treeView, m_editor, m_preview }, this);
 	Meter* m_meter = new Meter("Meter");
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 	User* m_user = new User(QCoreApplication::applicationName(), this);
