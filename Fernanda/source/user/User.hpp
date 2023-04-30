@@ -2,23 +2,38 @@
 
 #include "../common/Path.hpp"
 
+#include <QCoreApplication>
+#include <QMap>
 #include <QStandardPaths>
+#include <QString>
 
-class User
+class User : public QObject
 {
+	using StdFsPath = std::filesystem::path;
+
+	Q_OBJECT
+
 public:
-	inline User(const QString& name = "User")
+	inline User(const QString& applicationName = QCoreApplication::applicationName())
 	{
-		auto data_folder = "." + name.toLower();
-		auto user_data = Path::toStdFs(QDir::homePath()) / Path::toStdFs(data_folder);
-		auto temp_folder = user_data / ".temp";
-		auto backup = user_data / "backup";
-		auto documents = Path::toStdFs(QStandardPaths::locate(QStandardPaths::DocumentsLocation, nullptr, QStandardPaths::LocateDirectory));
-		auto user_documents = documents / Path::toStdFs(name);
-		for (const auto& data_folder : { user_data, temp_folder, backup, user_documents })
-			Path::makeDirectories(data_folder);
+		auto data_folder_name = "." + applicationName.toLower();
+		auto data_folder_path = Path::toStdFs(QDir::homePath()) / Path::toStdFs(data_folder_name);
+		m_folders["data"] = data_folder_path;
+		m_folders["tempFiles"] = data_folder_path / ".temp";
+		m_folders["backup"] = data_folder_path / "backup";
+		auto system_documents = Path::toStdFs(QStandardPaths::locate(QStandardPaths::DocumentsLocation, nullptr, QStandardPaths::LocateDirectory));
+		m_folders["documents"] = system_documents / Path::toStdFs(applicationName);
+		for (auto& data_folder : m_folders.values())
+			Path::make(data_folder);
+		connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &User::destroyTemp);
 	}
 
 private:
-	//
+	QMap<QString, StdFsPath> m_folders;
+
+private slots:
+	inline void destroyTemp()
+	{
+		Path::clear(m_folders["tempFiles"], true);
+	}
 };
