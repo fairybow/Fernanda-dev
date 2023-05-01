@@ -15,14 +15,22 @@ MainWindow::MainWindow(const char* name, QWidget* parent)
 
 	// testing
 
-	auto button = new QPushButton;
-	button->setText("Signal");
-	m_statusBar->addPermanentWidget(button, 0);
-	connect(button, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
+	auto button_1 = new QPushButton;
+	auto button_2 = new QPushButton;
+	button_1->setText("Save");
+	button_2->setText("Load");
+	m_statusBar->addPermanentWidget(button_1, 0);
+	m_statusBar->addPermanentWidget(button_2, 0);
+	connect(button_1, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
+	connect(button_2, &QPushButton::pressed, this, [&]() { emit testSignal2(); });
 	connect(this, &MainWindow::testSignal1, this, [&]()
 		{
-			emitAndSave(&MainWindow::testSignal2, QString("Signal received by m_settings"));
-			emitAndSave(&MainWindow::testSignal3, 666, this);
+			emitAndSave(&MainWindow::testSignal3, QString("Signal received by m_settings"));
+			emitAndSave(&MainWindow::testSignal4, 80085, this);
+		});
+	connect(this, &MainWindow::testSignal2, this, [&]()
+		{
+			// load both and print to console
 		});
 }
 

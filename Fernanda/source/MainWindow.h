@@ -23,8 +23,9 @@ public:
 
 signals:
 	void testSignal1();
-	void testSignal2(QString text);
-	void testSignal3(int i);
+	void testSignal2();
+	void testSignal3(QString text);
+	void testSignal4(int i);
 
 private:
 	MenuBar* m_menuBar = new MenuBar("MenuBar", this);

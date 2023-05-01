@@ -5,6 +5,7 @@
 
 #include <QCoreApplication>
 #include <QMap>
+#include <QMetaObject>
 #include <QStandardPaths>
 #include <QString>
 
@@ -34,12 +35,14 @@ public:
 	template<typename T>
 	inline void save(T value)
 	{
-		m_settings->saveConfig(
-			m_folders["data"] / "Settings.ini", QVariant::fromValue(value));
+		QString something_generated_1 = "prefix";
+		QString something_generated_2 = "key";
+
+		Settings::save(
+			m_folders["data"] / "Settings.ini", QVariant::fromValue(value), something_generated_1, something_generated_2);
 	}
 
 private:
-	Settings* m_settings = new Settings(this);
 	QMap<QString, StdFsPath> m_folders;
 
 private slots:

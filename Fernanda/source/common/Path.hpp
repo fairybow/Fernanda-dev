@@ -33,7 +33,7 @@ namespace Path
 		return StdFs::path(cStringPath);
 	}
 
-	inline QString toQString(StdFs::path path, bool sanitize = false)
+	inline QString toQString(StdFs::path path, bool sanitize = true)
 	{
 		auto qpath = QString::fromStdString(path.make_preferred().string());
 		if (sanitize)
