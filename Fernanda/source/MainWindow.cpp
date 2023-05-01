@@ -21,8 +21,8 @@ MainWindow::MainWindow(const char* name, QWidget* parent)
 	connect(button_1, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
 	connect(this, &MainWindow::testSignal1, this, [&]()
 		{
-			emitAndSave(&MainWindow::testSignal3, 420, "Thing1", this);
-			emitAndSave(&MainWindow::testSignal3, 69, "Thing2");
+			emitAndSave(&MainWindow::testSignal3, 666, "Key", this);
+			emitAndSave(&MainWindow::testSignal3, 12, "Key");
 		});
 
 	auto button_2 = new QPushButton;
@@ -31,9 +31,9 @@ MainWindow::MainWindow(const char* name, QWidget* parent)
 	connect(button_2, &QPushButton::pressed, this, [&]() { emit testSignal2(); });
 	connect(this, &MainWindow::testSignal2, this, [&]()
 		{
-			auto x = loadConfig("Thing2", 666);
-			auto y = loadConfig("Thing1", this);
-			qDebug() << y << x;
+			auto x = loadConfig("Key", this, 666);
+			auto y = loadConfig("Key", 12);
+			qDebug() << x << y;
 		});
 	
 	connect(this, &MainWindow::testSignal3, this, [&]()
@@ -60,16 +60,4 @@ void MainWindow::editorConnections()
 void MainWindow::previewConnections()
 {
 	//
-}
-
-QVariant MainWindow::loadConfig(const QString& valueKey, QObject* namedObject, QVariant fallback)
-{
-	return namedObject
-		? m_user->load(valueKey, namedObject->objectName(), fallback)
-		: m_user->load(valueKey, fallback);
-}
-
-QVariant MainWindow::loadConfig(const QString& valueKey, QVariant fallback)
-{
-	return loadConfig(valueKey, nullptr, fallback);
 }

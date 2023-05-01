@@ -14,19 +14,21 @@ class Settings
 	using StdFsPath = std::filesystem::path;
 
 public:
-	static inline void save(StdFsPath config, const QString& groupPrefix, const QString& valueKey, QVariant value)
+	template<typename T>
+	static inline void save(StdFsPath config, const QString& groupPrefix, const QString& valueKey, T value)
 	{
 		auto ini = iniFile(config, groupPrefix);
-		ini->setValue(valueKey, value);
+		ini->setValue(valueKey, QVariant::fromValue(value));
 		ini->endGroup();
 	}
 
-	static inline QVariant load(StdFsPath config, const QString& groupPrefix, const QString& valueKey, QVariant fallback = QVariant())
+	template<typename T>
+	static inline T load(StdFsPath config, const QString& groupPrefix, const QString& valueKey, T fallbackValue = T())
 	{
 		auto ini = iniFile(config, groupPrefix);
-		auto value = ini->value(valueKey, fallback);
+		auto variant_value = ini->value(valueKey, QVariant::fromValue(fallbackValue));
 		ini->endGroup();
-		return value;
+		return variant_value.value<T>();
 	}
 
 private:

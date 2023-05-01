@@ -14,7 +14,6 @@
 
 #include <QMainWindow>
 #include <QString>
-#include <QVariant>
 
 class MainWindow : public QMainWindow
 {
@@ -45,20 +44,28 @@ private:
 	void treeViewConnections();
 	void editorConnections();
 	void previewConnections();
-	QVariant loadConfig(const QString& valueKey, QObject* namedObject, QVariant fallbackValue = QVariant());
-	QVariant loadConfig(const QString& valueKey, QVariant fallbackValue = QVariant());
 
 	template<typename T>
-	inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey)
+	inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey, QObject* namedObject = nullptr)
 	{
 		emit(this->*signal)(value);
-		m_user->save(value, valueKey);
+		QString group_prefix;
+		if (namedObject)
+			group_prefix = namedObject->objectName();
+		m_user->save(value, valueKey, group_prefix);
 	}
 
 	template<typename T>
-	inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey, QObject* namedObject)
+	inline T loadConfig(const QString& valueKey, QObject* namedObject, T fallbackValue = T())
 	{
-		emit(this->*signal)(value);
-		m_user->save(value, valueKey, namedObject->objectName());
+		return namedObject
+			? m_user->load(valueKey, namedObject->objectName(), fallbackValue)
+			: m_user->load(valueKey, fallbackValue);
+	}
+
+	template<typename T>
+	inline T loadConfig(const QString& valueKey, T fallbackValue = T())
+	{
+		return loadConfig(valueKey, nullptr, fallbackValue);
 	}
 };

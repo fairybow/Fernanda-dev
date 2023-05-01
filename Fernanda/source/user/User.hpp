@@ -7,12 +7,13 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QString>
-#include <QVariant>
 
 #include <filesystem>
 #include <map>
 
-constexpr char DEFAULT_GROUP[] = "Common";
+constexpr char BACKUP_NAME[] = "backup";
+constexpr char DATA_NAME[] = "data";
+constexpr char TEMP_NAME[] = "tempFiles";
 
 class User : public QObject
 {
@@ -26,9 +27,9 @@ public:
 	{
 		auto data_folder_name = "." + applicationName.toLower();
 		auto data_folder_path = Path::toStdFs(QDir::homePath()) / Path::toStdFs(data_folder_name);
-		m_folders["data"] = data_folder_path;
-		m_folders["tempFiles"] = data_folder_path / ".temp";
-		m_folders["backup"] = data_folder_path / "backup";
+		m_folders[DATA_NAME] = data_folder_path;
+		m_folders[TEMP_NAME] = data_folder_path / ".temp";
+		m_folders[BACKUP_NAME] = data_folder_path / BACKUP_NAME;
 		auto system_documents = Path::toStdFs(QStandardPaths::locate(
 			QStandardPaths::DocumentsLocation, nullptr, QStandardPaths::LocateDirectory));
 		m_folders["documents"] = system_documents / Path::toStdFs(applicationName);
@@ -38,21 +39,23 @@ public:
 	}
 
 	template<typename T>
-	inline void save(T value, const QString& valueKey, const QString& groupPrefix = DEFAULT_GROUP)
+	inline void save(T value, const QString& valueKey, const QString& groupPrefix = QString())
 	{
-		Settings::save(m_folders["data"] / m_configFileName,
-			groupPrefix, valueKey, QVariant::fromValue(value));
+		Settings::save(m_folders[DATA_NAME] / m_configFileName,
+			groupPrefix, valueKey, value);
 	}
 
-	inline QVariant load(const QString& valueKey, const QString& groupPrefix = DEFAULT_GROUP, QVariant fallback = QVariant())
+	template<typename T>
+	inline T load(const QString& valueKey, const QString& groupPrefix = QString(), T fallbackValue = T())
 	{
-		return Settings::load(m_folders["data"] / m_configFileName,
-			groupPrefix, valueKey, fallback);
+		return Settings::load(m_folders[DATA_NAME] / m_configFileName,
+			groupPrefix, valueKey, fallbackValue);
 	}
 
-	inline QVariant load(const QString& valueKey, QVariant fallback = QVariant())
+	template<typename T>
+	inline T load(const QString& valueKey, T fallbackValue = T())
 	{
-		return load(valueKey, DEFAULT_GROUP, fallback);
+		return load(valueKey, QString(), fallbackValue);
 	}
 
 private:
@@ -70,6 +73,6 @@ private:
 private slots:
 	inline void destroyTemp()
 	{
-		Path::clear(m_folders["tempFiles"], true);
+		Path::clear(m_folders[TEMP_NAME], true);
 	}
 };

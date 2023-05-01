@@ -47,13 +47,43 @@ inline void emitAndSave(void (MainWindow::* signal)(Args...), SignalArgs<Args...
 
 //
 
-auto button = new QPushButton;
-button->setText("Signal");
-m_statusBar->addPermanentWidget(button, 0);
-connect(button, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
+auto button_1 = new QPushButton;
+button_1->setText("Save");
+m_statusBar->addPermanentWidget(button_1, 0);
+connect(button_1, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
 connect(this, &MainWindow::testSignal1, this, [&]()
 	{
-		emitAndSave(&MainWindow::testSignal2, QString("Signal received by m_settings"));
-		emitAndSave(&MainWindow::testSignal3, 666, this);
+		emitAndSave(&MainWindow::testSignal3, 666, "Key", this);
+		emitAndSave(&MainWindow::testSignal3, 12, "Key");
 	});
+
+auto button_2 = new QPushButton;
+button_2->setText("Load");
+m_statusBar->addPermanentWidget(button_2, 0);
+connect(button_2, &QPushButton::pressed, this, [&]() { emit testSignal2(); });
+connect(this, &MainWindow::testSignal2, this, [&]()
+	{
+		auto x = loadConfig("Key", this, 666);
+		auto y = loadConfig("Key", 12);
+		qDebug() << x << y;
+	});
+	
+connect(this, &MainWindow::testSignal3, this, [&]()
+	{
+		qDebug() << "testSignal 3 emitted by MainWindow using `emitAndSave`";
+	});
+
+//
+
+/*QVariant MainWindow::loadConfig(const QString& valueKey, QObject* namedObject, QVariant fallbackValue = QVariant())
+{
+	return namedObject
+		? m_user->load(valueKey, namedObject->objectName(), fallbackValue)
+		: m_user->load(valueKey, fallbackValue);
+}
+
+QVariant MainWindow::loadConfig(const QString& valueKey, QVariant fallbackValue = QVariant())
+{
+	return loadConfig(valueKey, nullptr, fallbackValue);
+}*/
 ```
