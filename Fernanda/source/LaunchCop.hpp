@@ -5,7 +5,6 @@
 #include <QLocalSocket>
 #include <QMainWindow>
 #include <QString>
-#include <qsystemdetection.h>
 #include <QWidget>
 
 #ifdef Q_OS_WINDOWS

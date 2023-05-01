@@ -15,12 +15,16 @@
 #include <QMainWindow>
 #include <QString>
 
+#include <filesystem>
+
 class MainWindow : public QMainWindow
 {
+	using StdFsPath = std::filesystem::path;
+
 	Q_OBJECT
 
 public:
-	MainWindow(const char* name, QWidget* parent = nullptr);
+	MainWindow(const char* name, bool isDev = false, StdFsPath file = StdFsPath(), QWidget* parent = nullptr);
 
 signals:
 	void testSignal1();
@@ -39,6 +43,8 @@ private:
 	Meter* m_meter = new Meter("Meter");
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 	User* m_user = new User(QCoreApplication::applicationName(), this);
+
+	const bool m_isDev;
 
 	void connections();
 	void treeViewConnections();

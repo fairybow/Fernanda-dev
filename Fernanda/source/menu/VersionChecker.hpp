@@ -20,7 +20,7 @@ public:
 	{
 		auto urls = makeGitHubUrls(user, repo);
 		QString text = {
-			HtmlString::heading("Version")
+			HtmlString::heading("Version", 3)
 			% HtmlString::bold("Current version:")
 			/ version
 		};

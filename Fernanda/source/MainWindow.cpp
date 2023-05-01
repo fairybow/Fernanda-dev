@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 
-MainWindow::MainWindow(const char* name, QWidget* parent)
-	: QMainWindow(parent)
+MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* parent)
+	: QMainWindow(parent), m_isDev(isDev)
 {
 	setObjectName(name);
 	setGeometry(0, 0, 1000, 600);
