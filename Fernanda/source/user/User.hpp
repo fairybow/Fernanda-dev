@@ -33,13 +33,10 @@ public:
 	}
 
 	template<typename T>
-	inline void save(T value)
+	inline void save(T value, const QString& valueKey, const QString& groupPrefix = "Common")
 	{
-		QString something_generated_1 = "prefix";
-		QString something_generated_2 = "key";
-
-		Settings::save(
-			m_folders["data"] / "Settings.ini", QVariant::fromValue(value), something_generated_1, something_generated_2);
+		Settings::save(m_folders["data"] / "Settings.ini",
+			groupPrefix, valueKey, QVariant::fromValue(value));
 	}
 
 private:

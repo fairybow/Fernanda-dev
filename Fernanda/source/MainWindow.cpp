@@ -25,12 +25,11 @@ MainWindow::MainWindow(const char* name, QWidget* parent)
 	connect(button_2, &QPushButton::pressed, this, [&]() { emit testSignal2(); });
 	connect(this, &MainWindow::testSignal1, this, [&]()
 		{
-			emitAndSave(&MainWindow::testSignal3, QString("Signal received by m_settings"));
-			emitAndSave(&MainWindow::testSignal4, 80085, this);
+			emitAndSave(&MainWindow::testSignal3, 80085, "Thing");
 		});
-	connect(this, &MainWindow::testSignal2, this, [&]()
+	connect(this, &MainWindow::testSignal3, this, [&]()
 		{
-			// load both and print to console
+			qDebug() << "testSignal 3 emitted by MainWindow using `emitAndSave`";
 		});
 }
 

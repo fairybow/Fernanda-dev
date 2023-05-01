@@ -11,7 +11,7 @@ class Settings
 	using StdFsPath = std::filesystem::path;
 
 public:
-	static inline void save(StdFsPath config, QVariant value, const QString& groupPrefix, const QString& valueKey)
+	static inline void save(StdFsPath config, const QString& groupPrefix, const QString& valueKey, QVariant value)
 	{
 		auto ini = iniFile(config, groupPrefix);
 		ini->setValue(valueKey, value);

@@ -24,8 +24,7 @@ public:
 signals:
 	void testSignal1();
 	void testSignal2();
-	void testSignal3(QString text);
-	void testSignal4(int i);
+	void testSignal3(int i);
 
 private:
 	MenuBar* m_menuBar = new MenuBar("MenuBar", this);
@@ -46,17 +45,33 @@ private:
 	void previewConnections();
 
 	template<typename T>
-	inline void emitAndSave(void (MainWindow::* signal)(T), T value)
+	inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey)
 	{
 		emit(this->*signal)(value);
-		m_user->save(value);
+		m_user->save(value, valueKey);
+	}
+
+	template<typename T>
+	inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey, QObject* object)
+	{
+		emit(this->*signal)(value);
+		m_user->save(value, valueKey, object->objectName());
 	}
 
 	template<typename T, typename U>
+	inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey, QObject* object, U* pointerCheck)
+	{
+		if (pointerCheck == nullptr) return;
+		emitAndSave(signal, value, valueKey, object);
+	}
+
+	/*template<typename T, typename U>
 	inline void emitAndSave(void (MainWindow::* signal)(T), T value, U* pointerCheck)
 	{
 		if (pointerCheck == nullptr) return;
 		emit(this->*signal)(value);
 		m_user->save(value);
-	}
+	}*/
+
+	// may want to derive settings group name from objectName, and if blank go to default
 };
