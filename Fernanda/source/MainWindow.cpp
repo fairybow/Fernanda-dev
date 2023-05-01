@@ -15,7 +15,7 @@ MainWindow::MainWindow(const char* name, QWidget* parent)
 
 	// testing
 
-	auto button_1 = new QPushButton;
+	/*auto button_1 = new QPushButton;
 	button_1->setText("Save");
 	m_statusBar->addPermanentWidget(button_1, 0);
 	connect(button_1, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
@@ -39,7 +39,7 @@ MainWindow::MainWindow(const char* name, QWidget* parent)
 	connect(this, &MainWindow::testSignal3, this, [&]()
 		{
 			qDebug() << "testSignal 3 emitted by MainWindow using `emitAndSave`";
-		});
+		});*/
 }
 
 void MainWindow::connections()

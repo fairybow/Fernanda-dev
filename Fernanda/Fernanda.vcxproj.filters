@@ -40,6 +40,21 @@
     <Filter Include="Notes">
       <UniqueIdentifier>{7779faed-9209-4cf7-98f8-545bb5e086c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Installer">
+      <UniqueIdentifier>{413766c5-980f-496a-892c-117358b38d56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Themes">
+      <UniqueIdentifier>{2eb54143-8727-42dc-8e4b-9c56e1a76a59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Themes\Editor">
+      <UniqueIdentifier>{f2b59bd6-f94c-4249-9afc-229dc926eae6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Themes\Sample">
+      <UniqueIdentifier>{faed79c5-94e2-4c40-9734-51e4e3b253fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Themes\Window">
+      <UniqueIdentifier>{99991278-b82e-4a4d-90da-1add4c529a4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -60,6 +75,60 @@
       <Filter>Notes</Filter>
     </None>
     <None Include="cpp.hint" />
+    <None Include="installer\Fonts.nsh">
+      <Filter>Installer</Filter>
+    </None>
+    <None Include="installer\Installer.nsi">
+      <Filter>Installer</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Amber.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Blue.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Green.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Grey.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Pocket.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Pocket-Alt.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Snooze.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Snooze-Alt.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Solarized Dark.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Solarized Light.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\sample\Sample.fernanda_editor">
+      <Filter>Resources\Themes\Sample</Filter>
+    </None>
+    <None Include="resources\menu\themes\sample\Sample.fernanda_window">
+      <Filter>Resources\Themes\Sample</Filter>
+    </None>
+    <None Include="resources\menu\themes\window\Dark.fernanda_window">
+      <Filter>Resources\Themes\Window</Filter>
+    </None>
+    <None Include="resources\menu\themes\window\Light.fernanda_window">
+      <Filter>Resources\Themes\Window</Filter>
+    </None>
+    <None Include="resources\menu\themes\window\Solarized Dark.fernanda_window">
+      <Filter>Resources\Themes\Window</Filter>
+    </None>
+    <None Include="resources\menu\themes\window\Solarized Light.fernanda_window">
+      <Filter>Resources\Themes\Window</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="source\MainWindow.h">
