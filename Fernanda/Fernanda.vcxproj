@@ -95,6 +95,7 @@
   <ItemGroup>
     <None Include="..\.gitignore" />
     <None Include="..\README.md" />
+    <None Include="cpp.hint" />
     <None Include="notes\Snippets.md" />
     <None Include="resources\stylist\Editor.qss" />
     <None Include="resources\stylist\EditorBase.qss" />
