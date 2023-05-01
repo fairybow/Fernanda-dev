@@ -3,7 +3,10 @@
 #include "../common/Path.hpp"
 
 #include <QSettings>
+#include <QString>
+#include <QVariant>
 
+#include <filesystem>
 #include <memory>
 
 class Settings

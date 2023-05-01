@@ -16,17 +16,26 @@ MainWindow::MainWindow(const char* name, QWidget* parent)
 	// testing
 
 	auto button_1 = new QPushButton;
-	auto button_2 = new QPushButton;
 	button_1->setText("Save");
-	button_2->setText("Load");
 	m_statusBar->addPermanentWidget(button_1, 0);
-	m_statusBar->addPermanentWidget(button_2, 0);
 	connect(button_1, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
-	connect(button_2, &QPushButton::pressed, this, [&]() { emit testSignal2(); });
 	connect(this, &MainWindow::testSignal1, this, [&]()
 		{
-			emitAndSave(&MainWindow::testSignal3, 80085, "Thing");
+			emitAndSave(&MainWindow::testSignal3, 420, "Thing1", this);
+			emitAndSave(&MainWindow::testSignal3, 69, "Thing2");
 		});
+
+	auto button_2 = new QPushButton;
+	button_2->setText("Load");
+	m_statusBar->addPermanentWidget(button_2, 0);
+	connect(button_2, &QPushButton::pressed, this, [&]() { emit testSignal2(); });
+	connect(this, &MainWindow::testSignal2, this, [&]()
+		{
+			auto x = loadConfig("Thing2", 666);
+			auto y = loadConfig("Thing1", this);
+			qDebug() << y << x;
+		});
+	
 	connect(this, &MainWindow::testSignal3, this, [&]()
 		{
 			qDebug() << "testSignal 3 emitted by MainWindow using `emitAndSave`";
@@ -51,4 +60,14 @@ void MainWindow::editorConnections()
 void MainWindow::previewConnections()
 {
 	//
+}
+
+QVariant MainWindow::loadConfig(const QString& valueKey, QVariant fallback)
+{
+	return m_user->load(valueKey, fallback);
+}
+
+QVariant MainWindow::loadConfig(const QString& valueKey, QObject* object, QVariant fallback)
+{
+	return m_user->load(valueKey, object->objectName(), fallback);
 }
