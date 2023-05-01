@@ -95,7 +95,6 @@
   <ItemGroup>
     <None Include="..\.gitignore" />
     <None Include="..\README.md" />
-    <None Include="Cpp.hint" />
     <None Include="notes\Snippets.md" />
     <None Include="resources\stylist\Editor.qss" />
     <None Include="resources\stylist\EditorBase.qss" />
@@ -138,7 +137,7 @@
     <ClInclude Include="source\preview\WebEnginePage.hpp" />
     <ClInclude Include="source\preview\WebEngineView.hpp" />
     <ClInclude Include="source\splitter\SplitterHandle.hpp" />
-    <QtMoc Include="source\StartCop.hpp" />
+    <QtMoc Include="source\LaunchCop.hpp" />
     <ClInclude Include="source\StatusBar.hpp" />
     <ClInclude Include="source\Stylist.h" />
     <ClInclude Include="source\tree\TreeView.h" />

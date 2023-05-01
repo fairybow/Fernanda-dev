@@ -42,7 +42,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Cpp.hint" />
     <None Include="..\README.md" />
     <None Include="..\.gitignore" />
     <None Include="resources\stylist\MainWindowBase.qss">
@@ -80,7 +79,7 @@
     <QtMoc Include="source\Indicator.h">
       <Filter>Source</Filter>
     </QtMoc>
-    <QtMoc Include="source\StartCop.hpp">
+    <QtMoc Include="source\LaunchCop.hpp">
       <Filter>Source</Filter>
     </QtMoc>
     <QtMoc Include="source\common\StatusBarButton.hpp">

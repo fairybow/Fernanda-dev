@@ -17,12 +17,12 @@
 
 #include <algorithm>
 
-class StartCop : public QObject
+class LaunchCop : public QObject
 {
 	Q_OBJECT
 
 public:
-	inline StartCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow", bool forceFocus = false)
+	inline LaunchCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow", bool forceFocus = false)
 		: m_lockString(lockString), m_windowName(mainWindowObjectName), m_forceFocus(forceFocus) {}
 
 	inline bool exists() const
@@ -52,7 +52,7 @@ private:
 		auto server = new QLocalServer;
 		server->setSocketOptions(QLocalServer::WorldAccessOption);
 		server->listen(m_lockString);
-		connect(server, &QLocalServer::newConnection, this, &StartCop::focusMainWindow);
+		connect(server, &QLocalServer::newConnection, this, &LaunchCop::focusMainWindow);
 	}
 
 private slots:

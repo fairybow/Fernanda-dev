@@ -1,13 +1,13 @@
+#include "LaunchCop.hpp"
 #include "MainWindow.h"
-#include "StartCop.hpp"
 
 #include <QApplication>
 
 int main(int argc, char* argv[])
 {
 	auto window_name = "MainWindow";
-	StartCop start_cop("Fernanda", window_name);
-	if (start_cop.exists())
+	LaunchCop launch_cop("Fernanda", window_name);
+	if (launch_cop.exists())
 		return 0;
 
 	QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
