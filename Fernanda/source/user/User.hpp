@@ -4,6 +4,7 @@
 #include "Settings.hpp"
 
 #include <QCoreApplication>
+#include <QDir>
 #include <QStandardPaths>
 #include <QString>
 #include <QVariant>
@@ -20,8 +21,8 @@ class User : public QObject
 	Q_OBJECT
 
 public:
-	inline User(const QString& applicationName = QCoreApplication::applicationName(), QObject* parent = nullptr, const QString& configFilename = "Settings.ini")
-		: QObject(parent), m_configFilename(filename(configFilename))
+	inline User(const QString& applicationName = QCoreApplication::applicationName(), QObject* parent = nullptr, const QString& configFileName = "Settings.ini")
+		: QObject(parent), m_configFileName(fileName(configFileName))
 	{
 		auto data_folder_name = "." + applicationName.toLower();
 		auto data_folder_path = Path::toStdFs(QDir::homePath()) / Path::toStdFs(data_folder_name);
@@ -39,27 +40,26 @@ public:
 	template<typename T>
 	inline void save(T value, const QString& valueKey, const QString& groupPrefix = DEFAULT_GROUP)
 	{
-		Settings::save(m_folders["data"] / m_configFilename,
+		Settings::save(m_folders["data"] / m_configFileName,
 			groupPrefix, valueKey, QVariant::fromValue(value));
-	}
-
-	inline QVariant load(const QString& valueKey, QVariant fallback = QVariant())
-	{
-		return Settings::load(m_folders["data"] / m_configFilename,
-			DEFAULT_GROUP, valueKey, fallback);
 	}
 
 	inline QVariant load(const QString& valueKey, const QString& groupPrefix = DEFAULT_GROUP, QVariant fallback = QVariant())
 	{
-		return Settings::load(m_folders["data"] / m_configFilename,
+		return Settings::load(m_folders["data"] / m_configFileName,
 			groupPrefix, valueKey, fallback);
+	}
+
+	inline QVariant load(const QString& valueKey, QVariant fallback = QVariant())
+	{
+		return load(valueKey, DEFAULT_GROUP, fallback);
 	}
 
 private:
 	std::map<QString, StdFsPath> m_folders;
-	const StdFsPath m_configFilename;
+	const StdFsPath m_configFileName;
 
-	inline StdFsPath filename(const QString& name)
+	inline StdFsPath fileName(const QString& name)
 	{
 		auto fs_name = Path::toStdFs(name);
 		if (!fs_name.has_extension())

@@ -45,8 +45,8 @@ private:
 	void treeViewConnections();
 	void editorConnections();
 	void previewConnections();
-	QVariant loadConfig(const QString& valueKey, QVariant fallbackValue = QVariant());
 	QVariant loadConfig(const QString& valueKey, QObject* namedObject, QVariant fallbackValue = QVariant());
+	QVariant loadConfig(const QString& valueKey, QVariant fallbackValue = QVariant());
 
 	template<typename T>
 	inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey)

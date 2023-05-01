@@ -11,7 +11,7 @@ public:
 
 	inline virtual QSize sizeHint() const override
 	{
-		QSize size = QSplitterHandle::sizeHint();
+		auto size = QSplitterHandle::sizeHint();
 		auto i = 5;
 		(orientation() != Qt::Horizontal) ? size.setHeight(i) : size.setWidth(i);
 		return size;

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QDir>
 #include <QString>
 #include <QVariant>
 
@@ -12,9 +11,9 @@ namespace Path
 
 	namespace
 	{
-		inline StdFs::path pathOrParentBasedOnFileName(StdFs::path path, bool includes)
+		inline StdFs::path pathOrParent(StdFs::path path, bool hasFileName)
 		{
-			return includes ? path.parent_path() : path;
+			return hasFileName ? path.parent_path() : path;
 		}
 	}
 
@@ -35,22 +34,22 @@ namespace Path
 
 	inline QString toQString(StdFs::path path, bool sanitize = true)
 	{
-		auto qpath = QString::fromStdString(path.make_preferred().string());
+		auto q_path = QString::fromStdString(path.make_preferred().string());
 		if (sanitize)
-			qpath.replace(R"(\)", R"(/)");
-		return qpath;
+			q_path.replace(R"(\)", R"(/)");
+		return q_path;
 	}
 
 	inline void make(StdFs::path path, bool includesFileName = false)
 	{
-		auto directory = pathOrParentBasedOnFileName(path, includesFileName);
-		if (!QDir(directory).exists())
+		auto directory = pathOrParent(path, includesFileName);
+		if (!StdFs::exists(directory))
 			StdFs::create_directories(directory);
 	}
 
 	inline void clear(StdFs::path path, bool clearSelf = false, bool includesFileName = false)
 	{
-		auto directory = pathOrParentBasedOnFileName(path, includesFileName);
+		auto directory = pathOrParent(path, includesFileName);
 		if (!StdFs::exists(directory)) return;
 		for (auto& item : StdFs::directory_iterator(directory))
 			StdFs::remove_all(item);

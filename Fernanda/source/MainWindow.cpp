@@ -62,12 +62,14 @@ void MainWindow::previewConnections()
 	//
 }
 
-QVariant MainWindow::loadConfig(const QString& valueKey, QVariant fallback)
+QVariant MainWindow::loadConfig(const QString& valueKey, QObject* namedObject, QVariant fallback)
 {
-	return m_user->load(valueKey, fallback);
+	return namedObject
+		? m_user->load(valueKey, namedObject->objectName(), fallback)
+		: m_user->load(valueKey, fallback);
 }
 
-QVariant MainWindow::loadConfig(const QString& valueKey, QObject* object, QVariant fallback)
+QVariant MainWindow::loadConfig(const QString& valueKey, QVariant fallback)
 {
-	return m_user->load(valueKey, object->objectName(), fallback);
+	return loadConfig(valueKey, nullptr, fallback);
 }

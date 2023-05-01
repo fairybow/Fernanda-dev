@@ -42,10 +42,10 @@ Stylist::StdPathPair Stylist::sheetPathsFromClass(QWidget* widget)
 {
 	QString class_name = widget->metaObject()->className();
 	auto root = Path::toStdFs(":/stylist");
-	auto base_filename = class_name + m_baseSuffix + m_extension;
-	auto style_filename = class_name + m_extension;
-	auto base_path = root / base_filename.toStdString();
-	auto style_path = root / style_filename.toStdString();
+	auto base_file_name = class_name + m_baseSuffix + m_extension;
+	auto style_file_name = class_name + m_extension;
+	auto base_path = root / base_file_name.toStdString();
+	auto style_path = root / style_file_name.toStdString();
 	return { base_path, style_path };
 }
 
