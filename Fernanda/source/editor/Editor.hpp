@@ -21,7 +21,7 @@ public:
 		m_trueEditor->setLineNumberArea(m_lineNumberArea);
 		m_trueEditor->viewport()->setCursor(Qt::ArrowCursor);
 		buildScrollBar();
-		Layout::stack(this, { m_shadow, m_overlay, m_trueEditor, m_underlay });
+		Layout::stack({ m_shadow, m_overlay, m_trueEditor, m_underlay }, this);
 	}
 
 	// funnel to and from QPTE

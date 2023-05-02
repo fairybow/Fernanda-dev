@@ -27,7 +27,7 @@ private:
 
 	void view();
 	void help();
-	void addThemesToBoxes(QComboBox* comboBox, QActionGroup* actionGroup);
+	void addActionsToBoxes(QComboBox* comboBox, QActionGroup* actionGroup);
 	void addFontDialog(QMdiArea* multiDocArea);
 	LiveFontDialog* fontDialog();
 	const QFont initialFont();

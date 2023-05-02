@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMainWindow>
+#include <QMargins>
 #include <QStackedLayout>
 #include <QVBoxLayout>
 #include <QVector>
@@ -16,9 +17,9 @@ namespace Layout
 
 	namespace
 	{
-		inline void setBoxProperties(QBoxLayout* box, QVector<QWidget*> widgets)
+		inline void setBoxProperties(QBoxLayout* box, QVector<QWidget*> widgets, QMargins margins)
 		{
-			box->setContentsMargins(0, 0, 0, 0);
+			box->setContentsMargins(margins);
 			box->setSpacing(0);
 			for (auto& widget : widgets)
 				box->addWidget(widget);
@@ -26,7 +27,7 @@ namespace Layout
 
 		inline void setStackProperties(QStackedLayout* stack, QVector<QWidget*> widgets)
 		{
-			stack->setContentsMargins(0, 0, 0, 0);
+			stack->setContentsMargins(QMargins());
 			stack->setSpacing(0);
 			stack->setStackingMode(QStackedLayout::StackAll);
 			for (auto& widget : widgets)
@@ -34,20 +35,23 @@ namespace Layout
 		}
 	}
 
-	inline QBoxLayout* box(QWidget* parent, QVector<QWidget*> widgets = {}, Line alignment = Line::Vertically)
+	inline QBoxLayout* box(QVector<QWidget*> widgets = {}, QWidget* parent = nullptr,
+		Line alignment = Line::Vertically, QMargins margins = QMargins())
 	{
 		QBoxLayout* layout = nullptr;
 		(alignment == Line::Horizontally)
 			? layout = new QHBoxLayout(parent)
 			: layout = new QVBoxLayout(parent);
-		setBoxProperties(layout, widgets);
-		parent->setLayout(layout);
+		setBoxProperties(layout, widgets, margins);
+		if (parent)
+			parent->setLayout(layout);
 		return layout;
 	}
 
-	inline QBoxLayout* box(QWidget* parent, QWidget* widget, Line alignment = Line::Vertically)
+	inline QBoxLayout* box(QWidget* widget, QWidget* parent = nullptr,
+		Line alignment = Line::Vertically, QMargins margins = QMargins())
 	{
-		return box(parent, QVector<QWidget*>{ widget }, alignment);
+		return box(QVector<QWidget*>{ widget }, parent, alignment, margins);
 	}
 
 	inline void setCentralWidgets(QMainWindow* parentWindow, QVector<QWidget*> widgets)
@@ -77,22 +81,21 @@ namespace Layout
 		return stack(QVector<QWidget*>{ widget }, parent);
 	}
 
-	inline QWidget* labeledContainer(const QString& text, QVector<QWidget*> widgets, QWidget* parent = nullptr)
+	inline QWidget* labeledContainer(const QString& text, QVector<QWidget*> widgets,
+		QWidget* parent = nullptr, Line alignment = Line::Vertically, QMargins margins = { 10, 10, 10, 10 })
 	{
-		auto container = new QWidget;
-
-		//auto label = QLabel;
-		/*auto layout = new QVBoxLayout(container);
-		auto label = new QLabel(container);
+		auto container = new QWidget(parent);
+		auto label = new QLabel;
 		label->setText(text);
-		layout->addWidget(label);
-		layout->addWidget(comboBox);
-		}*/
+		QVector<QWidget*> amended_widgets = { label };
+		amended_widgets << widgets;
+		auto layout = box(amended_widgets, container, alignment, margins);
 		return container;
 	}
 
-	inline QWidget* labeledContainer(const QString& text, QWidget* widget, QWidget* parent = nullptr)
+	inline QWidget* labeledContainer(const QString& text, QWidget* widget,
+		QWidget* parent = nullptr, Line alignment = Line::Vertically, QMargins margins = { 10, 10, 10, 10 })
 	{
-		return labeledContainer(text, QVector<QWidget*>{ widget }, parent);
+		return labeledContainer(text, QVector<QWidget*>{ widget }, parent, alignment, margins);
 	}
 }

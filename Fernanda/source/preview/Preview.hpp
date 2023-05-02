@@ -10,7 +10,7 @@ public:
 		: QWidget(parent)
 	{
 		setObjectName(name);
-		Layout::box(this, m_view);
+		Layout::box( m_view, this);
 	}
 
 private:

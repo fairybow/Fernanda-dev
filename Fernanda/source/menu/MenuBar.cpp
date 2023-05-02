@@ -39,14 +39,14 @@ void MenuBar::help()
 		menu->addAction(action);
 }
 
-void MenuBar::addThemesToBoxes(QComboBox* comboBox, QActionGroup* actionGroup)
+void MenuBar::addActionsToBoxes(QComboBox* comboBox, QActionGroup* actionGroup)
 {
-	/*for (auto i = 0; i < actionGroup->actions().count(); ++i) {
+	for (auto i = 0; i < actionGroup->actions().count(); ++i) {
 		auto action = actionGroup->actions().at(i);
 		comboBox->addItem(action->text(), QVariant::fromValue(action));
 		if (action == actionGroup->checkedAction())
 			comboBox->setCurrentIndex(i);
-	}*/
+	}
 }
 
 void MenuBar::addFontDialog(QMdiArea* multiDocArea)
@@ -70,7 +70,7 @@ LiveFontDialog* MenuBar::fontDialog()
 const QFont MenuBar::initialFont()
 {
 	QFont initial = QFont("mononoki", 16);
-	/*auto loaded_font = 
+	/*auto loaded_font = // from config
 	if (loaded_font.isEmpty() || loaded_font.isNull())
 		return initial;
 	initial.fromString(loaded_font);*/
@@ -82,6 +82,8 @@ void MenuBar::appearanceDialog()
 	QDialog dialog(this);
 	auto editor_themes_box = new QComboBox;
 	auto window_themes_box = new QComboBox;
+	//addActionsToBoxes(editor_themes_box, ); // map member containing action group
+	//addActionsToBoxes(window_themes_box, );
 	auto editor_themes_container = Layout::labeledContainer("Editor theme:", editor_themes_box);
 	auto window_themes_container = Layout::labeledContainer("Window theme:", window_themes_box);
 	for (auto& themes_box : { editor_themes_box, window_themes_box }) {
@@ -90,9 +92,8 @@ void MenuBar::appearanceDialog()
 			});
 	}
 	auto font_box_area = new QMdiArea;
-	auto layout = Layout::box(&dialog);
-	auto combo_boxes_layout = Layout::box(this,
-		{ editor_themes_container, window_themes_container }, Layout::Line::Horizontally);
+	auto layout = Layout::box(nullptr, &dialog, Layout::Line::Vertically, { 10, 10, 10, 10 });
+	auto combo_boxes_layout = Layout::box({ editor_themes_container, window_themes_container }, nullptr, Layout::Line::Horizontally);
 	layout->addLayout(combo_boxes_layout);
 	layout->addWidget(font_box_area);
 	addFontDialog(font_box_area);

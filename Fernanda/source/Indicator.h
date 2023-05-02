@@ -16,7 +16,7 @@ public:
 		m_progressBar->setObjectName(name);
 		setAttribute(Qt::WA_TransparentForMouseEvents);
 		m_progressBar->setAttribute(Qt::WA_TransparentForMouseEvents);
-		Layout::box(this, m_progressBar);
+		Layout::box(m_progressBar, this);
 
 		m_progressBar->setMaximumHeight(3);
 		m_progressBar->setTextVisible(false);
