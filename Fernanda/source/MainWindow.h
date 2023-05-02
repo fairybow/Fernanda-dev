@@ -47,9 +47,11 @@ private:
 	const bool m_isDev;
 
 	void connections();
+	void splitterConnections();
 	void treeViewConnections();
 	void editorConnections();
 	void previewConnections();
+	void menuBarConnections();
 
 	template<typename T>
 	inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey, QObject* namedObject = nullptr)

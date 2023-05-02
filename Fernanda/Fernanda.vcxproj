@@ -146,7 +146,7 @@
     <ClInclude Include="source\editor\LineNumberArea.h" />
     <QtMoc Include="source\Indicator.h" />
     <ClInclude Include="source\menu\LiveFontDialog.hpp" />
-    <ClInclude Include="source\menu\MenuBar.h" />
+    <QtMoc Include="source\menu\MenuBar.h" />
     <QtMoc Include="source\menu\MenuPopup.hpp" />
     <ClInclude Include="source\menu\PopupText.hpp" />
     <QtMoc Include="source\menu\VersionChecker.hpp" />

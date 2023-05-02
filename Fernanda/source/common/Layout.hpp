@@ -15,12 +15,19 @@ namespace Layout
 
 	namespace
 	{
+		inline void add(QLayout* layout, QVector<QWidget*> widgets)
+		{
+			for (auto& widget : widgets) {
+				if (widget == nullptr) continue;
+				layout->addWidget(widget);
+			}
+		}
+
 		inline void setBoxProperties(QBoxLayout* box, QVector<QWidget*> widgets, QMargins margins)
 		{
 			box->setContentsMargins(margins);
 			box->setSpacing(0);
-			for (auto& widget : widgets)
-				box->addWidget(widget);
+			add(box, widgets);
 		}
 
 		inline void setStackProperties(QStackedLayout* stack, QVector<QWidget*> widgets)
@@ -28,8 +35,7 @@ namespace Layout
 			stack->setContentsMargins(QMargins());
 			stack->setSpacing(0);
 			stack->setStackingMode(QStackedLayout::StackAll);
-			for (auto& widget : widgets)
-				stack->addWidget(widget);
+			add(stack, widgets);
 		}
 	}
 

@@ -164,6 +164,9 @@
     <QtMoc Include="source\user\User.hpp">
       <Filter>Source\User</Filter>
     </QtMoc>
+    <QtMoc Include="source\menu\MenuBar.h">
+      <Filter>Source\Menu</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -236,9 +239,6 @@
     </ClInclude>
     <ClInclude Include="source\StatusBar.hpp">
       <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\MenuBar.h">
-      <Filter>Source\Menu</Filter>
     </ClInclude>
     <ClInclude Include="source\menu\LiveFontDialog.hpp">
       <Filter>Source\Menu</Filter>

@@ -18,10 +18,18 @@
 
 class MenuBar : public QMenuBar
 {
+	using StdFsPath = std::filesystem::path;
+
+	Q_OBJECT
+
 public:
 	MenuBar(const char* name, QWidget* parent);
 
 	void makeSubmenus();
+
+signals:
+	MenuBar::StdFsPath getUserDataPath();
+	MenuBar::StdFsPath getResourcePaths();
 
 private:
 	std::map<QString, QActionGroup*> m_actionGroups;

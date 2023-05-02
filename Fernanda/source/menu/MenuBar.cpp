@@ -6,6 +6,9 @@ MenuBar::MenuBar(const char* name, QWidget* parent)
 	setObjectName(name);
 
 	// functions to collect and store action groups for available resources (themes, fonts, etc.)
+
+	auto x = getUserDataPath();
+	qDebug() << x;
 }
 
 void MenuBar::makeSubmenus()
@@ -92,11 +95,11 @@ void MenuBar::appearanceDialog()
 			});
 	}
 	auto font_box_area = new QMdiArea;
-	auto layout = Layout::box(nullptr, &dialog, Layout::Line::Vertically, { 10, 10, 10, 10 });
+	addFontDialog(font_box_area);
+	auto layout = Layout::box(nullptr, &dialog, Layout::Line::Vertically, {10, 10, 10, 10});
 	auto combo_boxes_layout = Layout::box({ editor_themes_container, window_themes_container }, nullptr, Layout::Line::Horizontally);
 	layout->addLayout(combo_boxes_layout);
 	layout->addWidget(font_box_area);
-	addFontDialog(font_box_area);
 	dialog.setMaximumSize(600, 400);
 	dialog.exec();
 }
