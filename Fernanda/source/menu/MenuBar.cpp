@@ -7,8 +7,10 @@ MenuBar::MenuBar(const char* name, QWidget* parent)
 
 	// functions to collect and store action groups for available resources (themes, fonts, etc.)
 
-	auto x = getUserDataPath();
-	qDebug() << x;
+	//auto x = getUserDataPath();
+
+	auto editor_themes = ResourceGroups::make(":/menu/themes/editor/", ".fernanda_editor");
+
 }
 
 void MenuBar::makeSubmenus()

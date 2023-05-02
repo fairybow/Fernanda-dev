@@ -9,8 +9,9 @@
 namespace Io
 {
 	namespace StdFs = std::filesystem;
+	using StdFsPath = StdFs::path;
 
-	inline const QString readFile(StdFs::path filePath)
+	inline const QString readFile(StdFsPath filePath)
 	{
 		QString text;
 		QFile file(filePath);
@@ -21,7 +22,7 @@ namespace Io
 		return text;
 	}
 
-	inline bool writeFile(StdFs::path filePath, QString text, bool createDirectories = true)
+	inline bool writeFile(StdFsPath filePath, QString text, bool createDirectories = true)
 	{
 		if (createDirectories) {
 			auto parent = filePath.parent_path();

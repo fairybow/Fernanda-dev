@@ -258,7 +258,7 @@
     <ClInclude Include="source\user\Settings.hpp">
       <Filter>Source\User</Filter>
     </ClInclude>
-    <ClInclude Include="source\menu\Resource.hpp">
+    <ClInclude Include="source\menu\ResourceGroups.hpp">
       <Filter>Source\Menu</Filter>
     </ClInclude>
   </ItemGroup>

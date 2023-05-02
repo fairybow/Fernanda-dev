@@ -150,7 +150,7 @@
     <QtMoc Include="source\menu\MenuPopup.hpp" />
     <ClInclude Include="source\menu\PopupText.hpp" />
     <QtMoc Include="source\menu\VersionChecker.hpp" />
-    <ClInclude Include="source\menu\Resource.hpp" />
+    <ClInclude Include="source\menu\ResourceGroups.hpp" />
     <ClInclude Include="source\Meter.h" />
     <ClInclude Include="source\preview\Preview.hpp" />
     <ClInclude Include="source\preview\WebDocument.hpp" />
