@@ -4,22 +4,25 @@ MenuBar::MenuBar(const char* name, QWidget* parent)
 	: QMenuBar(parent)
 {
 	setObjectName(name);
-
-	auto user_data_path = getUserDataPath();
-	auto editor_themes_group = ResourceGroups::make(":/menu/themes/editor/",
-		".fernanda_editor", user_data_path, this, [&]() {});
-	auto window_themes_group = ResourceGroups::make(":/menu/themes/window/",
-		".fernanda_window", user_data_path, this, [&]() {});
-
-	//add groups to map
-
-	// a version to accept a packet of { data, label }. In make, deal with case of `label` blank
+	makeActionGroups();
 }
 
 void MenuBar::makeSubmenus()
 {
 	view();
 	help();
+}
+
+void MenuBar::makeActionGroups()
+{
+	auto user_data_path = getUserDataPath();
+	auto editor_themes_group = MenuGroups::make(":/menu/themes/editor/", ".fernanda_editor", user_data_path, this, [&]() {});
+	auto window_themes_group = MenuGroups::make(":/menu/themes/window/", ".fernanda_window", user_data_path, this, [&]() {});
+
+
+	//add groups to map
+
+	// a version to accept a packet of { data, label }. In make, deal with case of `label` blank
 }
 
 void MenuBar::view()

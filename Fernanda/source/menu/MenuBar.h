@@ -3,7 +3,7 @@
 #include "../common/Layout.hpp"
 #include "LiveFontDialog.hpp"
 #include "MenuPopup.hpp"
-#include "ResourceGroups.hpp"
+#include "MenuGroups.hpp"
 
 #include <QComboBox>
 #include <QDesktopServices>
@@ -33,6 +33,7 @@ signals:
 private:
 	std::map<QString, QActionGroup*> m_actionGroups;
 
+	void makeActionGroups();
 	void view();
 	void help();
 	void addActionsToBoxes(QComboBox* comboBox, QActionGroup* actionGroup);

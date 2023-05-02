@@ -10,8 +10,14 @@
 #include <algorithm>
 #include <functional>
 
-namespace ResourceGroups
+namespace MenuGroups
 {
+	struct Bespoke {
+		const QVariant data;
+		const QString label;
+	};
+
+	using BespokeList = QVector<Bespoke>;
 	using StdFsPath = std::filesystem::path;
 	using StdFsPathList = QVector<StdFsPath>;
 
@@ -46,7 +52,7 @@ namespace ResourceGroups
 	}
 
 	inline QActionGroup* make(const QStringList& qrcPaths, QStringList extensions,
-		StdFsPathList systemPaths = {}, QWidget * parent = nullptr, std::function<void()> slot = nullptr)
+		StdFsPathList systemPaths = {}, QWidget* parent = nullptr, std::function<void()> slot = nullptr)
 	{
 		auto group = new QActionGroup(parent);
 		checkExtensions(extensions);
@@ -71,4 +77,15 @@ namespace ResourceGroups
 		return make(qrcPaths, extensions,
 			StdFsPathList{ systemPath }, parent, slot);
 	}
+
+	inline QActionGroup* makeBespoke(BespokeList entries, QWidget* parent = nullptr)
+	{
+		auto group = new QActionGroup(parent);
+
+		// etc.
+
+		return group;
+	}
+
+
 }
