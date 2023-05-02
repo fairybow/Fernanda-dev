@@ -8,7 +8,6 @@
 #include <QComboBox>
 #include <QDesktopServices>
 #include <QFileDialog>
-#include <QFontDialog>
 #include <QMenuBar>
 #include <QMdiArea>
 #include <QMdiSubWindow>
@@ -28,6 +27,10 @@ private:
 
 	void view();
 	void help();
+	void addThemesToBoxes(QComboBox* comboBox, QActionGroup* actionGroup);
+	void addFontDialog(QMdiArea* multiDocArea);
+	LiveFontDialog* fontDialog();
+	const QFont initialFont();
 
 private slots:
 	void appearanceDialog();

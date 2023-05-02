@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QMainWindow>
 #include <QStackedLayout>
 #include <QVBoxLayout>
@@ -33,7 +34,7 @@ namespace Layout
 		}
 	}
 
-	inline void box(QWidget* parent, QVector<QWidget*> widgets, Line alignment = Line::Vertically)
+	inline QBoxLayout* box(QWidget* parent, QVector<QWidget*> widgets = {}, Line alignment = Line::Vertically)
 	{
 		QBoxLayout* layout = nullptr;
 		(alignment == Line::Horizontally)
@@ -41,11 +42,12 @@ namespace Layout
 			: layout = new QVBoxLayout(parent);
 		setBoxProperties(layout, widgets);
 		parent->setLayout(layout);
+		return layout;
 	}
 
-	inline void box(QWidget* parent, QWidget* widget, Line alignment = Line::Vertically)
+	inline QBoxLayout* box(QWidget* parent, QWidget* widget, Line alignment = Line::Vertically)
 	{
-		box(parent, QVector<QWidget*>{ widget }, alignment);
+		return box(parent, QVector<QWidget*>{ widget }, alignment);
 	}
 
 	inline void setCentralWidgets(QMainWindow* parentWindow, QVector<QWidget*> widgets)
@@ -61,15 +63,36 @@ namespace Layout
 		setCentralWidgets(parentWindow, QVector<QWidget*>{ widget });
 	}
 
-	inline void stack(QWidget* parent, QVector<QWidget*> widgets)
+	inline QStackedLayout* stack(QVector<QWidget*> widgets, QWidget* parent = nullptr)
 	{
 		auto layout = new QStackedLayout(parent);
 		setStackProperties(layout, widgets);
-		parent->setLayout(layout);
+		if (parent != nullptr)
+			parent->setLayout(layout);
+		return layout;
 	}
 
-	inline void stack(QWidget* parent, QWidget* widget)
+	inline QStackedLayout* stack(QWidget* widget, QWidget* parent = nullptr)
 	{
-		stack(parent, QVector<QWidget*>{ widget });
+		return stack(QVector<QWidget*>{ widget }, parent);
+	}
+
+	inline QWidget* labeledContainer(const QString& text, QVector<QWidget*> widgets, QWidget* parent = nullptr)
+	{
+		auto container = new QWidget;
+
+		//auto label = QLabel;
+		/*auto layout = new QVBoxLayout(container);
+		auto label = new QLabel(container);
+		label->setText(text);
+		layout->addWidget(label);
+		layout->addWidget(comboBox);
+		}*/
+		return container;
+	}
+
+	inline QWidget* labeledContainer(const QString& text, QWidget* widget, QWidget* parent = nullptr)
+	{
+		return labeledContainer(text, QVector<QWidget*>{ widget }, parent);
 	}
 }
