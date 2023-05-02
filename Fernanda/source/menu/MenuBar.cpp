@@ -13,6 +13,7 @@ MenuBar::MenuBar(const char* name, QWidget* parent)
 
 	//add groups to map
 
+	// a version to accept a packet of { data, label }. In make, deal with case of `label` blank
 }
 
 void MenuBar::makeSubmenus()
