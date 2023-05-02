@@ -4,6 +4,7 @@
 #include <QVariant>
 
 #include <filesystem>
+#include <type_traits>
 
 namespace Path
 {
@@ -11,6 +12,9 @@ namespace Path
 
 	namespace
 	{
+		template <typename T>
+		using IsFsPathOrQString = std::disjunction<std::is_same<T, StdFs::path>, std::is_same<T, QString>>;
+
 		inline StdFs::path pathOrParent(StdFs::path path, bool hasFileName)
 		{
 			return hasFileName ? path.parent_path() : path;
@@ -40,14 +44,14 @@ namespace Path
 		return q_path;
 	}
 
-	inline void make(StdFs::path path, bool includesFileName = false)
+	inline void make(const StdFs::path& path, bool includesFileName = false)
 	{
 		auto directory = pathOrParent(path, includesFileName);
 		if (!StdFs::exists(directory))
 			StdFs::create_directories(directory);
 	}
 
-	inline void clear(StdFs::path path, bool clearSelf = false, bool includesFileName = false)
+	inline void clear(const StdFs::path& path, bool clearSelf = false, bool includesFileName = false)
 	{
 		auto directory = pathOrParent(path, includesFileName);
 		if (!StdFs::exists(directory)) return;
@@ -55,5 +59,22 @@ namespace Path
 			StdFs::remove_all(item);
 		if (clearSelf)
 			StdFs::remove(directory);
+	}
+
+	inline StdFs::path name(const StdFs::path& path, bool keepExtension = false)
+	{
+		return keepExtension ? path.filename() : path.stem();
+	}
+
+	inline StdFs::path name(const QString& path, bool keepExtension = false)
+	{
+		return name(toStdFs(path), keepExtension);
+	}
+
+	template<typename T>
+	inline typename std::enable_if<IsFsPathOrQString<T>::value, QString>::type
+		qStringName(const T& path, bool keepExtension = false)
+	{
+		return QString::fromStdString(name(path, keepExtension).string());
 	}
 }

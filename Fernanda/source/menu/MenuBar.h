@@ -3,6 +3,7 @@
 #include "../common/Layout.hpp"
 #include "LiveFontDialog.hpp"
 #include "MenuPopup.hpp"
+#include "Resource.hpp"
 
 #include <QActionGroup>
 #include <QComboBox>
