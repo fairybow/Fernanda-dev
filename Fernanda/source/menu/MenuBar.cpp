@@ -5,11 +5,13 @@ MenuBar::MenuBar(const char* name, QWidget* parent)
 {
 	setObjectName(name);
 
-	// functions to collect and store action groups for available resources (themes, fonts, etc.)
+	auto user_data_path = getUserDataPath();
+	auto editor_themes_group = ResourceGroups::make(":/menu/themes/editor/",
+		".fernanda_editor", user_data_path, this, [&]() {});
+	auto window_themes_group = ResourceGroups::make(":/menu/themes/window/",
+		".fernanda_window", user_data_path, this, [&]() {});
 
-	//auto x = getUserDataPath();
-
-	auto editor_themes = ResourceGroups::make(":/menu/themes/editor/", ".fernanda_editor");
+	//add groups to map
 
 }
 

@@ -1,6 +1,6 @@
 #include "Splitter.h"
 
-Splitter::Splitter(const char* name, Qt::Orientation orientation, QVector<QWidget*> widgets, QWidget* parent)
+Splitter::Splitter(const char* name, Qt::Orientation orientation, QWidgetList widgets, QWidget* parent)
 	: QWidget(parent)
 {
 	m_trueSplitter->setObjectName(name);

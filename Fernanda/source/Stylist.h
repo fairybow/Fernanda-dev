@@ -4,8 +4,8 @@
 #include "common/Path.hpp"
 
 #include <QRegularExpressionMatchIterator>
-#include <QVector>
 #include <QWidget>
+#include <QVector>
 
 #include <functional>
 #include <utility>
@@ -17,7 +17,7 @@ class Stylist : public QObject
 	using QStringPair = std::pair<QString, QString>;
 
 public:
-	Stylist(QVector<QWidget*> widgets = {}, QObject* parent = nullptr, const QString& baseSuffix = "Base", const QString& extension = ".qss");
+	Stylist(QWidgetList widgets = {}, QObject* parent = nullptr, const QString& baseSuffix = "Base", const QString& extension = ".qss");
 
 	void add(QWidget* widget);
 	void style(QWidget* styleeWidget, const StdFsPath& themeSheet);

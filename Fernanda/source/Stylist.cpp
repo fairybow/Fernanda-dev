@@ -1,6 +1,6 @@
 #include "Stylist.h"
 
-Stylist::Stylist(QVector<QWidget*> widgets, QObject* parent, const QString& baseSuffix, const QString& extension)
+Stylist::Stylist(QWidgetList widgets, QObject* parent, const QString& baseSuffix, const QString& extension)
 	: QObject(parent), m_baseSuffix(baseSuffix), m_extension(extension)
 {
 	for (auto& widget : widgets)

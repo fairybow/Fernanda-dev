@@ -8,10 +8,12 @@
 #include <QVector>
 
 #include <algorithm>
+#include <functional>
 
 namespace ResourceGroups
 {
 	using StdFsPath = std::filesystem::path;
+	using StdFsPathList = QVector<StdFsPath>;
 
 	namespace
 	{
@@ -44,21 +46,29 @@ namespace ResourceGroups
 	}
 
 	inline QActionGroup* make(const QStringList& qrcPaths, QStringList extensions,
-		QVector<StdFsPath> systemPaths = {}, QWidget * parent = nullptr)
+		StdFsPathList systemPaths = {}, QWidget * parent = nullptr, std::function<void()> slot = nullptr)
 	{
 		auto group = new QActionGroup(parent);
 		checkExtensions(extensions);
 		auto entries = gather(qrcPaths, extensions);
 		abcByFileName(entries);
-		qDebug() << entries;
 
 		// etc.
 
 		return group;
 	}
 
-	inline QActionGroup* make(const QString& qrcPath, QString extension, QWidget* parent = nullptr)
+	inline QActionGroup* make(const QString& qrcPath, QString extension,
+		StdFsPath systemPath = StdFsPath(), QWidget* parent = nullptr, std::function<void()> slot = nullptr)
 	{
-		return make({ qrcPath }, { extension }, {}, parent);
+		return make(QStringList{ qrcPath }, QStringList{ extension },
+			StdFsPathList{ systemPath }, parent, slot);
+	}
+
+	inline QActionGroup* make(const QStringList& qrcPaths, QStringList extensions,
+		StdFsPath systemPath = StdFsPath(), QWidget* parent = nullptr, std::function<void()> slot = nullptr)
+	{
+		return make(qrcPaths, extensions,
+			StdFsPathList{ systemPath }, parent, slot);
 	}
 }
