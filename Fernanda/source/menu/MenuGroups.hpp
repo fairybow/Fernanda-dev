@@ -10,82 +10,95 @@
 #include <algorithm>
 #include <functional>
 
-namespace MenuGroups
+class MenuGroups : public QObject
 {
+	using StdFsPath = std::filesystem::path;
+	using StdFsPathList = QVector<StdFsPath>;
+
+	Q_OBJECT
+
+public:
 	struct Bespoke {
 		const QVariant data;
 		const QString label;
 	};
 
 	using BespokeList = QVector<Bespoke>;
-	using StdFsPath = std::filesystem::path;
-	using StdFsPathList = QVector<StdFsPath>;
 
-	namespace
-	{
-		inline void checkExtensions(QStringList& extensions)
-		{
-			for (auto& extension : extensions)
-				if (!extension.startsWith("*"))
-					extension = "*" + extension;
-		}
-
-		inline void abcByFileName(QStringList& paths)
-		{
-			std::sort(paths.begin(), paths.end(), [](auto& lhs, auto& rhs) {
-				return Path::name(lhs) < Path::name(rhs);
-				});
-		}
-
-		inline QStringList gather(const QStringList& qrcPaths, const QStringList& extensions)
-		{
-			QStringList entries;
-			for (auto& qrc_path : qrcPaths) {
-				QDirIterator it(qrc_path, extensions, QDir::Files, QDirIterator::Subdirectories);
-				while (it.hasNext()) {
-					it.next();
-					entries << it.filePath();
-				}
-			}
-			return entries;
-		}
-	}
-
-	inline QActionGroup* make(const QStringList& qrcPaths, QStringList extensions,
-		StdFsPathList systemPaths = {}, QWidget* parent = nullptr, std::function<void()> slot = nullptr)
+	static inline QActionGroup* fromQrc(const QStringList& qrcPaths, QStringList extensions,
+		StdFsPathList systemPaths = {}, QObject* parent = nullptr, std::function<void()> slot = nullptr)
 	{
 		auto group = new QActionGroup(parent);
 		checkExtensions(extensions);
 		auto entries = gather(qrcPaths, extensions);
 		abcByFileName(entries);
 
-		// etc.
+		/*for (auto& entry : entries) {
+			auto label = Path::qStringName(entry).toUtf8();
+			auto action = new QAction(tr(label), group);
+			action->setData(entry);
+			action->setCheckable(true);
+			QObject::connect(action, &QAction::toggled, parent, slot);
+		}*/
 
+		group->setExclusive(true);
 		return group;
 	}
 
-	inline QActionGroup* make(const QString& qrcPath, QString extension,
-		StdFsPath systemPath = StdFsPath(), QWidget* parent = nullptr, std::function<void()> slot = nullptr)
+	static inline QActionGroup* fromQrc(const QString& qrcPath, QString extension,
+		StdFsPath systemPath = StdFsPath(), QObject* parent = nullptr, std::function<void()> slot = nullptr)
 	{
-		return make(QStringList{ qrcPath }, QStringList{ extension },
+		return fromQrc(QStringList{ qrcPath }, QStringList{ extension },
 			StdFsPathList{ systemPath }, parent, slot);
 	}
 
-	inline QActionGroup* make(const QStringList& qrcPaths, QStringList extensions,
-		StdFsPath systemPath = StdFsPath(), QWidget* parent = nullptr, std::function<void()> slot = nullptr)
+	static inline QActionGroup* fromQrc(const QStringList& qrcPaths, QStringList extensions,
+		StdFsPath systemPath = StdFsPath(), QObject* parent = nullptr, std::function<void()> slot = nullptr)
 	{
-		return make(qrcPaths, extensions,
-			StdFsPathList{ systemPath }, parent, slot);
+		return fromQrc(qrcPaths, extensions, StdFsPathList{ systemPath }, parent, slot);
 	}
 
-	inline QActionGroup* makeBespoke(BespokeList entries, QWidget* parent = nullptr)
+	static inline QActionGroup* bespoke(BespokeList entries, QObject* parent = nullptr, std::function<void()> slot = nullptr)
 	{
 		auto group = new QActionGroup(parent);
+		
+		/*for (auto& data_pair : entries) {
+			auto label = data_pair.label.toUtf8();
+			auto action = new QAction(tr(label), group);
+			action->setData(data_pair.data);
+			action->setCheckable(true);
+			QObject::connect(action, &QAction::toggled, parent, slot);
+		}*/
 
-		// etc.
-
+		group->setExclusive(true);
 		return group;
 	}
 
+private:
+	static inline void checkExtensions(QStringList& extensions)
+	{
+		for (auto& extension : extensions)
+			if (!extension.startsWith("*"))
+				extension = "*" + extension;
+	}
 
-}
+	static inline void abcByFileName(QStringList& paths)
+	{
+		std::sort(paths.begin(), paths.end(), [](auto& lhs, auto& rhs) {
+			return Path::name(lhs) < Path::name(rhs);
+			});
+	}
+
+	static inline QStringList gather(const QStringList& qrcPaths, const QStringList& extensions)
+	{
+		QStringList entries;
+		for (auto& qrc_path : qrcPaths) {
+			QDirIterator it(qrc_path, extensions, QDir::Files, QDirIterator::Subdirectories);
+			while (it.hasNext()) {
+				it.next();
+				entries << it.filePath();
+			}
+		}
+		return entries;
+	}
+};
