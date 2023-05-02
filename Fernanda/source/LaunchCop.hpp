@@ -35,7 +35,7 @@ public:
 private:
 	const QString m_lockString;
 	const QString m_windowName;
-	bool m_forceFocus = false;
+	const bool m_forceFocus;
 
 	inline bool serverExists() const
 	{
