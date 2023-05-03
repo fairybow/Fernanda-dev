@@ -22,7 +22,7 @@ public:
 
 	struct Bespoke {
 		const QVariant data;
-		const QString label = QString();
+		QString label = QString();
 	};
 
 	using BespokeList = QVector<Bespoke>;
@@ -33,16 +33,11 @@ public:
 		auto group = new ActionGroup(parent);
 		checkExtensions(extensions);
 		auto entries = gather(qrcPaths, extensions);
-		abcByFileName(entries);
-
-		/*for (auto& entry : entries) {
-			auto label = Path::qStringName(entry).toUtf8();
-			auto action = new QAction(tr(label), group);
-			action->setData(entry);
-			action->setCheckable(true);
-			QObject::connect(action, &QAction::toggled, parent, slot);
-		}*/
-
+		for (auto& entry : entries) {
+			auto label = Path::qStringName(entry);
+			addActionToGroup(group, label, entry, parent, slot);
+		}
+		alphabetize(group);
 		group->setExclusive(true);
 		return group;
 	}
@@ -60,23 +55,31 @@ public:
 		return fromQrc(qrcPaths, extensions, StdFsPathList{ systemPath }, parent, slot);
 	}
 
-	static inline ActionGroup* bespoke(BespokeList entries, QObject* parent = nullptr, std::function<void()> slot = nullptr)
+	static inline ActionGroup* bespoke(BespokeList entries, QObject* parent = nullptr,
+		std::function<void()> slot = nullptr)
 	{
 		auto group = new ActionGroup(parent);
-		
-		/*for (auto& data_pair : entries) {
-			auto label = data_pair.label.toUtf8();
-			auto action = new QAction(tr(label), group);
-			action->setData(data_pair.data);
-			action->setCheckable(true);
-			QObject::connect(action, &QAction::toggled, parent, slot);
-		}*/
-
+		for (auto& data_pair : entries) {
+			auto& label = data_pair.label;
+			if (label.isEmpty())
+				label = data_pair.data.toString();
+			addActionToGroup(group, label, data_pair.data, parent, slot);
+		}
+		alphabetize(group);
 		group->setExclusive(true);
 		return group;
 	}
 
 private:
+	static inline void addActionToGroup(ActionGroup* actionGroup, const QString& label,
+		const QVariant& data, QObject* parent, std::function<void()> slot)
+	{
+		auto action = new QAction(tr(label.toUtf8()), actionGroup);
+		action->setData(data);
+		action->setCheckable(true);
+		connect(action, &QAction::toggled, parent, slot);
+	}
+
 	static inline void checkExtensions(QStringList& extensions)
 	{
 		for (auto& extension : extensions)
@@ -84,11 +87,16 @@ private:
 				extension = "*" + extension;
 	}
 
-	static inline void abcByFileName(QStringList& paths)
+	static inline void alphabetize(ActionGroup* actionGroup)
 	{
-		std::sort(paths.begin(), paths.end(), [](auto& lhs, auto& rhs) {
-			return Path::name(lhs) < Path::name(rhs);
+		QVector<QAction*> sorted_actions = actionGroup->actions();
+		std::sort(sorted_actions.begin(), sorted_actions.end(), [](auto& lhs, auto& rhs) {
+			return lhs->text() < rhs->text();
 			});
+		for (auto& action : actionGroup->actions())
+			actionGroup->removeAction(action);
+		for (auto& action : sorted_actions)
+			actionGroup->addAction(action);
 	}
 
 	static inline QStringList gather(const QStringList& qrcPaths, const QStringList& extensions)

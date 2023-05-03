@@ -16,16 +16,14 @@ void MenuBar::makeSubmenus()
 void MenuBar::makeActionGroups()
 {
 	auto user_data_path = getUserDataPath();
-	auto editor_themes_group = ActionGroup::fromQrc(
+	m_actionGroups["editor_themes"] = ActionGroup::fromQrc(
 		":/menu/themes/editor/", ".fernanda_editor", user_data_path, this, [&]() {});
-	auto window_themes_group = ActionGroup::fromQrc(
+	m_actionGroups["window_themes"] = ActionGroup::fromQrc(
 		":/menu/themes/window/", ".fernanda_window", user_data_path, this, [&]() {});
 
 	// check that `user_data_path` can be empty
 
 	// bespokes
-
-	// add groups to map
 
 }
 
@@ -97,8 +95,8 @@ void MenuBar::appearanceDialog()
 	QDialog dialog(this);
 	auto editor_themes_box = new QComboBox;
 	auto window_themes_box = new QComboBox;
-	//addActionsToBoxes(editor_themes_box, ); // map member containing action group
-	//addActionsToBoxes(window_themes_box, );
+	addActionsToBoxes(editor_themes_box, m_actionGroups["editor_themes"]);
+	addActionsToBoxes(window_themes_box, m_actionGroups["window_themes"]);
 	auto editor_themes_container = Layout::labeledContainer("Editor theme:", editor_themes_box);
 	auto window_themes_container = Layout::labeledContainer("Window theme:", window_themes_box);
 	for (auto& themes_box : { editor_themes_box, window_themes_box }) {
