@@ -10,10 +10,10 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	connections();
 	shortcuts();*/
 	setGeometry(0, 0, 1000, 600); // from user data
-	Layout::setCentralWidget(this, m_splitter);
-	setMenuBar(m_menuBar);
-	setStatusBar(m_statusBar);
-	m_statusBar->addPermanentWidget(m_meter, 0);
+	Layout::setCentralWidget(this, m_splitter); // addWidgets();
+	setMenuBar(m_menuBar); // addWidgets();
+	setStatusBar(m_statusBar); // addWidgets();
+	m_statusBar->addPermanentWidget(m_meter, 0); // addWidgets();
 
 	connections();
 
@@ -22,6 +22,13 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	m_splitter->initialize({ 0.2, 0.4, 0.4 }, 1);
 
 	// testing
+
+	loadConfig();
+
+	/*auto button_1 = new QPushButton;
+	button_1->setText("Test");
+	m_statusBar->addPermanentWidget(button_1, 0);
+	connect(button_1, &QPushButton::pressed, this, [&] { loadConfig(); });*/
 }
 
 void MainWindow::connections()
@@ -72,4 +79,18 @@ void MainWindow::menuBarConnections()
 				m_stylist->style(this, path);
 			});
 		});
+}
+
+void MainWindow::loadConfig()
+{
+	// etc.
+	loadMenuBarConfig();
+}
+
+void MainWindow::loadMenuBarConfig()
+{
+	auto editor_theme = m_user->load("theme", m_editor, Path::toQString(m_menuBar->defaultEditorTheme()));
+	auto window_theme = m_user->load("theme", this, Path::toQString(m_menuBar->defaultWindowTheme()));
+	m_stylist->style(m_editor, Path::toStdFs(editor_theme));
+	m_stylist->style(this, Path::toStdFs(window_theme));
 }

@@ -64,11 +64,11 @@ public:
 		return load(valueKey, namedObject->objectName(), fallbackValue);
 	}
 
-	template<typename T>
+	/*template<typename T>
 	inline T load(const QString& valueKey, T fallbackValue = T())
 	{
 		return load(valueKey, QString(), fallbackValue);
-	}
+	}*/
 
 	inline StdFsPath dataFolder() { return m_folders[DATA_NAME]; }
 

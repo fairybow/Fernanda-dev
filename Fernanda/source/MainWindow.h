@@ -53,6 +53,12 @@ private:
 	void editorConnections();
 	void previewConnections();
 	void menuBarConnections();
+	void loadConfig();
+	//void loadSplitterConfig();
+	//void loadTreeViewConfig();
+	//void loadEditorConfig();
+	//void loadPreviewConfig();
+	void loadMenuBarConfig();
 
 	template<typename T>
 	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction)

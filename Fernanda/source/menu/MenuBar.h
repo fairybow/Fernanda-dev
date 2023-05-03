@@ -17,6 +17,8 @@
 
 constexpr char EDITOR_THEMES[] = "editor_themes";
 constexpr char WINDOW_THEMES[] = "window_themes";
+constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
+constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
 
 class MenuBar : public QMenuBar
 {
@@ -28,6 +30,9 @@ public:
 	MenuBar(const char* name, bool isDev = false, QWidget* parent = nullptr);
 
 	void makeSubmenus();
+
+	inline StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; };
+	inline StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; };
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();

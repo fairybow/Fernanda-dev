@@ -16,13 +16,13 @@ void MenuBar::makeSubmenus()
 void MenuBar::makeActionGroups()
 {
 	auto user_data_path = emit getUserDataPath();
-	m_actionGroups[EDITOR_THEMES] = ActionGroup::fromQrc(":/menu/themes/editor/",
+	m_actionGroups[EDITOR_THEMES] = ActionGroup::fromQrc(QRC_EDITOR,
 		".fernanda_editor", user_data_path, this, [&] {
 			auto selection = selectedEditorTheme();
 			if (selection == nullptr) return;
 			emit askStyleEditor(Path::toStdFs(selection->data()));
 		});
-	m_actionGroups[WINDOW_THEMES] = ActionGroup::fromQrc(":/menu/themes/window/",
+	m_actionGroups[WINDOW_THEMES] = ActionGroup::fromQrc(QRC_MAIN_WINDOW,
 		".fernanda_window", user_data_path, this, [&] {
 			auto selection = selectedWindowTheme();
 			if (selection == nullptr) return;
