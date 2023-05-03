@@ -35,7 +35,7 @@ void MainWindow::connections()
 
 void MainWindow::splitterConnections()
 {
-	connect(m_splitter, &Splitter::askWindowSize, this, [&]() {
+	connect(m_splitter, &Splitter::askWindowSize, this, [&] {
 		return geometry();
 		});
 }
@@ -57,7 +57,7 @@ void MainWindow::previewConnections()
 
 void MainWindow::menuBarConnections()
 {
-	connect(m_menuBar, &MenuBar::getUserDataPath, this, [&]() {
+	connect(m_menuBar, &MenuBar::getUserDataPath, this, [&] {
 		return m_user->getUserData();
 		});
 	connect(m_menuBar, &MenuBar::askStyleEditor, this, [&](StdFsPath path) {

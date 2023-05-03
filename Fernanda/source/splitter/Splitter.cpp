@@ -3,13 +3,14 @@
 Splitter::Splitter(const char* name, Qt::Orientation orientation, QWidgetList widgets, QWidget* parent)
 	: QWidget(parent)
 {
+	setObjectName(name);
 	m_trueSplitter->setObjectName(name);
 	Layout::box( m_trueSplitter, this);
 	m_trueSplitter->setOrientation(orientation);
 	for (auto& widget : widgets)
 		m_trueSplitter->addWidget(widget);
-	connect(m_trueSplitter, &TrueSplitter::splitterMoved, this, [&]() { moveButtons(); });
-	connect(m_trueSplitter, &TrueSplitter::resized, this, [&]() { moveButtons(); });
+	connect(m_trueSplitter, &TrueSplitter::splitterMoved, this, [&] { moveButtons(); });
+	connect(m_trueSplitter, &TrueSplitter::resized, this, [&] { moveButtons(); });
 	connect(m_trueSplitter, &TrueSplitter::widgetVisibilityChanged, this, &Splitter::showOrHideButtons);
 }
 
@@ -21,7 +22,7 @@ void Splitter::initialize(QVector<double> fallbacks, int centralWidgetIndex)
 		auto meta = Meta{ i };
 		if (i != centralWidgetIndex) {
 			auto button = new QPushButton(QString(isLeft(i) ? "Left Collapse" : "Right Collapse"), this);
-			//connect(button, &QPushButton::clicked, this, [&]() { emit askChangeMetaState(button); });
+			//connect(button, &QPushButton::clicked, this, [&] { emit askChangeMetaState(button); });
 			meta.handleButton = button;
 		}
 		m_metas << meta;

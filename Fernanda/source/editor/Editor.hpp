@@ -15,6 +15,7 @@ public:
 	inline Editor(const char* name, QWidget* parent = nullptr)
 		: QWidget(parent)
 	{
+		setObjectName(name);
 		m_trueEditor->setObjectName(name);
 		m_lineNumberArea->setObjectName(name + QString("-line-number-area"));
 		m_trueEditor->setReadOnly(true);

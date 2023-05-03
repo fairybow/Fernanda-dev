@@ -17,16 +17,13 @@ void MenuBar::makeActionGroups()
 {
 	auto user_data_path = emit getUserDataPath();
 	m_actionGroups[EDITOR_THEMES] = ActionGroup::fromQrc(":/menu/themes/editor/",
-		".fernanda_editor", user_data_path, this, [&]() { emit editorThemeSelectionChanged(); });
-	m_actionGroups[WINDOW_THEMES] = ActionGroup::fromQrc(":/menu/themes/window/",
-		".fernanda_window", user_data_path, this, [&]() { emit windowThemeSelectionChanged(); });
-
-	connect(this, &MenuBar::editorThemeSelectionChanged, this, [&]() {
+		".fernanda_editor", user_data_path, this, [&] {
 			auto selection = selectedEditorTheme();
 			if (selection == nullptr) return;
 			emit askStyleEditor(Path::toStdFs(selection->data()));
 		});
-	connect(this, &MenuBar::windowThemeSelectionChanged, this, [&]() {
+	m_actionGroups[WINDOW_THEMES] = ActionGroup::fromQrc(":/menu/themes/window/",
+		".fernanda_window", user_data_path, this, [&] {
 			auto selection = selectedWindowTheme();
 			if (selection == nullptr) return;
 			emit askStyleWindow(Path::toStdFs(selection->data()));

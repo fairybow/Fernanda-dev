@@ -62,8 +62,8 @@ inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& 
 auto button_1 = new QPushButton;
 button_1->setText("Save");
 m_statusBar->addPermanentWidget(button_1, 0);
-connect(button_1, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
-connect(this, &MainWindow::testSignal1, this, [&]()
+connect(button_1, &QPushButton::pressed, this, [&] { emit testSignal1(); });
+connect(this, &MainWindow::testSignal1, this, [&]
 	{
 		emitAndSave(&MainWindow::testSignal3, 666, "Key", this);
 		emitAndSave(&MainWindow::testSignal3, 12, "Key");
@@ -72,15 +72,15 @@ connect(this, &MainWindow::testSignal1, this, [&]()
 auto button_2 = new QPushButton;
 button_2->setText("Load");
 m_statusBar->addPermanentWidget(button_2, 0);
-connect(button_2, &QPushButton::pressed, this, [&]() { emit testSignal2(); });
-connect(this, &MainWindow::testSignal2, this, [&]()
+connect(button_2, &QPushButton::pressed, this, [&] { emit testSignal2(); });
+connect(this, &MainWindow::testSignal2, this, [&]
 	{
 		auto x = loadConfig("Key", this, 666);
 		auto y = loadConfig("Key", 12);
 		qDebug() << x << y;
 	});
 	
-connect(this, &MainWindow::testSignal3, this, [&]()
+connect(this, &MainWindow::testSignal3, this, [&]
 	{
 		qDebug() << "testSignal 3 emitted by MainWindow using `emitAndSave`";
 	});

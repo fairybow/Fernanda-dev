@@ -31,8 +31,6 @@ public:
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();
-	void editorThemeSelectionChanged();
-	void windowThemeSelectionChanged();
 	void askStyleEditor(StdFsPath path);
 	void askStyleWindow(StdFsPath path);
 

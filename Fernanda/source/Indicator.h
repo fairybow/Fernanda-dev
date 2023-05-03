@@ -13,6 +13,7 @@ public:
 	inline Indicator(const char* name, QWidget* parent)
 		: QWidget(parent)
 	{
+		setObjectName(name);
 		m_progressBar->setObjectName(name);
 		setAttribute(Qt::WA_TransparentForMouseEvents);
 		m_progressBar->setAttribute(Qt::WA_TransparentForMouseEvents);
