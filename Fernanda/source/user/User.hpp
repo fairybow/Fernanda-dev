@@ -70,10 +70,7 @@ public:
 		return load(valueKey, QString(), fallbackValue);
 	}
 
-	inline StdFsPath getUserData()
-	{
-		return m_folders[DATA_NAME];
-	}
+	inline StdFsPath dataFolder() { return m_folders[DATA_NAME]; }
 
 private:
 	std::map<QString, StdFsPath> m_folders;

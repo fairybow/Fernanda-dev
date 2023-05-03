@@ -16,6 +16,7 @@
 #include <QString>
 
 #include <filesystem>
+#include <functional>
 
 class MainWindow : public QMainWindow
 {
@@ -52,4 +53,19 @@ private:
 	void editorConnections();
 	void previewConnections();
 	void menuBarConnections();
+
+	template<typename T>
+	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction)
+	{
+		configurableAction();
+		m_user->save(value, valueKey, associatedObject);
+	}
+
+	template<typename T, typename U>
+	U saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<U()> configurableAction)
+	{
+		U result = configurableAction();
+		m_user->save(value, valueKey, associatedObject);
+		return result;
+	}
 };

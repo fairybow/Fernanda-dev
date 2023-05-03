@@ -58,14 +58,18 @@ void MainWindow::previewConnections()
 void MainWindow::menuBarConnections()
 {
 	connect(m_menuBar, &MenuBar::getUserDataPath, this, [&] {
-		return m_user->getUserData();
+		return m_user->dataFolder();
 		});
 	connect(m_menuBar, &MenuBar::askStyleEditor, this, [&](StdFsPath path) {
-		m_stylist->style(m_editor, path);
-		m_user->save(Path::toQString(path), "theme", m_editor);
+		saveConfigPassthrough(
+			Path::toQString(path), "theme", m_editor, [&] {
+				m_stylist->style(m_editor, path);
+			});
 		});
 	connect(m_menuBar, &MenuBar::askStyleWindow, this, [&](StdFsPath path) {
-		m_stylist->style(this, path);
-		m_user->save(Path::toQString(path), "theme", this);
+		saveConfigPassthrough(
+			Path::toQString(path), "theme", this, [&] {
+				m_stylist->style(this, path);
+			});
 		});
 }
