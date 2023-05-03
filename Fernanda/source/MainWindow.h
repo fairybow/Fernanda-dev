@@ -32,7 +32,7 @@ signals:
 	void testSignal3(int i);
 
 private:
-	MenuBar* m_menuBar = new MenuBar("MenuBar", this);
+	MenuBar* m_menuBar = new MenuBar("MenuBar", m_isDev, this);
 	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
 	Indicator* m_indicator = new Indicator("Indicator", this);
 	TreeView* m_treeView = new TreeView("TreeView");
@@ -52,28 +52,4 @@ private:
 	void editorConnections();
 	void previewConnections();
 	void menuBarConnections();
-
-	template<typename T>
-	inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey, QObject* namedObject = nullptr)
-	{
-		emit(this->*signal)(value);
-		QString group_prefix;
-		if (namedObject)
-			group_prefix = namedObject->objectName();
-		m_user->save(value, valueKey, group_prefix);
-	}
-
-	template<typename T>
-	inline T loadConfig(const QString& valueKey, QObject* namedObject, T fallbackValue = T())
-	{
-		return namedObject
-			? m_user->load(valueKey, namedObject->objectName(), fallbackValue)
-			: m_user->load(valueKey, fallbackValue);
-	}
-
-	template<typename T>
-	inline T loadConfig(const QString& valueKey, T fallbackValue = T())
-	{
-		return loadConfig(valueKey, nullptr, fallbackValue);
-	}
 };

@@ -1,7 +1,7 @@
 #include "MenuBar.h"
 
-MenuBar::MenuBar(const char* name, QWidget* parent)
-	: QMenuBar(parent)
+MenuBar::MenuBar(const char* name, bool isDev, QWidget* parent)
+	: QMenuBar(parent), m_isDev(isDev)
 {
 	setObjectName(name);
 	makeActionGroups();
@@ -15,11 +15,22 @@ void MenuBar::makeSubmenus()
 
 void MenuBar::makeActionGroups()
 {
-	auto user_data_path = getUserDataPath();
-	m_actionGroups["editor_themes"] = ActionGroup::fromQrc(
-		":/menu/themes/editor/", ".fernanda_editor", user_data_path, this, [&]() {});
-	m_actionGroups["window_themes"] = ActionGroup::fromQrc(
-		":/menu/themes/window/", ".fernanda_window", user_data_path, this, [&]() {});
+	auto user_data_path = emit getUserDataPath();
+	m_actionGroups[EDITOR_THEMES] = ActionGroup::fromQrc(":/menu/themes/editor/",
+		".fernanda_editor", user_data_path, this, [&]() { emit editorThemeSelectionChanged(); });
+	m_actionGroups[WINDOW_THEMES] = ActionGroup::fromQrc(":/menu/themes/window/",
+		".fernanda_window", user_data_path, this, [&]() { emit windowThemeSelectionChanged(); });
+
+	connect(this, &MenuBar::editorThemeSelectionChanged, this, [&]() {
+			auto selection = selectedEditorTheme();
+			if (selection == nullptr) return;
+			emit askStyleEditor(Path::toStdFs(selection->data()));
+		});
+	connect(this, &MenuBar::windowThemeSelectionChanged, this, [&]() {
+			auto selection = selectedWindowTheme();
+			if (selection == nullptr) return;
+			emit askStyleWindow(Path::toStdFs(selection->data()));
+		});
 
 	// check that `user_data_path` can be empty
 
@@ -95,8 +106,8 @@ void MenuBar::appearanceDialog()
 	QDialog dialog(this);
 	auto editor_themes_box = new QComboBox;
 	auto window_themes_box = new QComboBox;
-	addActionsToBoxes(editor_themes_box, m_actionGroups["editor_themes"]);
-	addActionsToBoxes(window_themes_box, m_actionGroups["window_themes"]);
+	addActionsToBoxes(editor_themes_box, m_actionGroups[EDITOR_THEMES]);
+	addActionsToBoxes(window_themes_box, m_actionGroups[WINDOW_THEMES]);
 	auto editor_themes_container = Layout::labeledContainer("Editor theme:", editor_themes_box);
 	auto window_themes_container = Layout::labeledContainer("Window theme:", window_themes_box);
 	for (auto& themes_box : { editor_themes_box, window_themes_box }) {

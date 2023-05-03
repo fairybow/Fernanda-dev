@@ -13,9 +13,13 @@ class Settings
 {
 	using StdFsPath = std::filesystem::path;
 
+	template<typename T>
+	using IsNotStdFs = std::negation<std::is_same<T, StdFsPath>>;
+
 public:
 	template<typename T>
-	static inline void save(StdFsPath config, const QString& groupPrefix, const QString& valueKey, T value)
+	static inline typename std::enable_if<IsNotStdFs<T>::value, void>::type
+		save(StdFsPath config, const QString& groupPrefix, const QString& valueKey, T value)
 	{
 		auto ini = iniFile(config, groupPrefix);
 		ini->setValue(valueKey, QVariant::fromValue(value));

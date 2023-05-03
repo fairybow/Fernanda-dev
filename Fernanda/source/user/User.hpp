@@ -46,10 +46,22 @@ public:
 	}
 
 	template<typename T>
+	inline void save(T value, const QString& valueKey, QObject* namedObject)
+	{
+		save(value, valueKey, namedObject->objectName());
+	}
+
+	template<typename T>
 	inline T load(const QString& valueKey, const QString& groupPrefix = QString(), T fallbackValue = T())
 	{
 		return Settings::load(m_folders[DATA_NAME] / m_configFileName,
 			groupPrefix, valueKey, fallbackValue);
+	}
+
+	template<typename T>
+	inline T load(const QString& valueKey, QObject* namedObject, T fallbackValue = T())
+	{
+		return load(valueKey, namedObject->objectName(), fallbackValue);
 	}
 
 	template<typename T>

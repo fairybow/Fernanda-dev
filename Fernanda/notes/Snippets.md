@@ -47,6 +47,18 @@ inline void emitAndSave(void (MainWindow::* signal)(Args...), SignalArgs<Args...
 
 //
 
+template<typename T>
+inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey, QObject* namedObject = nullptr)
+{
+	emit(this->*signal)(value);
+	QString group_prefix;
+	if (namedObject)
+		group_prefix = namedObject->objectName();
+	m_user->save(value, valueKey, group_prefix);
+}
+
+//
+
 auto button_1 = new QPushButton;
 button_1->setText("Save");
 m_statusBar->addPermanentWidget(button_1, 0);
@@ -72,18 +84,4 @@ connect(this, &MainWindow::testSignal3, this, [&]()
 	{
 		qDebug() << "testSignal 3 emitted by MainWindow using `emitAndSave`";
 	});
-
-//
-
-/*QVariant MainWindow::loadConfig(const QString& valueKey, QObject* namedObject, QVariant fallbackValue = QVariant())
-{
-	return namedObject
-		? m_user->load(valueKey, namedObject->objectName(), fallbackValue)
-		: m_user->load(valueKey, fallbackValue);
-}
-
-QVariant MainWindow::loadConfig(const QString& valueKey, QVariant fallbackValue = QVariant())
-{
-	return loadConfig(valueKey, nullptr, fallbackValue);
-}*/
 ```

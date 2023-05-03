@@ -22,32 +22,6 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	m_splitter->initialize({ 0.2, 0.4, 0.4 }, 1);
 
 	// testing
-
-	/*auto button_1 = new QPushButton;
-	button_1->setText("Save");
-	m_statusBar->addPermanentWidget(button_1, 0);
-	connect(button_1, &QPushButton::pressed, this, [&]() { emit testSignal1(); });
-	connect(this, &MainWindow::testSignal1, this, [&]()
-		{
-			emitAndSave(&MainWindow::testSignal3, 666, "Key", this);
-			emitAndSave(&MainWindow::testSignal3, 12, "Key");
-		});
-
-	auto button_2 = new QPushButton;
-	button_2->setText("Load");
-	m_statusBar->addPermanentWidget(button_2, 0);
-	connect(button_2, &QPushButton::pressed, this, [&]() { emit testSignal2(); });
-	connect(this, &MainWindow::testSignal2, this, [&]()
-		{
-			auto x = loadConfig("Key", this, 666);
-			auto y = loadConfig("Key", 12);
-			qDebug() << x << y;
-		});
-	
-	connect(this, &MainWindow::testSignal3, this, [&]()
-		{
-			qDebug() << "testSignal 3 emitted by MainWindow using `emitAndSave`";
-		});*/
 }
 
 void MainWindow::connections()
@@ -86,7 +60,12 @@ void MainWindow::menuBarConnections()
 	connect(m_menuBar, &MenuBar::getUserDataPath, this, [&]() {
 		return m_user->getUserData();
 		});
-	connect(m_menuBar, &MenuBar::getResourcePaths, this, [&]() {
-		return StdFsPath(); // ":/themes/editor/"
+	connect(m_menuBar, &MenuBar::askStyleEditor, this, [&](StdFsPath path) {
+		m_stylist->style(m_editor, path);
+		m_user->save(Path::toQString(path), "theme", m_editor);
+		});
+	connect(m_menuBar, &MenuBar::askStyleWindow, this, [&](StdFsPath path) {
+		m_stylist->style(this, path);
+		m_user->save(Path::toQString(path), "theme", this);
 		});
 }
