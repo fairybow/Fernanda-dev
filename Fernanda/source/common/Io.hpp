@@ -2,6 +2,7 @@
 
 #include <QDir>
 #include <QFile>
+#include <QString>
 #include <QTextStream>
 
 #include <filesystem>
@@ -26,7 +27,7 @@ namespace Io
 	{
 		if (createDirectories) {
 			auto parent = filePath.parent_path();
-			if (!QDir(parent).exists())
+			if (!StdFs::exists(parent))
 				StdFs::create_directories(parent);
 		}
 		QFile file(filePath);

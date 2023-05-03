@@ -1,19 +1,19 @@
 #pragma once
 
 #include "common/Layout.hpp"
+#include "common/Widget.hpp"
 
 #include <QProgressBar>
 #include <QTimer>
 
-class Indicator : public QWidget
+class Indicator : public Widget<>
 {
 	Q_OBJECT
 
 public:
 	inline Indicator(const char* name, QWidget* parent)
-		: QWidget(parent)
+		: Widget(name, parent)
 	{
-		setObjectName(name);
 		m_progressBar->setObjectName(name);
 		setAttribute(Qt::WA_TransparentForMouseEvents);
 		m_progressBar->setAttribute(Qt::WA_TransparentForMouseEvents);

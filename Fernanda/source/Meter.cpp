@@ -1,9 +1,9 @@
 #include "Meter.h"
 
 Meter::Meter(const char* name, QWidget* parent)
-	: QWidget(parent)
+	: Widget(name, parent)
 {
-	for (auto& widget : QWidgetList{ this, m_positions, m_separator, m_counts })
+	for (auto& widget : QWidgetList{ m_positions, m_separator, m_counts })
 		widget->setObjectName(name);
 	Layout::box({ m_positions, m_separator, m_counts, m_refresh }, this, Layout::Line::Horizontally);
 	m_separator->setText("/");

@@ -1,15 +1,15 @@
 #pragma once
 
 #include "../common/Layout.hpp"
+#include "../common/Widget.hpp"
 #include "WebEngineView.hpp"
 
-class Preview : public QWidget
+class Preview : public Widget<>
 {
 public:
 	inline Preview(const char* name, QWidget* parent = nullptr)
-		: QWidget(parent)
+		: Widget(name, parent)
 	{
-		setObjectName(name);
 		Layout::box( m_view, this);
 	}
 

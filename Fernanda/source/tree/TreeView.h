@@ -1,17 +1,17 @@
 #pragma once
 
+#include "../common/Widget.hpp"
 #include "StyledItemDelegate.hpp"
 
 #include <QStandardItemModel>
 #include <QTreeView>
 
-class TreeView : public QTreeView
+class TreeView : public Widget<QTreeView>
 {
 public:
 	inline TreeView(const char* name, QWidget* parent = nullptr)
-		: QTreeView(parent)
+		: Widget(name, parent)
 	{
-		setObjectName(name);
 		setItemDelegate(m_delegate);
 		setModel(m_itemModel);
 	}

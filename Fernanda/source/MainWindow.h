@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/Layout.hpp"
+#include "common/Widget.hpp"
 #include "editor/Editor.hpp"
 #include "Indicator.h"
 #include "menu/MenuBar.h"
@@ -18,7 +19,7 @@
 #include <filesystem>
 #include <functional>
 
-class MainWindow : public QMainWindow
+class MainWindow : public Widget<QMainWindow>
 {
 	using StdFsPath = std::filesystem::path;
 

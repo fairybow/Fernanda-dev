@@ -1,9 +1,8 @@
 #include "MenuBar.h"
 
 MenuBar::MenuBar(const char* name, bool isDev, QWidget* parent)
-	: QMenuBar(parent), m_isDev(isDev)
+	: Widget(name, parent), m_isDev(isDev)
 {
-	setObjectName(name);
 	makeActionGroups();
 }
 

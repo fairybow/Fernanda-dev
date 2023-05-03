@@ -1,21 +1,21 @@
 #pragma once
 
 #include "../common/Layout.hpp"
+#include "../common/Widget.hpp"
 #include "TrueEditor.h"
 
 #include <QLabel>
 #include <QPushButton>
 #include <QVector>
 
-class Editor : public QWidget
+class Editor : public Widget<>
 {
 	Q_OBJECT
 
 public:
 	inline Editor(const char* name, QWidget* parent = nullptr)
-		: QWidget(parent)
+		: Widget(name, parent)
 	{
-		setObjectName(name);
 		m_trueEditor->setObjectName(name);
 		m_lineNumberArea->setObjectName(name + QString("-line-number-area"));
 		m_trueEditor->setReadOnly(true);

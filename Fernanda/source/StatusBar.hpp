@@ -1,14 +1,15 @@
 #pragma once
 
+#include "common/Widget.hpp"
+
 #include <QStatusBar>
 
-class StatusBar : public QStatusBar
+class StatusBar : public Widget<QStatusBar>
 {
 public:
 	inline StatusBar(const char* name, QWidget* parent = nullptr)
-		: QStatusBar(parent)
+		: Widget(name, parent)
 	{
-		setObjectName(name);
 		setMaximumHeight(22);
 	}
 };

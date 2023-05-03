@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common/Layout.hpp"
+#include "../common/Widget.hpp"
 #include "ActionGroup.hpp"
 #include "LiveFontDialog.hpp"
 #include "Popup.hpp"
@@ -20,7 +21,7 @@ constexpr char WINDOW_THEMES[] = "window_themes";
 constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
 constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
 
-class MenuBar : public QMenuBar
+class MenuBar : public Widget<QMenuBar>
 {
 	using StdFsPath = std::filesystem::path;
 

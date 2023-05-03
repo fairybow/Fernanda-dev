@@ -1,13 +1,14 @@
 #pragma once
 
 #include "common/Layout.hpp"
+#include "common/Widget.hpp"
 #include "common/StatusBarButton.hpp"
 
 #include <QGraphicsOpacityEffect>
 #include <QLabel>
 #include <QRegularExpression>
 
-class Meter : public QWidget
+class Meter : public Widget<>
 {
 public:
 	Meter(const char* name, QWidget* parent = nullptr);

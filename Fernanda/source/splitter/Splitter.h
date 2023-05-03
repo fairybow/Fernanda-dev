@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common/Layout.hpp"
+#include "../common/Widget.hpp"
 #include "TrueSplitter.hpp"
 
 #include <QPushButton>
@@ -11,7 +12,7 @@
 #include <numeric>
 #include <optional>
 
-class Splitter : public QWidget
+class Splitter : public Widget<>
 {
 	Q_OBJECT
 

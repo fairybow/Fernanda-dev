@@ -261,6 +261,9 @@
     <ClInclude Include="source\user\Settings.hpp">
       <Filter>Source\User</Filter>
     </ClInclude>
+    <ClInclude Include="source\common\Widget.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">
