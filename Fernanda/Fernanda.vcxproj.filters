@@ -158,7 +158,7 @@
     <QtMoc Include="source\menu\VersionChecker.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
-    <QtMoc Include="source\menu\MenuPopup.hpp">
+    <QtMoc Include="source\menu\Popup.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
     <QtMoc Include="source\user\User.hpp">
@@ -167,7 +167,7 @@
     <QtMoc Include="source\menu\MenuBar.h">
       <Filter>Source\Menu</Filter>
     </QtMoc>
-    <QtMoc Include="source\menu\MenuGroups.hpp">
+    <QtMoc Include="source\menu\ActionGroup.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
   </ItemGroup>

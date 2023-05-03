@@ -16,10 +16,12 @@ void MenuBar::makeSubmenus()
 void MenuBar::makeActionGroups()
 {
 	auto user_data_path = getUserDataPath();
-	auto editor_themes_group = MenuGroups::fromQrc(
+	auto editor_themes_group = ActionGroup::fromQrc(
 		":/menu/themes/editor/", ".fernanda_editor", user_data_path, this, [&]() {});
-	auto window_themes_group = MenuGroups::fromQrc(
+	auto window_themes_group = ActionGroup::fromQrc(
 		":/menu/themes/window/", ".fernanda_window", user_data_path, this, [&]() {});
+
+	// check that `user_data_path` can be empty
 
 	// bespokes
 
@@ -41,18 +43,18 @@ void MenuBar::help()
 	auto about = new QAction(tr("&About..."), this);
 	auto check_for_updates = new QAction(tr("&Check for updates..."), this);
 	connect(about, &QAction::triggered, this, [&] {
-		if (!MenuPopup::about(this)) return;
-		MenuPopup::version(this);
+		if (!Popup::about(this)) return;
+		Popup::version(this);
 		});
 	connect(check_for_updates, &QAction::triggered, this, [&] {
-		MenuPopup::version(this);
+		Popup::version(this);
 		});
 	auto menu = addMenu(tr("&Help"));
 	for (const auto& action : { about, check_for_updates })
 		menu->addAction(action);
 }
 
-void MenuBar::addActionsToBoxes(QComboBox* comboBox, QActionGroup* actionGroup)
+void MenuBar::addActionsToBoxes(QComboBox* comboBox, ActionGroup* actionGroup)
 {
 	for (auto i = 0; i < actionGroup->actions().count(); ++i) {
 		auto action = actionGroup->actions().at(i);

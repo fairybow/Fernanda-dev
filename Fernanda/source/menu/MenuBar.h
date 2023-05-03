@@ -1,9 +1,9 @@
 #pragma once
 
 #include "../common/Layout.hpp"
+#include "ActionGroup.hpp"
 #include "LiveFontDialog.hpp"
-#include "MenuPopup.hpp"
-#include "MenuGroups.hpp"
+#include "Popup.hpp"
 
 #include <QComboBox>
 #include <QDesktopServices>
@@ -31,12 +31,12 @@ signals:
 	MenuBar::StdFsPath getResourcePaths();
 
 private:
-	std::map<QString, QActionGroup*> m_actionGroups;
+	std::map<QString, ActionGroup*> m_actionGroups;
 
 	void makeActionGroups();
 	void view();
 	void help();
-	void addActionsToBoxes(QComboBox* comboBox, QActionGroup* actionGroup);
+	void addActionsToBoxes(QComboBox* comboBox, ActionGroup* actionGroup);
 	void addFontDialog(QMdiArea* multiDocArea);
 	LiveFontDialog* fontDialog();
 	const QFont initialFont();

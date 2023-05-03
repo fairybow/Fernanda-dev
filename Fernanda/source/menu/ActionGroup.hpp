@@ -4,13 +4,13 @@
 
 #include <QActionGroup>
 #include <QDirIterator>
-#include <QStringList>
+#include <QString>
 #include <QVector>
 
 #include <algorithm>
 #include <functional>
 
-class MenuGroups : public QObject
+class ActionGroup : public QActionGroup
 {
 	using StdFsPath = std::filesystem::path;
 	using StdFsPathList = QVector<StdFsPath>;
@@ -18,17 +18,19 @@ class MenuGroups : public QObject
 	Q_OBJECT
 
 public:
+	using QActionGroup::QActionGroup;
+
 	struct Bespoke {
 		const QVariant data;
-		const QString label;
+		const QString label = QString();
 	};
 
 	using BespokeList = QVector<Bespoke>;
 
-	static inline QActionGroup* fromQrc(const QStringList& qrcPaths, QStringList extensions,
+	static inline ActionGroup* fromQrc(const QStringList& qrcPaths, QStringList extensions,
 		StdFsPathList systemPaths = {}, QObject* parent = nullptr, std::function<void()> slot = nullptr)
 	{
-		auto group = new QActionGroup(parent);
+		auto group = new ActionGroup(parent);
 		checkExtensions(extensions);
 		auto entries = gather(qrcPaths, extensions);
 		abcByFileName(entries);
@@ -45,22 +47,22 @@ public:
 		return group;
 	}
 
-	static inline QActionGroup* fromQrc(const QString& qrcPath, QString extension,
+	static inline ActionGroup* fromQrc(const QString& qrcPath, QString extension,
 		StdFsPath systemPath = StdFsPath(), QObject* parent = nullptr, std::function<void()> slot = nullptr)
 	{
 		return fromQrc(QStringList{ qrcPath }, QStringList{ extension },
 			StdFsPathList{ systemPath }, parent, slot);
 	}
 
-	static inline QActionGroup* fromQrc(const QStringList& qrcPaths, QStringList extensions,
+	static inline ActionGroup* fromQrc(const QStringList& qrcPaths, QStringList extensions,
 		StdFsPath systemPath = StdFsPath(), QObject* parent = nullptr, std::function<void()> slot = nullptr)
 	{
 		return fromQrc(qrcPaths, extensions, StdFsPathList{ systemPath }, parent, slot);
 	}
 
-	static inline QActionGroup* bespoke(BespokeList entries, QObject* parent = nullptr, std::function<void()> slot = nullptr)
+	static inline ActionGroup* bespoke(BespokeList entries, QObject* parent = nullptr, std::function<void()> slot = nullptr)
 	{
-		auto group = new QActionGroup(parent);
+		auto group = new ActionGroup(parent);
 		
 		/*for (auto& data_pair : entries) {
 			auto label = data_pair.label.toUtf8();

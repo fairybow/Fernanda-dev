@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 
-class MenuPopup : public QObject
+class Popup : public QObject
 {
 	Q_OBJECT
 
