@@ -55,6 +55,9 @@
     <Filter Include="Resources\Themes\Window">
       <UniqueIdentifier>{99991278-b82e-4a4d-90da-1add4c529a4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\Editor">
+      <UniqueIdentifier>{f9fcb0a7-8900-457a-b2c4-5b9d6c57862d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -128,6 +131,9 @@
     </None>
     <None Include="resources\menu\themes\window\Solarized Light.fernanda_window">
       <Filter>Resources\Themes\Window</Filter>
+    </None>
+    <None Include="resources\editor\Shadow.qss">
+      <Filter>Resources\Editor</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -275,6 +281,9 @@
       <Filter>Resources</Filter>
     </QtRcc>
     <QtRcc Include="resources\Stylist.qrc">
+      <Filter>Resources</Filter>
+    </QtRcc>
+    <QtRcc Include="resources\Editor.qrc">
       <Filter>Resources</Filter>
     </QtRcc>
   </ItemGroup>

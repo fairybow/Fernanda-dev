@@ -1,18 +1,19 @@
 #pragma once
 
+#include "Widget.hpp"
+
 #include <QEvent>
 #include <QGraphicsOpacityEffect>
 #include <QPushButton>
 
-class StatusBarButton : public QPushButton
+class StatusBarButton : public Widget<QPushButton>
 {
 	Q_OBJECT
 
 public:
 	inline StatusBarButton(const char* name, const QString& text, QWidget* parent, double defaultOpacity = 0.5)
-		: QPushButton(parent), m_opacity(defaultOpacity)
+		: Widget(name, parent), m_opacity(defaultOpacity)
 	{
-		setObjectName(name);
 		installEventFilter(this);
 		setText(text);
 		m_effect->setOpacity(m_opacity);

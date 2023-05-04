@@ -99,6 +99,7 @@
     <None Include="installer\Fonts.nsh" />
     <None Include="installer\Installer.nsi" />
     <None Include="notes\Snippets.md" />
+    <None Include="resources\editor\Shadow.qss" />
     <None Include="resources\menu\themes\editor\Amber.fernanda_editor" />
     <None Include="resources\menu\themes\editor\Blue.fernanda_editor" />
     <None Include="resources\menu\themes\editor\Green.fernanda_editor" />
@@ -173,6 +174,7 @@
     <ResourceCompile Include="resources\Resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <QtRcc Include="resources\Editor.qrc" />
     <QtRcc Include="resources\MenuBar.qrc" />
     <QtRcc Include="resources\Stylist.qrc" />
   </ItemGroup>

@@ -1,11 +1,14 @@
 #pragma once
 
+#include "../common/Io.hpp"
 #include "../common/Layout.hpp"
 #include "../common/Widget.hpp"
 #include "TrueEditor.h"
 
+#include <QGraphicsBlurEffect>
 #include <QLabel>
 #include <QPushButton>
+#include <QScrollBar>
 #include <QVector>
 
 class Editor : public Widget<>
@@ -18,10 +21,32 @@ public:
 	{
 		m_trueEditor->setObjectName(name);
 		m_lineNumberArea->setObjectName(name + QString("-line-number-area"));
+		m_shadow->setObjectName(name + QString("-shadow"));
+		m_overlay->setObjectName(name + QString("-overlay"));
+		m_underlay->setObjectName(name + QString("-underlay"));
+		m_trueEditor->horizontalScrollBar()->setObjectName("HScrollBar"); // rename in qss
+		m_trueEditor->verticalScrollBar()->setObjectName("VScrollBar"); // rename in qss
+		m_scrollUp->setObjectName("ScrollUp"); // rename in qss
+		m_scrollPrevious->setObjectName("ScrollPrevious"); // rename in qss
+		m_scrollNext->setObjectName("ScrollNext"); // rename in qss
+		m_scrollDown->setObjectName("ScrollDown"); // rename in qss
+
 		m_trueEditor->setReadOnly(true);
 		m_trueEditor->setLineNumberArea(m_lineNumberArea);
 		m_trueEditor->viewport()->setCursor(Qt::ArrowCursor);
+
+		m_shadow->setStyleSheet(Io::readFile(":/editor/Shadow.qss")); // blur
+
+		m_shadow->setAttribute(Qt::WA_TransparentForMouseEvents);
+		m_overlay->setAttribute(Qt::WA_TransparentForMouseEvents);
+
+		auto effect = new QGraphicsBlurEffect(this);
+		effect->setBlurHints(QGraphicsBlurEffect::QualityHint);
+		effect->setBlurRadius(15);
+		m_shadow->setGraphicsEffect(effect);
+
 		buildScrollBar();
+
 		Layout::stack({ m_shadow, m_overlay, m_trueEditor, m_underlay }, this);
 	}
 
