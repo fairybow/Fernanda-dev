@@ -58,6 +58,9 @@
     <Filter Include="Resources\Editor">
       <UniqueIdentifier>{f9fcb0a7-8900-457a-b2c4-5b9d6c57862d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\External">
+      <UniqueIdentifier>{5c6cfbb3-c534-4b22-a326-fc8fcd4122a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -270,6 +273,9 @@
     <ClInclude Include="source\common\Widget.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
+    <ClInclude Include="source\Archiver.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">
@@ -285,6 +291,9 @@
     </QtRcc>
     <QtRcc Include="resources\Editor.qrc">
       <Filter>Resources</Filter>
+    </QtRcc>
+    <QtRcc Include="external\bit7z\Fernanda-bit7z\DLLs.qrc">
+      <Filter>Resources\External</Filter>
     </QtRcc>
   </ItemGroup>
 </Project>

@@ -139,6 +139,7 @@
   <ItemGroup>
     <QtMoc Include="source\editor\Editor.hpp" />
     <QtMoc Include="source\editor\TrueEditor.h" />
+    <ClInclude Include="source\Archiver.hpp" />
     <ClInclude Include="source\common\HtmlString.hpp" />
     <ClInclude Include="source\common\Io.hpp" />
     <ClInclude Include="source\common\Layout.hpp" />
@@ -174,6 +175,7 @@
     <ResourceCompile Include="resources\Resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <QtRcc Include="external\bit7z\Fernanda-bit7z\DLLs.qrc" />
     <QtRcc Include="resources\Editor.qrc" />
     <QtRcc Include="resources\MenuBar.qrc" />
     <QtRcc Include="resources\Stylist.qrc" />
