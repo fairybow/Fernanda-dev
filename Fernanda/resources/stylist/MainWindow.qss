@@ -4,48 +4,48 @@
 	border: none;
 }
 
-#HScrollBar:horizontal, #TreeViewVScrollBar:vertical, #VScrollBar:vertical
+#HorizontalScrollBar:horizontal, #TreeView-vertical-scroll-bar:vertical, #VerticalScrollBar:vertical
 {
 	background: @scrollBg;
 	margin: 0px 0 0px 0;
 }
 
-#HScrollBar::handle:horizontal
+#HorizontalScrollBar::handle:horizontal
 {
 	min-width: 16px;
 }
 
-#HScrollBar::handle:horizontal, #TreeViewVScrollBar::handle:vertical, #VScrollBar::handle:vertical
+#HorizontalScrollBar::handle:horizontal, #TreeView-vertical-scroll-bar::handle:vertical, #VerticalScrollBar::handle:vertical
 {
 	background: @scrollHandle;
 	border-left: 2px solid @scrollBg;
 	border-right: 2px solid @scrollBg;
 }
 
-#HScrollBar::handle:horizontal:hover, #TreeViewVScrollBar::handle:vertical:hover, #VScrollBar::handle:vertical:hover
+#HorizontalScrollBar::handle:horizontal:hover, #TreeView-vertical-scroll-bar::handle:vertical:hover, #VerticalScrollBar::handle:vertical:hover
 {
 	background: @scrollHandleHover;
 }
 
-#HScrollBar::handle:horizontal:pressed, #TreeViewVScrollBar::handle:vertical:pressed, #VScrollBar::handle:vertical:pressed
+#HorizontalScrollBar::handle:horizontal:pressed, #TreeView-vertical-scroll-bar::handle:vertical:pressed, #VerticalScrollBar::handle:vertical:pressed
 {
 	background: @scrollHandlePress;
 }
 
-#HScrollBar::add-line:horizontal, #HScrollBar::sub-line:horizontal, #TreeViewVScrollBar::add-line:vertical, #TreeViewVScrollBar::sub-line:vertical, #VScrollBar::add-line:vertical, #VScrollBar::sub-line:vertical
+#HorizontalScrollBar::add-line:horizontal, #HorizontalScrollBar::sub-line:horizontal, #TreeView-vertical-scroll-bar::add-line:vertical, #TreeView-vertical-scroll-bar::sub-line:vertical, #VerticalScrollBar::add-line:vertical, #VerticalScrollBar::sub-line:vertical
 {
 	border: none;
 	height: 0px;
 }
 
-#HScrollBar::left-arrow:horizontal, #HScrollBar::right-arrow:horizontal, #TreeViewVScrollBar::up-arrow:vertical, #TreeViewVScrollBar::down-arrow:vertical, #VScrollBar::up-arrow:vertical, #VScrollBar::down-arrow:vertical
+#HorizontalScrollBar::left-arrow:horizontal, #HorizontalScrollBar::right-arrow:horizontal, #TreeView-vertical-scroll-bar::up-arrow:vertical, #TreeView-vertical-scroll-bar::down-arrow:vertical, #VerticalScrollBar::up-arrow:vertical, #VerticalScrollBar::down-arrow:vertical
 {
 	border: none;
 	height: 0px;
 	width: 0px;
 }
 
-#HScrollBar::add-page:horizontal, #HScrollBar::sub-page:horizontal, #TreeViewVScrollBar::add-page:vertical, #TreeViewVScrollBar::sub-page:vertical, #VScrollBar::add-page:vertical, #VScrollBar::sub-page:vertical
+#HorizontalScrollBar::add-page:horizontal, #HorizontalScrollBar::sub-page:horizontal, #TreeView-vertical-scroll-bar::add-page:vertical, #TreeView-vertical-scroll-bar::sub-page:vertical, #VerticalScrollBar::add-page:vertical, #VerticalScrollBar::sub-page:vertical
 {
 	background: none;
 }
@@ -151,27 +151,27 @@ QSizeGrip
 	image: url(none);
 }
 
-#ScrollPrevious, #ScrollUp, #ScrollDown, #ScrollNext
+#Editor-scroll-button-previous, #Editor-scroll-button-up, #Editor-scroll-button-down, #Editor-scroll-button-next
 {
 	background: @scrollButtonBg;
 	border: none;
 	color: @scrollButtonFont;
 }
 
-#ScrollUp, #ScrollDown
+#Editor-scroll-button-up, #Editor-scroll-button-down
 {
 	font-size: 7pt;
 	font-weight: normal;
 	width: 16px;
 }
 
-#ScrollPrevious:hover, #ScrollUp:hover, #ScrollDown:hover, #ScrollNext:hover
+#Editor-scroll-button-previous:hover, #Editor-scroll-button-up:hover, #Editor-scroll-button-down:hover, #Editor-scroll-button-next:hover
 {
 	background: @scrollButtonHover;
 	color: @scrollButtonFontHover;
 }
 
-#ScrollPrevious:pressed, #ScrollUp:pressed, #ScrollDown:pressed, #ScrollNext:pressed
+#Editor-scroll-button-previous:pressed, #Editor-scroll-button-up:pressed, #Editor-scroll-button-down:pressed, #Editor-scroll-button-next:pressed
 {
 	background: @scrollButtonPress;
 	color: @scrollButtonFontPress;
@@ -213,7 +213,7 @@ QSizeGrip
 	color: @treeViewFont;
 }
 
-#TreeViewVScrollBar::handle:vertical, #VScrollBar::handle:vertical
+#TreeView-vertical-scroll-bar::handle:vertical, #VerticalScrollBar::handle:vertical
 {
 	min-height: 16px;
 }

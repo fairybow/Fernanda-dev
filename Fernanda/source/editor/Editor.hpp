@@ -24,12 +24,14 @@ public:
 		m_shadow->setObjectName(name + QString("-shadow"));
 		m_overlay->setObjectName(name + QString("-overlay"));
 		m_underlay->setObjectName(name + QString("-underlay"));
-		m_trueEditor->horizontalScrollBar()->setObjectName("HScrollBar"); // rename in qss
-		m_trueEditor->verticalScrollBar()->setObjectName("VScrollBar"); // rename in qss
-		m_scrollUp->setObjectName("ScrollUp"); // rename in qss
-		m_scrollPrevious->setObjectName("ScrollPrevious"); // rename in qss
-		m_scrollNext->setObjectName("ScrollNext"); // rename in qss
-		m_scrollDown->setObjectName("ScrollDown"); // rename in qss
+
+		m_scrollUp->setObjectName(name + QString("-scroll-button-up"));
+		m_scrollPrevious->setObjectName(name + QString("-scroll-button-previous"));
+		m_scrollNext->setObjectName(name + QString("-scroll-button-next"));
+		m_scrollDown->setObjectName(name + QString("-scroll-button-down"));
+
+		m_trueEditor->horizontalScrollBar()->setObjectName("HorizontalScrollBar");
+		m_trueEditor->verticalScrollBar()->setObjectName("VerticalScrollBar");
 
 		m_trueEditor->setReadOnly(true);
 		m_trueEditor->setLineNumberArea(m_lineNumberArea);

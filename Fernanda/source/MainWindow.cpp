@@ -91,4 +91,6 @@ void MainWindow::loadMenuBarConfig()
 	auto window_theme = m_user->load("theme", this, Path::toQString(m_menuBar->defaultWindowTheme()));
 	m_stylist->style(m_editor, Path::toStdFs(editor_theme));
 	m_stylist->style(this, Path::toStdFs(window_theme));
+
+	// need to set selected for MenuBar!
 }

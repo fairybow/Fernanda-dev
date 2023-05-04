@@ -104,4 +104,10 @@ namespace Layout
 	{
 		return labeledContainer(text, QWidgetList{ widget }, parent, alignment, margins);
 	}
+
+	inline void setMinAndMaxSize(QWidget* widget, int width, int height)
+	{
+		widget->setMinimumSize(width, height);
+		widget->setMaximumSize(width, height);
+	}
 }

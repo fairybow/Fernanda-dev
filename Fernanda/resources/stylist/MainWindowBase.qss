@@ -3,12 +3,12 @@
 	border: none;
 }
 
-#HScrollBar:horizontal
+#HorizontalScrollBar:horizontal
 {
 	height: 10px;
 }
 
-#MenuBar, #Meter, QDialog, QDialog QLabel, QDialog QPushButton, QMenu, #ScrollPrevious, #ScrollUp, #ScrollDown, #ScrollNext, #StatusBar, #TreeView
+#MenuBar, #Meter, QDialog, QDialog QLabel, QDialog QPushButton, QMenu, #Editor-scroll-button-previous, #Editor-scroll-button-up, #Editor-scroll-button-down, #Editor-scroll-button-next, #StatusBar, #TreeView
 {
 	font-size: 9pt;
 }
@@ -19,19 +19,19 @@
 	padding-right: 1px;
 }
 
-#ScrollNext
+#Editor-scroll-button-next
 {
 	text-decoration: underline;
 }
 
-#ScrollNext, #ScrollPrevious
+#Editor-scroll-button-next, #Editor-scroll-button-previous
 {
 	font-size: 7pt;
 	font-weight: normal;
 	width: 16px;
 }
 
-#ScrollPrevious
+#Editor-scroll-button-previous
 {
 	text-decoration: overline;
 }
@@ -51,12 +51,12 @@
 	font-size: 10pt;
 }
 
-#TreeViewVScrollBar:vertical
+#TreeView-vertical-scroll-bar:vertical
 {
 	width: 10px;
 }
 
-#VScrollBar:vertical
+#VerticalScrollBar:vertical
 {
 	width: 16px;
 }

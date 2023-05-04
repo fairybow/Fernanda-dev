@@ -117,6 +117,6 @@ void MenuBar::appearanceDialog()
 	auto combo_boxes_layout = Layout::box({ editor_themes_container, window_themes_container }, nullptr, Layout::Line::Horizontally);
 	layout->addLayout(combo_boxes_layout);
 	layout->addWidget(font_box_area);
-	dialog.setMaximumSize(600, 400);
+	Layout::setMinAndMaxSize(&dialog, 600, 400);
 	dialog.exec();
 }

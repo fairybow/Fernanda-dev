@@ -13,8 +13,8 @@ public:
 	inline TreeView(const char* name, QWidget* parent = nullptr)
 		: Widget(name, parent)
 	{
-		horizontalScrollBar()->setObjectName("HScrollBar"); // rename in qss
-		verticalScrollBar()->setObjectName("TreeViewVScrollBar"); // rename in qss
+		verticalScrollBar()->setObjectName(name + QString("-vertical-scroll-bar"));
+		horizontalScrollBar()->setObjectName("HorizontalScrollBar");
 		setItemDelegate(m_delegate);
 		setModel(m_itemModel);
 	}
