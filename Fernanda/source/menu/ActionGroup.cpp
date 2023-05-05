@@ -1,0 +1,85 @@
+#include "ActionGroup.h"
+
+ActionGroup* ActionGroup::fromQrc(const QStringList& qrcPaths, QStringList extensions,
+	StdFsPathList systemPaths, QObject* parent, std::function<void()> slot)
+{
+	auto group = new ActionGroup(parent);
+	checkExtensions(extensions);
+	auto entries = gather(qrcPaths, extensions);
+	for (auto& entry : entries) {
+		auto label = Path::qStringName(entry);
+		addActionToGroup(group, label, entry, parent, slot);
+	}
+	alphabetize(group);
+	group->setExclusive(true);
+	return group;
+}
+
+ActionGroup* ActionGroup::fromQrc(const QString& qrcPath, QString extension,
+	StdFsPath systemPath, QObject* parent, std::function<void()> slot)
+{
+	return fromQrc(QStringList{ qrcPath }, QStringList{ extension },
+		StdFsPathList{ systemPath }, parent, slot);
+}
+
+ActionGroup* ActionGroup::fromQrc(const QStringList& qrcPaths, QStringList extensions,
+	StdFsPath systemPath, QObject* parent, std::function<void()> slot)
+{
+	return fromQrc(qrcPaths, extensions, StdFsPathList{ systemPath }, parent, slot);
+}
+
+ActionGroup* ActionGroup::bespoke(BespokeList entries, QObject* parent,
+	std::function<void()> slot)
+{
+	auto group = new ActionGroup(parent);
+	for (auto& data_pair : entries) {
+		auto& label = data_pair.label;
+		if (label.isEmpty())
+			label = data_pair.data.toString();
+		addActionToGroup(group, label, data_pair.data, parent, slot);
+	}
+	alphabetize(group);
+	group->setExclusive(true);
+	return group;
+}
+
+void ActionGroup::addActionToGroup(ActionGroup* actionGroup, const QString& label,
+	const QVariant& data, QObject* parent, std::function<void()> slot)
+{
+	auto action = new QAction(tr(label.toUtf8()), actionGroup);
+	action->setData(data);
+	action->setCheckable(true);
+	connect(action, &QAction::toggled, parent, slot);
+}
+
+void ActionGroup::checkExtensions(QStringList& extensions)
+{
+	for (auto& extension : extensions)
+		if (!extension.startsWith("*"))
+			extension = "*" + extension;
+}
+
+void ActionGroup::alphabetize(ActionGroup* actionGroup)
+{
+	QVector<QAction*> sorted_actions = actionGroup->actions();
+	std::sort(sorted_actions.begin(), sorted_actions.end(), [](auto& lhs, auto& rhs) {
+		return lhs->text() < rhs->text();
+		});
+	for (auto& action : actionGroup->actions())
+		actionGroup->removeAction(action);
+	for (auto& action : sorted_actions)
+		actionGroup->addAction(action);
+}
+
+QStringList ActionGroup::gather(const QStringList& qrcPaths, const QStringList& extensions)
+{
+	QStringList entries;
+	for (auto& qrc_path : qrcPaths) {
+		QDirIterator it(qrc_path, extensions, QDir::Files, QDirIterator::Subdirectories);
+		while (it.hasNext()) {
+			it.next();
+			entries << it.filePath();
+		}
+	}
+	return entries;
+}

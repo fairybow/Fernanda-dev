@@ -4,11 +4,8 @@ Editor::Editor(const char* name, QWidget* parent)
 	: Widget(name, parent)
 {
 	nameObjects(name);
-	m_trueEditor->setReadOnly(true);
-	m_trueEditor->setLineNumberArea(m_lineNumberArea);
-	m_trueEditor->viewport()->setCursor(Qt::ArrowCursor);
-	m_shadow->setStyleSheet(Io::readFile(":/editor/Shadow.qss"));
-	m_shadow->setGraphicsEffect(blur(15));
+	setupTrueEditor();
+	setupShadow();
 	buildScrollBar();
 	Widget::transpareForMouse({ m_shadow, m_overlay });
 	Layout::stack({ m_shadow, m_overlay, m_trueEditor, m_underlay }, this);
@@ -31,12 +28,17 @@ void Editor::nameObjects(const char* name)
 	m_trueEditor->verticalScrollBar()->setObjectName("VerticalScrollBar");
 }
 
-QGraphicsBlurEffect* Editor::blur(int radius)
+void Editor::setupTrueEditor()
 {
-	auto effect = new QGraphicsBlurEffect(this);
-	effect->setBlurHints(QGraphicsBlurEffect::QualityHint);
-	effect->setBlurRadius(radius);
-	return effect;
+	m_trueEditor->setReadOnly(true);
+	m_trueEditor->setLineNumberArea(m_lineNumberArea);
+	m_trueEditor->viewport()->setCursor(Qt::ArrowCursor);
+}
+
+void Editor::setupShadow()
+{
+	m_shadow->setStyleSheet(Io::readFile(":/editor/Shadow.qss"));
+	m_shadow->setGraphicsEffect(Fx::blur(15, m_shadow));
 }
 
 void Editor::buildScrollBar()

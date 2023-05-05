@@ -2,7 +2,7 @@
 
 #include "../common/Layout.hpp"
 #include "../common/Widget.hpp"
-#include "ActionGroup.hpp"
+#include "ActionGroup.h"
 #include "LiveFontDialog.hpp"
 #include "Popup.hpp"
 

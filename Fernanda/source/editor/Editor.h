@@ -1,11 +1,11 @@
 #pragma once
 
+#include "../common/Fx.hpp"
 #include "../common/Io.hpp"
 #include "../common/Layout.hpp"
 #include "../common/Widget.hpp"
 #include "TrueEditor.h"
 
-#include <QGraphicsBlurEffect>
 #include <QLabel>
 #include <QPushButton>
 #include <QScrollBar>
@@ -35,6 +35,7 @@ private:
 	QPushButton* m_scrollNext = new QPushButton;
 
 	void nameObjects(const char* name);
-	QGraphicsBlurEffect* blur(int radius = 15);
+	void setupTrueEditor();
+	void setupShadow();
 	void buildScrollBar();
 };

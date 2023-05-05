@@ -176,7 +176,7 @@
     <QtMoc Include="source\menu\MenuBar.h">
       <Filter>Source\Menu</Filter>
     </QtMoc>
-    <QtMoc Include="source\menu\ActionGroup.hpp">
+    <QtMoc Include="source\menu\ActionGroup.h">
       <Filter>Source\Menu</Filter>
     </QtMoc>
   </ItemGroup>
@@ -196,9 +196,6 @@
     <ClCompile Include="source\editor\TrueEditor.cpp">
       <Filter>Source\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="source\Meter.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="source\Indicator.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -213,6 +210,12 @@
     </ClCompile>
     <ClCompile Include="source\editor\Editor.cpp">
       <Filter>Source\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\Fx.hpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\ActionGroup.cpp">
+      <Filter>Source\Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -249,7 +252,7 @@
     <ClInclude Include="source\common\Io.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
-    <ClInclude Include="source\Meter.h">
+    <ClInclude Include="source\Meter.hpp">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="source\StatusBar.hpp">

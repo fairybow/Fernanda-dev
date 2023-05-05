@@ -125,14 +125,15 @@
     <QtMoc Include="source\MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\common\Fx.hpp" />
     <ClCompile Include="source\editor\Editor.cpp" />
     <ClCompile Include="source\editor\LineNumberArea.cpp" />
     <ClCompile Include="source\editor\TrueEditor.cpp" />
     <ClCompile Include="source\Indicator.cpp" />
     <ClCompile Include="source\Main.cpp" />
     <ClCompile Include="source\MainWindow.cpp" />
+    <ClCompile Include="source\menu\ActionGroup.cpp" />
     <ClCompile Include="source\menu\MenuBar.cpp" />
-    <ClCompile Include="source\Meter.cpp" />
     <ClCompile Include="source\splitter\Splitter.cpp" />
     <ClCompile Include="source\Stylist.cpp" />
     <ClCompile Include="source\tree\TreeView.cpp" />
@@ -154,8 +155,8 @@
     <QtMoc Include="source\menu\Popup.hpp" />
     <ClInclude Include="source\menu\PopupText.hpp" />
     <QtMoc Include="source\menu\VersionChecker.hpp" />
-    <QtMoc Include="source\menu\ActionGroup.hpp" />
-    <ClInclude Include="source\Meter.h" />
+    <QtMoc Include="source\menu\ActionGroup.h" />
+    <ClInclude Include="source\Meter.hpp" />
     <ClInclude Include="source\preview\Preview.hpp" />
     <ClInclude Include="source\preview\WebDocument.hpp" />
     <ClInclude Include="source\preview\WebEnginePage.hpp" />

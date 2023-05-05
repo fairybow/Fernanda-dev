@@ -5,7 +5,7 @@
 #include "editor/Editor.h"
 #include "Indicator.h"
 #include "menu/MenuBar.h"
-#include "Meter.h"
+#include "Meter.hpp"
 #include "preview/Preview.hpp"
 #include "splitter/Splitter.h"
 #include "StatusBar.hpp"
