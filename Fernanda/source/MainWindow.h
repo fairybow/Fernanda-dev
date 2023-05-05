@@ -13,6 +13,7 @@
 #include "tree/TreeView.h"
 #include "user/User.hpp"
 
+#include <QCloseEvent>
 #include <QMainWindow>
 #include <QString>
 
@@ -33,6 +34,9 @@ signals:
 	void testSignal2();
 	void testSignal3(int i);
 
+protected:
+	virtual void closeEvent(QCloseEvent* event);
+
 private:
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_isDev, this);
 	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
@@ -48,6 +52,7 @@ private:
 
 	const bool m_isDev;
 
+	void setupWidgets();
 	void connections();
 	void splitterConnections();
 	void treeViewConnections();
@@ -55,17 +60,19 @@ private:
 	void previewConnections();
 	void menuBarConnections();
 	void menuBarConfigConnections();
-	void loadConfig();
-	//void loadSplitterConfig();
-	//void loadTreeViewConfig();
-	//void loadEditorConfig();
-	//void loadPreviewConfig();
-	void loadMenuBarConfig();
+	void loadConfigs();
+	void loadSplitterConfigs();
+	//void loadTreeViewConfigs();
+	//void loadEditorConfigs();
+	//void loadPreviewConfigs();
+	void loadMenuBarConfigs();
+	void closeEventConfigs(Qt::WindowStates priorState);
 
 	template<typename T>
-	inline void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction)
+	inline void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction = nullptr)
 	{
-		configurableAction();
+		if (configurableAction)
+			configurableAction();
 		m_user->save(value, valueKey, associatedObject);
 	}
 
@@ -74,5 +81,11 @@ private:
 	{
 		auto value = m_user->load<T>(valueKey, associatedObject, fallbackValue);
 		configurableAction(value);
+	}
+
+	template<typename T>
+	inline T loadConfig(const QString& valueKey, QObject* associatedObject, T fallbackValue = T())
+	{
+		return m_user->load<T>(valueKey, associatedObject, fallbackValue);
 	}
 };

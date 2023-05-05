@@ -3,30 +3,35 @@
 MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* parent)
 	: Widget(name, parent), m_isDev(isDev)
 {
-	/*adjustTitle();
-	addWidgets();
+	setupWidgets();
 	connections();
-	shortcuts();*/
-	setGeometry(0, 0, 1000, 600); // from user data
-	Layout::setCentralWidget(this, m_splitter); // addWidgets();
-	setMenuBar(m_menuBar); // addWidgets();
-	setStatusBar(m_statusBar); // addWidgets();
-	m_statusBar->addPermanentWidget(m_meter, 0); // addWidgets();
-
-	connections();
-
-	m_menuBar->makeSubmenus();
-	
-	m_splitter->initialize({ 0.2, 0.4, 0.4 }, 1);
+	loadConfigs();
 
 	// testing
-
-	loadConfig();
 
 	/*auto button_1 = new QPushButton;
 	button_1->setText("Test");
 	m_statusBar->addPermanentWidget(button_1, 0);
 	connect(button_1, &QPushButton::pressed, this, [&] { loadConfig(); });*/
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+	auto state = windowState();
+	showNormal();
+	// return if canceled
+	closeEventConfigs(state);
+	event->accept();
+}
+
+void MainWindow::setupWidgets()
+{
+	setMenuBar(m_menuBar);
+	setStatusBar(m_statusBar);
+	m_statusBar->addPermanentWidget(m_meter, 0);
+	m_menuBar->makeSubmenus();
+	m_splitter->initialize({ 0.2, 0.4, 0.4 }, 1);
+	Layout::setCentralWidget(this, m_splitter);
 }
 
 void MainWindow::connections()
@@ -84,13 +89,23 @@ void MainWindow::menuBarConfigConnections()
 		});
 }
 
-void MainWindow::loadConfig()
+void MainWindow::loadConfigs()
 {
-	// etc.
-	loadMenuBarConfig();
+	//auto state = loadConfig("state", this, Qt::WindowState::WindowNoState);
+	//setWindowState(state); // behaves strangely, Windows issue I think
+	auto geometry = loadConfig("geometry", this, QRect(0, 0, 1000, 600));
+	setGeometry(geometry);
+	loadSplitterConfigs();
+	loadMenuBarConfigs();
 }
 
-void MainWindow::loadMenuBarConfig()
+void MainWindow::loadSplitterConfigs()
+{
+	auto state = loadConfig<QByteArray>("position", m_splitter);
+	m_splitter->restoreState(state);
+}
+
+void MainWindow::loadMenuBarConfigs()
 {
 	loadConfigPassthrough<QString>("theme", m_editor, [&](QString theme) {
 
@@ -107,4 +122,11 @@ void MainWindow::loadMenuBarConfig()
 		m_menuBar->setSelectedWindowTheme(fs_window_theme);
 
 		}, Path::toQString(m_menuBar->defaultWindowTheme()));
+}
+
+void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
+{
+	saveConfigPassthrough(priorState, "state", this);
+	saveConfigPassthrough(geometry(), "geometry", this);
+	saveConfigPassthrough(m_splitter->saveState(), "position", m_splitter);
 }

@@ -22,6 +22,7 @@ public:
 	void initialize(QVector<double> fallbacks, int centralWidgetIndex);
 
 	inline QByteArray saveState() const { return m_trueSplitter->saveState(); }
+	inline bool restoreState(const QByteArray& state) const { return m_trueSplitter->restoreState(state); }
 
 signals:
 	QRect askWindowSize();

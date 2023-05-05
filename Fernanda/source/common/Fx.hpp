@@ -5,7 +5,7 @@
 
 namespace Fx
 {
-	inline QGraphicsBlurEffect* blur(int radius = 15, QObject* parent = nullptr)
+	inline QGraphicsBlurEffect* blur(int radius = 5, QObject* parent = nullptr)
 	{
 		auto effect = new QGraphicsBlurEffect(parent);
 		effect->setBlurHints(QGraphicsBlurEffect::QualityHint);
@@ -13,7 +13,7 @@ namespace Fx
 		return effect;
 	}
 
-	inline QGraphicsOpacityEffect* opacify(double qreal, QObject* parent = nullptr)
+	inline QGraphicsOpacityEffect* opacify(double qreal = 0.5, QObject* parent = nullptr)
 	{
 		auto effect = new QGraphicsOpacityEffect(parent);
 		effect->setOpacity(qreal);
