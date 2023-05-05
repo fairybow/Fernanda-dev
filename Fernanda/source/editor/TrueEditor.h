@@ -4,6 +4,7 @@
 
 #include <QPainter>
 #include <QPlainTextEdit>
+#include <QScrollBar>
 #include <QTextBlock>
 
 class TrueEditor : public QPlainTextEdit
@@ -16,6 +17,9 @@ public:
 	void setLineNumberArea(LineNumberArea* lineNumberArea);
 	void lineNumberAreaPaintEvent(QPaintEvent* event);
 	int lineNumberAreaWidth();
+
+	inline bool isMaximumScroll() const { return (verticalScrollBar()->sliderPosition() == verticalScrollBar()->maximum()); }
+	inline bool isMinimumScroll() const { return (verticalScrollBar()->sliderPosition() == verticalScrollBar()->minimum()); }
 
 protected:
 	virtual void resizeEvent(QResizeEvent* event) override;

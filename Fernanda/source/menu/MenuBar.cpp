@@ -89,23 +89,12 @@ void MenuBar::addFontDialog(QMdiArea* multiDocArea)
 
 LiveFontDialog* MenuBar::fontDialog()
 {
-	auto dialog = new LiveFontDialog(initialFont(), this);
+	auto dialog = new LiveFontDialog(emit getUserFont(), this);
 	dialog->setOptions(LiveFontDialog::NoButtons);
 	connect(dialog, &LiveFontDialog::currentFontChanged, this, [&](const QFont& font) {
-		// ask editor for font change
-		// save config
+		emit askChangeFont(font);
 		});
 	return dialog;
-}
-
-const QFont MenuBar::initialFont()
-{
-	QFont initial = QFont("mononoki", 16);
-	/*auto loaded_font = // from config
-	if (loaded_font.isEmpty() || loaded_font.isNull())
-		return initial;
-	initial.fromString(loaded_font);*/
-	return initial;
 }
 
 void MenuBar::appearanceDialog()

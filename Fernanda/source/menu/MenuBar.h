@@ -40,8 +40,10 @@ public:
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();
+	QFont getUserFont();
 	void askStyleEditor(StdFsPath path);
 	void askStyleWindow(StdFsPath path);
+	void askChangeFont(const QFont& font);
 
 private:
 	std::map<QString, ActionGroup*> m_actionGroups;
@@ -54,7 +56,6 @@ private:
 	void addActionsToBoxes(QComboBox* comboBox, ActionGroup* actionGroup);
 	void addFontDialog(QMdiArea* multiDocArea);
 	LiveFontDialog* fontDialog();
-	const QFont initialFont();
 
 	inline QAction* selectedEditorTheme() const { return m_actionGroups.at(EDITOR_THEMES)->checkedAction(); }
 	inline QAction* selectedWindowTheme() const { return m_actionGroups.at(WINDOW_THEMES)->checkedAction(); }

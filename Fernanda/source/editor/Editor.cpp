@@ -1,14 +1,15 @@
 #include "Editor.h"
 
-Editor::Editor(const char* name, QWidget* parent)
-	: Widget(name, parent)
+Editor::Editor(const char* name, const QFont& defaultFont, QWidget* parent)
+	: Widget(name, parent), m_defaultFont(defaultFont)
 {
 	nameObjects(name);
 	setupTrueEditor();
 	setupShadow();
 	buildScrollBar();
+	connections();
 	Widget::transpareForMouse({ m_shadow, m_overlay });
-	Layout::stack({ m_shadow, m_overlay, m_trueEditor, m_underlay }, this);
+	Layout::stack({ /*m_shadow, m_overlay,*/ m_trueEditor, m_underlay}, this);
 }
 
 void Editor::nameObjects(const char* name)
@@ -30,9 +31,9 @@ void Editor::nameObjects(const char* name)
 
 void Editor::setupTrueEditor()
 {
-	m_trueEditor->setReadOnly(true);
+	//m_trueEditor->setReadOnly(true);
 	m_trueEditor->setLineNumberArea(m_lineNumberArea);
-	m_trueEditor->viewport()->setCursor(Qt::ArrowCursor);
+	//m_trueEditor->viewport()->setCursor(Qt::ArrowCursor);
 }
 
 void Editor::setupShadow()
@@ -60,4 +61,21 @@ void Editor::buildScrollBar()
 	m_scrollDown->setText(down_arrow);
 	for (auto& button : { m_scrollUp, m_scrollPrevious, m_scrollNext, m_scrollDown })
 		button->setMinimumHeight(30);
+	scrollButtonEnabler();
+}
+
+void Editor::connections()
+{
+	connect(m_trueEditor->verticalScrollBar(), &QScrollBar::rangeChanged, this, [&] {
+		scrollButtonEnabler();
+		});
+	connect(m_trueEditor->verticalScrollBar(), &QScrollBar::valueChanged, this, [&] {
+		scrollButtonEnabler();
+		});
+}
+
+void Editor::scrollButtonEnabler()
+{
+	m_trueEditor->isMinimumScroll() ? m_scrollUp->setEnabled(false) : m_scrollUp->setEnabled(true);
+	m_trueEditor->isMaximumScroll() ? m_scrollDown->setEnabled(false) : m_scrollDown->setEnabled(true);
 }

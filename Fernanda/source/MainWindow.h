@@ -42,7 +42,7 @@ private:
 	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
 	Indicator* m_indicator = new Indicator("Indicator", this);
 	TreeView* m_treeView = new TreeView("TreeView");
-	Editor* m_editor = new Editor("Editor");
+	Editor* m_editor = new Editor("Editor", QFont("mononoki", 16));
 	Preview* m_preview = new Preview("Preview");
 	Splitter* m_splitter = new Splitter("Splitter", Qt::Horizontal,
 		{ m_treeView, m_editor, m_preview }, this);
@@ -62,9 +62,9 @@ private:
 	void menuBarConfigConnections();
 	void loadConfigs();
 	void loadSplitterConfigs();
-	//void loadTreeViewConfigs();
-	//void loadEditorConfigs();
-	//void loadPreviewConfigs();
+	void loadTreeViewConfigs();
+	void loadEditorConfigs();
+	void loadPreviewConfigs();
 	void loadMenuBarConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
 

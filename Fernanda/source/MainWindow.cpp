@@ -87,6 +87,16 @@ void MainWindow::menuBarConfigConnections()
 				m_stylist->style(this, path);
 			});
 		});
+	connect(m_menuBar, &MenuBar::askChangeFont, this, [&](const QFont& font) {
+		saveConfigPassthrough(
+			font, "font", m_editor, [&] {
+				m_editor->setFont(font);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::getUserFont, this, [&] {
+		return loadConfig<QFont>("font", m_editor, m_editor->defaulFont());
+		});
 }
 
 void MainWindow::loadConfigs()
@@ -96,6 +106,9 @@ void MainWindow::loadConfigs()
 	auto geometry = loadConfig("geometry", this, QRect(0, 0, 1000, 600));
 	setGeometry(geometry);
 	loadSplitterConfigs();
+	loadTreeViewConfigs();
+	loadEditorConfigs();
+	loadPreviewConfigs();
 	loadMenuBarConfigs();
 }
 
@@ -103,6 +116,22 @@ void MainWindow::loadSplitterConfigs()
 {
 	auto state = loadConfig<QByteArray>("position", m_splitter);
 	m_splitter->restoreState(state);
+}
+
+void MainWindow::loadTreeViewConfigs()
+{
+	//
+}
+
+void MainWindow::loadEditorConfigs()
+{
+	auto font = loadConfig<QFont>("font", m_editor, m_editor->defaulFont());
+	m_editor->setFont(font);
+}
+
+void MainWindow::loadPreviewConfigs()
+{
+	//
 }
 
 void MainWindow::loadMenuBarConfigs()
