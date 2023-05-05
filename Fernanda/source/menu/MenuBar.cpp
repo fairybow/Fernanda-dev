@@ -34,6 +34,17 @@ void MenuBar::makeActionGroups()
 
 }
 
+void MenuBar::setSelectedGroupAction(ActionGroup* actionGroup, const StdFsPath& path)
+{
+	for (auto i = 0; i < actionGroup->actions().count(); ++i) {
+		auto action = actionGroup->actions().at(i);
+		if (Path::toStdFs(action->data()) == path) {
+			action->setChecked(true);
+			return;
+		}
+	}
+}
+
 void MenuBar::view()
 {
 	auto appearance = new QAction(tr("&Appearance..."), this);

@@ -15,6 +15,7 @@
 #include <QVector>
 
 #include <map>
+#include <filesystem>
 
 constexpr char EDITOR_THEMES[] = "editor_themes";
 constexpr char WINDOW_THEMES[] = "window_themes";
@@ -34,6 +35,8 @@ public:
 
 	inline StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; };
 	inline StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; };
+	void setSelectedEditorTheme(const StdFsPath& path) { setSelectedGroupAction(m_actionGroups[EDITOR_THEMES], path); };
+	void setSelectedWindowTheme(const StdFsPath& path) { setSelectedGroupAction(m_actionGroups[WINDOW_THEMES], path); };
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();
@@ -45,6 +48,7 @@ private:
 	const bool m_isDev;
 
 	void makeActionGroups();
+	void setSelectedGroupAction(ActionGroup* actionGroup, const StdFsPath& path);
 	void view();
 	void help();
 	void addActionsToBoxes(QComboBox* comboBox, ActionGroup* actionGroup);
