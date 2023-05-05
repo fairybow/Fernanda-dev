@@ -1,3 +1,64 @@
+### Path
+```
+struct QFsPath
+{
+	using StdFsPath = std::filesystem::path;
+	StdFsPath path;
+
+	enum class Type { QString, StdFs };
+
+	inline QFsPath() : path() {}
+	inline QFsPath(const QString& qStringPath) : path(qStringPath.toStdString()) {}
+	inline QFsPath(const StdFsPath& stdFsPath) : path(stdFsPath) {}
+	inline QFsPath(const char* cStringPath) : path(cStringPath) {}
+
+	inline operator StdFsPath() const { return path; }
+
+	QFsPath operator/(const StdFsPath& rhs) const
+	{
+		return QFsPath(path / rhs);
+	}
+
+	QFsPath operator/(const QString& rhs) const
+	{
+		return QFsPath(path / StdFsPath(rhs.toStdString()));
+	}
+
+	QFsPath operator/(const char* rhs) const
+	{
+		return QFsPath(path / StdFsPath(rhs));
+	}
+
+	inline QString toQString(bool sanitize = true) const
+	{
+		return Path::toQString(path, sanitize);
+	}
+
+	template<typename T>
+	inline T name(bool keepExtension = false, Type type = Type::QString)
+	{
+		T name_value{};
+		switch (type) {
+		case Type::QString:
+			name_value = Path::qStringName(path, keepExtension);
+			break;
+		case Type::StdFs:
+			name_value = Path::name(path, keepExtension);
+			break;
+		}
+		return name_value;
+	}
+
+	inline bool has_extension() const noexcept { return path.has_extension(); }
+
+	inline QFsPath& replace_extension(const StdFsPath& replacement = StdFsPath())
+	{
+		path.replace_extension(replacement);
+		return *this;
+	}
+};
+```
+
 ### User
 ```
 template<typename T>

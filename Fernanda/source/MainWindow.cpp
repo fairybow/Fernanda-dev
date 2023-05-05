@@ -93,14 +93,18 @@ void MainWindow::loadConfig()
 void MainWindow::loadMenuBarConfig()
 {
 	loadConfigPassthrough<QString>("theme", m_editor, [&](QString theme) {
+
 		auto fs_editor_theme = Path::toStdFs(theme);
 		m_stylist->style(m_editor, fs_editor_theme);
 		m_menuBar->setSelectedEditorTheme(fs_editor_theme);
+
 		}, Path::toQString(m_menuBar->defaultEditorTheme()));
 
 	loadConfigPassthrough<QString>("theme", this, [&](QString theme) {
+
 		auto fs_window_theme = Path::toStdFs(theme);
 		m_stylist->style(this, fs_window_theme);
 		m_menuBar->setSelectedWindowTheme(fs_window_theme);
+
 		}, Path::toQString(m_menuBar->defaultWindowTheme()));
 }
