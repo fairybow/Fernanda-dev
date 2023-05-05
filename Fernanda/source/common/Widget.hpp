@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QVector>
 #include <QWidget>
 
 #include <utility>
@@ -13,4 +14,12 @@ public:
 	{
 		this->setObjectName(objectName);
 	}
+
+	static inline void transpareForMouse(QWidgetList widgets)
+	{
+		for (auto& widget : widgets)
+			widget->setAttribute(Qt::WA_TransparentForMouseEvents);
+	}
+
+	static inline void transpareForMouse(QWidget* widget) { transpareForMouse({ widget }); }
 };

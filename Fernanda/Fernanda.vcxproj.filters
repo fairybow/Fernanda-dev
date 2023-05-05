@@ -149,7 +149,7 @@
     <QtMoc Include="source\splitter\TrueSplitter.hpp">
       <Filter>Source\Splitter</Filter>
     </QtMoc>
-    <QtMoc Include="source\editor\Editor.hpp">
+    <QtMoc Include="source\editor\Editor.h">
       <Filter>Source\Editor</Filter>
     </QtMoc>
     <QtMoc Include="source\editor\TrueEditor.h">
@@ -210,6 +210,9 @@
     </ClCompile>
     <ClCompile Include="source\Stylist.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\editor\Editor.cpp">
+      <Filter>Source\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

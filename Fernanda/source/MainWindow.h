@@ -2,7 +2,7 @@
 
 #include "common/Layout.hpp"
 #include "common/Widget.hpp"
-#include "editor/Editor.hpp"
+#include "editor/Editor.h"
 #include "Indicator.h"
 #include "menu/MenuBar.h"
 #include "Meter.h"

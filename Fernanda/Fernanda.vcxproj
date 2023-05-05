@@ -125,6 +125,7 @@
     <QtMoc Include="source\MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\editor\Editor.cpp" />
     <ClCompile Include="source\editor\LineNumberArea.cpp" />
     <ClCompile Include="source\editor\TrueEditor.cpp" />
     <ClCompile Include="source\Indicator.cpp" />
@@ -137,7 +138,7 @@
     <ClCompile Include="source\tree\TreeView.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="source\editor\Editor.hpp" />
+    <QtMoc Include="source\editor\Editor.h" />
     <QtMoc Include="source\editor\TrueEditor.h" />
     <ClInclude Include="source\Archiver.hpp" />
     <ClInclude Include="source\common\HtmlString.hpp" />
