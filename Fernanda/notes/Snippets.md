@@ -15,6 +15,16 @@ inline void save(Args... args)
 
 ### MainWindow
 ```
+template<typename T, typename U>
+inline U saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<U()> configurableAction)
+{
+	U result = configurableAction();
+	m_user->save(value, valueKey, associatedObject);
+	return result;
+}
+
+//
+
 template<typename... Args>
 struct SignalArgs
 {

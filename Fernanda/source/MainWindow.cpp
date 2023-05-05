@@ -36,6 +36,7 @@ void MainWindow::connections()
 	editorConnections();
 	previewConnections();
 	menuBarConnections();
+	menuBarConfigConnections();
 }
 
 void MainWindow::splitterConnections()
@@ -65,6 +66,10 @@ void MainWindow::menuBarConnections()
 	connect(m_menuBar, &MenuBar::getUserDataPath, this, [&] {
 		return m_user->dataFolder();
 		});
+}
+
+void MainWindow::menuBarConfigConnections()
+{
 	connect(m_menuBar, &MenuBar::askStyleEditor, this, [&](StdFsPath path) {
 		saveConfigPassthrough(
 			Path::toQString(path), "theme", m_editor, [&] {
@@ -87,12 +92,15 @@ void MainWindow::loadConfig()
 
 void MainWindow::loadMenuBarConfig()
 {
-	auto editor_theme = m_user->load("theme", m_editor, Path::toQString(m_menuBar->defaultEditorTheme()));
-	auto window_theme = m_user->load("theme", this, Path::toQString(m_menuBar->defaultWindowTheme()));
-	auto fs_editor_theme = Path::toStdFs(editor_theme);
-	auto fs_window_theme = Path::toStdFs(window_theme);
-	m_stylist->style(m_editor, fs_editor_theme);
-	m_stylist->style(this, fs_window_theme);
-	m_menuBar->setSelectedEditorTheme(fs_editor_theme);
-	m_menuBar->setSelectedWindowTheme(fs_window_theme);
+	loadConfigPassthrough<QString>("theme", m_editor, [&](QString theme) {
+		auto fs_editor_theme = Path::toStdFs(theme);
+		m_stylist->style(m_editor, fs_editor_theme);
+		m_menuBar->setSelectedEditorTheme(fs_editor_theme);
+		}, Path::toQString(m_menuBar->defaultEditorTheme()));
+
+	loadConfigPassthrough<QString>("theme", this, [&](QString theme) {
+		auto fs_window_theme = Path::toStdFs(theme);
+		m_stylist->style(this, fs_window_theme);
+		m_menuBar->setSelectedWindowTheme(fs_window_theme);
+		}, Path::toQString(m_menuBar->defaultWindowTheme()));
 }

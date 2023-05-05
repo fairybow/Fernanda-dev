@@ -54,6 +54,7 @@ private:
 	void editorConnections();
 	void previewConnections();
 	void menuBarConnections();
+	void menuBarConfigConnections();
 	void loadConfig();
 	//void loadSplitterConfig();
 	//void loadTreeViewConfig();
@@ -62,17 +63,16 @@ private:
 	void loadMenuBarConfig();
 
 	template<typename T>
-	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction)
+	inline void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction)
 	{
 		configurableAction();
 		m_user->save(value, valueKey, associatedObject);
 	}
 
-	template<typename T, typename U>
-	U saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<U()> configurableAction)
+	template<typename T>
+	inline void loadConfigPassthrough(const QString& valueKey, QObject* associatedObject, std::function<void(T)> configurableAction, T fallbackValue = T())
 	{
-		U result = configurableAction();
-		m_user->save(value, valueKey, associatedObject);
-		return result;
+		auto value = m_user->load<T>(valueKey, associatedObject, fallbackValue);
+		configurableAction(value);
 	}
 };

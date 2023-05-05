@@ -49,7 +49,8 @@ void ActionGroup::addActionToGroup(ActionGroup* actionGroup, const QString& labe
 	auto action = new QAction(tr(label.toUtf8()), actionGroup);
 	action->setData(data);
 	action->setCheckable(true);
-	connect(action, &QAction::toggled, parent, slot);
+	if (slot)
+		connect(action, &QAction::toggled, parent, slot);
 }
 
 void ActionGroup::checkExtensions(QStringList& extensions)
