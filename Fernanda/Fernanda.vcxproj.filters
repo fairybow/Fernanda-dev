@@ -285,6 +285,9 @@
     <ClInclude Include="source\Archiver.hpp">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="source\common\Event.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">

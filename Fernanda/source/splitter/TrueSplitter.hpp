@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../common/Event.hpp"
 #include "SplitterHandle.hpp"
 
 #include <QChildEvent>
@@ -39,7 +40,7 @@ protected:
 					? emit widgetVisibilityChanged(i, WidgetWas::Hidden)
 					: emit widgetVisibilityChanged(i, WidgetWas::Shown);
 			}
-			QTimer::singleShot(0, this, [&] { emit resized(); });
+			Event::delay(this, [&] { emit resized(); });
 		}
 		return QSplitter::eventFilter(object, event);
 	}

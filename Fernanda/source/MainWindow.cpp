@@ -9,6 +9,8 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 
 	// testing
 
+	m_editor->setFocus();
+
 	/*auto button_1 = new QPushButton;
 	button_1->setText("Test");
 	m_statusBar->addPermanentWidget(button_1, 0);
