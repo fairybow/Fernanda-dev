@@ -2,6 +2,7 @@
 
 #include "LineNumberArea.h"
 
+#include <QFont>
 #include <QPainter>
 #include <QPlainTextEdit>
 #include <QScrollBar>
@@ -14,12 +15,16 @@ class TrueEditor : public QPlainTextEdit
 public:
 	TrueEditor(QWidget* parent = nullptr);
 
-	void setLineNumberArea(LineNumberArea* lineNumberArea);
 	void lineNumberAreaPaintEvent(QPaintEvent* event);
 	int lineNumberAreaWidth();
+	void setFont(const QFont& font);
+	void setLineNumberArea(LineNumberArea* lineNumberArea);
 
 	inline bool isMaximumScroll() const { return (verticalScrollBar()->sliderPosition() == verticalScrollBar()->maximum()); }
 	inline bool isMinimumScroll() const { return (verticalScrollBar()->sliderPosition() == verticalScrollBar()->minimum()); }
+
+signals:
+	bool getHasLineHighlight();
 
 protected:
 	virtual void resizeEvent(QResizeEvent* event) override;
@@ -27,7 +32,9 @@ protected:
 private:
 	LineNumberArea* m_lineNumberArea;
 
-	void updateLineNumberAreaWidth(int newBlockCount);
 	void highlightCurrentLine();
 	void updateLineNumberArea(const QRect& rect, int dy);
+	const QColor highlight();
+
+	void updateLineNumberAreaWidth() { setViewportMargins(lineNumberAreaWidth(), 0, 0, 0); }
 };

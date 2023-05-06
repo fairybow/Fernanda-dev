@@ -72,6 +72,9 @@ void Editor::connections()
 	connect(m_trueEditor->verticalScrollBar(), &QScrollBar::valueChanged, this, [&] {
 		scrollButtonEnabler();
 		});
+	connect(m_trueEditor, &TrueEditor::getHasLineHighlight, this, [&] {
+		return m_hasLineHighlight;
+		});
 }
 
 void Editor::scrollButtonEnabler()

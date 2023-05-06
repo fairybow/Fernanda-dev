@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QPaintEvent>
+#include <QSize>
 #include <QWidget>
 
 class TrueEditor;

@@ -25,6 +25,7 @@ public:
 
 private:
 	const QFont m_defaultFont;
+	bool m_hasLineHighlight = true;
 	TrueEditor* m_trueEditor = new TrueEditor(this);
 	LineNumberArea* m_lineNumberArea = new LineNumberArea(m_trueEditor);
 	QLabel* m_shadow = new QLabel(this);

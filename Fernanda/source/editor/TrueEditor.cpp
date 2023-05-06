@@ -3,9 +3,9 @@
 TrueEditor::TrueEditor(QWidget* parent)
 	: QPlainTextEdit(parent), m_lineNumberArea(nullptr)
 {
-	connect(this, &TrueEditor::blockCountChanged, this, [&](int newBlockCount) {
+	connect(this, &TrueEditor::blockCountChanged, this, [&](int) {
 		if (m_lineNumberArea == nullptr) return;
-		updateLineNumberAreaWidth(newBlockCount);
+		updateLineNumberAreaWidth();
 		});
 	connect(this, &TrueEditor::updateRequest, this, [&](const QRect& rect, int dy) {
 		if (m_lineNumberArea == nullptr) return;
@@ -15,13 +15,8 @@ TrueEditor::TrueEditor(QWidget* parent)
 		if (m_lineNumberArea == nullptr) return;
 		highlightCurrentLine();
 		});
-	updateLineNumberAreaWidth(0);
+	updateLineNumberAreaWidth();
 	highlightCurrentLine();
-}
-
-void TrueEditor::setLineNumberArea(LineNumberArea* lineNumberArea)
-{
-	m_lineNumberArea = lineNumberArea;
 }
 
 void TrueEditor::lineNumberAreaPaintEvent(QPaintEvent* event)
@@ -57,36 +52,40 @@ int TrueEditor::lineNumberAreaWidth()
 	}();
 }
 
+void TrueEditor::setFont(const QFont& font)
+{
+	QFont q_font = font;
+	q_font.setStyleStrategy(QFont::PreferAntialias);
+	q_font.setHintingPreference(QFont::HintingPreference::PreferNoHinting);
+	QPlainTextEdit::setFont(q_font);
+	m_lineNumberArea->setFont(q_font);
+}
+
 void TrueEditor::resizeEvent(QResizeEvent* event)
 {
 	QPlainTextEdit::resizeEvent(event);
-
-	QRect cr = contentsRect();
-	m_lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+	auto contents_rect = contentsRect();
+	m_lineNumberArea->setGeometry(QRect(contents_rect.left(),
+		contents_rect.top(), lineNumberAreaWidth(), contents_rect.height()));
 }
 
-void TrueEditor::updateLineNumberAreaWidth(int newBlockCount)
+void TrueEditor::setLineNumberArea(LineNumberArea* lineNumberArea) // can't define in header?
 {
-	setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
+	m_lineNumberArea = lineNumberArea;
 }
 
 void TrueEditor::highlightCurrentLine()
 {
-	QList<QTextEdit::ExtraSelection> extraSelections;
-
+	QVector<QTextEdit::ExtraSelection> extra_selections;
 	if (!isReadOnly()) {
 		QTextEdit::ExtraSelection selection;
-
-		QColor lineColor = QColor(Qt::yellow).lighter(160);
-
-		selection.format.setBackground(lineColor);
+		selection.format.setBackground(highlight());
 		selection.format.setProperty(QTextFormat::FullWidthSelection, true);
 		selection.cursor = textCursor();
 		selection.cursor.clearSelection();
-		extraSelections.append(selection);
+		extra_selections.append(selection);
 	}
-
-	setExtraSelections(extraSelections);
+	setExtraSelections(extra_selections);
 }
 
 void TrueEditor::updateLineNumberArea(const QRect& rect, int dy)
@@ -95,5 +94,14 @@ void TrueEditor::updateLineNumberArea(const QRect& rect, int dy)
 		? m_lineNumberArea->scroll(0, dy)
 		: m_lineNumberArea->update(0, rect.y(), m_lineNumberArea->width(), rect.height());
 	if (rect.contains(viewport()->rect()))
-		updateLineNumberAreaWidth(0);
+		updateLineNumberAreaWidth();
+}
+
+const QColor TrueEditor::highlight()
+{
+	QColor color;
+	emit getHasLineHighlight()
+		? color = QColor(255, 255, 255, 30)
+		: color = QColor(0, 0, 0, 0);
+	return color;
 }
