@@ -8,7 +8,7 @@ Editor::Editor(const char* name, const QFont& defaultFont, QWidget* parent)
 	setupShadow();
 	buildScrollBar();
 	connections();
-	Widget::transpareForMouse({ m_shadow, m_overlay });
+	transpareForMouse({ m_shadow, m_overlay });
 	Layout::stack({ /*m_shadow, m_overlay,*/ m_trueEditor, m_underlay}, this);
 }
 

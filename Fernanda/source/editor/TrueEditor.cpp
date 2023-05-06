@@ -15,8 +15,10 @@ TrueEditor::TrueEditor(QWidget* parent)
 		if (m_lineNumberArea == nullptr) return;
 		highlightCurrentLine();
 		});
-	updateLineNumberAreaWidth();
-	highlightCurrentLine();
+	QTimer::singleShot(0, this, [&] {
+		updateLineNumberAreaWidth();
+		highlightCurrentLine();
+		});
 }
 
 void TrueEditor::lineNumberAreaPaintEvent(QPaintEvent* event)

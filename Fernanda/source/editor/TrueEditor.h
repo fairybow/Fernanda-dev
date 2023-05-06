@@ -7,6 +7,7 @@
 #include <QPlainTextEdit>
 #include <QScrollBar>
 #include <QTextBlock>
+#include <QTimer>
 
 class TrueEditor : public QPlainTextEdit
 {
