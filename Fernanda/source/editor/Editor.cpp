@@ -66,12 +66,9 @@ void Editor::buildScrollBar()
 
 void Editor::connections()
 {
-	connect(m_trueEditor->verticalScrollBar(), &QScrollBar::rangeChanged, this, [&] {
+	connectMultiple(m_trueEditor->verticalScrollBar(), this, [&] {
 		scrollButtonEnabler();
-		});
-	connect(m_trueEditor->verticalScrollBar(), &QScrollBar::valueChanged, this, [&] {
-		scrollButtonEnabler();
-		});
+		}, &QScrollBar::rangeChanged, &QScrollBar::valueChanged);
 	connect(m_trueEditor, &TrueEditor::getHasLineHighlight, this, [&] {
 		return m_hasLineHighlight;
 		});

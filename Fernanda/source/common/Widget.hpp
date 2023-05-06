@@ -15,11 +15,17 @@ public:
 		this->setObjectName(objectName);
 	}
 
-	static inline void transpareForMouse(QWidgetList widgets)
+	inline void transpareForMouse(QWidgetList widgets)
 	{
 		for (auto& widget : widgets)
 			widget->setAttribute(Qt::WA_TransparentForMouseEvents);
 	}
 
-	static inline void transpareForMouse(QWidget* widget) { transpareForMouse({ widget }); }
+	inline void transpareForMouse(QWidget* widget) { transpareForMouse({ widget }); }
+
+	template<typename Sender, typename Receiver, typename Slot, typename... Signals>
+	inline void connectMultiple(Sender sender, Receiver receiver, Slot slot, Signals... signal)
+	{
+		(QObject::connect(sender, signal, receiver, slot), ...);
+	}
 };
