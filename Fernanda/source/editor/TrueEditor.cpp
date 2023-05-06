@@ -3,18 +3,8 @@
 TrueEditor::TrueEditor(QWidget* parent)
 	: QPlainTextEdit(parent), m_lineNumberArea(nullptr)
 {
-	connect(this, &TrueEditor::blockCountChanged, this, [&](int) {
-		if (m_lineNumberArea == nullptr) return;
-		updateLineNumberAreaWidth();
-		});
-	connect(this, &TrueEditor::updateRequest, this, [&](const QRect& rect, int dy) {
-		if (m_lineNumberArea == nullptr) return;
-		updateLineNumberArea(rect, dy);
-		});
-	connect(this, &TrueEditor::cursorPositionChanged, this, [&] {
-		if (m_lineNumberArea == nullptr) return;
-		highlightCurrentLine();
-		});
+	m_cursorBlinkTimer->setTimerType(Qt::VeryCoarseTimer);
+	connections();
 	QTimer::singleShot(0, this, [&] {
 		updateLineNumberAreaWidth();
 		highlightCurrentLine();
@@ -66,7 +56,7 @@ void TrueEditor::setFont(const QFont& font)
 void TrueEditor::paintEvent(QPaintEvent* event)
 {
 	QPlainTextEdit::paintEvent(event);
-	/*QPainter painter(viewport());
+	QPainter painter(viewport());
 	auto current_char = currentChar();
 	auto rect = reshapeCursor(current_char);
 	painter.fillRect(rect, recolorCursor());
@@ -74,7 +64,7 @@ void TrueEditor::paintEvent(QPaintEvent* event)
 		painter.setPen(recolorCursor(true));
 		painter.setFont(font());
 		painter.drawText(rect, current_char);
-	}*/
+	}
 }
 
 void TrueEditor::resizeEvent(QResizeEvent* event)
@@ -88,6 +78,50 @@ void TrueEditor::resizeEvent(QResizeEvent* event)
 void TrueEditor::setLineNumberArea(LineNumberArea* lineNumberArea) // can't define in header?
 {
 	m_lineNumberArea = lineNumberArea;
+}
+
+void TrueEditor::setCursorStyle(const QString& styleSheet)
+{
+	auto it = QRegularExpression("Cursor[^}]*}").globalMatch(styleSheet);
+	while (it.hasNext()) {
+		auto match = it.next();
+		QString css_block = match.capturedTexts().at(0);
+		auto match_cursor = QRegularExpression("(\\scolor = )(.*)(;)").match(css_block).captured(2);
+		auto match_under_cursor = QRegularExpression("(\\sunder-color = )(.*)(;)").match(css_block).captured(2);
+		if (QColor(match_cursor).isValid())
+			m_cursorColorHex = match_cursor;
+		if (QColor(match_under_cursor).isValid())
+			m_cursorUnderColorHex = match_under_cursor;
+	}
+}
+
+void TrueEditor::connections()
+{
+	connect(this, &TrueEditor::blockCountChanged, this, [&](int) {
+		if (m_lineNumberArea == nullptr) return;
+		updateLineNumberAreaWidth();
+		});
+	connect(this, &TrueEditor::updateRequest, this, [&](const QRect& rect, int dy) {
+		if (m_lineNumberArea == nullptr) return;
+		updateLineNumberArea(rect, dy);
+		});
+	connect(this, &TrueEditor::cursorPositionChanged, this, [&] {
+		if (m_lineNumberArea == nullptr) return;
+		highlightCurrentLine();
+		});
+	connect(this, &TrueEditor::startCursorBlinkTimer, this, [&] {
+		if (!emit getHasCursorBlink()) return;
+		m_cursorBlinkTimer->start(1000);
+		});
+	connect(m_cursorBlinkTimer, &QTimer::timeout, this, [&] {
+		m_cursorBlinkVisible = !m_cursorBlinkVisible;
+		emit startCursorBlinkTimer();
+		});
+	connect(this, &TrueEditor::cursorPositionChanged, this, [&] {
+		if (textCursor().hasSelection() || !emit getHasCursorBlink()) return;
+		m_cursorBlinkVisible = true;
+		emit startCursorBlinkTimer();
+		});
 }
 
 void TrueEditor::highlightCurrentLine()
@@ -119,5 +153,36 @@ const QColor TrueEditor::highlight()
 	emit getHasLineHighlight()
 		? color = QColor(255, 255, 255, 30)
 		: color = QColor(0, 0, 0, 0);
+	return color;
+}
+
+const QChar TrueEditor::currentChar()
+{
+	auto text = textCursor().block().text();
+	auto current_position = textCursor().positionInBlock();
+	return (current_position < text.size()) ? text.at(current_position) : QChar();
+}
+
+const QRect TrueEditor::reshapeCursor(const QChar& currentChar)
+{
+	if (emit getHasCursorBlock()) {
+		QFontMetrics metrics(font());
+		currentChar.isNull()
+			? setCursorWidth(metrics.averageCharWidth())
+			: setCursorWidth(metrics.horizontalAdvance(currentChar));
+	}
+	else
+		setCursorWidth(2);
+	auto result = cursorRect(textCursor());
+	setCursorWidth(0);
+	return result;
+}
+
+const QColor TrueEditor::recolorCursor(bool under)
+{
+	QColor color;
+	(!m_cursorBlinkVisible && emit getHasCursorBlink())
+		? color = QColor(0, 0, 0, 0)
+		: under ? color = QColor(m_cursorUnderColorHex) : color = QColor(m_cursorColorHex);
 	return color;
 }

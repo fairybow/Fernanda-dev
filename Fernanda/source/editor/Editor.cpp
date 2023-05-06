@@ -9,7 +9,18 @@ Editor::Editor(const char* name, const QFont& defaultFont, QWidget* parent)
 	buildScrollBar();
 	connections();
 	transpareForMouse({ m_shadow, m_overlay });
-	Layout::stack({ /*m_shadow, m_overlay,*/ m_trueEditor, m_underlay}, this);
+	Layout::stack({ m_shadow, m_overlay, m_trueEditor, m_underlay}, this);
+
+	// testing
+
+	m_overlay->hide();
+}
+
+void Editor::changeEvent(QEvent* event)
+{
+	if (event->type() == QEvent::StyleChange)
+		m_trueEditor->setCursorStyle(styleSheet());
+	QWidget::changeEvent(event);
 }
 
 void Editor::nameObjects(const char* name)
@@ -71,6 +82,12 @@ void Editor::connections()
 		}, &QScrollBar::rangeChanged, &QScrollBar::valueChanged);
 	connect(m_trueEditor, &TrueEditor::getHasLineHighlight, this, [&] {
 		return m_hasLineHighlight;
+		});
+	connect(m_trueEditor, &TrueEditor::getHasCursorBlink, this, [&] {
+		return m_hasCursorBlink;
+		});
+	connect(m_trueEditor, &TrueEditor::getHasCursorBlock, this, [&] {
+		return m_hasCursorBlock;
 		});
 }
 
