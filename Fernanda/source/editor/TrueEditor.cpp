@@ -61,6 +61,20 @@ void TrueEditor::setFont(const QFont& font)
 	m_lineNumberArea->setFont(q_font);
 }
 
+void TrueEditor::paintEvent(QPaintEvent* event)
+{
+	QPlainTextEdit::paintEvent(event);
+	/*QPainter painter(viewport());
+	auto current_char = currentChar();
+	auto rect = reshapeCursor(current_char);
+	painter.fillRect(rect, recolorCursor());
+	if (!current_char.isNull() && emit getHasCursorBlock()) {
+		painter.setPen(recolorCursor(true));
+		painter.setFont(font());
+		painter.drawText(rect, current_char);
+	}*/
+}
+
 void TrueEditor::resizeEvent(QResizeEvent* event)
 {
 	QPlainTextEdit::resizeEvent(event);
