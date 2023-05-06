@@ -18,6 +18,8 @@ class Editor : public Widget<>
 public:
 	Editor(const char* name, const QFont& defaultFont = QFont(), QWidget* parent = nullptr);
 
+	inline void setFocus() { m_trueEditor->setFocus(); };
+
 	inline QFont defaulFont() const { return m_defaultFont; };
 	inline void setFont(const QFont& font) { m_trueEditor->setFont(font); };
 	inline void setReadOnly(bool readOnly) { m_trueEditor->setReadOnly(readOnly); }

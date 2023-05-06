@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../common/Event.hpp"
+
 #include <QChar>
 #include <QColor>
 #include <QFontMetrics>
@@ -19,9 +21,7 @@ public:
 	{
 		connections();
 		m_blinkTimer->setTimerType(Qt::VeryCoarseTimer);
-		QTimer::singleShot(0, this, [&] {
-			emit startBlinkTimer();
-			});
+		Event::delay(this, [&] { emit startBlinkTimer(); });
 	}
 
 	inline void paint()

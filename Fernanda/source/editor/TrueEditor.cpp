@@ -4,7 +4,7 @@ TrueEditor::TrueEditor(QWidget* parent)
 	: QPlainTextEdit(parent), m_lineNumberArea(nullptr)
 {
 	connections();
-	QTimer::singleShot(0, this, [&] {
+	Event::delay(this, [&] {
 		updateLineNumberAreaWidth();
 		highlightCurrentLine();
 		});

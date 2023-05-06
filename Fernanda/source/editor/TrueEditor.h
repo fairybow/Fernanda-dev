@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../common/Event.hpp"
 #include "BlockCursor.hpp"
 #include "LineNumberArea.h"
 
