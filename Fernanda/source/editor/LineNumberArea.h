@@ -4,6 +4,8 @@
 #include <QSize>
 #include <QWidget>
 
+// move some TE methods over here!
+
 class TrueEditor;
 
 class LineNumberArea : public QWidget

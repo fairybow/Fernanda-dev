@@ -110,4 +110,12 @@ namespace Layout
 		widget->setMinimumSize(width, height);
 		widget->setMaximumSize(width, height);
 	}
+
+	inline void transpareForMouse(QWidgetList widgets)
+	{
+		for (auto& widget : widgets)
+			widget->setAttribute(Qt::WA_TransparentForMouseEvents);
+	}
+
+	inline void transpareForMouse(QWidget* widget) { transpareForMouse({ widget }); }
 }

@@ -15,7 +15,7 @@ public:
 		: Widget(name, parent)
 	{
 		buildProgressBar(name);
-		transpareForMouse({ this, m_progressBar });
+		Layout::transpareForMouse({ this, m_progressBar });
 		Layout::box(m_progressBar, this);
 	}
 

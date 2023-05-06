@@ -148,6 +148,7 @@
     <QtMoc Include="source\common\StatusBarButton.hpp" />
     <ClInclude Include="source\common\Path.hpp" />
     <ClInclude Include="source\common\Widget.hpp" />
+    <QtMoc Include="source\editor\BlockCursor.hpp" />
     <ClInclude Include="source\editor\LineNumberArea.h" />
     <QtMoc Include="source\Indicator.h" />
     <ClInclude Include="source\menu\LiveFontDialog.hpp" />

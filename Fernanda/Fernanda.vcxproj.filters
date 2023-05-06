@@ -179,6 +179,9 @@
     <QtMoc Include="source\menu\ActionGroup.h">
       <Filter>Source\Menu</Filter>
     </QtMoc>
+    <QtMoc Include="source\editor\BlockCursor.hpp">
+      <Filter>Source\Editor</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">

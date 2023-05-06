@@ -3,7 +3,6 @@
 TrueEditor::TrueEditor(QWidget* parent)
 	: QPlainTextEdit(parent), m_lineNumberArea(nullptr)
 {
-	m_cursorBlinkTimer->setTimerType(Qt::VeryCoarseTimer);
 	connections();
 	QTimer::singleShot(0, this, [&] {
 		updateLineNumberAreaWidth();
@@ -56,15 +55,7 @@ void TrueEditor::setFont(const QFont& font)
 void TrueEditor::paintEvent(QPaintEvent* event)
 {
 	QPlainTextEdit::paintEvent(event);
-	QPainter painter(viewport());
-	auto current_char = currentChar();
-	auto rect = reshapeCursor(current_char);
-	painter.fillRect(rect, recolorCursor());
-	if (!current_char.isNull() && emit getHasCursorBlock()) {
-		painter.setPen(recolorCursor(true));
-		painter.setFont(font());
-		painter.drawText(rect, current_char);
-	}
+	m_cursor->paint();
 }
 
 void TrueEditor::resizeEvent(QResizeEvent* event)
@@ -89,14 +80,20 @@ void TrueEditor::setCursorStyle(const QString& styleSheet)
 		auto match_cursor = QRegularExpression("(\\scolor = )(.*)(;)").match(css_block).captured(2);
 		auto match_under_cursor = QRegularExpression("(\\sunder-color = )(.*)(;)").match(css_block).captured(2);
 		if (QColor(match_cursor).isValid())
-			m_cursorColorHex = match_cursor;
+			m_cursor->setColor(match_cursor);
 		if (QColor(match_under_cursor).isValid())
-			m_cursorUnderColorHex = match_under_cursor;
+			m_cursor->setUnderColor(match_under_cursor);
 	}
 }
 
 void TrueEditor::connections()
 {
+	lineNumberAreaConnections();
+	trueEditorConnections();
+	cursorConnections();
+
+	//
+
 	connect(this, &TrueEditor::blockCountChanged, this, [&](int) {
 		if (m_lineNumberArea == nullptr) return;
 		updateLineNumberAreaWidth();
@@ -109,18 +106,25 @@ void TrueEditor::connections()
 		if (m_lineNumberArea == nullptr) return;
 		highlightCurrentLine();
 		});
-	connect(this, &TrueEditor::startCursorBlinkTimer, this, [&] {
-		if (!emit getHasCursorBlink()) return;
-		m_cursorBlinkTimer->start(1000);
+}
+
+void TrueEditor::lineNumberAreaConnections()
+{
+
+}
+
+void TrueEditor::trueEditorConnections()
+{
+
+}
+
+void TrueEditor::cursorConnections()
+{
+	connect(m_cursor, &BlockCursor::getHasBlink, this, [&] {
+		return emit getHasCursorBlink();
 		});
-	connect(m_cursorBlinkTimer, &QTimer::timeout, this, [&] {
-		m_cursorBlinkVisible = !m_cursorBlinkVisible;
-		emit startCursorBlinkTimer();
-		});
-	connect(this, &TrueEditor::cursorPositionChanged, this, [&] {
-		if (textCursor().hasSelection() || !emit getHasCursorBlink()) return;
-		m_cursorBlinkVisible = true;
-		emit startCursorBlinkTimer();
+	connect(m_cursor, &BlockCursor::getHasBlock, this, [&] {
+		return emit getHasCursorBlock();
 		});
 }
 
@@ -153,36 +157,5 @@ const QColor TrueEditor::highlight()
 	emit getHasLineHighlight()
 		? color = QColor(255, 255, 255, 30)
 		: color = QColor(0, 0, 0, 0);
-	return color;
-}
-
-const QChar TrueEditor::currentChar()
-{
-	auto text = textCursor().block().text();
-	auto current_position = textCursor().positionInBlock();
-	return (current_position < text.size()) ? text.at(current_position) : QChar();
-}
-
-const QRect TrueEditor::reshapeCursor(const QChar& currentChar)
-{
-	if (emit getHasCursorBlock()) {
-		QFontMetrics metrics(font());
-		currentChar.isNull()
-			? setCursorWidth(metrics.averageCharWidth())
-			: setCursorWidth(metrics.horizontalAdvance(currentChar));
-	}
-	else
-		setCursorWidth(2);
-	auto result = cursorRect(textCursor());
-	setCursorWidth(0);
-	return result;
-}
-
-const QColor TrueEditor::recolorCursor(bool under)
-{
-	QColor color;
-	(!m_cursorBlinkVisible && emit getHasCursorBlink())
-		? color = QColor(0, 0, 0, 0)
-		: under ? color = QColor(m_cursorUnderColorHex) : color = QColor(m_cursorColorHex);
 	return color;
 }
