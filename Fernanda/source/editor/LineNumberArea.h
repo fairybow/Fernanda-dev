@@ -1,10 +1,7 @@
 #pragma once
 
-#include <QPaintEvent>
 #include <QSize>
 #include <QWidget>
-
-// move some TE methods over here!
 
 class TrueEditor;
 
