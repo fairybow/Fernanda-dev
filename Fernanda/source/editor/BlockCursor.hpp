@@ -21,7 +21,7 @@ public:
 	{
 		connections();
 		m_blinkTimer->setTimerType(Qt::VeryCoarseTimer);
-		Event::delay(this, [&] { emit startBlinkTimer(); });
+		Event::delayCall(this, [&] { emit startBlinkTimer(); });
 	}
 
 	inline void paint()

@@ -40,7 +40,7 @@ protected:
 					? emit widgetVisibilityChanged(i, WidgetWas::Hidden)
 					: emit widgetVisibilityChanged(i, WidgetWas::Shown);
 			}
-			Event::delay(this, [&] { emit resized(); });
+			Event::delayCall(this, [&] { emit resized(); });
 		}
 		return QSplitter::eventFilter(object, event);
 	}
