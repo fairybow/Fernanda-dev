@@ -89,7 +89,6 @@ void TrueEditor::setCursorStyle(const QString& styleSheet)
 void TrueEditor::connections()
 {
 	lineNumberAreaConnections();
-	trueEditorConnections();
 	cursorConnections();
 
 	//
@@ -103,17 +102,11 @@ void TrueEditor::connections()
 		updateLineNumberArea(rect, dy);
 		});
 	connect(this, &TrueEditor::cursorPositionChanged, this, [&] {
-		if (m_lineNumberArea == nullptr) return;
 		highlightCurrentLine();
 		});
 }
 
 void TrueEditor::lineNumberAreaConnections()
-{
-
-}
-
-void TrueEditor::trueEditorConnections()
 {
 
 }

@@ -43,7 +43,6 @@ private:
 
 	void connections();
 	void lineNumberAreaConnections();
-	void trueEditorConnections();
 	void cursorConnections();
 	void highlightCurrentLine();
 	void updateLineNumberArea(const QRect& rect, int dy);
