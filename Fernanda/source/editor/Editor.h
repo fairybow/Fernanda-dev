@@ -45,7 +45,7 @@ private:
 	void nameObjects(const char* name);
 	void setupTrueEditor();
 	void setupShadow();
-	void buildScrollBar();
+	void buildScrollBar(const char* name);
 	void connections();
 	void cursorConnections();
 	void lineNumberAreaConnections();

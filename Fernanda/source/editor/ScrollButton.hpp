@@ -23,9 +23,6 @@ public:
 	inline ScrollButton(QPlainTextEdit* editor, Type type, QWidget* parent = nullptr)
 		: Widget(parent), m_type(type), m_scrollBar(editor->verticalScrollBar())
 	{
-		// lines on previous & next
-		// needs same color as stylesheet, though
-
 		if (type == Type::Up || type == Type::Previous) {
 			setText("\U000025B2");
 			editor->addScrollBarWidget(this, Qt::AlignTop);
@@ -34,10 +31,17 @@ public:
 			setText("\U000025BC");
 			editor->addScrollBarWidget(this, Qt::AlignBottom);
 		}
+
 		if (type == Type::Up || type == Type::Down) {
 			setAutoRepeat(true);
 			setAutoRepeatDelay(500);
 		}
+
+		if (type == Type::Next)
+			setStyleSheet("text-decoration: underline");
+		if (type == Type::Previous)
+			setStyleSheet("text-decoration: overline");
+
 		setMinimumHeight(30);
 		connections();
 	}
@@ -49,10 +53,8 @@ private:
 	inline void connections()
 	{
 		connect(this, &ScrollButton::clicked, this, &ScrollButton::scroll);
-		if (m_type == Type::Up || m_type == Type::Down) {
-			connectMultiple(m_scrollBar, this,
-				&ScrollButton::toggleEnabled, &QScrollBar::rangeChanged, &QScrollBar::valueChanged);
-		}
+		connectMultiple(m_scrollBar, this, &ScrollButton::toggleEnabled,
+			&QScrollBar::rangeChanged, &QScrollBar::valueChanged);
 	}
 
 	inline void skip()
@@ -69,9 +71,9 @@ private:
 private slots:
 	inline void toggleEnabled()
 	{
-		if (m_type == Type::Up)
+		if (m_type == Type::Up || m_type == Type::Previous)
 			isMinimumScroll() ? setEnabled(false) : setEnabled(true);
-		if (m_type == Type::Down)
+		if (m_type == Type::Down || m_type == Type::Next)
 			isMaximumScroll() ? setEnabled(false) : setEnabled(true);
 	}
 
@@ -87,9 +89,10 @@ private slots:
 		sliding->setDuration(200);
 		sliding->setEasingCurve(QEasingCurve::OutQuad);
 		sliding->setStartValue(scroll_value);
-		(m_type == Type::Up)
-			? sliding->setEndValue(scroll_value + steps)
-			: sliding->setEndValue(scroll_value - steps);
+		if (m_type == Type::Down)
+			sliding->setEndValue(scroll_value + steps);
+		if (m_type == Type::Up)
+			sliding->setEndValue(scroll_value - steps);
 		sliding->start(QAbstractAnimation::DeleteWhenStopped);
 	}
 };

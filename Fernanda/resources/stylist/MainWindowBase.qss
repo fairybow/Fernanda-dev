@@ -19,21 +19,11 @@
 	padding-right: 1px;
 }
 
-#Editor-scroll-button-next
-{
-	text-decoration: underline;
-}
-
 #Editor-scroll-button-next, #Editor-scroll-button-previous
 {
 	font-size: 7pt;
 	font-weight: normal;
 	width: 16px;
-}
-
-#Editor-scroll-button-previous
-{
-	text-decoration: overline;
 }
 
 #StatusBarButton

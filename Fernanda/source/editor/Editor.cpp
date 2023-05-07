@@ -6,7 +6,7 @@ Editor::Editor(const char* name, const QFont& defaultFont, QWidget* parent)
 	nameObjects(name);
 	setupTrueEditor();
 	setupShadow();
-	buildScrollBar();
+	buildScrollBar(name);
 	connections();
 	Layout::transpareForMouse({ m_shadow, m_overlay });
 	Layout::stack({ m_shadow, m_overlay, m_trueEditor, m_underlay}, this);
@@ -48,21 +48,17 @@ void Editor::setupShadow()
 	m_shadow->setGraphicsEffect(Fx::blur(15, m_shadow));
 }
 
-void Editor::buildScrollBar()
+void Editor::buildScrollBar(const char* name)
 {
 	auto up = new ScrollButton(m_trueEditor, ScrollButton::Type::Up, this);
 	auto previous = new ScrollButton(m_trueEditor, ScrollButton::Type::Previous, this);
 	auto next = new ScrollButton(m_trueEditor, ScrollButton::Type::Next, this);
 	auto down = new ScrollButton(m_trueEditor, ScrollButton::Type::Down, this);
 
-	/*up->setObjectName(name + QString("-scroll-button-up"));
+	up->setObjectName(name + QString("-scroll-button-up"));
 	previous->setObjectName(name + QString("-scroll-button-previous"));
 	next->setObjectName(name + QString("-scroll-button-next"));
-	down->setObjectName(name + QString("-scroll-button-down"));*/
-
-	/*
-	scrollButtonEnabler();
-	*/
+	down->setObjectName(name + QString("-scroll-button-down"));
 }
 
 void Editor::connections()
