@@ -4,11 +4,11 @@
 #include "../common/Io.hpp"
 #include "../common/Layout.hpp"
 #include "../common/Widget.hpp"
+#include "ScrollButton.hpp"
 #include "TrueEditor.h"
 
 #include <QFont>
 #include <QLabel>
-#include <QPushButton>
 #include <QVector>
 
 class Editor : public Widget<>
@@ -41,10 +41,6 @@ private:
 	QLabel* m_shadow = new QLabel(this);
 	QLabel* m_overlay = new QLabel(this);
 	QLabel* m_underlay = new QLabel(this);
-	QPushButton* m_scrollPrevious = new QPushButton;
-	QPushButton* m_scrollUp = new QPushButton;
-	QPushButton* m_scrollDown = new QPushButton;
-	QPushButton* m_scrollNext = new QPushButton;
 
 	void nameObjects(const char* name);
 	void setupTrueEditor();
@@ -54,5 +50,4 @@ private:
 	void cursorConnections();
 	void lineNumberAreaConnections();
 	void trueEditorConnections();
-	void scrollButtonEnabler();
 };

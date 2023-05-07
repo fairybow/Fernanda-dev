@@ -9,12 +9,9 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 
 	// testing
 
-	m_editor->setFocus();
+	// if opened w/o file, will still have overlay
 
-	/*auto button_1 = new QPushButton;
-	button_1->setText("Test");
-	m_statusBar->addPermanentWidget(button_1, 0);
-	connect(button_1, &QPushButton::pressed, this, [&] { loadConfig(); });*/
+	m_editor->setFocus();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -32,30 +29,15 @@ void MainWindow::setupWidgets()
 	setStatusBar(m_statusBar);
 	m_statusBar->addPermanentWidget(m_meter, 0);
 	m_menuBar->makeSubmenus();
-	m_splitter->initialize({ 0.2, 0.4, 0.4 }, 1);
-	Layout::setCentralWidget(this, m_splitter);
+	Layout::setCentralWidget(this, m_editor);
 }
 
 void MainWindow::connections()
 {
-	splitterConnections();
-	treeViewConnections();
 	editorConnections();
-	previewConnections();
+	//previewConnections();
 	menuBarConnections();
 	menuBarConfigConnections();
-}
-
-void MainWindow::splitterConnections()
-{
-	connect(m_splitter, &Splitter::askWindowSize, this, [&] {
-		return geometry();
-		});
-}
-
-void MainWindow::treeViewConnections()
-{
-	//
 }
 
 void MainWindow::editorConnections()
@@ -63,10 +45,10 @@ void MainWindow::editorConnections()
 	//
 }
 
-void MainWindow::previewConnections()
+/*void MainWindow::previewConnections()
 {
 	//
-}
+}*/
 
 void MainWindow::menuBarConnections()
 {
@@ -107,22 +89,9 @@ void MainWindow::loadConfigs()
 	//setWindowState(state); // behaves strangely, Windows issue I think
 	auto geometry = loadConfig("geometry", this, QRect(0, 0, 1000, 600));
 	setGeometry(geometry);
-	loadSplitterConfigs();
-	loadTreeViewConfigs();
 	loadEditorConfigs();
-	loadPreviewConfigs();
+	//loadPreviewConfigs();
 	loadMenuBarConfigs();
-}
-
-void MainWindow::loadSplitterConfigs()
-{
-	auto state = loadConfig<QByteArray>("position", m_splitter);
-	m_splitter->restoreState(state);
-}
-
-void MainWindow::loadTreeViewConfigs()
-{
-	//
 }
 
 void MainWindow::loadEditorConfigs()
@@ -131,10 +100,10 @@ void MainWindow::loadEditorConfigs()
 	m_editor->setFont(font);
 }
 
-void MainWindow::loadPreviewConfigs()
+/*void MainWindow::loadPreviewConfigs()
 {
 	//
-}
+}*/
 
 void MainWindow::loadMenuBarConfigs()
 {
@@ -159,5 +128,4 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 {
 	saveConfigPassthrough(priorState, "state", this);
 	saveConfigPassthrough(geometry(), "geometry", this);
-	saveConfigPassthrough(m_splitter->saveState(), "position", m_splitter);
 }

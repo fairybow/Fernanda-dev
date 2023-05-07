@@ -7,10 +7,8 @@
 #include "menu/MenuBar.h"
 #include "Meter.hpp"
 #include "preview/Preview.hpp"
-#include "splitter/Splitter.h"
 #include "StatusBar.hpp"
 #include "Stylist.h"
-#include "tree/TreeView.h"
 #include "user/User.hpp"
 
 #include <QCloseEvent>
@@ -29,11 +27,6 @@ class MainWindow : public Widget<QMainWindow>
 public:
 	MainWindow(const char* name, bool isDev = false, StdFsPath file = StdFsPath(), QWidget* parent = nullptr);
 
-signals:
-	void testSignal1();
-	void testSignal2();
-	void testSignal3(int i);
-
 protected:
 	virtual void closeEvent(QCloseEvent* event);
 
@@ -41,11 +34,8 @@ private:
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_isDev, this);
 	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
 	Indicator* m_indicator = new Indicator("Indicator", this);
-	TreeView* m_treeView = new TreeView("TreeView");
 	Editor* m_editor = new Editor("Editor", QFont("mononoki", 16));
-	Preview* m_preview = new Preview("Preview");
-	Splitter* m_splitter = new Splitter("Splitter", Qt::Horizontal,
-		{ m_treeView, m_editor, m_preview }, this);
+	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 	User* m_user = new User(QCoreApplication::applicationName(), this);
@@ -54,17 +44,13 @@ private:
 
 	void setupWidgets();
 	void connections();
-	void splitterConnections();
-	void treeViewConnections();
 	void editorConnections();
-	void previewConnections();
+	//void previewConnections();
 	void menuBarConnections();
 	void menuBarConfigConnections();
 	void loadConfigs();
-	void loadSplitterConfigs();
-	void loadTreeViewConfigs();
 	void loadEditorConfigs();
-	void loadPreviewConfigs();
+	//void loadPreviewConfigs();
 	void loadMenuBarConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
 

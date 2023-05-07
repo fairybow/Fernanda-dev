@@ -39,5 +39,4 @@
 		stop: 0 rgba(0, 0, 0, 0.3),
 		stop: 1 transparent
 	);
-	margin-right: 16px;
 }

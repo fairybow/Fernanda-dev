@@ -31,11 +31,6 @@ void Editor::nameObjects(const char* name)
 	m_overlay->setObjectName(name + QString("-overlay"));
 	m_underlay->setObjectName(name + QString("-underlay"));
 
-	m_scrollUp->setObjectName(name + QString("-scroll-button-up"));
-	m_scrollPrevious->setObjectName(name + QString("-scroll-button-previous"));
-	m_scrollNext->setObjectName(name + QString("-scroll-button-next"));
-	m_scrollDown->setObjectName(name + QString("-scroll-button-down"));
-
 	m_trueEditor->horizontalScrollBar()->setObjectName("HorizontalScrollBar");
 	m_trueEditor->verticalScrollBar()->setObjectName("VerticalScrollBar");
 }
@@ -55,31 +50,26 @@ void Editor::setupShadow()
 
 void Editor::buildScrollBar()
 {
-	m_trueEditor->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-	m_trueEditor->addScrollBarWidget(m_scrollUp, Qt::AlignTop);
-	m_trueEditor->addScrollBarWidget(m_scrollPrevious, Qt::AlignTop);
-	m_trueEditor->addScrollBarWidget(m_scrollNext, Qt::AlignBottom);
-	m_trueEditor->addScrollBarWidget(m_scrollDown, Qt::AlignBottom);
-	for (auto& button : { m_scrollUp, m_scrollDown }) {
-		button->setAutoRepeat(true);
-		button->setAutoRepeatDelay(500);
-	}
-	auto up_arrow = "\U000025B2";
-	auto down_arrow = "\U000025BC";
-	m_scrollUp->setText(up_arrow);
-	m_scrollPrevious->setText(up_arrow);
-	m_scrollNext->setText(down_arrow);
-	m_scrollDown->setText(down_arrow);
-	for (auto& button : { m_scrollUp, m_scrollPrevious, m_scrollNext, m_scrollDown })
-		button->setMinimumHeight(30);
+	auto up = new ScrollButton(m_trueEditor, ScrollButton::Type::Up, this);
+	auto previous = new ScrollButton(m_trueEditor, ScrollButton::Type::Previous, this);
+	auto next = new ScrollButton(m_trueEditor, ScrollButton::Type::Next, this);
+	auto down = new ScrollButton(m_trueEditor, ScrollButton::Type::Down, this);
+
+	/*up->setObjectName(name + QString("-scroll-button-up"));
+	previous->setObjectName(name + QString("-scroll-button-previous"));
+	next->setObjectName(name + QString("-scroll-button-next"));
+	down->setObjectName(name + QString("-scroll-button-down"));*/
+
+	/*
 	scrollButtonEnabler();
+	*/
 }
 
 void Editor::connections()
 {
-	trueEditorConnections();
-	lineNumberAreaConnections();
 	cursorConnections();
+	lineNumberAreaConnections();
+	trueEditorConnections();
 }
 
 void Editor::cursorConnections()
@@ -94,10 +84,6 @@ void Editor::lineNumberAreaConnections()
 
 void Editor::trueEditorConnections()
 {
-	connectMultiple(m_trueEditor->verticalScrollBar(), this, [&] {
-		scrollButtonEnabler();
-		}, &QScrollBar::rangeChanged, &QScrollBar::valueChanged);
-
 	connect(m_trueEditor, &TrueEditor::getHasLineHighlight, this, [&] {
 		return m_hasLineHighlight;
 		});
@@ -107,10 +93,4 @@ void Editor::trueEditorConnections()
 	connect(m_trueEditor, &TrueEditor::getHasCursorBlock, this, [&] {
 		return m_hasCursorBlock;
 		});
-}
-
-void Editor::scrollButtonEnabler()
-{
-	m_trueEditor->isMinimumScroll() ? m_scrollUp->setEnabled(false) : m_scrollUp->setEnabled(true);
-	m_trueEditor->isMaximumScroll() ? m_scrollDown->setEnabled(false) : m_scrollDown->setEnabled(true);
 }

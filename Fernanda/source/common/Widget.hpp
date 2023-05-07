@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QVector>
 #include <QWidget>
 
 #include <utility>
@@ -9,6 +8,9 @@ template<typename T = QWidget, typename... Args>
 class Widget : public T
 {
 public:
+	explicit Widget(QWidget* parent = nullptr, Args&&... args)
+		: T(parent, std::forward<Args>(args)...) {}
+
 	explicit Widget(const char* objectName, QWidget* parent = nullptr, Args&&... args)
 		: T(parent, std::forward<Args>(args)...)
 	{

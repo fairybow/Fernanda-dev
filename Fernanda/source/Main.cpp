@@ -1,5 +1,4 @@
 #include "common/Path.hpp"
-#include "LaunchCop.hpp"
 #include "MainWindow.h"
 
 #include <QApplication>
@@ -11,11 +10,6 @@ void setFont(QApplication& application);
 
 int main(int argc, char* argv[])
 {
-	auto window_name = "MainWindow";
-	LaunchCop launch_cop("Fernanda", window_name);
-	if (launch_cop.exists())
-		return 0;
-
 	QApplication::setHighDpiScaleFactorRoundingPolicy(
 		Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 	QApplication::setDesktopSettingsAware(true);
@@ -23,10 +17,10 @@ int main(int argc, char* argv[])
 
 	std::filesystem::path open_file;
 	for (auto& arg : fernanda.arguments())
-		if (arg.endsWith(".story"))
+		if (arg.endsWith(".txt")) // handle projects, too
 			open_file = Path::toStdFs(arg);
 
-	MainWindow main_window(window_name, fernanda.arguments().contains("-dev"), open_file);
+	MainWindow main_window("MainWindow", fernanda.arguments().contains("-dev"), open_file);
 	setFont(fernanda);
 	main_window.show();
 	return fernanda.exec();

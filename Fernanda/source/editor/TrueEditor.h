@@ -25,9 +25,6 @@ public:
 	void setLineNumberArea(LineNumberArea* lineNumberArea);
 	void setCursorStyle(const QString& styleSheet);
 
-	inline bool isMaximumScroll() const { return (verticalScrollBar()->sliderPosition() == verticalScrollBar()->maximum()); }
-	inline bool isMinimumScroll() const { return (verticalScrollBar()->sliderPosition() == verticalScrollBar()->minimum()); }
-
 signals:
 	bool getHasLineHighlight();
 	bool getHasCursorBlock();

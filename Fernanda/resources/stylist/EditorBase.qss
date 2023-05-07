@@ -14,7 +14,6 @@ Cursor
 	background: transparent;
 	background-image: url(none);
 	background-repeat: repeat-xy;
-	margin-right: 16px;
 }
 
 #Editor-line-number-area
