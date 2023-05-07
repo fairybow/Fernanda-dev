@@ -80,6 +80,11 @@ namespace Layout
 		parentWindow->setCentralWidget(container);
 	}
 
+	inline void setCentralWidgets(QMainWindow* parentWindow, int margins, QWidgetList widgets, Line alignment = Line::Vertically)
+	{
+		setCentralWidgets(parentWindow, widgets, { margins, margins, margins, margins }, alignment);
+	}
+
 	inline void setCentralWidgets(QMainWindow* parentWindow, QWidgetList widgets, Line alignment = Line::Vertically)
 	{
 		setCentralWidgets(parentWindow, widgets, QMargins(), alignment);
@@ -88,6 +93,11 @@ namespace Layout
 	inline void setCentralWidget(QMainWindow* parentWindow, QWidget* widget, QMargins margins, Line alignment = Line::Vertically)
 	{
 		setCentralWidgets(parentWindow, QWidgetList{ widget }, margins, alignment);
+	}
+
+	inline void setCentralWidget(QMainWindow* parentWindow, int margins, QWidget* widget, Line alignment = Line::Vertically)
+	{
+		setCentralWidgets(parentWindow, QWidgetList{ widget }, { margins, margins, margins, margins }, alignment);
 	}
 
 	inline void setCentralWidget(QMainWindow* parentWindow, QWidget* widget, Line alignment = Line::Vertically)

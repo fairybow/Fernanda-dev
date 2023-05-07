@@ -1,53 +1,12 @@
+#MainWindow
+{
+	background-color: @background;
+}
+
 #Indicator
 {
 	background: transparent;
 	border: none;
-}
-
-#HorizontalScrollBar:horizontal, #TreeView-vertical-scroll-bar:vertical, #VerticalScrollBar:vertical
-{
-	background: @scrollBg;
-	margin: 0px 0 0px 0;
-}
-
-#HorizontalScrollBar::handle:horizontal
-{
-	min-width: 16px;
-}
-
-#HorizontalScrollBar::handle:horizontal, #TreeView-vertical-scroll-bar::handle:vertical, #VerticalScrollBar::handle:vertical
-{
-	background: @scrollHandle;
-	border-left: 2px solid @scrollBg;
-	border-right: 2px solid @scrollBg;
-}
-
-#HorizontalScrollBar::handle:horizontal:hover, #TreeView-vertical-scroll-bar::handle:vertical:hover, #VerticalScrollBar::handle:vertical:hover
-{
-	background: @scrollHandleHover;
-}
-
-#HorizontalScrollBar::handle:horizontal:pressed, #TreeView-vertical-scroll-bar::handle:vertical:pressed, #VerticalScrollBar::handle:vertical:pressed
-{
-	background: @scrollHandlePress;
-}
-
-#HorizontalScrollBar::add-line:horizontal, #HorizontalScrollBar::sub-line:horizontal, #TreeView-vertical-scroll-bar::add-line:vertical, #TreeView-vertical-scroll-bar::sub-line:vertical, #VerticalScrollBar::add-line:vertical, #VerticalScrollBar::sub-line:vertical
-{
-	border: none;
-	height: 0px;
-}
-
-#HorizontalScrollBar::left-arrow:horizontal, #HorizontalScrollBar::right-arrow:horizontal, #TreeView-vertical-scroll-bar::up-arrow:vertical, #TreeView-vertical-scroll-bar::down-arrow:vertical, #VerticalScrollBar::up-arrow:vertical, #VerticalScrollBar::down-arrow:vertical
-{
-	border: none;
-	height: 0px;
-	width: 0px;
-}
-
-#HorizontalScrollBar::add-page:horizontal, #HorizontalScrollBar::sub-page:horizontal, #TreeView-vertical-scroll-bar::add-page:vertical, #TreeView-vertical-scroll-bar::sub-page:vertical, #VerticalScrollBar::add-page:vertical, #VerticalScrollBar::sub-page:vertical
-{
-	background: none;
 }
 
 #MenuBar, QMenu
@@ -70,37 +29,6 @@
 QSizeGrip
 {
 	image: url(none);
-}
-
-#Editor-scroll-button-previous, #Editor-scroll-button-up, #Editor-scroll-button-down, #Editor-scroll-button-next
-{
-	background: @scrollButtonBg;
-	border: none;
-	color: @scrollButtonFont;
-}
-
-#Editor-scroll-button-up, #Editor-scroll-button-down
-{
-	font-size: 7pt;
-	font-weight: normal;
-	width: 16px;
-}
-
-#Editor-scroll-button-previous:hover, #Editor-scroll-button-up:hover, #Editor-scroll-button-down:hover, #Editor-scroll-button-next:hover
-{
-	background: @scrollButtonHover;
-	color: @scrollButtonFontHover;
-}
-
-#Editor-scroll-button-previous:pressed, #Editor-scroll-button-up:pressed, #Editor-scroll-button-down:pressed, #Editor-scroll-button-next:pressed
-{
-	background: @scrollButtonPress;
-	color: @scrollButtonFontPress;
-}
-
-#Splitter::handle
-{
-	background: @splitterHandle;
 }
 
 #StatusBar
@@ -132,9 +60,4 @@ QSizeGrip
 {
 	background: @treeViewBg;
 	color: @treeViewFont;
-}
-
-#TreeView-vertical-scroll-bar::handle:vertical, #VerticalScrollBar::handle:vertical
-{
-	min-height: 16px;
 }

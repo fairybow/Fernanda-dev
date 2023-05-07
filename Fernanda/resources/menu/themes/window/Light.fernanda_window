@@ -1,3 +1,5 @@
+@background; = #f0f0f0;
+
 @menuBg; = #f8f8f8;
 @menuHover; = #ccc;
 @menuFont; = #595959;

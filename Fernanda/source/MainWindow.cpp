@@ -29,7 +29,7 @@ void MainWindow::setupWidgets()
 	setStatusBar(m_statusBar);
 	m_statusBar->addPermanentWidget(m_meter, 0);
 	m_menuBar->makeSubmenus();
-	Layout::setCentralWidget(this, m_editor);
+	Layout::setCentralWidget(this, m_editor, { 4, 0, 4, 0 });
 }
 
 void MainWindow::connections()

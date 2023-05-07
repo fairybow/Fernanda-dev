@@ -4,7 +4,6 @@
 #include "../common/Io.hpp"
 #include "../common/Layout.hpp"
 #include "../common/Widget.hpp"
-#include "ScrollButton.hpp"
 #include "TrueEditor.h"
 
 #include <QFont>
@@ -45,7 +44,7 @@ private:
 	void nameObjects(const char* name);
 	void setupTrueEditor();
 	void setupShadow();
-	void buildScrollBar(const char* name);
+	void buildScrollBar();
 	void connections();
 	void cursorConnections();
 	void lineNumberAreaConnections();

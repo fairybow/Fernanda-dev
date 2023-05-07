@@ -182,9 +182,6 @@
     <QtMoc Include="source\editor\BlockCursor.hpp">
       <Filter>Source\Editor</Filter>
     </QtMoc>
-    <QtMoc Include="source\editor\ScrollButton.hpp">
-      <Filter>Source\Editor</Filter>
-    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">

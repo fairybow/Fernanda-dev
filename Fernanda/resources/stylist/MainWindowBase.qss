@@ -3,12 +3,7 @@
 	border: none;
 }
 
-#HorizontalScrollBar:horizontal
-{
-	height: 10px;
-}
-
-#MenuBar, #Meter, QDialog, QDialog QLabel, QDialog QPushButton, QMenu, #Editor-scroll-button-previous, #Editor-scroll-button-up, #Editor-scroll-button-down, #Editor-scroll-button-next, #StatusBar, #TreeView
+#MenuBar, #Meter, QDialog, QDialog QLabel, QDialog QPushButton, QMenu, #StatusBar, #TreeView
 {
 	font-size: 9pt;
 }
@@ -17,13 +12,6 @@
 {
 	padding-left: 1px;
 	padding-right: 1px;
-}
-
-#Editor-scroll-button-next, #Editor-scroll-button-previous
-{
-	font-size: 7pt;
-	font-weight: normal;
-	width: 16px;
 }
 
 #StatusBarButton
@@ -39,14 +27,4 @@
 #StatusBarButton:hover
 {
 	font-size: 10pt;
-}
-
-#TreeView-vertical-scroll-bar:vertical
-{
-	width: 10px;
-}
-
-#VerticalScrollBar:vertical
-{
-	width: 16px;
 }

@@ -4,9 +4,9 @@
 	background-image: url(none);
 	background-repeat: repeat-xy;
 	border-top: 22px solid black;
-	border-left: 20px solid black;
+	border-left: 22px solid black;
 	border-right: 22px solid black;
-	border-bottom: 20px solid black;
+	border-bottom: 22px solid black;
 	border-top-color: qlineargradient(
 		x1:0,
 		y1:0,
