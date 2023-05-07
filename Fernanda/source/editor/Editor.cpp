@@ -77,9 +77,27 @@ void Editor::buildScrollBar()
 
 void Editor::connections()
 {
+	trueEditorConnections();
+	lineNumberAreaConnections();
+	cursorConnections();
+}
+
+void Editor::cursorConnections()
+{
+	//
+}
+
+void Editor::lineNumberAreaConnections()
+{
+	//
+}
+
+void Editor::trueEditorConnections()
+{
 	connectMultiple(m_trueEditor->verticalScrollBar(), this, [&] {
 		scrollButtonEnabler();
 		}, &QScrollBar::rangeChanged, &QScrollBar::valueChanged);
+
 	connect(m_trueEditor, &TrueEditor::getHasLineHighlight, this, [&] {
 		return m_hasLineHighlight;
 		});

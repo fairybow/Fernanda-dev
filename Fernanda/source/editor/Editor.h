@@ -51,5 +51,8 @@ private:
 	void setupShadow();
 	void buildScrollBar();
 	void connections();
+	void cursorConnections();
+	void lineNumberAreaConnections();
+	void trueEditorConnections();
 	void scrollButtonEnabler();
 };
