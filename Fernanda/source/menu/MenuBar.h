@@ -38,16 +38,16 @@ public:
 
 	void makeSubmenus();
 
-	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; };
-	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; };
+	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; }; // Set in Editor?
+	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; }; // Set in MW?
 
 	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[EDITOR_THEMES], path); };
 	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[WINDOW_THEMES], path); };
-	void setSelectedTabStop(int pixels) { setGroupSelectedAction(m_actionGroups[TABS], pixels); };
+	void setSelectedTabStop(int pixels) { setGroupSelectedAction(m_actionGroups[TABS], pixels); }; // switch to m_sliderValues
 	void setSelectedWrapMode(const QString& mode) { setGroupSelectedAction(m_actionGroups[WRAPS], mode); };
 	void setSelectedIndicatorPosition(const QString& position) { setGroupSelectedAction(m_actionGroups[INDICATOR_POS], position); };
 	void setSelectedPreviewType(const QString& type) { setGroupSelectedAction(m_actionGroups[PREVIEW], type); };
-	void setSelectedPomodoroTime(int timeInSeconds) { setGroupSelectedAction(m_actionGroups[POMODORO], timeInSeconds); };
+	void setSelectedPomodoroTime(int timeInSeconds) { setGroupSelectedAction(m_actionGroups[POMODORO], timeInSeconds); }; // switch to m_sliderValues
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();
@@ -63,6 +63,7 @@ signals:
 
 private:
 	std::map<QString, ActionGroup*> m_actionGroups;
+	std::map<QString, int> m_sliderValues;
 	const bool m_isDev;
 
 	void makeActionGroups();
@@ -76,11 +77,11 @@ private:
 
 	QAction* selectedEditorTheme() const { return m_actionGroups.at(EDITOR_THEMES)->checkedAction(); }
 	QAction* selectedWindowTheme() const { return m_actionGroups.at(WINDOW_THEMES)->checkedAction(); }
-	QAction* selectedTabStop() const { return m_actionGroups.at(TABS)->checkedAction(); }
+	QAction* selectedTabStop() const { return m_actionGroups.at(TABS)->checkedAction(); } // switch to m_sliderValues
 	QAction* selectedWrapMode() const { return m_actionGroups.at(WRAPS)->checkedAction(); }
 	QAction* selectedIndicatorPosition() const { return m_actionGroups.at(INDICATOR_POS)->checkedAction(); }
 	QAction* selectedPreviewType() const { return m_actionGroups.at(PREVIEW)->checkedAction(); }
-	QAction* selectedPomodoroTime() const { return m_actionGroups.at(POMODORO)->checkedAction(); }
+	QAction* selectedPomodoroTime() const { return m_actionGroups.at(POMODORO)->checkedAction(); } // switch to m_sliderValues
 
 	template<typename T>
 	void setGroupSelectedAction(ActionGroup* actionGroup, T value)
