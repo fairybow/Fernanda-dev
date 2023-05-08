@@ -78,6 +78,8 @@ void MainWindow::toolButtonConnections()
 	connect(m_pomodoroTimer, &PomodoroTimer::getCurrentDefault, this, [&] {
 		return 0; // from MenuBar
 		});
+
+	/* I think this is unneeded? */
 }
 
 /*void MainWindow::previewConnections()
@@ -117,6 +119,8 @@ void MainWindow::menuBarConfigConnections()
 		saveConfigPassthrough(
 			timeInSeconds, "time", m_pomodoroTimer, [&] {
 				m_pomodoroTimer->setCountdown(timeInSeconds);
+
+				/* I think this is perhaps all that is needed. Slot to set countdown time (which should maybe then overwrite backup time)  */
 			});
 		});
 
