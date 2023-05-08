@@ -19,12 +19,24 @@ class Editor : public Widget<>
 public:
 	Editor(const char* name, const QFont& defaultFont = QFont(), QWidget* parent = nullptr);
 
-	inline void setFocus() { m_trueEditor->setFocus(); };
+	inline void setFocus() { m_trueEditor->setFocus(); }
 
-	inline QFont defaulFont() const { return m_defaultFont; };
-	inline void setFont(const QFont& font) { m_trueEditor->setFont(font); };
+	inline QFont defaulFont() const { return m_defaultFont; }
+	inline void setFont(const QFont& font) { m_trueEditor->setFont(font); }
 	inline void setReadOnly(bool readOnly) { m_trueEditor->setReadOnly(readOnly); }
 	inline bool isReadOnly() const { return m_trueEditor->isReadOnly(); }
+	inline QString selectedText() const { return m_trueEditor->textCursor().selectedText(); }
+	inline int selectedLineCount() const { return m_trueEditor->selectedLineCount(); }
+	inline QString toPlainText() const { return m_trueEditor->toPlainText(); }
+	inline int blockCount() const { return m_trueEditor->blockCount(); }
+	inline int cursorBlockNumber() const { return m_trueEditor->textCursor().blockNumber(); }
+	inline int cursorPositionInBlock() const { return m_trueEditor->textCursor().positionInBlock(); }
+	inline bool hasSelection() const { return m_trueEditor->textCursor().hasSelection(); }
+
+signals:
+	void selectionChanged();
+	void textChanged();
+	void cursorPositionChanged();
 
 protected:
 	virtual void changeEvent(QEvent* event) override;

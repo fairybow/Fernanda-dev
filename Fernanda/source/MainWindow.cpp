@@ -28,6 +28,7 @@ void MainWindow::setupWidgets()
 	setMenuBar(m_menuBar);
 	setStatusBar(m_statusBar);
 	m_statusBar->addPermanentWidget(m_meter, 0);
+	m_statusBar->addPermanentWidget(m_spacer, 1);
 	m_menuBar->makeSubmenus();
 	Layout::setCentralWidget(this, m_editor, { 4, 0, 4, 0 });
 }
@@ -35,6 +36,7 @@ void MainWindow::setupWidgets()
 void MainWindow::connections()
 {
 	editorConnections();
+	meterConnections();
 	//previewConnections();
 	menuBarConnections();
 	menuBarConfigConnections();
@@ -43,6 +45,32 @@ void MainWindow::connections()
 void MainWindow::editorConnections()
 {
 	//
+}
+
+void MainWindow::meterConnections()
+{
+	connect(m_meter, &Meter::getCountsData, this, [&](bool isSelection) {
+		if (isSelection)
+			return Meter::Counts{ m_editor->selectedText(), m_editor->selectedLineCount() };
+		return Meter::Counts{ m_editor->toPlainText(), m_editor->blockCount() };
+		});
+	connect(m_meter, &Meter::getPositionsData, this, [&] {
+		return Meter::Positions{ m_editor->cursorBlockNumber(), m_editor->cursorPositionInBlock() };
+		});
+	connect(m_meter, &Meter::editorFocusReturn, m_editor, [&] {
+		m_editor->setFocus();
+		});
+	connect(m_editor, &Editor::selectionChanged, this, [&] {
+			m_editor->hasSelection()
+				? m_meter->trigger(Meter::Type::Selection, true)
+				: m_meter->trigger(Meter::Type::Counts, true);
+		});
+	connect(m_editor, &Editor::textChanged, m_meter, [&] {
+		m_meter->trigger(Meter::Type::Counts);
+		});
+	connect(m_editor, &Editor::cursorPositionChanged, m_meter, [&] {
+		m_meter->trigger(Meter::Type::Positions);
+		});
 }
 
 /*void MainWindow::previewConnections()

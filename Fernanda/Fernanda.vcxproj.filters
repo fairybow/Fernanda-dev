@@ -182,6 +182,9 @@
     <QtMoc Include="source\editor\BlockCursor.hpp">
       <Filter>Source\Editor</Filter>
     </QtMoc>
+    <QtMoc Include="source\Meter.h">
+      <Filter>Source</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -220,6 +223,9 @@
     <ClCompile Include="source\menu\ActionGroup.cpp">
       <Filter>Source\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="source\Meter.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\preview\WebDocument.hpp">
@@ -254,9 +260,6 @@
     </ClInclude>
     <ClInclude Include="source\common\Io.hpp">
       <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Meter.hpp">
-      <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="source\StatusBar.hpp">
       <Filter>Source</Filter>

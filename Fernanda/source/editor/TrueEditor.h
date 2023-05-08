@@ -24,6 +24,7 @@ public:
 	void setFont(const QFont& font);
 	void setLineNumberArea(LineNumberArea* lineNumberArea);
 	void setCursorStyle(const QString& styleSheet);
+	int selectedLineCount();
 
 signals:
 	bool getHasLineHighlight();

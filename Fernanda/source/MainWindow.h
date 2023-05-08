@@ -5,7 +5,7 @@
 #include "editor/Editor.h"
 #include "Indicator.h"
 #include "menu/MenuBar.h"
-#include "Meter.hpp"
+#include "Meter.h"
 #include "preview/Preview.hpp"
 #include "StatusBar.hpp"
 #include "Stylist.h"
@@ -37,6 +37,7 @@ private:
 	Editor* m_editor = new Editor("Editor", QFont("mononoki", 16));
 	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");
+	QLabel* m_spacer = new QLabel; // handle this in subclassed statusbar
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 	User* m_user = new User(QCoreApplication::applicationName(), this);
 
@@ -45,6 +46,7 @@ private:
 	void setupWidgets();
 	void connections();
 	void editorConnections();
+	void meterConnections();
 	//void previewConnections();
 	void menuBarConnections();
 	void menuBarConfigConnections();

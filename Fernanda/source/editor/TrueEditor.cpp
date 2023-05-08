@@ -86,6 +86,14 @@ void TrueEditor::setCursorStyle(const QString& styleSheet)
 	}
 }
 
+int TrueEditor::selectedLineCount()
+{
+	auto cursor = textCursor();
+	if (!cursor.hasSelection())
+		return 1;
+	return cursor.selectedText().count("(\U00002029)") + 1;
+}
+
 void TrueEditor::connections()
 {
 	connect(this, &TrueEditor::blockCountChanged, this, [&](int) {
