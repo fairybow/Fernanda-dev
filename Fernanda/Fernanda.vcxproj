@@ -168,6 +168,10 @@
     <QtMoc Include="source\LaunchCop.hpp" />
     <ClInclude Include="source\StatusBar.hpp" />
     <ClInclude Include="source\Stylist.h" />
+    <QtMoc Include="source\tools\AlwaysOnTop.hpp" />
+    <QtMoc Include="source\tools\StayAwake.hpp" />
+    <QtMoc Include="source\tools\PomodoroTimer.hpp" />
+    <ClInclude Include="source\tools\Tool.hpp" />
     <ClInclude Include="source\tree\TreeView.h" />
     <ClInclude Include="source\tree\StyledItemDelegate.hpp" />
     <ClInclude Include="source\user\Settings.hpp" />

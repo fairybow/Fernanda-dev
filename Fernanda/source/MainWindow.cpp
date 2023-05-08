@@ -27,7 +27,7 @@ void MainWindow::setupWidgets()
 {
 	setMenuBar(m_menuBar);
 	setStatusBar(m_statusBar);
-	m_statusBar->addLeftWidget(m_meter);
+	m_statusBar->addWidgets({ m_meter }, { m_pomodoroTimer, m_stayAwake, m_alwaysOnTop });
 	m_menuBar->makeSubmenus();
 	Layout::setCentralWidget(this, m_editor, { 4, 0, 4, 0 });
 }

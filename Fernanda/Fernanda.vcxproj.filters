@@ -61,6 +61,9 @@
     <Filter Include="Resources\External">
       <UniqueIdentifier>{5c6cfbb3-c534-4b22-a326-fc8fcd4122a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Tools">
+      <UniqueIdentifier>{754514d6-3538-451d-897e-36ad4a7af95e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -185,6 +188,15 @@
     <QtMoc Include="source\Meter.h">
       <Filter>Source</Filter>
     </QtMoc>
+    <QtMoc Include="source\tools\AlwaysOnTop.hpp">
+      <Filter>Source\Tools</Filter>
+    </QtMoc>
+    <QtMoc Include="source\tools\StayAwake.hpp">
+      <Filter>Source\Tools</Filter>
+    </QtMoc>
+    <QtMoc Include="source\tools\PomodoroTimer.hpp">
+      <Filter>Source\Tools</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -290,6 +302,9 @@
     </ClInclude>
     <ClInclude Include="source\common\Event.hpp">
       <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\tools\Tool.hpp">
+      <Filter>Source\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

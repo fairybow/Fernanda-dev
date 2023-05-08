@@ -32,17 +32,17 @@ public:
 
 	void addWidgets(QWidget* leftWidget, QWidget* rightWidget)
 	{
-		addWidgets({ leftWidget }, { rightWidget });
+		addWidgets(QWidgetList{ leftWidget }, QWidgetList{ rightWidget });
 	}
 
 	void addLeftWidget(QWidget* leftWidget)
 	{
-		addWidgets({ leftWidget }, QWidgetList{});
+		addWidgets(QWidgetList{ leftWidget }, QWidgetList{});
 	}
 
 	void addRightWidget(QWidget* rightWidget)
 	{
-		addWidgets(QWidgetList{}, { rightWidget });
+		addWidgets(QWidgetList{}, QWidgetList{ rightWidget });
 	}
 
 private:
