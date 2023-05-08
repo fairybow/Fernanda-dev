@@ -61,6 +61,7 @@ private:
 	const bool m_isDev;
 
 	void makeActionGroups();
+	void makeBespokeActionGroups();
 	void setSelectedGroupAction(ActionGroup* actionGroup, const StdFsPath& path);
 	void view();
 	void help();

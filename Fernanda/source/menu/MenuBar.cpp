@@ -4,6 +4,7 @@ MenuBar::MenuBar(const char* name, bool isDev, QWidget* parent)
 	: Widget(name, parent), m_isDev(isDev)
 {
 	makeActionGroups();
+	makeBespokeActionGroups();
 }
 
 void MenuBar::makeSubmenus()
@@ -12,7 +13,7 @@ void MenuBar::makeSubmenus()
 	help();
 }
 
-void MenuBar::makeActionGroups()
+void MenuBar::makeActionGroups() // check that `user_data_path` can be empty
 {
 	auto user_data_path = emit getUserDataPath();
 	m_actionGroups[EDITOR_THEMES] = ActionGroup::fromQrc(QRC_EDITOR,
@@ -23,6 +24,7 @@ void MenuBar::makeActionGroups()
 			emit askStyleEditor(Path::toStdFs(selection->data()));
 
 		});
+
 	m_actionGroups[WINDOW_THEMES] = ActionGroup::fromQrc(QRC_MAIN_WINDOW,
 		".fernanda_window", user_data_path, this, [&] {
 
@@ -31,11 +33,10 @@ void MenuBar::makeActionGroups()
 			emit askStyleWindow(Path::toStdFs(selection->data()));
 
 		});
+}
 
-	// check that `user_data_path` can be empty
-
-	// bespokes
-
+void MenuBar::makeBespokeActionGroups()
+{
 	ActionGroup::BespokeList tab_stops;
 	tab_stops << ActionGroup::bespoke(20, "20 pixels");
 	tab_stops << ActionGroup::bespoke(40, "40 pixels");
