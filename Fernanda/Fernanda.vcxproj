@@ -140,6 +140,7 @@
     <ClCompile Include="source\tree\TreeView.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="unused\LaunchCop.hpp" />
     <QtMoc Include="source\editor\Editor.h" />
     <QtMoc Include="source\editor\TrueEditor.h" />
     <ClInclude Include="source\Archiver.hpp" />
@@ -165,7 +166,6 @@
     <ClInclude Include="source\preview\WebEnginePage.hpp" />
     <ClInclude Include="source\preview\WebEngineView.hpp" />
     <ClInclude Include="source\splitter\SplitterHandle.hpp" />
-    <QtMoc Include="source\LaunchCop.hpp" />
     <ClInclude Include="source\StatusBar.hpp" />
     <ClInclude Include="source\Stylist.h" />
     <QtMoc Include="source\tools\AlwaysOnTop.hpp" />

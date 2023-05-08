@@ -64,6 +64,9 @@
     <Filter Include="Source\Tools">
       <UniqueIdentifier>{754514d6-3538-451d-897e-36ad4a7af95e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Unused">
+      <UniqueIdentifier>{b22f5103-7bb4-40fb-a537-6136200f6f0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -161,9 +164,6 @@
     <QtMoc Include="source\Indicator.h">
       <Filter>Source</Filter>
     </QtMoc>
-    <QtMoc Include="source\LaunchCop.hpp">
-      <Filter>Source</Filter>
-    </QtMoc>
     <QtMoc Include="source\common\StatusBarButton.hpp">
       <Filter>Source\Common</Filter>
     </QtMoc>
@@ -196,6 +196,9 @@
     </QtMoc>
     <QtMoc Include="source\tools\PomodoroTimer.hpp">
       <Filter>Source\Tools</Filter>
+    </QtMoc>
+    <QtMoc Include="unused\LaunchCop.hpp">
+      <Filter>Unused</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
