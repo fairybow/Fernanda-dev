@@ -52,7 +52,6 @@ private:
 	void connections();
 	void editorConnections();
 	void meterConnections();
-	void toolButtonConnections();
 	//void previewConnections();
 	void menuBarConnections();
 	void menuBarConfigConnections();

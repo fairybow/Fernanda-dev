@@ -14,18 +14,17 @@ class PomodoroTimer : public ToolButton
 	Q_OBJECT
 
 public:
-	PomodoroTimer(const QString& text, QMainWindow* mainWindow, QWidget* parent = nullptr, int defaultSecondsCountdown = 1500)
-		: ToolButton(text, parent), m_text(text), m_window(mainWindow), m_backupCountdown(defaultSecondsCountdown)
+	PomodoroTimer(const QString& text, QMainWindow* mainWindow, QWidget* parent = nullptr, int defaultSecondsCountdown = defaultInterval())
+		: ToolButton(text, parent), m_text(text), m_window(mainWindow), m_interval(defaultSecondsCountdown)
 	{
 		m_timer->setTimerType(Qt::PreciseTimer);
 		connect(m_timer, &QTimer::timeout, this, &PomodoroTimer::countdownDisplay);
 		connect(this, &PomodoroTimer::toggled, this, &PomodoroTimer::startCountdown);
 	}
 
-	void setCountdown(int seconds) { m_countdown = qBound(30, seconds, 3600); }
+	static int defaultInterval() { return 1500; };
 
-signals:
-	int getCurrentDefault();
+	void setCountdown(int seconds) { m_interval = qBound(30, seconds, 3600); }
 
 protected:
 	virtual void mousePressEvent(QMouseEvent* event) override
@@ -37,18 +36,10 @@ protected:
 
 private:
 	const QString m_text;
-	const int m_backupCountdown;
+	int m_interval;
 	int m_countdown = 0;
 	QMainWindow* m_window;
 	QTimer* m_timer = new QTimer(this);
-
-	int currentDefaultCountdown()
-	{
-		auto default_value = m_backupCountdown;
-		if (emit getCurrentDefault() > 0)
-			default_value = emit getCurrentDefault();
-		return default_value;
-	}
 
 	const QString time(int seconds)
 	{
@@ -75,7 +66,7 @@ private:
 		if (!checked) {
 			setText(m_text);
 			m_timer->stop();
-			m_countdown = currentDefaultCountdown();
+			m_countdown = m_interval;
 			return true;
 		}
 		return false;
@@ -83,7 +74,7 @@ private:
 
 	bool pauseOrResumeIfRunning()
 	{
-		if (m_countdown > 0 && m_countdown < currentDefaultCountdown()) {
+		if (m_countdown > 0 && m_countdown < m_interval) {
 			m_timer->isActive()
 				? m_timer->stop()
 				: m_timer->start(1000);
@@ -107,7 +98,7 @@ private slots:
 	void startCountdown(bool checked)
 	{
 		if (isStopping(checked)) return;
-		m_countdown = currentDefaultCountdown();
+		m_countdown = m_interval;
 		m_timer->start(1000);
 	}
 };

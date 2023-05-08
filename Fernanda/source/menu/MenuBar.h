@@ -41,8 +41,13 @@ public:
 	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; };
 	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; };
 
-	void setSelectedEditorTheme(const StdFsPath& path) { setSelectedGroupAction(m_actionGroups[EDITOR_THEMES], path); };
-	void setSelectedWindowTheme(const StdFsPath& path) { setSelectedGroupAction(m_actionGroups[WINDOW_THEMES], path); };
+	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[EDITOR_THEMES], path); };
+	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[WINDOW_THEMES], path); };
+	void setSelectedTabStop(int pixels) { setGroupSelectedAction(m_actionGroups[TABS], pixels); };
+	void setSelectedWrapMode(const QString& mode) { setGroupSelectedAction(m_actionGroups[WRAPS], mode); };
+	void setSelectedIndicatorPosition(const QString& position) { setGroupSelectedAction(m_actionGroups[INDICATOR_POS], position); };
+	void setSelectedPreviewType(const QString& type) { setGroupSelectedAction(m_actionGroups[PREVIEW], type); };
+	void setSelectedPomodoroTime(int timeInSeconds) { setGroupSelectedAction(m_actionGroups[POMODORO], timeInSeconds); };
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();
@@ -62,7 +67,7 @@ private:
 
 	void makeActionGroups();
 	void makeBespokeActionGroups();
-	void setSelectedGroupAction(ActionGroup* actionGroup, const StdFsPath& path);
+	//void setSelectedGroupAction(ActionGroup* actionGroup, const StdFsPath& path);
 	void view();
 	void help();
 	void addActionsToBoxes(QComboBox* comboBox, ActionGroup* actionGroup);
@@ -76,6 +81,18 @@ private:
 	QAction* selectedIndicatorPosition() const { return m_actionGroups.at(INDICATOR_POS)->checkedAction(); }
 	QAction* selectedPreviewType() const { return m_actionGroups.at(PREVIEW)->checkedAction(); }
 	QAction* selectedPomodoroTime() const { return m_actionGroups.at(POMODORO)->checkedAction(); }
+
+	template<typename T>
+	void setGroupSelectedAction(ActionGroup* actionGroup, T value)
+	{
+		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
+			auto action = actionGroup->actions().at(i);
+			if (action->data().value<T>() == value) {
+				action->setChecked(true);
+				return;
+			}
+		}
+	}
 
 private slots:
 	void appearanceDialog();

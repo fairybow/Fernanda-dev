@@ -36,7 +36,6 @@ void MainWindow::connections()
 {
 	editorConnections();
 	meterConnections();
-	toolButtonConnections();
 	//previewConnections();
 	menuBarConnections();
 	menuBarConfigConnections();
@@ -73,28 +72,22 @@ void MainWindow::meterConnections()
 		});
 }
 
-void MainWindow::toolButtonConnections()
-{
-	connect(m_pomodoroTimer, &PomodoroTimer::getCurrentDefault, this, [&] {
-		return 0; // from MenuBar
-		});
-
-	/* I think this is unneeded? */
-}
-
 /*void MainWindow::previewConnections()
 {
 	//
 }*/
 
-void MainWindow::menuBarConnections()
+void MainWindow::menuBarConnections() // things MenuBar needs in order to function
 {
 	connect(m_menuBar, &MenuBar::getUserDataPath, this, [&] {
 		return m_user->dataFolder();
 		});
+	connect(m_menuBar, &MenuBar::getUserFont, this, [&] {
+		return loadConfig<QFont>("font", m_editor, m_editor->defaulFont());
+		});
 }
 
-void MainWindow::menuBarConfigConnections()
+void MainWindow::menuBarConfigConnections() // things that *other things* need in order to function, controlled via menu
 {
 	connect(m_menuBar, &MenuBar::askStyleEditor, this, [&](StdFsPath path) {
 		saveConfigPassthrough(
@@ -115,24 +108,18 @@ void MainWindow::menuBarConfigConnections()
 			});
 		});
 
+	//void askSetTabStop(int pixels);
+	//void askSetWrapMode(const QString& mode);
+	//void askSetIndicatorPosition(const QString& position);
+	//void askSetPreviewType(const QString& type);
+	//void askSetPomodoroTime(int timeInSeconds);
+
 	connect(m_menuBar, &MenuBar::askSetPomodoroTime, this, [&](int timeInSeconds) {
 		saveConfigPassthrough(
 			timeInSeconds, "time", m_pomodoroTimer, [&] {
 				m_pomodoroTimer->setCountdown(timeInSeconds);
-
-				/* I think this is perhaps all that is needed. Slot to set countdown time (which should maybe then overwrite backup time)  */
 			});
-		});
-
-	/*void askSetTabStop(int pixels);
-	void askSetWrapMode(const QString& mode);
-	void askSetIndicatorPosition(const QString& position);
-	void askSetPreviewType(const QString& type);
-	void askSetPomodoroTime(int timeInSeconds);*/
-
-	connect(m_menuBar, &MenuBar::getUserFont, this, [&] {
-		return loadConfig<QFont>("font", m_editor, m_editor->defaulFont());
-		});
+		});	
 }
 
 void MainWindow::loadConfigs()
@@ -174,6 +161,26 @@ void MainWindow::loadMenuBarConfigs()
 		m_menuBar->setSelectedWindowTheme(fs_window_theme);
 
 		}, Path::toQString(m_menuBar->defaultWindowTheme()));
+
+	//void askSetTabStop(int pixels);
+	//void askSetWrapMode(const QString& mode);
+	//void askSetIndicatorPosition(const QString& position);
+	//void askSetPreviewType(const QString& type);
+	//void askSetPomodoroTime(int timeInSeconds);
+
+	/*loadConfigPassthrough<>("", m_obj, [&]() {
+
+		//m_obj->
+		//m_obj->set
+
+		}, m_obj->defaultValue());*/
+
+	loadConfigPassthrough<int>("time", m_pomodoroTimer, [&](int timeInSeconds) {
+
+		m_pomodoroTimer->setCountdown(timeInSeconds);
+		m_menuBar->setSelectedPomodoroTime(timeInSeconds);
+
+		}, m_pomodoroTimer->defaultInterval());
 }
 
 void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
