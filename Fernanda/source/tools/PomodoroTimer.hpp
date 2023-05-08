@@ -101,7 +101,7 @@ private slots:
 			setChecked(false);
 			return;
 		}
-		--m_countdown;
+		Event::delayCall(this, [&] { --m_countdown; });
 	}
 
 	void startCountdown(bool checked)

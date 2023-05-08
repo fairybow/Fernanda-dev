@@ -1,3 +1,26 @@
+/*
+Requires Qt Network
+
+Usage:
+```
+#include "LaunchCop.hpp"
+
+#include <QApplication>
+#include <QMainWindow>
+
+int main(int argc, char* argv[])
+{
+	LaunchCop launch_cop("Program name", "QMainWindow object name");
+	if (launch_cop.exists())
+		return 0;
+	QApplication app(argc, argv);
+	QMainWindow main_window;
+	main_window.show();
+	return app.exec();
+}
+```
+*/
+
 #pragma once
 
 #include <QApplication>
@@ -5,7 +28,6 @@
 #include <QLocalSocket>
 #include <QMainWindow>
 #include <QString>
-#include <QWidget>
 
 #ifdef Q_OS_WINDOWS
 
