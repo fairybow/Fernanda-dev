@@ -34,7 +34,7 @@ private:
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_isDev, this);
 	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
 	Indicator* m_indicator = new Indicator("Indicator", this);
-	Editor* m_editor = new Editor("Editor", QFont("mononoki", 16));
+	Editor* m_editor = new Editor("Editor", QFont("mononoki", 12));
 	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");
 	QLabel* m_spacer = new QLabel; // handle this in subclassed statusbar
@@ -57,7 +57,7 @@ private:
 	void closeEventConfigs(Qt::WindowStates priorState);
 
 	template<typename T>
-	inline void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction = nullptr)
+	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction = nullptr)
 	{
 		if (configurableAction)
 			configurableAction();
@@ -65,14 +65,14 @@ private:
 	}
 
 	template<typename T>
-	inline void loadConfigPassthrough(const QString& valueKey, QObject* associatedObject, std::function<void(T)> configurableAction, T fallbackValue = T())
+	void loadConfigPassthrough(const QString& valueKey, QObject* associatedObject, std::function<void(T)> configurableAction, T fallbackValue = T())
 	{
 		auto value = m_user->load<T>(valueKey, associatedObject, fallbackValue);
 		configurableAction(value);
 	}
 
 	template<typename T>
-	inline T loadConfig(const QString& valueKey, QObject* associatedObject, T fallbackValue = T())
+	T loadConfig(const QString& valueKey, QObject* associatedObject, T fallbackValue = T())
 	{
 		return m_user->load<T>(valueKey, associatedObject, fallbackValue);
 	}

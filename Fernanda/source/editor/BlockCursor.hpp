@@ -16,7 +16,7 @@ class BlockCursor : public QObject
 	Q_OBJECT
 
 public:
-	inline BlockCursor(QPlainTextEdit* editor)
+	BlockCursor(QPlainTextEdit* editor)
 		: QObject(editor), m_editor(editor)
 	{
 		connections();
@@ -24,7 +24,7 @@ public:
 		Event::delayCall(this, [&] { emit startBlinkTimer(); });
 	}
 
-	inline void paint()
+	void paint()
 	{
 		QPainter painter(m_editor->viewport());
 		auto current_char = currentChar();
@@ -37,10 +37,10 @@ public:
 		}
 	}
 
-	inline QString color() const { return m_colorHex; };
-	inline QString underColor() const { return m_underColorHex; };
-	inline void setColor(const QString& color) { m_colorHex = color; };
-	inline void setUnderColor(const QString& color) { m_underColorHex = color; };
+	QString color() const { return m_colorHex; };
+	QString underColor() const { return m_underColorHex; };
+	void setColor(const QString& color) { m_colorHex = color; };
+	void setUnderColor(const QString& color) { m_underColorHex = color; };
 
 signals:
 	bool getHasBlock();
@@ -54,7 +54,7 @@ private:
 	bool m_blinkVisible = true;
 	QTimer* m_blinkTimer = new QTimer(this);
 
-	inline void connections()
+	void connections()
 	{
 		connect(this, &BlockCursor::startBlinkTimer, this, [&] {
 			if (!emit getHasBlink()) return;
@@ -71,14 +71,14 @@ private:
 			});
 	}
 
-	inline const QChar currentChar()
+	const QChar currentChar()
 	{
 		auto text = m_editor->textCursor().block().text();
 		auto current_position = m_editor->textCursor().positionInBlock();
 		return (current_position < text.size()) ? text.at(current_position) : QChar();
 	}
 
-	inline const QRect shapeFromTrueCursor(const QChar& currentChar)
+	const QRect shapeFromTrueCursor(const QChar& currentChar)
 	{
 		if (emit getHasBlock()) {
 			QFontMetrics metrics(m_editor->font());
@@ -93,7 +93,7 @@ private:
 		return result;
 	}
 
-	inline const QColor colorBasedOnState(bool under = false)
+	const QColor colorBasedOnState(bool under = false)
 	{
 		QColor color;
 		(!m_blinkVisible && emit getHasBlink())

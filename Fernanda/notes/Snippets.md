@@ -62,13 +62,13 @@ struct QFsPath
 ### User
 ```
 template<typename T>
-inline void save(T value)
+void save(T value)
 {
 	qDebug() << value;
 }
 
 template<typename... Args>
-inline void save(Args... args)
+void save(Args... args)
 {
 	(qDebug() << ... << args);
 }
@@ -77,7 +77,7 @@ inline void save(Args... args)
 ### MainWindow
 ```
 template<typename T, typename U>
-inline U saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<U()> configurableAction)
+U saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<U()> configurableAction)
 {
 	U result = configurableAction();
 	m_user->save(value, valueKey, associatedObject);
@@ -95,14 +95,14 @@ struct SignalArgs
 };
 
 template<typename T>
-inline void emitAndSave(void (MainWindow::* signal)(T), T value)
+void emitAndSave(void (MainWindow::* signal)(T), T value)
 {
 	emit(this->*signal)(value);
 	m_user->save(value);
 }
 
 template<typename T, typename U>
-inline void emitAndSave(void (MainWindow::* signal)(T), T value, U* pointerCheck)
+void emitAndSave(void (MainWindow::* signal)(T), T value, U* pointerCheck)
 {
 	if (pointerCheck == nullptr) return;
 	emit(this->*signal)(value);
@@ -110,7 +110,7 @@ inline void emitAndSave(void (MainWindow::* signal)(T), T value, U* pointerCheck
 }
 
 template<typename... Args>
-inline void emitAndSave(void (MainWindow::* signal)(Args...), SignalArgs<Args...> signalArgs)
+void emitAndSave(void (MainWindow::* signal)(Args...), SignalArgs<Args...> signalArgs)
 {
 	std::apply([&, signal](Args... args) { emit(this->*signal)(args...); }, signalArgs.args);
 	std::apply([&](Args... args) { m_user->save(args...); }, signalArgs.args);
@@ -119,7 +119,7 @@ inline void emitAndSave(void (MainWindow::* signal)(Args...), SignalArgs<Args...
 //
 
 template<typename T>
-inline void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey, QObject* namedObject = nullptr)
+void emitAndSave(void (MainWindow::* signal)(T), T value, const QString& valueKey, QObject* namedObject = nullptr)
 {
 	emit(this->*signal)(value);
 	QString group_prefix;
