@@ -44,7 +44,7 @@ private:
 	QLabel* m_positions = new QLabel(this);
 	QLabel* m_counts = new QLabel(this);
 	QLabel* m_separator = new QLabel(this);
-	StatusBarButton* m_refresh = new StatusBarButton("StatusBarButton", "\U0001F504", this);
+	StatusBarButton* m_refresh = new StatusBarButton("StatusBarButton", "\U0001F504", this, 0.4);
 
 	bool m_hasAutoCount = true;
 	bool m_hasLinePosition = true;

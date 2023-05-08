@@ -40,7 +40,7 @@ private:
 	Editor* m_editor = new Editor("Editor", QFont("mononoki", 12));
 	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");
-	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer("\U0001F345", this, m_statusBar); // add pausing
+	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer("\U0001F345", this, m_statusBar);
 	StayAwake* m_stayAwake = new StayAwake("\U0001F375", m_statusBar);
 	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop("\U0001F4CC", this, m_statusBar);
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
