@@ -38,6 +38,7 @@ void MenuBar::makeActionGroups() // check that `user_data_path` can be empty
 void MenuBar::makeBespokeActionGroups()
 {
 	// make this a slider:
+	// set a qBound for default tab stop values in Editor, like in PomomodoroTimer
 	ActionGroup::BespokeList tab_stops;
 	tab_stops << ActionGroup::bespoke(20, "20 pixels");
 	tab_stops << ActionGroup::bespoke(40, "40 pixels");
