@@ -6,10 +6,10 @@
 class SplitterHandle : public QSplitterHandle
 {
 public:
-	inline SplitterHandle(Qt::Orientation orientation, QSplitter* parent)
+	SplitterHandle(Qt::Orientation orientation, QSplitter* parent)
 		: QSplitterHandle(orientation, parent) {}
 
-	inline virtual QSize sizeHint() const override
+	virtual QSize sizeHint() const override
 	{
 		auto size = QSplitterHandle::sizeHint();
 		auto i = 5;

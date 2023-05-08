@@ -21,10 +21,10 @@ class LaunchCop : public QObject
 	Q_OBJECT
 
 public:
-	inline LaunchCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow", bool forceFocus = false)
+	LaunchCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow", bool forceFocus = false)
 		: m_lockString(lockString), m_windowName(mainWindowObjectName), m_forceFocus(forceFocus) {}
 
-	inline bool exists() const
+	bool exists() const
 	{
 		if (serverExists())
 			return true;
@@ -37,7 +37,7 @@ private:
 	const QString m_windowName;
 	const bool m_forceFocus;
 
-	inline bool serverExists() const
+	bool serverExists() const
 	{
 		QLocalSocket socket;
 		socket.connectToServer(m_lockString);
@@ -46,7 +46,7 @@ private:
 		return exists;
 	}
 
-	inline void startServer() const
+	void startServer() const
 	{
 		auto server = new QLocalServer;
 		server->setSocketOptions(QLocalServer::WorldAccessOption);
@@ -55,7 +55,7 @@ private:
 	}
 
 private slots:
-	inline void focusMainWindow() const
+	void focusMainWindow() const
 	{
 		auto top_widgets = QApplication::topLevelWidgets();
 		auto it = std::find_if(top_widgets.begin(), top_widgets.end(),

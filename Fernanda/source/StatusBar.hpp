@@ -7,9 +7,11 @@
 class StatusBar : public Widget<QStatusBar>
 {
 public:
-	inline StatusBar(const char* name, QWidget* parent = nullptr)
+	StatusBar(const char* name, QWidget* parent = nullptr)
 		: Widget(name, parent)
 	{
 		setMaximumHeight(22);
 	}
+
+
 };

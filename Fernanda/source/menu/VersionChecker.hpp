@@ -16,7 +16,7 @@ class VersionChecker : public QObject
 	Q_OBJECT
 
 public:
-	static inline const QString check(const QString& user, const QString& repo, const QString& version, QWidget* parent)
+	static const QString check(const QString& user, const QString& repo, const QString& version, QWidget* parent)
 	{
 		auto urls = makeGitHubUrls(user, repo);
 		QString text = {
@@ -52,14 +52,14 @@ public:
 	}
 
 private:
-	static inline std::pair<QUrl, QUrl> makeGitHubUrls(const QString& user, const QString& repo)
+	static std::pair<QUrl, QUrl> makeGitHubUrls(const QString& user, const QString& repo)
 	{
 		auto releases_api = QUrl("https://api.github.com/repos/" + user + "/" + repo + "/releases");
 		auto releases = QUrl("https://github.com/" + user + "/" + repo + "/releases");
 		return std::make_pair(releases_api, releases);
 	}
 
-	static inline QVariantMap latestVersion(const QUrl& url, QWidget* parent)
+	static QVariantMap latestVersion(const QUrl& url, QWidget* parent)
 	{
 		QEventLoop loop;
 		auto manager = new QNetworkAccessManager(parent);
