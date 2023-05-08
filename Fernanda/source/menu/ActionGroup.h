@@ -21,19 +21,20 @@ public:
 	using QActionGroup::QActionGroup;
 
 	struct Bespoke {
-		const QVariant data;
+		QVariant data;
 		QString label = QString();
 	};
 
 	using BespokeList = QVector<Bespoke>;
 
+	static Bespoke bespoke(QVariant data, QString label = QString());
 	static ActionGroup* fromQrc(const QStringList& qrcPaths, QStringList extensions,
 		StdFsPathList systemPaths = {}, QObject* parent = nullptr, std::function<void()> slot = nullptr);
 	static ActionGroup* fromQrc(const QString& qrcPath, QString extension,
 		StdFsPath systemPath = StdFsPath(), QObject* parent = nullptr, std::function<void()> slot = nullptr);
 	static ActionGroup* fromQrc(const QStringList& qrcPaths, QStringList extensions,
 		StdFsPath systemPath = StdFsPath(), QObject* parent = nullptr, std::function<void()> slot = nullptr);
-	static ActionGroup* bespoke(BespokeList entries, QObject* parent = nullptr,
+	static ActionGroup* fromBespoke(BespokeList entries, QObject* parent = nullptr,
 		std::function<void()> slot = nullptr);
 
 private:

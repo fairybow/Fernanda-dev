@@ -36,6 +36,68 @@ void MenuBar::makeActionGroups()
 
 	// bespokes
 
+	ActionGroup::BespokeList tab_stops;
+	tab_stops << ActionGroup::bespoke(20, "20 pixels");
+	tab_stops << ActionGroup::bespoke(40, "40 pixels");
+	tab_stops << ActionGroup::bespoke(60, "60 pixels");
+	tab_stops << ActionGroup::bespoke(80, "80 pixels");
+	m_actionGroups[TABS] = ActionGroup::fromBespoke(tab_stops, this, [&] {
+
+		auto selection = selectedTabStop();
+		if (selection == nullptr) return;
+		emit askSetTabStop(selection->data().toInt());
+
+		});
+
+	ActionGroup::BespokeList wrap_modes;
+	wrap_modes << ActionGroup::bespoke("NoWrap", "No wrap");
+	wrap_modes << ActionGroup::bespoke("WordWrap", "Wrap at word boundaries");
+	wrap_modes << ActionGroup::bespoke("WrapAnywhere", "Wrap anywhere");
+	wrap_modes << ActionGroup::bespoke("WrapAt", "Wrap at word boundaries or anywhere");
+	m_actionGroups[WRAPS] = ActionGroup::fromBespoke(wrap_modes, this, [&] {
+
+		auto selection = selectedWrapMode();
+		if (selection == nullptr) return;
+		emit askSetWrapMode(selection->data().toString());
+
+		});
+
+	ActionGroup::BespokeList indicator_positions;
+	indicator_positions << ActionGroup::bespoke("Top");
+	indicator_positions << ActionGroup::bespoke("Bottom");
+	m_actionGroups[INDICATOR_POS] = ActionGroup::fromBespoke(indicator_positions, this, [&] {
+
+		auto selection = selectedIndicatorPosition();
+		if (selection == nullptr) return;
+		emit askSetIndicatorPosition(selection->data().toString());
+
+		});
+
+	ActionGroup::BespokeList preview_types;
+	preview_types << ActionGroup::bespoke("Fountain");
+	preview_types << ActionGroup::bespoke("Markdown");
+	m_actionGroups[PREVIEW] = ActionGroup::fromBespoke(preview_types, this, [&] {
+
+		auto selection = selectedPreviewType();
+		if (selection == nullptr) return;
+		emit askSetPreviewType(selection->data().toString());
+
+		});
+
+	ActionGroup::BespokeList pomodoro_times;
+	pomodoro_times << ActionGroup::bespoke(300, "5 minutes");
+	pomodoro_times << ActionGroup::bespoke(600, "10 minutes");
+	pomodoro_times << ActionGroup::bespoke(900, "15 minutes");
+	pomodoro_times << ActionGroup::bespoke(1200, "20 minutes");
+	pomodoro_times << ActionGroup::bespoke(1500, "25 minutes");
+	pomodoro_times << ActionGroup::bespoke(1800, "30 minutes");
+	m_actionGroups[POMODORO] = ActionGroup::fromBespoke(pomodoro_times, this, [&] {
+
+		auto selection = selectedPomodoroTime();
+		if (selection == nullptr) return;
+		emit askSetPomodoroTime(selection->data().toInt());
+
+		});
 }
 
 void MenuBar::setSelectedGroupAction(ActionGroup* actionGroup, const StdFsPath& path)

@@ -1,5 +1,10 @@
 #include "ActionGroup.h"
 
+ActionGroup::Bespoke ActionGroup::bespoke(QVariant data, QString label)
+{
+	return Bespoke{ data, label };
+}
+
 ActionGroup* ActionGroup::fromQrc(const QStringList& qrcPaths, QStringList extensions,
 	StdFsPathList systemPaths, QObject* parent, std::function<void()> slot)
 {
@@ -28,7 +33,7 @@ ActionGroup* ActionGroup::fromQrc(const QStringList& qrcPaths, QStringList exten
 	return fromQrc(qrcPaths, extensions, StdFsPathList{ systemPath }, parent, slot);
 }
 
-ActionGroup* ActionGroup::bespoke(BespokeList entries, QObject* parent,
+ActionGroup* ActionGroup::fromBespoke(BespokeList entries, QObject* parent,
 	std::function<void()> slot)
 {
 	auto group = new ActionGroup(parent);

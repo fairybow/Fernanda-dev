@@ -19,6 +19,11 @@
 
 constexpr char EDITOR_THEMES[] = "editor_themes";
 constexpr char WINDOW_THEMES[] = "window_themes";
+constexpr char TABS[] = "tab_stops";
+constexpr char WRAPS[] = "wrap_modes";
+constexpr char INDICATOR_POS[] = "indicator_alignments";
+constexpr char PREVIEW[] = "preview_types";
+constexpr char POMODORO[] = "pomodoro_times";
 constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
 constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
 
@@ -45,6 +50,11 @@ signals:
 	void askStyleEditor(StdFsPath path);
 	void askStyleWindow(StdFsPath path);
 	void askChangeFont(const QFont& font);
+	void askSetTabStop(int pixels);
+	void askSetWrapMode(const QString& mode);
+	void askSetIndicatorPosition(const QString& position);
+	void askSetPreviewType(const QString& type);
+	void askSetPomodoroTime(int timeInSeconds);
 
 private:
 	std::map<QString, ActionGroup*> m_actionGroups;
@@ -60,6 +70,11 @@ private:
 
 	QAction* selectedEditorTheme() const { return m_actionGroups.at(EDITOR_THEMES)->checkedAction(); }
 	QAction* selectedWindowTheme() const { return m_actionGroups.at(WINDOW_THEMES)->checkedAction(); }
+	QAction* selectedTabStop() const { return m_actionGroups.at(TABS)->checkedAction(); }
+	QAction* selectedWrapMode() const { return m_actionGroups.at(WRAPS)->checkedAction(); }
+	QAction* selectedIndicatorPosition() const { return m_actionGroups.at(INDICATOR_POS)->checkedAction(); }
+	QAction* selectedPreviewType() const { return m_actionGroups.at(PREVIEW)->checkedAction(); }
+	QAction* selectedPomodoroTime() const { return m_actionGroups.at(POMODORO)->checkedAction(); }
 
 private slots:
 	void appearanceDialog();

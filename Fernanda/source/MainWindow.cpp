@@ -113,6 +113,19 @@ void MainWindow::menuBarConfigConnections()
 			});
 		});
 
+	connect(m_menuBar, &MenuBar::askSetPomodoroTime, this, [&](int timeInSeconds) {
+		saveConfigPassthrough(
+			timeInSeconds, "time", m_pomodoroTimer, [&] {
+				m_pomodoroTimer->setCountdown(timeInSeconds);
+			});
+		});
+
+	/*void askSetTabStop(int pixels);
+	void askSetWrapMode(const QString& mode);
+	void askSetIndicatorPosition(const QString& position);
+	void askSetPreviewType(const QString& type);
+	void askSetPomodoroTime(int timeInSeconds);*/
+
 	connect(m_menuBar, &MenuBar::getUserFont, this, [&] {
 		return loadConfig<QFont>("font", m_editor, m_editor->defaulFont());
 		});
