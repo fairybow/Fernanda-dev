@@ -59,6 +59,6 @@ private:
 	void updatePositions();
 	bool toggleVisibility(QLabel* label, bool hasAnything);
 
-	bool hasAnyCount() { return toggleVisibility(m_counts, (m_hasLineCount || m_hasWordCount || m_hasCharCount)); }
-	bool hasEitherPosition() { return toggleVisibility(m_positions, (m_hasLinePosition || m_hasColumnPosition)); }
+	inline bool hasAnyCount() { return toggleVisibility(m_counts, (m_hasLineCount || m_hasWordCount || m_hasCharCount)); }
+	inline bool hasEitherPosition() { return toggleVisibility(m_positions, (m_hasLinePosition || m_hasColumnPosition)); }
 };

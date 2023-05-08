@@ -9,7 +9,7 @@
 class WebEngineView : public QWebEngineView
 {
 public:
-	WebEngineView(WebDocument& content, QWidget* parent)
+	inline WebEngineView(WebDocument& content, QWidget* parent)
 		: QWebEngineView(parent)
 	{
 		setContextMenuPolicy(Qt::NoContextMenu);

@@ -9,7 +9,7 @@ public:
 	using QWebEnginePage::QWebEnginePage;
 
 protected:
-	virtual bool acceptNavigationRequest(const QUrl& url, NavigationType, bool) override
+	inline virtual bool acceptNavigationRequest(const QUrl& url, NavigationType, bool) override
 	{
 		if (url.scheme() == QStringLiteral("qrc"))
 			return true;

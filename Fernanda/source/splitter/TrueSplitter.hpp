@@ -17,7 +17,7 @@ public:
 		Shown
 	};
 
-	TrueSplitter(QWidget* parent)
+	inline TrueSplitter(QWidget* parent)
 		: QSplitter(parent) {}
 
 signals:
@@ -25,14 +25,14 @@ signals:
 	void widgetVisibilityChanged(int widgetIndex, WidgetWas visibility);
 
 protected:
-	virtual void childEvent(QChildEvent* event) override
+	inline virtual void childEvent(QChildEvent* event) override
 	{
 		if (event->type() == QEvent::ChildAdded && event->child()->isWidgetType())
 			event->child()->installEventFilter(this);
 		QSplitter::childEvent(event);
 	}
 
-	virtual bool eventFilter(QObject* object, QEvent* event) override
+	inline virtual bool eventFilter(QObject* object, QEvent* event) override
 	{
 		if (event->type() == QEvent::Show || event->type() == QEvent::Hide) {
 			for (auto i = 0; i < count(); ++i) {
@@ -45,11 +45,11 @@ protected:
 		return QSplitter::eventFilter(object, event);
 	}
 
-	virtual void resizeEvent(QResizeEvent* event) override
+	inline virtual void resizeEvent(QResizeEvent* event) override
 	{
 		QSplitter::resizeEvent(event);
 		emit resized();
 	}
 
-	virtual QSplitterHandle* createHandle() override { return new SplitterHandle(orientation(), this); }
+	inline virtual QSplitterHandle* createHandle() override { return new SplitterHandle(orientation(), this); }
 };

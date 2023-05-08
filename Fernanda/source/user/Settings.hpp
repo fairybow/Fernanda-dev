@@ -18,7 +18,7 @@ class Settings
 
 public:
 	template<typename T>
-	static typename std::enable_if<IsNotStdFs<T>::value, void>::type
+	static inline typename std::enable_if<IsNotStdFs<T>::value, void>::type
 		save(StdFsPath config, const QString& groupPrefix, const QString& valueKey, T value)
 	{
 		auto ini = iniFile(config, groupPrefix);
@@ -27,7 +27,7 @@ public:
 	}
 
 	template<typename T>
-	static T load(StdFsPath config, const QString& groupPrefix, const QString& valueKey, T fallbackValue = T())
+	static inline T load(StdFsPath config, const QString& groupPrefix, const QString& valueKey, T fallbackValue = T())
 	{
 		auto ini = iniFile(config, groupPrefix);
 		auto variant_value = ini->value(valueKey, QVariant::fromValue(fallbackValue));
@@ -36,7 +36,7 @@ public:
 	}
 
 private:
-	static std::unique_ptr<QSettings> iniFile(StdFsPath config, const QString& groupPrefix)
+	static inline std::unique_ptr<QSettings> iniFile(StdFsPath config, const QString& groupPrefix)
 	{
 		auto ini = std::make_unique<QSettings>(
 			Path::toQString(config), QSettings::IniFormat);

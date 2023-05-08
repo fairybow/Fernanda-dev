@@ -57,7 +57,7 @@ private:
 	void closeEventConfigs(Qt::WindowStates priorState);
 
 	template<typename T>
-	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction = nullptr)
+	inline void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction = nullptr)
 	{
 		if (configurableAction)
 			configurableAction();
@@ -65,14 +65,14 @@ private:
 	}
 
 	template<typename T>
-	void loadConfigPassthrough(const QString& valueKey, QObject* associatedObject, std::function<void(T)> configurableAction, T fallbackValue = T())
+	inline void loadConfigPassthrough(const QString& valueKey, QObject* associatedObject, std::function<void(T)> configurableAction, T fallbackValue = T())
 	{
 		auto value = m_user->load<T>(valueKey, associatedObject, fallbackValue);
 		configurableAction(value);
 	}
 
 	template<typename T>
-	T loadConfig(const QString& valueKey, QObject* associatedObject, T fallbackValue = T())
+	inline T loadConfig(const QString& valueKey, QObject* associatedObject, T fallbackValue = T())
 	{
 		return m_user->load<T>(valueKey, associatedObject, fallbackValue);
 	}

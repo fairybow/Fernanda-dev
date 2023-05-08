@@ -33,8 +33,8 @@ public:
 
 	void makeSubmenus();
 
-	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; };
-	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; };
+	inline StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; };
+	inline StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; };
 
 	void setSelectedEditorTheme(const StdFsPath& path) { setSelectedGroupAction(m_actionGroups[EDITOR_THEMES], path); };
 	void setSelectedWindowTheme(const StdFsPath& path) { setSelectedGroupAction(m_actionGroups[WINDOW_THEMES], path); };
@@ -58,8 +58,8 @@ private:
 	void addFontDialog(QMdiArea* multiDocArea);
 	LiveFontDialog* fontDialog();
 
-	QAction* selectedEditorTheme() const { return m_actionGroups.at(EDITOR_THEMES)->checkedAction(); }
-	QAction* selectedWindowTheme() const { return m_actionGroups.at(WINDOW_THEMES)->checkedAction(); }
+	inline QAction* selectedEditorTheme() const { return m_actionGroups.at(EDITOR_THEMES)->checkedAction(); }
+	inline QAction* selectedWindowTheme() const { return m_actionGroups.at(WINDOW_THEMES)->checkedAction(); }
 
 private slots:
 	void appearanceDialog();

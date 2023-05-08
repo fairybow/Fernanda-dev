@@ -11,7 +11,7 @@ class Indicator : public Widget<>
 	Q_OBJECT
 
 public:
-	Indicator(const char* name, QWidget* parent)
+	inline Indicator(const char* name, QWidget* parent)
 		: Widget(name, parent)
 	{
 		buildProgressBar(name);
@@ -23,7 +23,7 @@ private:
 	QProgressBar* m_progressBar = new QProgressBar(this);
 	QTimer* m_timer = new QTimer(this);
 
-	void buildProgressBar(const char* name)
+	inline void buildProgressBar(const char* name)
 	{
 		m_progressBar->setObjectName(name);
 		m_progressBar->setMaximumHeight(3);

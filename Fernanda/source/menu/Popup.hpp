@@ -12,7 +12,7 @@ class Popup : public QObject
 	Q_OBJECT
 
 public:
-	static bool about(QWidget* parent)
+	static inline bool about(QWidget* parent)
 	{
 		auto perform_update = false;
 		QMessageBox box(parent);
@@ -27,7 +27,7 @@ public:
 		return perform_update;
 	}
 
-	static void version(QWidget* parent)
+	static inline void version(QWidget* parent)
 	{
 		QMessageBox box(parent);
 		standardize(box, VersionChecker::check(VER_COMPANYNAME_STR, VER_PRODUCTNAME_STR, VER_FILEVERSION_STR, parent), true, true);
@@ -35,7 +35,7 @@ public:
 	}
 
 private:
-	static void standardize(QMessageBox& box, const QString& text, bool hasOk = true, bool hasIcon = false, const QString& title = "Fernanda")
+	static inline void standardize(QMessageBox& box, const QString& text, bool hasOk = true, bool hasIcon = false, const QString& title = "Fernanda")
 	{
 		box.setWindowTitle(title);
 		box.setText(text);

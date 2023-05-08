@@ -21,8 +21,8 @@ public:
 
 	void initialize(QVector<double> fallbacks, int centralWidgetIndex);
 
-	QByteArray saveState() const { return m_trueSplitter->saveState(); }
-	bool restoreState(const QByteArray& state) const { return m_trueSplitter->restoreState(state); }
+	inline QByteArray saveState() const { return m_trueSplitter->saveState(); }
+	inline bool restoreState(const QByteArray& state) const { return m_trueSplitter->restoreState(state); }
 
 signals:
 	QRect askWindowSize();
@@ -56,12 +56,12 @@ private:
 	QVector<int> verifyFallbacks(QVector<double> fallbacks);
 	void moveButtons();
 
-	bool is(Alignment alignment, int widgetIndex) const { return findAlignment(widgetIndex) == alignment; }
-	bool isCentral(int widgetIndex) const { return is(Alignment::Central, widgetIndex); }
-	bool isLeft(int widgetIndex) const { return is(Alignment::Left, widgetIndex); }
-	bool isRight(int widgetIndex) const { return is(Alignment::Right, widgetIndex); }
+	inline bool is(Alignment alignment, int widgetIndex) const { return findAlignment(widgetIndex) == alignment; }
+	inline bool isCentral(int widgetIndex) const { return is(Alignment::Central, widgetIndex); }
+	inline bool isLeft(int widgetIndex) const { return is(Alignment::Left, widgetIndex); }
+	inline bool isRight(int widgetIndex) const { return is(Alignment::Right, widgetIndex); }
 
-	int associatedHandle(int widgetIndex) { return (widgetIndex < m_centralWidgetIndex) ? widgetIndex + 1 : widgetIndex; }
+	inline int associatedHandle(int widgetIndex) { return (widgetIndex < m_centralWidgetIndex) ? widgetIndex + 1 : widgetIndex; }
 
 private slots:
 	void showOrHideButtons(int widgetIndex, TrueSplitter::WidgetWas visibility);

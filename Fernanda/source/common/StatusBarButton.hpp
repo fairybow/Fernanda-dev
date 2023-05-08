@@ -11,7 +11,7 @@ class StatusBarButton : public Widget<QPushButton>
 	Q_OBJECT
 
 public:
-	StatusBarButton(const char* name, const QString& text, QWidget* parent, double defaultOpacity = 0.5)
+	inline StatusBarButton(const char* name, const QString& text, QWidget* parent, double defaultOpacity = 0.5)
 		: Widget(name, parent), m_opacity(defaultOpacity)
 	{
 		installEventFilter(this);
@@ -24,7 +24,7 @@ public:
 	}
 
 protected:
-	virtual bool eventFilter(QObject* object, QEvent* event) override
+	inline virtual bool eventFilter(QObject* object, QEvent* event) override
 	{
 		if (qobject_cast<StatusBarButton*>(object)
 			&& (event->type() == QEvent::Enter || event->type() == QEvent::Leave))

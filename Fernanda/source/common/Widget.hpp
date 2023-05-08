@@ -18,7 +18,7 @@ public:
 	}
 
 	template<typename Sender, typename Receiver, typename Slot, typename... Signals>
-	void connectMultiple(Sender sender, Receiver receiver, Slot slot, Signals... signal)
+	inline void connectMultiple(Sender sender, Receiver receiver, Slot slot, Signals... signal)
 	{
 		(QObject::connect(sender, signal, receiver, slot), ...);
 	}

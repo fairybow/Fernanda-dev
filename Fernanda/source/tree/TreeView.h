@@ -10,7 +10,7 @@
 class TreeView : public Widget<QTreeView>
 {
 public:
-	TreeView(const char* name, QWidget* parent = nullptr)
+	inline TreeView(const char* name, QWidget* parent = nullptr)
 		: Widget(name, parent)
 	{
 		setItemDelegate(m_delegate);
