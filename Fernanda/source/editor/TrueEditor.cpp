@@ -88,11 +88,6 @@ void TrueEditor::setCursorStyle(const QString& styleSheet)
 
 void TrueEditor::connections()
 {
-	lineNumberAreaConnections();
-	cursorConnections();
-
-	//
-
 	connect(this, &TrueEditor::blockCountChanged, this, [&](int) {
 		if (m_lineNumberArea == nullptr) return;
 		updateLineNumberAreaWidth();
@@ -104,11 +99,8 @@ void TrueEditor::connections()
 	connect(this, &TrueEditor::cursorPositionChanged, this, [&] {
 		highlightCurrentLine();
 		});
-}
 
-void TrueEditor::lineNumberAreaConnections()
-{
-
+	cursorConnections();
 }
 
 void TrueEditor::cursorConnections()

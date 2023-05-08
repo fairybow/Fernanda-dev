@@ -39,7 +39,6 @@ private:
 	LineNumberArea* m_lineNumberArea;
 
 	void connections();
-	void lineNumberAreaConnections();
 	void cursorConnections();
 	void highlightCurrentLine();
 	void updateLineNumberArea(const QRect& rect, int dy);

@@ -52,19 +52,9 @@ void Editor::buildScrollBar()
 
 void Editor::connections()
 {
-	cursorConnections();
-	lineNumberAreaConnections();
 	trueEditorConnections();
-}
-
-void Editor::cursorConnections()
-{
-	//
-}
-
-void Editor::lineNumberAreaConnections()
-{
-	//
+	//cursorConnections();
+	//lineNumberAreaConnections();
 }
 
 void Editor::trueEditorConnections()
@@ -79,3 +69,13 @@ void Editor::trueEditorConnections()
 		return m_hasCursorBlock;
 		});
 }
+
+/*void Editor::cursorConnections()
+{
+	//
+}
+
+void Editor::lineNumberAreaConnections()
+{
+	//
+}*/

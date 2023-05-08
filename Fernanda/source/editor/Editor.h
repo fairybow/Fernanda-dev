@@ -5,6 +5,8 @@
 #include "../common/Layout.hpp"
 #include "../common/Widget.hpp"
 #include "TrueEditor.h"
+// potentially move block cursor and lna here and manage
+// the interactions between them with this container class
 
 #include <QFont>
 #include <QLabel>
@@ -46,7 +48,7 @@ private:
 	void setupShadow();
 	void buildScrollBar();
 	void connections();
-	void cursorConnections();
-	void lineNumberAreaConnections();
 	void trueEditorConnections();
+	//void cursorConnections();
+	//void lineNumberAreaConnections();
 };
