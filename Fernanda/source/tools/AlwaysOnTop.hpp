@@ -1,17 +1,17 @@
 #pragma once
 
-#include "Tool.hpp"
+#include "ToolButton.hpp"
 
 #include <QMainWindow>
 #include <QString>
 
-class AlwaysOnTop : public Tool
+class AlwaysOnTop : public ToolButton
 {
 	Q_OBJECT
 
 public:
 	AlwaysOnTop(const QString& text, QMainWindow* mainWindow, QWidget* parent = nullptr)
-		: Tool(text, parent), m_window(mainWindow)
+		: ToolButton(text, parent), m_window(mainWindow)
 	{
 		connect(this, &AlwaysOnTop::toggled, this, &AlwaysOnTop::alwaysOnTop);
 	}

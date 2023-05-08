@@ -303,7 +303,7 @@
     <ClInclude Include="source\common\Event.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
-    <ClInclude Include="source\tools\Tool.hpp">
+    <ClInclude Include="source\tools\ToolButton.hpp">
       <Filter>Source\Tools</Filter>
     </ClInclude>
   </ItemGroup>

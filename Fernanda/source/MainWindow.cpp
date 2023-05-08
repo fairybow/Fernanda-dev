@@ -36,6 +36,7 @@ void MainWindow::connections()
 {
 	editorConnections();
 	meterConnections();
+	toolButtonConnections();
 	//previewConnections();
 	menuBarConnections();
 	menuBarConfigConnections();
@@ -69,6 +70,13 @@ void MainWindow::meterConnections()
 		});
 	connect(m_editor, &Editor::cursorPositionChanged, m_meter, [&] {
 		m_meter->trigger(Meter::Type::Positions);
+		});
+}
+
+void MainWindow::toolButtonConnections()
+{
+	connect(m_pomodoroTimer, &PomodoroTimer::getCurrentDefault, this, [&] {
+		return 0; // from MenuBar
 		});
 }
 

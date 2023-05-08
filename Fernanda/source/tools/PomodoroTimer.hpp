@@ -1,36 +1,54 @@
 #pragma once
 
-#include "Tool.hpp"
+#include "../common/Event.hpp"
+#include "ToolButton.hpp"
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QMouseEvent>
 #include <QString>
 #include <QTimer>
 
-class PomodoroTimer : public Tool
+class PomodoroTimer : public ToolButton
 {
 	Q_OBJECT
 
 public:
 	PomodoroTimer(const QString& text, QMainWindow* mainWindow, QWidget* parent = nullptr, int defaultSecondsCountdown = 1500)
-		: Tool(text, parent), m_text(text), m_window(mainWindow), m_defaultCountdown(defaultSecondsCountdown)
+		: ToolButton(text, parent), m_text(text), m_window(mainWindow), m_backupCountdown(defaultSecondsCountdown)
 	{
 		m_timer->setTimerType(Qt::PreciseTimer);
 		connect(m_timer, &QTimer::timeout, this, &PomodoroTimer::countdownDisplay);
 		connect(this, &PomodoroTimer::toggled, this, &PomodoroTimer::startCountdown);
 	}
 
-	void setCountdown(int seconds) { m_countdown = seconds; }
+	void setCountdown(int seconds) { m_countdown = qBound(30, seconds, 3600); }
 
-/*signals:
-	int resetCountdown();*/
+signals:
+	int getCurrentDefault();
+
+protected:
+	virtual void mousePressEvent(QMouseEvent* event) override
+	{
+		if (event->button() != Qt::RightButton)
+			if (pauseOrResumeIfRunning()) return;
+		ToolButton::mousePressEvent(event);
+	}
 
 private:
 	const QString m_text;
-	const int m_defaultCountdown;
-	int m_countdown = m_defaultCountdown;
+	const int m_backupCountdown;
+	int m_countdown = 0;
 	QMainWindow* m_window;
 	QTimer* m_timer = new QTimer(this);
+
+	int currentDefaultCountdown()
+	{
+		auto default_value = m_backupCountdown;
+		if (emit getCurrentDefault() > 0)
+			default_value = emit getCurrentDefault();
+		return default_value;
+	}
 
 	const QString time(int seconds)
 	{
@@ -52,6 +70,28 @@ private:
 		popup.exec();
 	}
 
+	bool isStopping(bool checked)
+	{
+		if (!checked) {
+			setText(m_text);
+			m_timer->stop();
+			m_countdown = currentDefaultCountdown();
+			return true;
+		}
+		return false;
+	}
+
+	bool pauseOrResumeIfRunning()
+	{
+		if (m_countdown > 0 && m_countdown < currentDefaultCountdown()) {
+			m_timer->isActive()
+				? m_timer->stop()
+				: m_timer->start(1000);
+			return true;
+		}
+		return false;
+	}
+
 private slots:
 	void countdownDisplay()
 	{
@@ -66,12 +106,8 @@ private slots:
 
 	void startCountdown(bool checked)
 	{
-		if (!checked) {
-			setText(m_text);
-			m_timer->stop();
-			m_countdown = /*emit resetCountdown()*/ m_defaultCountdown;
-			return;
-		}
+		if (isStopping(checked)) return;
+		m_countdown = currentDefaultCountdown();
 		m_timer->start(1000);
 	}
 };

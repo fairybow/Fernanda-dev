@@ -5,16 +5,16 @@
 #include <QMouseEvent>
 #include <QString>
 
-class Tool : public StatusBarButton
+class ToolButton : public StatusBarButton
 {
 public:
-	Tool(const QString& text, QWidget* parent = nullptr)
+	ToolButton(const QString& text, QWidget* parent = nullptr)
 		: StatusBarButton("StatusBarButton", text, parent, 0.3)
 	{
 		setCheckable(true);
 	}
 
-	void toggle(bool value)
+	void toggleVisibility(bool value)
 	{
 		if (isChecked())
 			setChecked(false);

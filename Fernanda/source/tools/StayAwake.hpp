@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Tool.hpp"
+#include "ToolButton.hpp"
 
 #include <QString>
 #include <QTimer>
@@ -11,13 +11,13 @@
 
 #endif
 
-class StayAwake : public Tool
+class StayAwake : public ToolButton
 {
 	Q_OBJECT
 
 public:
 	StayAwake(const QString& text, QWidget* parent = nullptr)
-		: Tool(text, parent)
+		: ToolButton(text, parent)
 	{
 		m_timer->setTimerType(Qt::VeryCoarseTimer);
 		connect(this, &StayAwake::toggled, this, &StayAwake::stayAwake);
