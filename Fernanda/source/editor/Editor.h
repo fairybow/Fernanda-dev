@@ -22,6 +22,8 @@ public:
 	void setFocus() { m_trueEditor->setFocus(); }
 
 	QFont defaulFont() const { return m_defaultFont; }
+	int defaulTabStop() const { return 40; }
+
 	void setFont(const QFont& font) { m_trueEditor->setFont(font); }
 	void setReadOnly(bool readOnly) { m_trueEditor->setReadOnly(readOnly); }
 	bool isReadOnly() const { return m_trueEditor->isReadOnly(); }
