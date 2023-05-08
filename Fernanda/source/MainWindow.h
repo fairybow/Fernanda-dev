@@ -37,7 +37,6 @@ private:
 	Editor* m_editor = new Editor("Editor", QFont("mononoki", 12));
 	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");
-	QLabel* m_spacer = new QLabel; // handle this in subclassed statusbar
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 	User* m_user = new User(QCoreApplication::applicationName(), this);
 

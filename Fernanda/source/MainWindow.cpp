@@ -27,8 +27,7 @@ void MainWindow::setupWidgets()
 {
 	setMenuBar(m_menuBar);
 	setStatusBar(m_statusBar);
-	m_statusBar->addPermanentWidget(m_meter, 0);
-	m_statusBar->addPermanentWidget(m_spacer, 1);
+	m_statusBar->addLeftWidget(m_meter);
 	m_menuBar->makeSubmenus();
 	Layout::setCentralWidget(this, m_editor, { 4, 0, 4, 0 });
 }
