@@ -1,8 +1,8 @@
 #pragma once
 
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QMainWindow>
 #include <QMargins>
 #include <QStackedLayout>
@@ -125,24 +125,6 @@ namespace Layout
 	inline void setCentralWidget(QMainWindow* parentWindow, QWidget* widget, Line alignment = Line::Vertically)
 	{
 		setCentralWidgets(parentWindow, QWidgetList{ widget }, QMargins(), alignment);
-	}
-
-	inline QWidget* labeledContainer(const QString& text, QWidgetList widgets,
-		QWidget* parent = nullptr, Line alignment = Line::Vertically, QMargins margins = { 10, 10, 10, 10 })
-	{
-		auto container = new QWidget(parent);
-		auto label = new QLabel;
-		label->setText(text);
-		auto widgets_layout = box(widgets, nullptr, alignment, margins);
-		auto full_layout = box(label, container);
-		full_layout->addLayout(widgets_layout);
-		return container;
-	}
-
-	inline QWidget* labeledContainer(const QString& text, QWidget* widget,
-		QWidget* parent = nullptr, Line alignment = Line::Vertically, QMargins margins = { 10, 10, 10, 10 })
-	{
-		return labeledContainer(text, QWidgetList{ widget }, parent, alignment, margins);
 	}
 
 	inline void setMinAndMaxSize(QWidget* widget, int width, int height)

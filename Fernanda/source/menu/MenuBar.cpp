@@ -129,13 +129,15 @@ void MenuBar::appearanceDialog()
 {
 	QDialog dialog(this);
 
+	// QGroupBox, you dingus
+
 	// Themes
 	auto editor_themes_box = new QComboBox;
 	auto window_themes_box = new QComboBox;
 	addActionsToBoxes(editor_themes_box, m_actionGroups[EDITOR_THEMES]);
 	addActionsToBoxes(window_themes_box, m_actionGroups[WINDOW_THEMES]);
-	auto editor_themes = Layout::labeledContainer("Editor:", editor_themes_box);
-	auto window_themes = Layout::labeledContainer("Window:", window_themes_box);
+	//auto editor_themes = Layout::labeledContainer("Editor:", editor_themes_box);
+	//auto window_themes = Layout::labeledContainer("Window:", window_themes_box);
 	for (auto& themes_box : { editor_themes_box, window_themes_box }) {
 		connect(themes_box, &QComboBox::currentIndexChanged, this, [&](int index) {
 			themes_box->itemData(index).value<QAction*>()->trigger();
@@ -151,26 +153,26 @@ void MenuBar::appearanceDialog()
 	auto tab_stops_slider = new QSlider(Qt::Horizontal);
 	tab_stops_slider->setObjectName(objectName() + "slider");
 	tab_stops_slider->setRange(20, 80);
-	auto tab_stops = Layout::labeledContainer("Tab stop distance:", tab_stops_slider);
+	//auto tab_stops = Layout::labeledContainer("Tab stop distance:", tab_stops_slider);
 
 	// Tools
 	auto pomodoro_times_slider = new Slider(Qt::Horizontal);
 	pomodoro_times_slider->setObjectName(objectName() + "slider");
 	pomodoro_times_slider->setRange(300, 1800);
 	pomodoro_times_slider->setSingleStep(100);
-	auto pomodoro_times = Layout::labeledContainer("Pomodoro interval:", pomodoro_times_slider);
+	//auto pomodoro_times = Layout::labeledContainer("Pomodoro interval:", pomodoro_times_slider);
 
 	// Right side
-	auto right_hand_side = Layout::box({ tab_stops, pomodoro_times }, nullptr);
+	//auto right_hand_side = Layout::box({ tab_stops, pomodoro_times }, nullptr);
 
 	// Left side
-	auto combo_boxes = Layout::labeledContainer("Themes:", { editor_themes, window_themes }, nullptr, Layout::Line::Horizontally);
-	auto left_hand_side = Layout::box({ combo_boxes, font_box_area }, nullptr);
+	//auto combo_boxes = Layout::labeledContainer("Themes:", { editor_themes, window_themes }, nullptr, Layout::Line::Horizontally);
+	//auto left_hand_side = Layout::box({ combo_boxes, font_box_area }, nullptr);
 
 	// Full layout // grid?
 	auto box = Layout::box(nullptr, &dialog, Layout::Line::Horizontally, { 10, 10, 10, 10 });
-	box->addLayout(left_hand_side);
-	box->addLayout(right_hand_side);
+	//box->addLayout(left_hand_side);
+	//box->addLayout(right_hand_side);
 
 	Layout::setMinAndMaxSize(&dialog, 800, 400);
 	// may need to calculate based on these numbers
