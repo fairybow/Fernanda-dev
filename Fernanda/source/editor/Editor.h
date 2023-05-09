@@ -25,7 +25,7 @@ public:
 	int defaulTabStop() const { return 40; }
 
 	void setFont(const QFont& font) { m_trueEditor->setFont(font); }
-	void setTabStopDistance(qreal distance) { m_trueEditor->setTabStopDistance(qBound<qreal>(0, static_cast<int>(distance), 100)); }
+	void setTabStopDistance(qreal distance) { m_trueEditor->setTabStopDistance(qBound<qreal>(0, static_cast<int>(distance), 500)); }
 	void setReadOnly(bool readOnly) { m_trueEditor->setReadOnly(readOnly); }
 	bool isReadOnly() const { return m_trueEditor->isReadOnly(); }
 	QString selectedText() const { return m_trueEditor->textCursor().selectedText(); }

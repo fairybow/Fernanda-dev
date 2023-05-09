@@ -108,18 +108,23 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 			});
 		});
 
-	//void askSetTabStop(int pixels);
+	connect(m_menuBar, &MenuBar::askSetTabStop, this, [&](int pixels) {
+		saveConfigPassthrough(
+			pixels, "tab_stop_distance", m_editor, [&] {
+				m_editor->setTabStopDistance(pixels);
+			});
+		});
+
 	//void askSetWrapMode(const QString& mode);
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
-	//void askSetPomodoroTime(int timeInSeconds);
 
 	connect(m_menuBar, &MenuBar::askSetPomodoroTime, this, [&](int timeInSeconds) {
 		saveConfigPassthrough(
 			timeInSeconds, "time", m_pomodoroTimer, [&] {
 				m_pomodoroTimer->setCountdown(timeInSeconds);
 			});
-		});	
+		});
 }
 
 void MainWindow::loadConfigs()
@@ -162,11 +167,16 @@ void MainWindow::loadMenuBarConfigs()
 
 		}, Path::toQString(m_menuBar->defaultWindowTheme()));
 
-	//void askSetTabStop(int pixels);
+	loadConfigPassthrough<int>("tab_stop_distance", m_editor, [&](int pixels) {
+
+		m_editor->setTabStopDistance(pixels);
+		m_menuBar->setSelectedTabStop(pixels);
+
+		}, 40);
+
 	//void askSetWrapMode(const QString& mode);
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
-	//void askSetPomodoroTime(int timeInSeconds);
 
 	/*loadConfigPassthrough<>("", m_obj, [&]() {
 

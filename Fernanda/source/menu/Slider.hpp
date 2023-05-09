@@ -15,8 +15,8 @@ class Slider : public Widget<>
 	Q_OBJECT
 
 public:
-	Slider(const char* name, Qt::Orientation orientation, QWidget* parent = nullptr, const QString& label = QString(),
-		bool hasDisplay = true, const QString& displayUnit = QString(), int multiplier = 1)
+	Slider(const char* name, Qt::Orientation orientation, QWidget* parent = nullptr,
+		const QString& label = QString(), bool hasDisplay = true, const QString& displayUnit = QString(), int multiplier = 1)
 		: Widget(name, parent),
 		m_displayUnit(displayUnit),
 		m_multiplier(qBound(1, multiplier, 1000)),
@@ -42,6 +42,11 @@ public:
 		setRange(m_slider, bottom, top);
 	}
 
+	void setValue(int value)
+	{
+		m_slider->setValue(value / m_multiplier);
+	}
+
 signals:
 	void valueChanged(int value);
 
@@ -61,7 +66,7 @@ private:
 			m_valueDisplay = new QLabel(this);
 			connect(m_slider, &QSlider::valueChanged, this, [&](int value) {
 
-				auto value_string = QString::number(value);
+				auto value_string = QString::number(value * m_multiplier);
 				auto text = m_displayUnit.isEmpty() ? value_string : QString(value_string + " " + m_displayUnit);
 				m_valueDisplay.value()->setText(text);
 

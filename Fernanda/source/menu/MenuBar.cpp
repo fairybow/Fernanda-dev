@@ -153,14 +153,30 @@ void MenuBar::appearanceDialog()
 	// Editor settings
 	auto editor_box = new QGroupBox(tr("Editor:"));
 	auto tab_stops_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Tab stop distance:", true, "pixels", 10);
-	tab_stops_slider->setRange(1, 10);
+	tab_stops_slider->setRange(1, 30);
+	tab_stops_slider->setValue(m_sliderValues[TABS]);
 	auto editor_layout = Layout::box(tab_stops_slider, editor_box);
 
 	// Tool settings
 	auto tool_box = new QGroupBox(tr("Tools:"));
+	// 3 checkboxes for each tool
 	auto pomodoro_times_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Pomodoro interval:", true, "minutes");
 	pomodoro_times_slider->setRange(1, 60);
+	pomodoro_times_slider->setValue(m_sliderValues[POMODORO] / 60);
 	auto tool_layout = Layout::box(pomodoro_times_slider, tool_box);
+
+	// set initial slider values from ini by setting it to map/key
+
+	connect(tab_stops_slider, &Slider::valueChanged, this, [&](int value) {
+		setSelectedTabStop(value);
+		emit askSetTabStop(value);
+		});
+	connect(pomodoro_times_slider, &Slider::valueChanged, this, [&](int value) {
+		setSelectedPomodoroTime(value * 60);
+		emit askSetPomodoroTime(value * 60);
+		});
+
+	//
 
 	auto full_layout = Layout::grid(nullptr, &dialog);
 
