@@ -161,6 +161,7 @@
     <QtMoc Include="source\menu\VersionChecker.hpp" />
     <QtMoc Include="source\menu\ActionGroup.h" />
     <QtMoc Include="source\Meter.h" />
+    <ClInclude Include="source\menu\Slider.hpp" />
     <ClInclude Include="source\preview\Preview.hpp" />
     <ClInclude Include="source\preview\WebDocument.hpp" />
     <ClInclude Include="source\preview\WebEnginePage.hpp" />

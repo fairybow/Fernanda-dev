@@ -37,24 +37,6 @@ void MenuBar::makeActionGroups() // check that `user_data_path` can be empty
 
 void MenuBar::makeBespokeActionGroups()
 {
-	// make this a slider:
-	// set a qBound for default tab stop values in Editor, like in PomomodoroTimer
-
-	//m_sliderValues[TABS];
-
-	/*ActionGroup::BespokeList tab_stops;
-	tab_stops << ActionGroup::bespoke(20, "20 pixels");
-	tab_stops << ActionGroup::bespoke(40, "40 pixels");
-	tab_stops << ActionGroup::bespoke(60, "60 pixels");
-	tab_stops << ActionGroup::bespoke(80, "80 pixels");
-	m_actionGroups[TABS] = ActionGroup::fromBespoke(tab_stops, this, [&] {
-
-		auto selection = selectedTabStop();
-		if (selection == nullptr) return;
-		emit askSetTabStop(selection->data().toInt());
-
-		});*/
-
 	ActionGroup::BespokeList wrap_modes;
 	wrap_modes << ActionGroup::bespoke("NoWrap", "No wrap");
 	wrap_modes << ActionGroup::bespoke("WordWrap", "Wrap at word boundaries");
@@ -89,23 +71,6 @@ void MenuBar::makeBespokeActionGroups()
 		emit askSetPreviewType(selection->data().toString());
 
 		});
-
-	//m_sliderValues[TABS];
-
-	/*ActionGroup::BespokeList pomodoro_times;
-	pomodoro_times << ActionGroup::bespoke(300, "5 minutes");
-	pomodoro_times << ActionGroup::bespoke(600, "10 minutes");
-	pomodoro_times << ActionGroup::bespoke(900, "15 minutes");
-	pomodoro_times << ActionGroup::bespoke(1200, "20 minutes");
-	pomodoro_times << ActionGroup::bespoke(1500, "25 minutes");
-	pomodoro_times << ActionGroup::bespoke(1800, "30 minutes");
-	m_actionGroups[POMODORO] = ActionGroup::fromBespoke(pomodoro_times, this, [&] {
-
-		auto selection = selectedPomodoroTime();
-		if (selection == nullptr) return;
-		emit askSetPomodoroTime(selection->data().toInt());
-
-		});*/
 }
 
 void MenuBar::view()
@@ -165,8 +130,22 @@ void MenuBar::appearanceDialog()
 	QDialog dialog(this);
 	auto editor_themes_box = new QComboBox;
 	auto window_themes_box = new QComboBox;
+	auto tab_stops_slider = new QSlider(Qt::Horizontal);
+	auto pomodoro_times_slider = new Slider(Qt::Horizontal);
+
+	tab_stops_slider->setObjectName(objectName() + "slider");
+	pomodoro_times_slider->setObjectName(objectName() + "slider");
+
+	tab_stops_slider->setRange(20, 80);
+	pomodoro_times_slider->setRange(300, 1800);
+
+	pomodoro_times_slider->setSingleStep(100);
+
+	//
+
 	addActionsToBoxes(editor_themes_box, m_actionGroups[EDITOR_THEMES]);
 	addActionsToBoxes(window_themes_box, m_actionGroups[WINDOW_THEMES]);
+
 	auto editor_themes_container = Layout::labeledContainer("Editor theme:", editor_themes_box);
 	auto window_themes_container = Layout::labeledContainer("Window theme:", window_themes_box);
 	for (auto& themes_box : { editor_themes_box, window_themes_box }) {
@@ -174,12 +153,17 @@ void MenuBar::appearanceDialog()
 			themes_box->itemData(index).value<QAction*>()->trigger();
 			});
 	}
+
 	auto font_box_area = new QMdiArea;
 	addFontDialog(font_box_area);
+
 	auto layout = Layout::grid(nullptr, &dialog, { 10, 10, 10, 10 });
+
 	auto combo_boxes_layout = Layout::box({ editor_themes_container, window_themes_container }, nullptr, Layout::Line::Horizontally);
+
 	layout->addLayout(combo_boxes_layout, 0, 0);
 	layout->addWidget(font_box_area, 1, 0);
-	Layout::setMinAndMaxSize(&dialog, 600, 400);
+	Layout::setMinAndMaxSize(&dialog, 800, 600);
+
 	dialog.exec();
 }

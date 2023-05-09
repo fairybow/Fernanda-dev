@@ -5,6 +5,7 @@
 #include "ActionGroup.h"
 #include "LiveFontDialog.hpp"
 #include "Popup.hpp"
+#include "Slider.hpp"
 
 #include <QComboBox>
 #include <QDesktopServices>
@@ -13,6 +14,7 @@
 #include <QMdiArea>
 #include <QMdiSubWindow>
 #include <QVector>
+#include <QWidgetAction>
 
 #include <map>
 #include <filesystem>

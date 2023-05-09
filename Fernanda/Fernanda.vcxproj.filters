@@ -309,6 +309,9 @@
     <ClInclude Include="source\tools\ToolButton.hpp">
       <Filter>Source\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="source\menu\Slider.hpp">
+      <Filter>Source\Menu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">
