@@ -38,16 +38,16 @@ public:
 
 	void makeSubmenus();
 
-	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; }; // Set in Editor?
-	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; }; // Set in MW?
+	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; } // Set in Editor?
+	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; } // Set in MW?
 
-	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[EDITOR_THEMES], path); };
-	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[WINDOW_THEMES], path); };
-	void setSelectedTabStop(int pixels) { setGroupSelectedAction(m_actionGroups[TABS], pixels); }; // switch to m_sliderValues
-	void setSelectedWrapMode(const QString& mode) { setGroupSelectedAction(m_actionGroups[WRAPS], mode); };
-	void setSelectedIndicatorPosition(const QString& position) { setGroupSelectedAction(m_actionGroups[INDICATOR_POS], position); };
-	void setSelectedPreviewType(const QString& type) { setGroupSelectedAction(m_actionGroups[PREVIEW], type); };
-	void setSelectedPomodoroTime(int timeInSeconds) { setGroupSelectedAction(m_actionGroups[POMODORO], timeInSeconds); }; // switch to m_sliderValues
+	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[EDITOR_THEMES], path); }
+	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[WINDOW_THEMES], path); }
+	void setSelectedTabStop(int pixels) { setGroupSelectedAction(m_actionGroups[TABS], pixels); } // switch to m_sliderValues
+	void setSelectedWrapMode(const QString& mode) { setGroupSelectedAction(m_actionGroups[WRAPS], mode); }
+	void setSelectedIndicatorPosition(const QString& position) { setGroupSelectedAction(m_actionGroups[INDICATOR_POS], position); }
+	void setSelectedPreviewType(const QString& type) { setGroupSelectedAction(m_actionGroups[PREVIEW], type); }
+	void setSelectedPomodoroTime(int timeInSeconds) { setGroupSelectedAction(m_actionGroups[POMODORO], timeInSeconds); } // switch to m_sliderValues
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();
@@ -68,7 +68,6 @@ private:
 
 	void makeActionGroups();
 	void makeBespokeActionGroups();
-	//void setSelectedGroupAction(ActionGroup* actionGroup, const StdFsPath& path);
 	void view();
 	void help();
 	void addActionsToBoxes(QComboBox* comboBox, ActionGroup* actionGroup);
@@ -83,12 +82,33 @@ private:
 	QAction* selectedPreviewType() const { return m_actionGroups.at(PREVIEW)->checkedAction(); }
 	QAction* selectedPomodoroTime() const { return m_actionGroups.at(POMODORO)->checkedAction(); } // switch to m_sliderValues
 
-	template<typename T>
-	void setGroupSelectedAction(ActionGroup* actionGroup, T value)
+	void setGroupSelectedAction(ActionGroup* actionGroup, const StdFsPath& value)
 	{
 		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
 			auto action = actionGroup->actions().at(i);
-			if (action->data().value<T>() == value) {
+			if (Path::toStdFs(action->data()) == value) {
+				action->setChecked(true);
+				return;
+			}
+		}
+	}
+
+	void setGroupSelectedAction(ActionGroup* actionGroup, const QString& value)
+	{
+		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
+			auto action = actionGroup->actions().at(i);
+			if (action->data().toString() == value) {
+				action->setChecked(true);
+				return;
+			}
+		}
+	}
+
+	void setGroupSelectedAction(ActionGroup* actionGroup, int value) // won't need soon
+	{
+		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
+			auto action = actionGroup->actions().at(i);
+			if (action->data().toInt() == value) {
 				action->setChecked(true);
 				return;
 			}

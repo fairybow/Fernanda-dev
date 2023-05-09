@@ -172,10 +172,10 @@ void MenuBar::appearanceDialog()
 	}
 	auto font_box_area = new QMdiArea;
 	addFontDialog(font_box_area);
-	auto layout = Layout::box(nullptr, &dialog, Layout::Line::Vertically, {10, 10, 10, 10});
+	auto layout = Layout::grid(nullptr, &dialog, { 10, 10, 10, 10 });
 	auto combo_boxes_layout = Layout::box({ editor_themes_container, window_themes_container }, nullptr, Layout::Line::Horizontally);
-	layout->addLayout(combo_boxes_layout);
-	layout->addWidget(font_box_area);
+	layout->addLayout(combo_boxes_layout, 0, 0);
+	layout->addWidget(font_box_area, 1, 0);
 	Layout::setMinAndMaxSize(&dialog, 600, 400);
 	dialog.exec();
 }

@@ -37,10 +37,10 @@ public:
 		}
 	}
 
-	QString color() const { return m_colorHex; };
-	QString underColor() const { return m_underColorHex; };
-	void setColor(const QString& color) { m_colorHex = color; };
-	void setUnderColor(const QString& color) { m_underColorHex = color; };
+	QString color() const { return m_colorHex; }
+	QString underColor() const { return m_underColorHex; }
+	void setColor(const QString& color) { m_colorHex = color; }
+	void setUnderColor(const QString& color) { m_underColorHex = color; }
 
 signals:
 	bool getHasBlock();

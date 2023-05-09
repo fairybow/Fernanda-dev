@@ -13,7 +13,7 @@ public:
 		: QWebEngineView(parent)
 	{
 		setContextMenuPolicy(Qt::NoContextMenu);
-		m_channel->registerObject(QStringLiteral("content"), &content);
+		m_channel->registerObject("content", &content);
 		m_page->setWebChannel(m_channel);
 		setPage(m_page);
 	}

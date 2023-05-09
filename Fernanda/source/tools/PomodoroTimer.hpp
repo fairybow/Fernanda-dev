@@ -22,7 +22,7 @@ public:
 		connect(this, &PomodoroTimer::toggled, this, &PomodoroTimer::startCountdown);
 	}
 
-	static int defaultInterval() { return 1500; };
+	static int defaultInterval() { return 1500; }
 
 	void setCountdown(int seconds) { m_interval = qBound(30, seconds, 3600); }
 

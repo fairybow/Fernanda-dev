@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMainWindow>
@@ -37,6 +38,13 @@ namespace Layout
 			stack->setStackingMode(QStackedLayout::StackAll);
 			add(stack, widgets);
 		}
+
+		inline void setGridProperties(QGridLayout* grid, QWidgetList widgets, QMargins margins)
+		{
+			grid->setContentsMargins(margins);
+			grid->setSpacing(0);
+			add(grid, widgets);
+		}
 	}
 
 	inline QBoxLayout* box(QWidgetList widgets = {}, QWidget* parent = nullptr,
@@ -70,6 +78,20 @@ namespace Layout
 	inline QStackedLayout* stack(QWidget* widget, QWidget* parent = nullptr)
 	{
 		return stack(QWidgetList{ widget }, parent);
+	}
+
+	inline QGridLayout* grid(QWidgetList widgets, QWidget* parent = nullptr, QMargins margins = QMargins())
+	{
+		auto layout = new QGridLayout(parent);
+		setGridProperties(layout, widgets, margins);
+		if (parent != nullptr)
+			parent->setLayout(layout);
+		return layout;
+	}
+
+	inline QGridLayout* grid(QWidget* widget, QWidget* parent = nullptr, QMargins margins = QMargins())
+	{
+		return grid(QWidgetList{ widget }, parent, margins);
 	}
 
 	inline void setCentralWidgets(QMainWindow* parentWindow, QWidgetList widgets, QMargins margins, Line alignment = Line::Vertically)
@@ -135,5 +157,8 @@ namespace Layout
 			widget->setAttribute(Qt::WA_TransparentForMouseEvents);
 	}
 
-	inline void transpareForMouse(QWidget* widget) { transpareForMouse({ widget }); }
+	inline void transpareForMouse(QWidget* widget)
+	{
+		transpareForMouse({ widget });
+	}
 }
