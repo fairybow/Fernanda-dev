@@ -133,9 +133,9 @@ namespace Layout
 		auto container = new QWidget(parent);
 		auto label = new QLabel;
 		label->setText(text);
-		QWidgetList amended_widgets = { label };
-		amended_widgets << widgets;
-		auto layout = box(amended_widgets, container, alignment, margins);
+		auto widgets_layout = box(widgets, nullptr, alignment, margins);
+		auto full_layout = box(label, container);
+		full_layout->addLayout(widgets_layout);
 		return container;
 	}
 
