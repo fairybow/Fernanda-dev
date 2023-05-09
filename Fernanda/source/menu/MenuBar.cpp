@@ -128,24 +128,12 @@ LiveFontDialog* MenuBar::fontDialog()
 void MenuBar::appearanceDialog()
 {
 	QDialog dialog(this);
+
+	// Themes
 	auto editor_themes_box = new QComboBox;
 	auto window_themes_box = new QComboBox;
-	auto tab_stops_slider = new QSlider(Qt::Horizontal);
-	auto pomodoro_times_slider = new Slider(Qt::Horizontal);
-
-	tab_stops_slider->setObjectName(objectName() + "slider");
-	pomodoro_times_slider->setObjectName(objectName() + "slider");
-
-	tab_stops_slider->setRange(20, 80);
-	pomodoro_times_slider->setRange(300, 1800);
-
-	pomodoro_times_slider->setSingleStep(100);
-
-	//
-
 	addActionsToBoxes(editor_themes_box, m_actionGroups[EDITOR_THEMES]);
 	addActionsToBoxes(window_themes_box, m_actionGroups[WINDOW_THEMES]);
-
 	auto editor_themes_container = Layout::labeledContainer("Editor theme:", editor_themes_box);
 	auto window_themes_container = Layout::labeledContainer("Window theme:", window_themes_box);
 	for (auto& themes_box : { editor_themes_box, window_themes_box }) {
@@ -154,16 +142,38 @@ void MenuBar::appearanceDialog()
 			});
 	}
 
+	// Misc.
+	auto tab_stops_slider = new QSlider(Qt::Horizontal);
+	tab_stops_slider->setObjectName(objectName() + "slider");
+	tab_stops_slider->setRange(20, 80);
+	auto tab_stops_container = Layout::labeledContainer("Settings:", tab_stops_slider);
+
+	// Tools
+	auto pomodoro_times_slider = new Slider(Qt::Horizontal);
+	pomodoro_times_slider->setObjectName(objectName() + "slider");
+	pomodoro_times_slider->setRange(300, 1800);
+	pomodoro_times_slider->setSingleStep(100);
+	auto pomodoro_times_container = Layout::labeledContainer("Tools:", pomodoro_times_slider);
+
+	// Font box
 	auto font_box_area = new QMdiArea;
 	addFontDialog(font_box_area);
 
-	auto layout = Layout::grid(nullptr, &dialog, { 10, 10, 10, 10 });
+	// Right side
+	auto settings_layout = Layout::box({ tab_stops_container, pomodoro_times_container }, nullptr);
 
+	// Left side
+	auto left_hand_layout = Layout::box(nullptr, nullptr);
 	auto combo_boxes_layout = Layout::box({ editor_themes_container, window_themes_container }, nullptr, Layout::Line::Horizontally);
+	left_hand_layout->addLayout(combo_boxes_layout);
+	left_hand_layout->addWidget(font_box_area);
 
-	layout->addLayout(combo_boxes_layout, 0, 0);
-	layout->addWidget(font_box_area, 1, 0);
-	Layout::setMinAndMaxSize(&dialog, 800, 600);
+	// Full layout // grid?
+	auto full_layout = Layout::box(nullptr, &dialog, Layout::Line::Horizontally, { 10, 10, 10, 10 });
+	full_layout->addLayout(left_hand_layout);
+	full_layout->addLayout(settings_layout);
+
+	Layout::setMinAndMaxSize(&dialog, 1000, 400);
 
 	dialog.exec();
 }

@@ -151,6 +151,11 @@ namespace Layout
 		widget->setMaximumSize(width, height);
 	}
 
+	inline void setMinAndMaxSize(QWidget* widget, int sides)
+	{
+		setMinAndMaxSize(widget, sides, sides);
+	}
+
 	inline void transpareForMouse(QWidgetList widgets)
 	{
 		for (auto& widget : widgets)

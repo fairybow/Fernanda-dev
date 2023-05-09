@@ -13,10 +13,10 @@ namespace Fx
 		return effect;
 	}
 
-	inline QGraphicsOpacityEffect* opacify(double qreal = 0.5, QObject* parent = nullptr)
+	inline QGraphicsOpacityEffect* opacify(double opacity = 0.5, QObject* parent = nullptr)
 	{
 		auto effect = new QGraphicsOpacityEffect(parent);
-		effect->setOpacity(qreal);
+		effect->setOpacity(opacity); 
 		return effect;
 	}
 }
