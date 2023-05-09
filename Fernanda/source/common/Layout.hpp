@@ -147,4 +147,12 @@ namespace Layout
 	{
 		transpareForMouse({ widget });
 	}
+
+	inline void setUniformSpacing(QVector<QLayout*> layouts, int spacing = 5)
+	{
+		for (auto& layout : layouts) {
+			layout->setContentsMargins(spacing, spacing, spacing, spacing);
+			layout->setSpacing(spacing);
+		}
+	}
 }

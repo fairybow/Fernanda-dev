@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QComboBox>
+#include <QString>
 #include <QStyleOptionComboBox>
 #include <QStylePainter>
 

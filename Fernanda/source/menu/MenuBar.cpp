@@ -130,7 +130,7 @@ void MenuBar::appearanceDialog()
 	QDialog dialog(this);
 
 	// Themes
-	auto themes_box = new QGroupBox(tr("Themes:"), &dialog);
+	auto themes_box = new QGroupBox(tr("Themes:"));
 	auto editor_themes_combo_box = new ComboBox("Editor");
 	auto window_themes_combo_box = new ComboBox("Window");
 	addActionsToBoxes(editor_themes_combo_box, m_actionGroups[EDITOR_THEMES]);
@@ -140,41 +140,46 @@ void MenuBar::appearanceDialog()
 			combo_box->itemData(index).value<QAction*>()->trigger();
 			});
 	}
-	auto themes_layout = Layout::box({ editor_themes_combo_box, window_themes_combo_box }, themes_box, Layout::Line::Horizontally, { 10, 10, 10, 10});
+	auto themes_layout = Layout::box({ editor_themes_combo_box, window_themes_combo_box }, themes_box, Layout::Line::Horizontally);
 
 	// Font box
-	/*auto font_box = new QGroupBox(tr("Font:"), &dialog);
+	auto font_box = new QGroupBox(tr("Font:"));
 	auto font_box_area = new QMdiArea;
 	addFontDialog(font_box_area);
-	//font_box_area->setFixedWidth(400);
+	auto font_layout = Layout::box(font_box_area, font_box);
+	font_box_area->setFixedWidth(400);
 
-	// Misc.
-	auto tab_stops_slider = new QSlider(Qt::Horizontal);
-	tab_stops_slider->setObjectName(objectName() + "slider");
-	tab_stops_slider->setRange(20, 80);
-	//auto tab_stops = Layout::labeledContainer("Tab stop distance:", tab_stops_slider);
+	// Editor settings
+	auto editor_box = new QGroupBox(tr("Editor:"));
+	auto tab_stops_slider = new Slider(Qt::Horizontal, nullptr, "Tab stop distance:");
+	//tab_stops_slider->setObjectName(objectName() + "slider");
+	//tab_stops_slider->setRange(20, 80);
+	auto editor_layout = Layout::box(tab_stops_slider, editor_box);
 
-	// Tools
-	auto pomodoro_times_slider = new Slider(Qt::Horizontal);
-	pomodoro_times_slider->setObjectName(objectName() + "slider");
-	pomodoro_times_slider->setRange(300, 1800);
-	pomodoro_times_slider->setSingleStep(100);
-	//auto pomodoro_times = Layout::labeledContainer("Pomodoro interval:", pomodoro_times_slider);
+	// Tool settings
+	auto tool_box = new QGroupBox(tr("Tools:"));
+	auto pomodoro_times_slider = new Slider(Qt::Horizontal, nullptr, "Pomodoro interval:");
+	//pomodoro_times_slider->setObjectName(objectName() + "slider");
+	//pomodoro_times_slider->setRange(300, 1800);
+	//pomodoro_times_slider->setSingleStep(100);
+	auto tool_layout = Layout::box(pomodoro_times_slider, tool_box);
 
-	// Right side
-	//auto right_hand_side = Layout::box({ tab_stops, pomodoro_times }, nullptr);
 
-	// Left side
-	//auto combo_boxes = Layout::labeledContainer("Themes:", { editor_themes, window_themes }, nullptr, Layout::Line::Horizontally);
-	//auto left_hand_side = Layout::box({ combo_boxes, font_box_area }, nullptr);
 
-	// Full layout // grid?
-	auto box = Layout::box(nullptr, &dialog, Layout::Line::Horizontally, { 10, 10, 10, 10 });
-	//box->addLayout(left_hand_side);
-	//box->addLayout(right_hand_side);*/
+
+	//auto full_layout = Layout::box({ themes_box, font_box }, &dialog);
+	//auto full_layout = Layout::box({ themes_box, font_box }, &dialog);
+	//auto full_layout = Layout::box({ themes_box, font_box }, &dialog);
+
+
+	auto full_layout = Layout::grid(nullptr, &dialog);
+
+	full_layout->addWidget(themes_box, 0, 0);
+	full_layout->addWidget(font_box, 1, 0);
+	full_layout->addWidget(editor_box, 0, 1);
 
 	Layout::setMinAndMaxSize(&dialog, 800, 400);
-	// may need to calculate based on these numbers
+	Layout::setUniformSpacing({ themes_layout, font_layout, editor_layout, tool_layout, full_layout });
 
 	dialog.exec();
 }
