@@ -1,48 +1,58 @@
 #pragma once
 
-#include <QFontMetrics>
+#include "../common/Layout.hpp"
+
+#include <QLabel>
 #include <QSlider>
 #include <QString>
-#include <QStyleOptionSlider>
+#include <QVector>
 
-class Slider : public QSlider
+#include <optional>
+
+class Slider : public QWidget
 {
 public:
-	Slider(Qt::Orientation orientation, QWidget* parent = nullptr, const QString& idleText = QString(), int min = 0, int max = 100)
-		: QSlider(orientation, parent), m_idleText(idleText)
+	Slider(Qt::Orientation orientation, QWidget* parent = nullptr, const QString& label = QString(),
+		bool hasDisplay = true, int min = 0, int max = 100)
+		: QWidget(parent), m_slider(new QSlider(orientation, this))
 	{
+		// set starting value/valueDisplay
+		// spacing
+
 		setRange(min, max);
+
+		if (!label.isEmpty())
+			m_label = new QLabel(label, this);
+
+		if (hasDisplay) {
+			m_valueDisplay = new QLabel(this);
+			connect(m_slider, &QSlider::valueChanged, this, [&](int value) {
+				m_valueDisplay.value()->setText(QString::number(value));
+				});
+		}
+
+		QWidgetList widgets;
+
+		if (m_label.has_value()) widgets.append(m_label.value());
+		widgets << m_slider;
+		if (m_valueDisplay.has_value()) widgets.append(m_valueDisplay.value());
+
+		Layout::box(widgets, this, Layout::Line::Horizontally);
+	}
+
+	static void setRange(QSlider* slider, int bottom, int top)
+	{
+		slider->setMinimum(bottom);
+		slider->setMaximum(top);
 	}
 
 	void setRange(int bottom, int top)
 	{
-		setMinimum(bottom);
-		setMaximum(top);
-	}
-
-protected:
-	virtual void paintEvent(QPaintEvent* event)
-	{
-		QSlider::paintEvent(event);
-		QPainter painter(this);
-		painter.setPen(Qt::black);
-		auto display_value = value();
-		auto display = m_idleText + " " + QString::number(display_value);
-
-		QRect slider_rect = rect();
-		QFontMetrics font_metrics(font());
-		auto text_width = font_metrics.horizontalAdvance(display);
-		auto x = (slider_rect.width() - text_width) / 2;
-
-		QStyleOptionSlider option;
-		initStyleOption(&option);
-		auto handle_rect = style()->subControlRect(QStyle::CC_Slider, &option, QStyle::SC_SliderHandle, this);
-		auto text_height = font_metrics.height();
-		auto y = (handle_rect.top() + text_height) / 2;
-
-		painter.drawText(x, y, display);
+		setRange(m_slider, bottom, top);
 	}
 
 private:
-	const QString m_idleText;
+	QSlider* m_slider;
+	std::optional<QLabel*> m_label;
+	std::optional<QLabel*> m_valueDisplay;
 };

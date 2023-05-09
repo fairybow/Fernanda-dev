@@ -5,15 +5,21 @@
 #include <QStyleOptionComboBox>
 #include <QStylePainter>
 
+#include <optional>
+
 class ComboBox : public QComboBox
 {
 public:
-	ComboBox(const QString& idleText = QString(), QWidget* parent = nullptr)
-		: QComboBox(parent), m_idleText(idleText) {}
+	ComboBox(QWidget* parent = nullptr) : QComboBox(parent) {}
+	ComboBox(const QString& idleText, QWidget* parent = nullptr) : QComboBox(parent), m_idleText(idleText) {}
 
 protected:
 	virtual void paintEvent(QPaintEvent* event)
 	{
+		if (m_idleText.isEmpty()) {
+			QComboBox::paintEvent(event);
+			return;
+		}
 		QStylePainter painter(this);
 		QStyleOptionComboBox option;
 		initStyleOption(&option);

@@ -131,8 +131,8 @@ void MenuBar::appearanceDialog()
 
 	// Themes
 	auto themes_box = new QGroupBox(tr("Themes:"));
-	auto editor_themes_combo_box = new ComboBox("Editor");
-	auto window_themes_combo_box = new ComboBox("Window");
+	auto editor_themes_combo_box = new ComboBox;
+	auto window_themes_combo_box = new ComboBox;
 	addActionsToBoxes(editor_themes_combo_box, m_actionGroups[EDITOR_THEMES]);
 	addActionsToBoxes(window_themes_combo_box, m_actionGroups[WINDOW_THEMES]);
 	for (auto& combo_box : { editor_themes_combo_box, window_themes_combo_box }) {
@@ -147,7 +147,6 @@ void MenuBar::appearanceDialog()
 	auto font_box_area = new QMdiArea;
 	addFontDialog(font_box_area);
 	auto font_layout = Layout::box(font_box_area, font_box);
-	font_box_area->setFixedWidth(400);
 
 	// Editor settings
 	auto editor_box = new QGroupBox(tr("Editor:"));
@@ -174,12 +173,15 @@ void MenuBar::appearanceDialog()
 
 	auto full_layout = Layout::grid(nullptr, &dialog);
 
-	full_layout->addWidget(themes_box, 0, 0);
-	full_layout->addWidget(font_box, 1, 0);
-	full_layout->addWidget(editor_box, 0, 1);
+	full_layout->addWidget(themes_box, 0, 0, 1, 2);
+	full_layout->addWidget(font_box, 1, 0, 3, 2);
+	full_layout->addWidget(editor_box, 0, 3, 1, 2);
+	full_layout->addWidget(tool_box, 3, 3, 1, 2);
 
 	Layout::setMinAndMaxSize(&dialog, 800, 400);
 	Layout::setUniformSpacing({ themes_layout, font_layout, editor_layout, tool_layout, full_layout });
+
+	font_box_area->setFixedWidth(dialog.width() / 2);
 
 	dialog.exec();
 }
