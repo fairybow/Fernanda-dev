@@ -3,13 +3,14 @@
 #include "../common/Layout.hpp"
 #include "../common/Widget.hpp"
 #include "ActionGroup.h"
+#include "ComboBox.hpp"
 #include "LiveFontDialog.hpp"
 #include "Popup.hpp"
 #include "Slider.hpp"
 
-#include <QComboBox>
 #include <QDesktopServices>
 #include <QFileDialog>
+#include <QGroupBox>
 #include <QMenuBar>
 #include <QMdiArea>
 #include <QMdiSubWindow>

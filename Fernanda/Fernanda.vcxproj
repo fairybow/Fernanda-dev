@@ -154,6 +154,7 @@
     <QtMoc Include="source\editor\BlockCursor.hpp" />
     <ClInclude Include="source\editor\LineNumberArea.h" />
     <QtMoc Include="source\Indicator.h" />
+    <ClInclude Include="source\menu\ComboBox.hpp" />
     <ClInclude Include="source\menu\LiveFontDialog.hpp" />
     <QtMoc Include="source\menu\MenuBar.h" />
     <QtMoc Include="source\menu\Popup.hpp" />

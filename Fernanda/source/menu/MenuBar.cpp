@@ -129,22 +129,21 @@ void MenuBar::appearanceDialog()
 {
 	QDialog dialog(this);
 
-	// QGroupBox, you dingus
-
 	// Themes
-	auto editor_themes_box = new QComboBox;
-	auto window_themes_box = new QComboBox;
-	addActionsToBoxes(editor_themes_box, m_actionGroups[EDITOR_THEMES]);
-	addActionsToBoxes(window_themes_box, m_actionGroups[WINDOW_THEMES]);
-	//auto editor_themes = Layout::labeledContainer("Editor:", editor_themes_box);
-	//auto window_themes = Layout::labeledContainer("Window:", window_themes_box);
-	for (auto& themes_box : { editor_themes_box, window_themes_box }) {
-		connect(themes_box, &QComboBox::currentIndexChanged, this, [&](int index) {
-			themes_box->itemData(index).value<QAction*>()->trigger();
+	auto themes_box = new QGroupBox(tr("Themes:"), &dialog);
+	auto editor_themes_combo_box = new ComboBox("Editor");
+	auto window_themes_combo_box = new ComboBox("Window");
+	addActionsToBoxes(editor_themes_combo_box, m_actionGroups[EDITOR_THEMES]);
+	addActionsToBoxes(window_themes_combo_box, m_actionGroups[WINDOW_THEMES]);
+	for (auto& combo_box : { editor_themes_combo_box, window_themes_combo_box }) {
+		connect(combo_box, &ComboBox::currentIndexChanged, this, [&](int index) {
+			combo_box->itemData(index).value<QAction*>()->trigger();
 			});
 	}
+	auto themes_layout = Layout::box({ editor_themes_combo_box, window_themes_combo_box }, themes_box, Layout::Line::Horizontally, { 10, 10, 10, 10});
 
 	// Font box
+	/*auto font_box = new QGroupBox(tr("Font:"), &dialog);
 	auto font_box_area = new QMdiArea;
 	addFontDialog(font_box_area);
 	//font_box_area->setFixedWidth(400);
@@ -172,7 +171,7 @@ void MenuBar::appearanceDialog()
 	// Full layout // grid?
 	auto box = Layout::box(nullptr, &dialog, Layout::Line::Horizontally, { 10, 10, 10, 10 });
 	//box->addLayout(left_hand_side);
-	//box->addLayout(right_hand_side);
+	//box->addLayout(right_hand_side);*/
 
 	Layout::setMinAndMaxSize(&dialog, 800, 400);
 	// may need to calculate based on these numbers

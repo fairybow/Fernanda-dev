@@ -312,6 +312,9 @@
     <ClInclude Include="source\menu\Slider.hpp">
       <Filter>Source\Menu</Filter>
     </ClInclude>
+    <ClInclude Include="source\menu\ComboBox.hpp">
+      <Filter>Source\Menu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">

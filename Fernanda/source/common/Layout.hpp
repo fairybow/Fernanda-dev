@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QGridLayout>
-#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QMainWindow>
 #include <QMargins>
