@@ -200,6 +200,9 @@
     <QtMoc Include="unused\LaunchCop.hpp">
       <Filter>Unused</Filter>
     </QtMoc>
+    <QtMoc Include="source\menu\Slider.hpp">
+      <Filter>Source\Menu</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -308,9 +311,6 @@
     </ClInclude>
     <ClInclude Include="source\tools\ToolButton.hpp">
       <Filter>Source\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\Slider.hpp">
-      <Filter>Source\Menu</Filter>
     </ClInclude>
     <ClInclude Include="source\menu\ComboBox.hpp">
       <Filter>Source\Menu</Filter>

@@ -127,6 +127,8 @@ LiveFontDialog* MenuBar::fontDialog()
 
 void MenuBar::appearanceDialog()
 {
+	// split-up
+
 	QDialog dialog(this);
 
 	// Themes
@@ -150,26 +152,15 @@ void MenuBar::appearanceDialog()
 
 	// Editor settings
 	auto editor_box = new QGroupBox(tr("Editor:"));
-	auto tab_stops_slider = new Slider(Qt::Horizontal, nullptr, "Tab stop distance:");
-	//tab_stops_slider->setObjectName(objectName() + "slider");
-	//tab_stops_slider->setRange(20, 80);
+	auto tab_stops_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Tab stop distance:", true, "pixels", 10);
+	tab_stops_slider->setRange(1, 10);
 	auto editor_layout = Layout::box(tab_stops_slider, editor_box);
 
 	// Tool settings
 	auto tool_box = new QGroupBox(tr("Tools:"));
-	auto pomodoro_times_slider = new Slider(Qt::Horizontal, nullptr, "Pomodoro interval:");
-	//pomodoro_times_slider->setObjectName(objectName() + "slider");
-	//pomodoro_times_slider->setRange(300, 1800);
-	//pomodoro_times_slider->setSingleStep(100);
+	auto pomodoro_times_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Pomodoro interval:", true, "minutes");
+	pomodoro_times_slider->setRange(1, 60);
 	auto tool_layout = Layout::box(pomodoro_times_slider, tool_box);
-
-
-
-
-	//auto full_layout = Layout::box({ themes_box, font_box }, &dialog);
-	//auto full_layout = Layout::box({ themes_box, font_box }, &dialog);
-	//auto full_layout = Layout::box({ themes_box, font_box }, &dialog);
-
 
 	auto full_layout = Layout::grid(nullptr, &dialog);
 

@@ -31,6 +31,85 @@ QSizeGrip
 	image: url(none);
 }
 
+#Slider::groove:horizontal
+{
+	border: 1px solid #fff;
+	background: transparent;
+	height: 6px;
+	margin-left: 18px;
+	margin-right: 18px;
+}
+
+#Slider::sub-page:horizontal
+{
+	background: qlineargradient(
+		x1: 0,
+		y1: 0,
+		x2: 1,
+		y2: 0,
+		stop: 0 #7ce1f9,
+		stop: 0.25 #3bb0f3,
+		stop: 0.75 #9194f2,
+		stop: 1 #f9b3f9
+	);
+	border: 1px solid #777;
+	height: 6px;
+	margin-left: 18px;
+}
+
+#Slider::add-page:horizontal
+{
+	background: transparent;
+	border: 1px solid #777;
+	height: 6px;
+	margin-right: 18px;
+}
+
+#Slider::handle:horizontal
+{
+	background: qlineargradient(
+		x1:0,
+		y1:0,
+		x2:1,
+		y2:1,
+		stop:0 #eee,
+		stop:1 #ccc
+	);
+	border: none;
+	width: 8px;
+	margin-top: -6px;
+	margin-bottom: -6px;
+}
+
+#Slider::handle:horizontal:hover
+{
+	background: qlineargradient(
+		x1:0,
+		y1:0,
+		x2:1,
+		y2:1,
+		stop:0 #fff,
+		stop:1 #ddd
+	);
+}
+
+#Slider::sub-page:horizontal:disabled
+{
+	background: #bbb;
+	border-color: #999;
+}
+
+#Slider::add-page:horizontal:disabled
+{
+	background: #eee;
+	border-color: #999;
+}
+
+#Slider::handle:horizontal:disabled
+{
+	background: #eee;
+}
+
 #StatusBar
 {
 	background-color: @statusBarBg;

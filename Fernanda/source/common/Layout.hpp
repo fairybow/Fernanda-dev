@@ -139,8 +139,10 @@ namespace Layout
 
 	inline void transpareForMouse(QWidgetList widgets)
 	{
-		for (auto& widget : widgets)
+		for (auto& widget : widgets) {
+			if (widget == nullptr) continue;
 			widget->setAttribute(Qt::WA_TransparentForMouseEvents);
+		}
 	}
 
 	inline void transpareForMouse(QWidget* widget)
@@ -154,5 +156,10 @@ namespace Layout
 			layout->setContentsMargins(spacing, spacing, spacing, spacing);
 			layout->setSpacing(spacing);
 		}
+	}
+
+	inline void setUniformSpacing(QLayout* layout, int spacing = 5)
+	{
+		setUniformSpacing(QVector<QLayout*>{ layout }, spacing);
 	}
 }
