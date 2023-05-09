@@ -39,7 +39,10 @@ void MenuBar::makeBespokeActionGroups()
 {
 	// make this a slider:
 	// set a qBound for default tab stop values in Editor, like in PomomodoroTimer
-	ActionGroup::BespokeList tab_stops;
+
+	//m_sliderValues[TABS];
+
+	/*ActionGroup::BespokeList tab_stops;
 	tab_stops << ActionGroup::bespoke(20, "20 pixels");
 	tab_stops << ActionGroup::bespoke(40, "40 pixels");
 	tab_stops << ActionGroup::bespoke(60, "60 pixels");
@@ -50,7 +53,7 @@ void MenuBar::makeBespokeActionGroups()
 		if (selection == nullptr) return;
 		emit askSetTabStop(selection->data().toInt());
 
-		});
+		});*/
 
 	ActionGroup::BespokeList wrap_modes;
 	wrap_modes << ActionGroup::bespoke("NoWrap", "No wrap");
@@ -87,8 +90,9 @@ void MenuBar::makeBespokeActionGroups()
 
 		});
 
-	// make this a slider:
-	ActionGroup::BespokeList pomodoro_times;
+	//m_sliderValues[TABS];
+
+	/*ActionGroup::BespokeList pomodoro_times;
 	pomodoro_times << ActionGroup::bespoke(300, "5 minutes");
 	pomodoro_times << ActionGroup::bespoke(600, "10 minutes");
 	pomodoro_times << ActionGroup::bespoke(900, "15 minutes");
@@ -101,7 +105,7 @@ void MenuBar::makeBespokeActionGroups()
 		if (selection == nullptr) return;
 		emit askSetPomodoroTime(selection->data().toInt());
 
-		});
+		});*/
 }
 
 void MenuBar::view()

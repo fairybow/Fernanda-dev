@@ -43,11 +43,11 @@ public:
 
 	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[EDITOR_THEMES], path); }
 	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[WINDOW_THEMES], path); }
-	void setSelectedTabStop(int pixels) { setGroupSelectedAction(m_actionGroups[TABS], pixels); } // switch to m_sliderValues
+	void setSelectedTabStop(int pixels) { m_sliderValues[TABS] = pixels; }
 	void setSelectedWrapMode(const QString& mode) { setGroupSelectedAction(m_actionGroups[WRAPS], mode); }
 	void setSelectedIndicatorPosition(const QString& position) { setGroupSelectedAction(m_actionGroups[INDICATOR_POS], position); }
 	void setSelectedPreviewType(const QString& type) { setGroupSelectedAction(m_actionGroups[PREVIEW], type); }
-	void setSelectedPomodoroTime(int timeInSeconds) { setGroupSelectedAction(m_actionGroups[POMODORO], timeInSeconds); } // switch to m_sliderValues
+	void setSelectedPomodoroTime(int timeInSeconds) { m_sliderValues[POMODORO] = timeInSeconds; }
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();
@@ -76,11 +76,9 @@ private:
 
 	QAction* selectedEditorTheme() const { return m_actionGroups.at(EDITOR_THEMES)->checkedAction(); }
 	QAction* selectedWindowTheme() const { return m_actionGroups.at(WINDOW_THEMES)->checkedAction(); }
-	QAction* selectedTabStop() const { return m_actionGroups.at(TABS)->checkedAction(); } // switch to m_sliderValues
 	QAction* selectedWrapMode() const { return m_actionGroups.at(WRAPS)->checkedAction(); }
 	QAction* selectedIndicatorPosition() const { return m_actionGroups.at(INDICATOR_POS)->checkedAction(); }
 	QAction* selectedPreviewType() const { return m_actionGroups.at(PREVIEW)->checkedAction(); }
-	QAction* selectedPomodoroTime() const { return m_actionGroups.at(POMODORO)->checkedAction(); } // switch to m_sliderValues
 
 	void setGroupSelectedAction(ActionGroup* actionGroup, const StdFsPath& value)
 	{
@@ -98,17 +96,6 @@ private:
 		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
 			auto action = actionGroup->actions().at(i);
 			if (action->data().toString() == value) {
-				action->setChecked(true);
-				return;
-			}
-		}
-	}
-
-	void setGroupSelectedAction(ActionGroup* actionGroup, int value) // won't need soon
-	{
-		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
-			auto action = actionGroup->actions().at(i);
-			if (action->data().toInt() == value) {
 				action->setChecked(true);
 				return;
 			}
