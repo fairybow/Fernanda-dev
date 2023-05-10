@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <QPainter>
 #include <QSplitterHandle>
@@ -17,3 +17,4 @@ public:
 		return size;
 	}
 };
+*/

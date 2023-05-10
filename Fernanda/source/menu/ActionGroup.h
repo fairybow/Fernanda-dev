@@ -28,18 +28,23 @@ public:
 	using BespokeList = QVector<Bespoke>;
 
 	static Bespoke bespoke(QVariant data, QString label = QString());
+
 	static ActionGroup* fromQrc(const QStringList& qrcPaths, QStringList extensions,
 		StdFsPathList systemPaths = {}, QObject* parent = nullptr, std::function<void()> slot = nullptr);
+
 	static ActionGroup* fromQrc(const QString& qrcPath, QString extension,
 		StdFsPath systemPath = StdFsPath(), QObject* parent = nullptr, std::function<void()> slot = nullptr);
+
 	static ActionGroup* fromQrc(const QStringList& qrcPaths, QStringList extensions,
 		StdFsPath systemPath = StdFsPath(), QObject* parent = nullptr, std::function<void()> slot = nullptr);
+
 	static ActionGroup* fromBespoke(BespokeList entries, QObject* parent = nullptr,
 		std::function<void()> slot = nullptr);
 
 private:
 	static void addActionToGroup(ActionGroup* actionGroup, const QString& label,
 		const QVariant& data, QObject* parent, std::function<void()> slot);
+
 	static void checkExtensions(QStringList& extensions);
 	static void alphabetize(ActionGroup* actionGroup);
 	static QStringList gather(const QStringList& qrcPaths, const QStringList& extensions);

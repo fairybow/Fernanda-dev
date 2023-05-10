@@ -93,7 +93,7 @@ private slots:
 			auto name = main_window->windowTitle().toStdWString();
 			auto handle = FindWindow(0, name.c_str());
 			SwitchToThisWindow(handle, FALSE);
-			/* [This function is not intended for general use. It may be altered or unavailable in subsequent versions of Windows.] */
+			// [This function is not intended for general use. It may be altered or unavailable in subsequent versions of Windows.]
 		}
 
 #endif

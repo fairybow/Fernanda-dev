@@ -1,4 +1,4 @@
-#include "Splitter.h"
+/*#include "Splitter.h"
 
 Splitter::Splitter(const char* name, Qt::Orientation orientation, QWidgetList widgets, QWidget* parent)
 	: Widget(name, parent)
@@ -80,3 +80,4 @@ void Splitter::showOrHideButtons(int widgetIndex, TrueSplitter::WidgetWas visibi
 		(visibility == TrueSplitter::WidgetWas::Hidden) ? button->hide() : button->show();
 	}
 }
+*/

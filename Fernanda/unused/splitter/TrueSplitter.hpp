@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include "../common/Event.hpp"
 #include "SplitterHandle.hpp"
@@ -53,3 +53,4 @@ protected:
 
 	virtual QSplitterHandle* createHandle() override { return new SplitterHandle(orientation(), this); }
 };
+*/

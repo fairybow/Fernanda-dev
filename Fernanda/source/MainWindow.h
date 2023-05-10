@@ -3,17 +3,17 @@
 #include "common/Layout.hpp"
 #include "common/Widget.hpp"
 #include "editor/Editor.h"
-#include "Indicator.h"
-#include "IniKeys.hpp"
 #include "menu/MenuBar.h"
-#include "Meter.h"
 #include "preview/Preview.hpp"
-#include "StatusBar.hpp"
-#include "Stylist.h"
 #include "tools/AlwaysOnTop.hpp"
 #include "tools/StayAwake.hpp"
 #include "tools/PomodoroTimer.hpp"
 #include "user/User.hpp"
+#include "Indicator.h"
+#include "IniKeys.hpp"
+#include "Meter.h"
+#include "StatusBar.hpp"
+#include "Stylist.h"
 
 #include <QCloseEvent>
 #include <QMainWindow>

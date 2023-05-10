@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include "../common/Layout.hpp"
 #include "../common/Widget.hpp"
@@ -66,3 +66,4 @@ private:
 private slots:
 	void showOrHideButtons(int widgetIndex, TrueSplitter::WidgetWas visibility);
 };
+*/
