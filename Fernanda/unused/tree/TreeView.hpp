@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include "../common/Widget.hpp"
 #include "StyledItemDelegate.hpp"
@@ -21,3 +21,4 @@ private:
 	QStandardItemModel* m_itemModel = new QStandardItemModel(this);
 	StyledItemDelegate* m_delegate = new StyledItemDelegate(this);
 };
+*/

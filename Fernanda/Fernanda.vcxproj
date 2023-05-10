@@ -136,14 +136,17 @@
     <ClCompile Include="source\menu\MenuBar.cpp" />
     <ClCompile Include="source\Meter.cpp" />
     <ClCompile Include="source\Stylist.cpp" />
-    <ClCompile Include="source\tree\TreeView.cpp" />
     <ClCompile Include="unused\splitter\Splitter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\document\DocumentCache.hpp" />
+    <ClInclude Include="source\document\TabBar.hpp" />
     <ClInclude Include="unused\Archiver.hpp" />
     <ClInclude Include="unused\splitter\SplitterHandle.hpp" />
     <ClInclude Include="unused\splitter\TrueSplitter.hpp" />
     <ClInclude Include="unused\splitter\Splitter.h" />
+    <ClInclude Include="unused\tree\StyledItemDelegate.hpp" />
+    <ClInclude Include="unused\tree\TreeView.hpp" />
     <QtMoc Include="unused\LaunchCop.hpp" />
     <QtMoc Include="source\editor\Editor.h" />
     <QtMoc Include="source\editor\TrueEditor.h" />
@@ -179,8 +182,6 @@
     <QtMoc Include="source\tools\StayAwake.hpp" />
     <QtMoc Include="source\tools\PomodoroTimer.hpp" />
     <ClInclude Include="source\tools\ToolButton.hpp" />
-    <ClInclude Include="source\tree\TreeView.h" />
-    <ClInclude Include="source\tree\StyledItemDelegate.hpp" />
     <ClInclude Include="source\user\Settings.hpp" />
     <QtMoc Include="source\user\User.hpp" />
     <ClInclude Include="source\Version.hpp" />

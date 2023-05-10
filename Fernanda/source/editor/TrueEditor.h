@@ -5,6 +5,7 @@
 #include "BlockCursor.hpp"
 #include "LineNumberArea.h"
 
+#include <QChar>
 #include <QColor>
 #include <QFont>
 #include <QPainter>

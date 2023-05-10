@@ -15,9 +15,6 @@
     <Filter Include="Source\Editor">
       <UniqueIdentifier>{e30ec776-d711-4399-afbf-081ee41eaef8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Tree">
-      <UniqueIdentifier>{e55978b7-707a-49f4-86c0-98357a246181}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -66,6 +63,12 @@
     </Filter>
     <Filter Include="Unused\Splitter">
       <UniqueIdentifier>{82d7f2e5-d306-46a3-b618-c5f2630c3e6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Unused\Tree">
+      <UniqueIdentifier>{e55978b7-707a-49f4-86c0-98357a246181}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Document">
+      <UniqueIdentifier>{4148ff82-b621-4d53-97fd-fc587ea06125}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -214,9 +217,6 @@
     <ClCompile Include="source\Indicator.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="source\tree\TreeView.cpp">
-      <Filter>Source\Tree</Filter>
-    </ClCompile>
     <ClCompile Include="source\menu\MenuBar.cpp">
       <Filter>Source\Menu</Filter>
     </ClCompile>
@@ -257,12 +257,6 @@
     </ClInclude>
     <ClInclude Include="source\editor\LineNumberArea.h">
       <Filter>Source\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="source\tree\StyledItemDelegate.hpp">
-      <Filter>Source\Tree</Filter>
-    </ClInclude>
-    <ClInclude Include="source\tree\TreeView.h">
-      <Filter>Source\Tree</Filter>
     </ClInclude>
     <ClInclude Include="source\common\Layout.hpp">
       <Filter>Source\Common</Filter>
@@ -323,6 +317,18 @@
     </ClInclude>
     <ClInclude Include="unused\Archiver.hpp">
       <Filter>Unused</Filter>
+    </ClInclude>
+    <ClInclude Include="unused\tree\StyledItemDelegate.hpp">
+      <Filter>Unused\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="unused\tree\TreeView.hpp">
+      <Filter>Unused\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="source\document\DocumentCache.hpp">
+      <Filter>Source\Document</Filter>
+    </ClInclude>
+    <ClInclude Include="source\document\TabBar.hpp">
+      <Filter>Source\Document</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

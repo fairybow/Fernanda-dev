@@ -9,8 +9,6 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 
 	// testing
 
-	// if opened w/o file, will still have overlay
-
 	m_editor->setFocus();
 }
 
@@ -29,7 +27,11 @@ void MainWindow::setupWidgets()
 	setStatusBar(m_statusBar);
 	m_statusBar->addWidgets({ m_meter }, { m_pomodoroTimer, m_stayAwake, m_alwaysOnTop });
 	m_menuBar->makeSubmenus();
-	Layout::setCentralWidget(this, m_editor, { 4, 0, 4, 0 });
+
+	// testing
+
+	m_tabBar->addTab("Untitled");
+	Layout::setCentralWidgets(this, { m_tabBar, m_editor }, { 4, 0, 4, 0 });
 }
 
 void MainWindow::connections()
@@ -59,6 +61,7 @@ void MainWindow::meterConnections()
 	connect(m_meter, &Meter::editorFocusReturn, m_editor, [&] {
 		m_editor->setFocus();
 		});
+
 	connect(m_editor, &Editor::selectionChanged, this, [&] {
 			m_editor->hasSelection()
 				? m_meter->trigger(Meter::Type::Selection, true)
@@ -95,12 +98,14 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 				m_stylist->style(m_editor, path);
 			});
 		});
+
 	connect(m_menuBar, &MenuBar::askStyleWindow, this, [&](StdFsPath path) {
 		saveConfigPassthrough(
 			Path::toQString(path), WINDOW_THEME, this, [&] {
 				m_stylist->style(this, path);
 			});
 		});
+
 	connect(m_menuBar, &MenuBar::askChangeFont, this, [&](const QFont& font) {
 		saveConfigPassthrough(
 			font, EDITOR_FONT, m_editor, [&] {
@@ -152,44 +157,34 @@ void MainWindow::loadEditorConfigs()
 void MainWindow::loadMenuBarConfigs()
 {
 	loadConfigPassthrough<QString>(EDITOR_THEME, m_editor, [&](QString theme) {
-
 		auto fs_editor_theme = Path::toStdFs(theme);
 		m_stylist->style(m_editor, fs_editor_theme);
 		m_menuBar->setSelectedEditorTheme(fs_editor_theme);
-
 		}, Path::toQString(m_menuBar->defaultEditorTheme()));
 
 	loadConfigPassthrough<QString>(WINDOW_THEME, this, [&](QString theme) {
-
 		auto fs_window_theme = Path::toStdFs(theme);
 		m_stylist->style(this, fs_window_theme);
 		m_menuBar->setSelectedWindowTheme(fs_window_theme);
-
 		}, Path::toQString(m_menuBar->defaultWindowTheme()));
 
 	loadConfigPassthrough<int>(EDITOR_TAB_STOPS, m_editor, [&](int pixels) {
-
 		m_editor->setTabStopDistance(pixels);
 		m_menuBar->setSelectedTabStop(pixels);
-
-		}, 40);
+		}, m_editor->defaulTabStop());
 
 	//void askSetWrapMode(const QString& mode);
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
 
 	/*loadConfigPassthrough<>("", m_obj, [&]() {
-
 		//m_obj->
 		//m_obj->set
-
 		}, m_obj->defaultValue());*/
 
 	loadConfigPassthrough<int>(TOOL_POMO_INTERVAL, m_pomodoroTimer, [&](int timeInSeconds) {
-
 		m_pomodoroTimer->setCountdown(timeInSeconds);
 		m_menuBar->setSelectedPomodoroTime(timeInSeconds);
-
 		}, m_pomodoroTimer->defaultInterval());
 }
 

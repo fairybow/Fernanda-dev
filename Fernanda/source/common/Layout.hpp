@@ -129,6 +129,13 @@ namespace Layout
 		setCentralWidgets(parentWindow, QWidgetList{ widget }, QMargins(), alignment);
 	}
 
+	/*inline void setCentralWidget(QMainWindow* parentWindow, QLayout* layout, Line alignment = Line::Vertically)
+	{
+		auto widget = new QWidget;
+		widget->setLayout(layout);
+		setCentralWidgets(parentWindow, QWidgetList{ widget }, QMargins(), alignment);
+	}*/
+
 	inline void setMinAndMaxSize(QWidget* widget, int width, int height)
 	{
 		widget->setMinimumSize(width, height);

@@ -5,24 +5,29 @@ TrueEditor::TrueEditor(QWidget* parent)
 {
 	connections();
 	Event::delayCall(this, [&] {
+
 		updateLineNumberAreaWidth();
 		highlightCurrentLine();
+
 		});
 }
 
 void TrueEditor::lineNumberAreaPaintEvent(QPaintEvent* event)
 {
 	QPainter painter(m_lineNumberArea);
+
 	auto block = firstVisibleBlock();
 	auto block_number = block.blockNumber();
 	auto top = qRound(blockBoundingGeometry(block).translated(contentOffset()).top());
 	auto bottom = top + qRound(blockBoundingRect(block).height());
+
 	while (block.isValid() && top <= event->rect().bottom()) {
 		if (block.isVisible() && bottom >= event->rect().top()) {
 			auto number = QString::number(block_number + 1);
 			painter.drawText(0, top, m_lineNumberArea->width(),
 				fontMetrics().height(), Qt::AlignRight, number);
 		}
+
 		block = block.next();
 		top = bottom;
 		bottom = top + qRound(blockBoundingRect(block).height());
@@ -35,10 +40,12 @@ int TrueEditor::lineNumberAreaWidth()
 	return (m_lineNumberArea == nullptr || !m_lineNumberArea->isVisible()) ? 0 : [&] {
 		auto digits = 1;
 		auto max = qMax(1, blockCount());
+
 		while (max >= 10) {
 			max /= 10;
 			++digits;
 		}
+
 		auto space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
 		return space;
 	}();
@@ -76,13 +83,17 @@ void TrueEditor::setCursorStyle(const QString& styleSheet)
 {
 	auto it = QRegularExpression(
 		CURSOR_BLOCK).globalMatch(styleSheet);
+
 	while (it.hasNext()) {
 		auto match = it.next();
+
 		QString css_block = match.capturedTexts().at(0);
+
 		auto match_cursor = QRegularExpression(
 			CURSOR_COLOR_LINE).match(css_block).captured(2);
 		auto match_under_cursor = QRegularExpression(
 			CURSOR_UNDER_COLOR_LINE).match(css_block).captured(2);
+
 		if (QColor(match_cursor).isValid())
 			m_cursor->setColor(match_cursor);
 		if (QColor(match_under_cursor).isValid())
@@ -93,9 +104,8 @@ void TrueEditor::setCursorStyle(const QString& styleSheet)
 int TrueEditor::selectedLineCount()
 {
 	auto cursor = textCursor();
-	if (!cursor.hasSelection())
-		return 1;
-	return cursor.selectedText().count("(\U00002029)") + 1;
+	if (!cursor.hasSelection()) return 1;
+	return cursor.selectedText().count(QChar(0x2029)) + 1;
 }
 
 void TrueEditor::connections()
@@ -128,6 +138,7 @@ void TrueEditor::cursorConnections()
 void TrueEditor::highlightCurrentLine()
 {
 	QVector<QTextEdit::ExtraSelection> extra_selections;
+
 	if (!isReadOnly()) {
 		QTextEdit::ExtraSelection selection;
 		selection.format.setBackground(highlight());
@@ -136,6 +147,7 @@ void TrueEditor::highlightCurrentLine()
 		selection.cursor.clearSelection();
 		extra_selections.append(selection);
 	}
+
 	setExtraSelections(extra_selections);
 }
 
@@ -144,6 +156,7 @@ void TrueEditor::updateLineNumberArea(const QRect& rect, int dy)
 	dy
 		? m_lineNumberArea->scroll(0, dy)
 		: m_lineNumberArea->update(0, rect.y(), m_lineNumberArea->width(), rect.height());
+
 	if (rect.contains(viewport()->rect()))
 		updateLineNumberAreaWidth();
 }
