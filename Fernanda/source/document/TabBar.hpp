@@ -7,5 +7,9 @@
 class TabBar : public Widget<QTabBar>
 {
 public:
-	using Widget::Widget;
+	TabBar(const char* name, QWidget* parent = nullptr)
+		: Widget(name, parent)
+	{
+		setShape(Shape::RoundedNorth);
+	}
 };

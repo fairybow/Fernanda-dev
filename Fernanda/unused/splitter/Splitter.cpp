@@ -4,7 +4,7 @@ Splitter::Splitter(const char* name, Qt::Orientation orientation, QWidgetList wi
 	: Widget(name, parent)
 {
 	m_trueSplitter->setObjectName(name);
-	Layout::box( m_trueSplitter, this);
+	Layout::box(m_trueSplitter, this);
 	m_trueSplitter->setOrientation(orientation);
 	for (auto& widget : widgets)
 		m_trueSplitter->addWidget(widget);

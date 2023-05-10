@@ -288,9 +288,6 @@
     <ClInclude Include="source\common\Widget.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\Event.hpp">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
     <ClInclude Include="source\tools\ToolButton.hpp">
       <Filter>Source\Tools</Filter>
     </ClInclude>
@@ -329,6 +326,9 @@
     </ClInclude>
     <ClInclude Include="source\document\TabBar.hpp">
       <Filter>Source\Document</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\Utility.hpp">
+      <Filter>Source\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

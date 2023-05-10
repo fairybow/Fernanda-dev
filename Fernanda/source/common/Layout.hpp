@@ -46,8 +46,7 @@ namespace Layout
 		}
 	}
 
-	inline QBoxLayout* box(QWidgetList widgets = {}, QWidget* parent = nullptr,
-		Line alignment = Line::Vertically, QMargins margins = QMargins())
+	inline QBoxLayout* box(Line alignment, QWidgetList widgets = {}, QWidget* parent = nullptr, QMargins margins = QMargins())
 	{
 		QBoxLayout* layout = nullptr;
 		(alignment == Line::Horizontally)
@@ -62,10 +61,9 @@ namespace Layout
 		return layout;
 	}
 
-	inline QBoxLayout* box(QWidget* widget, QWidget* parent = nullptr,
-		Line alignment = Line::Vertically, QMargins margins = QMargins())
+	inline QBoxLayout* box(Line alignment, QWidget* widget, QWidget* parent = nullptr, QMargins margins = QMargins())
 	{
-		return box(QWidgetList{ widget }, parent, alignment, margins);
+		return box(alignment, QWidgetList{ widget }, parent, margins);
 	}
 
 	inline QStackedLayout* stack(QWidgetList widgets, QWidget* parent = nullptr)
@@ -96,40 +94,40 @@ namespace Layout
 		return grid(QWidgetList{ widget }, parent, margins);
 	}
 
-	inline void setCentralWidgets(QMainWindow* parentWindow, QWidgetList widgets, QMargins margins, Line alignment = Line::Vertically)
+	inline void setCentralWidgets(QMainWindow* parentWindow, QWidgetList widgets, QMargins margins, Line alignment = Line::Horizontally)
 	{
 		auto container = new QWidget(parentWindow);
-		auto layout = box(widgets, container, alignment);
-		container->setContentsMargins(margins); // unused
+		auto layout = box(alignment, widgets, container);
+		container->setContentsMargins(margins);
 		parentWindow->setCentralWidget(container);
 	}
 
-	inline void setCentralWidgets(QMainWindow* parentWindow, int margins, QWidgetList widgets, Line alignment = Line::Vertically)
+	inline void setCentralWidgets(QMainWindow* parentWindow, int margins, QWidgetList widgets, Line alignment = Line::Horizontally)
 	{
 		setCentralWidgets(parentWindow, widgets, { margins, margins, margins, margins }, alignment);
 	}
 
-	inline void setCentralWidgets(QMainWindow* parentWindow, QWidgetList widgets, Line alignment = Line::Vertically)
+	inline void setCentralWidgets(QMainWindow* parentWindow, QWidgetList widgets, Line alignment = Line::Horizontally)
 	{
 		setCentralWidgets(parentWindow, widgets, QMargins(), alignment);
 	}
 
-	inline void setCentralWidget(QMainWindow* parentWindow, QWidget* widget, QMargins margins, Line alignment = Line::Vertically)
+	inline void setCentralWidget(QMainWindow* parentWindow, QWidget* widget, QMargins margins, Line alignment = Line::Horizontally)
 	{
 		setCentralWidgets(parentWindow, QWidgetList{ widget }, margins, alignment);
 	}
 
-	inline void setCentralWidget(QMainWindow* parentWindow, int margins, QWidget* widget, Line alignment = Line::Vertically)
+	inline void setCentralWidget(QMainWindow* parentWindow, int margins, QWidget* widget, Line alignment = Line::Horizontally)
 	{
 		setCentralWidgets(parentWindow, QWidgetList{ widget }, { margins, margins, margins, margins }, alignment);
 	}
 
-	inline void setCentralWidget(QMainWindow* parentWindow, QWidget* widget, Line alignment = Line::Vertically)
+	inline void setCentralWidget(QMainWindow* parentWindow, QWidget* widget, Line alignment = Line::Horizontally)
 	{
 		setCentralWidgets(parentWindow, QWidgetList{ widget }, QMargins(), alignment);
 	}
 
-	/*inline void setCentralWidget(QMainWindow* parentWindow, QLayout* layout, Line alignment = Line::Vertically)
+	/*inline void setCentralWidget(QMainWindow* parentWindow, QLayout* layout, Line alignment = Line::Horizontally)
 	{
 		auto widget = new QWidget;
 		widget->setLayout(layout);

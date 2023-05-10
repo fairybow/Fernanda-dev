@@ -10,7 +10,7 @@ public:
 	Preview(const char* name, QWidget* parent = nullptr)
 		: Widget(name, parent)
 	{
-		Layout::box( m_view, this);
+		Layout::box(Layout::Line::Vertically, m_view, this);
 	}
 
 private:

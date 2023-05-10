@@ -7,8 +7,8 @@ Meter::Meter(const char* name, QWidget* parent)
 		widget->setObjectName(name);
 	setupLabels();
 	connections();
-	Layout::box({ m_positions, m_separator, m_counts, m_refresh },
-		this, Layout::Line::Horizontally);
+	Layout::box(Layout::Line::Horizontally,
+		{ m_positions, m_separator, m_counts, m_refresh }, this);
 	updateCounts();
 	updatePositions();
 }
@@ -62,8 +62,10 @@ void Meter::updateCounts(bool isSelection)
 	if (!hasAnyCount()) return;
 	auto counts_info = emit getCountsData(isSelection);
 	QStringList elements;
-	if (m_hasLineCount)
-		elements << QString::number(counts_info.blockCount) + " lines";
+	if (m_hasLineCount) {
+		auto block_count = Utility::greaterOrEqual(counts_info.blockCount);
+		elements << QString::number(block_count) + " lines";
+	}
 	if (m_hasWordCount) {
 		auto words = counts_info.text.split(
 			QRegularExpression(LEADING_WHITESPACE), Qt::SkipEmptyParts);

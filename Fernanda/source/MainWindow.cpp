@@ -30,8 +30,14 @@ void MainWindow::setupWidgets()
 
 	// testing
 
-	m_tabBar->addTab("Untitled");
-	Layout::setCentralWidgets(this, { m_tabBar, m_editor }, { 4, 0, 4, 0 });
+	//m_tabBar->addTab("Untitled 1");
+	//m_tabBar->addTab("Untitled 2");
+	//m_tabBar->addTab("Untitled 3");
+
+	//
+
+	Layout::setCentralWidgets(this,
+		{ m_tabBar, m_editor }, { 4, 0, 4, 0 }, Layout::Line::Vertically);
 }
 
 void MainWindow::connections()

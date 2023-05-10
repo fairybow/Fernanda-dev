@@ -16,7 +16,7 @@ public:
 	{
 		buildProgressBar(name);
 		Layout::transpareForMouse({ this, m_progressBar });
-		Layout::box(m_progressBar, this);
+		Layout::box(Layout::Line::Vertically, m_progressBar, this);
 	}
 
 private:

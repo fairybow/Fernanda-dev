@@ -132,7 +132,7 @@ void MenuBar::appearanceDialog()
 	QDialog dialog(this);
 
 	// Themes
-	auto themes_box = new QGroupBox(tr("Themes:"));
+	auto themes_box = new QGroupBox(tr("Themes"));
 	auto editor_themes_combo_box = new ComboBox;
 	auto window_themes_combo_box = new ComboBox;
 	addActionsToBoxes(editor_themes_combo_box, m_actionGroups[GROUP_EDITOR_THEMES]);
@@ -142,28 +142,28 @@ void MenuBar::appearanceDialog()
 			combo_box->itemData(index).value<QAction*>()->trigger();
 			});
 	}
-	auto themes_layout = Layout::box({ editor_themes_combo_box, window_themes_combo_box }, themes_box, Layout::Line::Horizontally);
+	auto themes_layout = Layout::box(Layout::Line::Horizontally, { editor_themes_combo_box, window_themes_combo_box }, themes_box);
 
 	// Font box
-	auto font_box = new QGroupBox(tr("Font:"));
+	auto font_box = new QGroupBox(tr("Font"));
 	auto font_box_area = new QMdiArea;
 	addFontDialog(font_box_area);
-	auto font_layout = Layout::box(font_box_area, font_box);
+	auto font_layout = Layout::box(Layout::Line::Horizontally, font_box_area, font_box);
 
 	// Editor settings
-	auto editor_box = new QGroupBox(tr("Editor:"));
-	auto tab_stops_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Tab stop distance:", true, "pixels", 10);
+	auto editor_box = new QGroupBox(tr("Editor"));
+	auto tab_stops_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Tab stop distance", true, "pixels", 10);
 	tab_stops_slider->setRange(1, 30);
 	tab_stops_slider->setValue(m_sliderValues[SLIDER_TABS]);
-	auto editor_layout = Layout::box(tab_stops_slider, editor_box);
+	auto editor_layout = Layout::box(Layout::Line::Horizontally, tab_stops_slider, editor_box);
 
 	// Tool settings
-	auto tool_box = new QGroupBox(tr("Tools:"));
+	auto tool_box = new QGroupBox(tr("Tools"));
 	// 3 checkboxes for each tool
-	auto pomodoro_times_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Pomodoro interval:", true, "minutes");
+	auto pomodoro_times_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Pomodoro interval", true, "minutes");
 	pomodoro_times_slider->setRange(1, 60);
 	pomodoro_times_slider->setValue(m_sliderValues[SLIDER_POMODORO] / 60);
-	auto tool_layout = Layout::box(pomodoro_times_slider, tool_box);
+	auto tool_layout = Layout::box(Layout::Line::Horizontally, pomodoro_times_slider, tool_box);
 
 	// set initial slider values from ini by setting it to map/key
 

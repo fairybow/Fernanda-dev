@@ -84,7 +84,7 @@ private:
 		if (m_valueDisplay.has_value())
 			widgets.append(m_valueDisplay.value());
 
-		auto layout = Layout::box(widgets, this, Layout::Line::Horizontally);
+		auto layout = Layout::box(Layout::Line::Horizontally, widgets, this);
 		Layout::setUniformSpacing(layout, 5);
 	}
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/Event.hpp"
+#include "../common/Utility.hpp"
 #include "ToolButton.hpp"
 
 #include <QMainWindow>
@@ -45,21 +45,12 @@ private:
 	QMainWindow* m_window;
 	QTimer* m_timer = new QTimer(this);
 
-	const QString time(int seconds)
-	{
-		auto time_seconds = seconds % 60;
-		QString seconds_string;
-		(time_seconds <= 9)
-			? seconds_string = "0" + QString::number(time_seconds)
-			: seconds_string = QString::number(time_seconds);
-		return QString::number((seconds / 60) % 60) + "." + seconds_string;
-	}
-
 	void timeUp(QMainWindow* parentWindow)
 	{
 		QMessageBox popup(parentWindow);
 		popup.setWindowTitle(parentWindow->windowTitle());
-		popup.setText("Time's up!          "); // -_-
+		popup.setText(
+			Utility::padString("Time's up!", 20));
 		auto ok = popup.addButton(QMessageBox::Ok);
 		popup.setDefaultButton(ok);
 		popup.exec();
@@ -90,13 +81,13 @@ private:
 private slots:
 	void countdownDisplay()
 	{
-		setText("  " + m_text + "  " + time(m_countdown) + "  ");
+		setText("  " + m_text + "  " + Utility::secondsToMinutes(m_countdown, ".") + "  ");
 		if (m_countdown < 1) {
 			timeUp(m_window);
 			setChecked(false);
 			return;
 		}
-		Event::delayCall(this, [&] { --m_countdown; });
+		Utility::delayCall(this, [&] { --m_countdown; });
 	}
 
 	void startCountdown(bool checked)

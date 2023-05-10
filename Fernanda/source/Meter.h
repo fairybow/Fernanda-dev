@@ -5,6 +5,7 @@
 #include "common/RegexPatterns.hpp"
 #include "common/Widget.hpp"
 #include "common/StatusBarButton.hpp"
+#include "common/Utility.hpp"
 
 #include <QLabel>
 #include <QRegularExpression>

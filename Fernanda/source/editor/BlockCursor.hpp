@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/Event.hpp"
+#include "../common/Utility.hpp"
 
 #include <QChar>
 #include <QColor>
@@ -21,7 +21,7 @@ public:
 	{
 		connections();
 		m_blinkTimer->setTimerType(Qt::VeryCoarseTimer);
-		Event::delayCall(this, [&] { emit startBlinkTimer(); });
+		Utility::delayCall(this, [&] { emit startBlinkTimer(); });
 	}
 
 	void paint()
