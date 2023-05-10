@@ -64,8 +64,11 @@ void Meter::updateCounts(bool isSelection)
 	QStringList elements;
 	if (m_hasLineCount)
 		elements << QString::number(counts_info.blockCount) + " lines";
-	if (m_hasWordCount)
-		elements << QString::number(counts_info.text.split(QRegularExpression("(\\s|\\n|\\r|\U00002029|^)+"), Qt::SkipEmptyParts).count()) + " words";
+	if (m_hasWordCount) {
+		auto words = counts_info.text.split(
+			QRegularExpression(LEADING_WHITESPACE), Qt::SkipEmptyParts);
+		elements << QString::number(words.count()) + " words";
+	}
 	auto character_count = counts_info.text.count();
 	if (m_hasCharCount)
 		elements << QString::number(character_count) + " chars";

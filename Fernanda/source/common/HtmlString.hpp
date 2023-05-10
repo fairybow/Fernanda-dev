@@ -1,10 +1,21 @@
 #pragma once
 
+#include "RegexPatterns.hpp"
+
 #include <QRegularExpression>
 #include <QString>
 #include <QUrl>
 
 #include <string>
+
+constexpr char TABLE_START[] = "<table><td>";
+constexpr char TABLE_DATA_START[] = "<td>";
+constexpr char TABLE_DATA_END[] = "</td>";
+constexpr char TABLE_END[] = "</table>";
+constexpr char EMPTY_TABLE_DATA[] = "<td>\n</td>";
+constexpr char FORMAT_BOLD[] = "<b>%1</b>";
+constexpr char FORMAT_HEADING[] = "<h%1>%2</h%1>";
+constexpr char FORMAT_LINK[] = "<a href='%1'>%2</a>";
 
 inline QString operator%(const QString& lhs, const QString& rhs)
 {
@@ -52,19 +63,19 @@ namespace HtmlString
 	{
 		inline QString tableColumnSpacing(int columns = 9)
 		{
-			return multiply("<td>\n</td>", columns);
+			return multiply(EMPTY_TABLE_DATA, columns);
 		}
 	}
 
 	template<typename T>
 	inline QString table(const std::vector<T>& columns)
 	{
-		QString table = "<table><td>";
+		QString table = TABLE_START;
 		for (auto& column : columns) {
-			table += column + "</td>" + tableColumnSpacing();
+			table += column + TABLE_DATA_END + tableColumnSpacing();
 			table += (column != columns.back())
-				? "<td>"
-				: "</table>";
+				? TABLE_DATA_START
+				: TABLE_END;
 		}
 		return table;
 	}
@@ -72,23 +83,23 @@ namespace HtmlString
 	template<typename T>
 	inline QString bold(const T& text)
 	{
-		return QString("<b>%1</b>").arg(text);
+		return QString(FORMAT_BOLD).arg(text);
 	}
 
 	template<typename T>
 	inline QString heading(const T& text, int level = 1)
 	{
 		level = qBound(1, level, 6);
-		return QString("<h%1>%2</h%1>").arg(level).arg(text);
+		return QString(FORMAT_HEADING).arg(level).arg(text);
 	}
 
 	inline QString link(const QString& url, QString displayName = QString())
 	{
 		if (displayName.isEmpty()) {
 			QString url_copy = url;
-			displayName = url_copy.replace(QRegularExpression("(https:\\/\\/|www.)"), "");
+			displayName = url_copy.replace(QRegularExpression(URL_BEGINNING), "");
 		}
-		return QString("<a href='%1'>%2</a>").arg(url).arg(displayName);
+		return QString(FORMAT_LINK).arg(url).arg(displayName);
 	}
 
 	inline QString link(const QUrl& url, QString displayName = QString())

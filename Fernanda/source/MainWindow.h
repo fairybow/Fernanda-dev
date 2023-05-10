@@ -4,6 +4,7 @@
 #include "common/Widget.hpp"
 #include "editor/Editor.h"
 #include "Indicator.h"
+#include "IniKeys.hpp"
 #include "menu/MenuBar.h"
 #include "Meter.h"
 #include "preview/Preview.hpp"

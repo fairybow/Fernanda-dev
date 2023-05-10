@@ -20,13 +20,13 @@
 #include <map>
 #include <filesystem>
 
-constexpr char EDITOR_THEMES[] = "editor_themes";
-constexpr char WINDOW_THEMES[] = "window_themes";
-constexpr char TABS[] = "tab_stops";
-constexpr char WRAPS[] = "wrap_modes";
-constexpr char INDICATOR_POS[] = "indicator_alignments";
-constexpr char PREVIEW[] = "preview_types";
-constexpr char POMODORO[] = "pomodoro_times";
+constexpr char GROUP_EDITOR_THEMES[] = "editor_themes";
+constexpr char GROUP_WINDOW_THEMES[] = "window_themes";
+constexpr char GROUP_WRAPS[] = "wrap_modes";
+constexpr char GROUP_INDICATOR_POS[] = "indicator_alignments";
+constexpr char GROUP_PREVIEW[] = "preview_types";
+constexpr char SLIDER_TABS[] = "tab_stops";
+constexpr char SLIDER_POMODORO[] = "pomodoro_times";
 constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
 constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
 
@@ -44,13 +44,13 @@ public:
 	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; } // Set in Editor?
 	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; } // Set in MW?
 
-	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[EDITOR_THEMES], path); }
-	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[WINDOW_THEMES], path); }
-	void setSelectedTabStop(int pixels) { m_sliderValues[TABS] = pixels; }
-	void setSelectedWrapMode(const QString& mode) { setGroupSelectedAction(m_actionGroups[WRAPS], mode); }
-	void setSelectedIndicatorPosition(const QString& position) { setGroupSelectedAction(m_actionGroups[INDICATOR_POS], position); }
-	void setSelectedPreviewType(const QString& type) { setGroupSelectedAction(m_actionGroups[PREVIEW], type); }
-	void setSelectedPomodoroTime(int timeInSeconds) { m_sliderValues[POMODORO] = timeInSeconds; }
+	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_EDITOR_THEMES], path); }
+	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_WINDOW_THEMES], path); }
+	void setSelectedTabStop(int pixels) { m_sliderValues[SLIDER_TABS] = pixels; }
+	void setSelectedWrapMode(const QString& mode) { setGroupSelectedAction(m_actionGroups[GROUP_WRAPS], mode); }
+	void setSelectedIndicatorPosition(const QString& position) { setGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_POS], position); }
+	void setSelectedPreviewType(const QString& type) { setGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
+	void setSelectedPomodoroTime(int timeInSeconds) { m_sliderValues[SLIDER_POMODORO] = timeInSeconds; }
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();
@@ -77,11 +77,11 @@ private:
 	void addFontDialog(QMdiArea* multiDocArea);
 	LiveFontDialog* fontDialog();
 
-	QAction* selectedEditorTheme() const { return m_actionGroups.at(EDITOR_THEMES)->checkedAction(); }
-	QAction* selectedWindowTheme() const { return m_actionGroups.at(WINDOW_THEMES)->checkedAction(); }
-	QAction* selectedWrapMode() const { return m_actionGroups.at(WRAPS)->checkedAction(); }
-	QAction* selectedIndicatorPosition() const { return m_actionGroups.at(INDICATOR_POS)->checkedAction(); }
-	QAction* selectedPreviewType() const { return m_actionGroups.at(PREVIEW)->checkedAction(); }
+	QAction* selectedEditorTheme() const { return m_actionGroups.at(GROUP_EDITOR_THEMES)->checkedAction(); }
+	QAction* selectedWindowTheme() const { return m_actionGroups.at(GROUP_WINDOW_THEMES)->checkedAction(); }
+	QAction* selectedWrapMode() const { return m_actionGroups.at(GROUP_WRAPS)->checkedAction(); }
+	QAction* selectedIndicatorPosition() const { return m_actionGroups.at(GROUP_INDICATOR_POS)->checkedAction(); }
+	QAction* selectedPreviewType() const { return m_actionGroups.at(GROUP_PREVIEW)->checkedAction(); }
 
 	void setGroupSelectedAction(ActionGroup* actionGroup, const StdFsPath& value)
 	{

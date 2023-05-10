@@ -315,6 +315,15 @@
     <ClInclude Include="source\menu\ComboBox.hpp">
       <Filter>Source\Menu</Filter>
     </ClInclude>
+    <ClInclude Include="source\common\RegexPatterns.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\StylePatterns.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\IniKeys.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">

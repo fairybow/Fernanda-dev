@@ -83,7 +83,7 @@ void MainWindow::menuBarConnections() // things MenuBar needs in order to functi
 		return m_user->dataFolder();
 		});
 	connect(m_menuBar, &MenuBar::getUserFont, this, [&] {
-		return loadConfig<QFont>("font", m_editor, m_editor->defaulFont());
+		return loadConfig<QFont>(EDITOR_FONT, m_editor, m_editor->defaulFont());
 		});
 }
 
@@ -91,26 +91,26 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 {
 	connect(m_menuBar, &MenuBar::askStyleEditor, this, [&](StdFsPath path) {
 		saveConfigPassthrough(
-			Path::toQString(path), "theme", m_editor, [&] {
+			Path::toQString(path), EDITOR_THEME, m_editor, [&] {
 				m_stylist->style(m_editor, path);
 			});
 		});
 	connect(m_menuBar, &MenuBar::askStyleWindow, this, [&](StdFsPath path) {
 		saveConfigPassthrough(
-			Path::toQString(path), "theme", this, [&] {
+			Path::toQString(path), WINDOW_THEME, this, [&] {
 				m_stylist->style(this, path);
 			});
 		});
 	connect(m_menuBar, &MenuBar::askChangeFont, this, [&](const QFont& font) {
 		saveConfigPassthrough(
-			font, "font", m_editor, [&] {
+			font, EDITOR_FONT, m_editor, [&] {
 				m_editor->setFont(font);
 			});
 		});
 
 	connect(m_menuBar, &MenuBar::askSetTabStop, this, [&](int pixels) {
 		saveConfigPassthrough(
-			pixels, "tab_stop_distance", m_editor, [&] {
+			pixels, EDITOR_TAB_STOPS, m_editor, [&] {
 				m_editor->setTabStopDistance(pixels);
 			});
 		});
@@ -121,7 +121,7 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 
 	connect(m_menuBar, &MenuBar::askSetPomodoroTime, this, [&](int timeInSeconds) {
 		saveConfigPassthrough(
-			timeInSeconds, "time", m_pomodoroTimer, [&] {
+			timeInSeconds, TOOL_POMO_INTERVAL, m_pomodoroTimer, [&] {
 				m_pomodoroTimer->setCountdown(timeInSeconds);
 			});
 		});
@@ -129,9 +129,9 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 
 void MainWindow::loadConfigs()
 {
-	//auto state = loadConfig("state", this, Qt::WindowState::WindowNoState);
+	//auto state = loadConfig(WINDOW_STATE, this, Qt::WindowState::WindowNoState);
 	//setWindowState(state); // behaves strangely, Windows issue I think
-	auto geometry = loadConfig("geometry", this, QRect(0, 0, 1000, 600));
+	auto geometry = loadConfig(WINDOW_GEOMETRY, this, QRect(0, 0, 1000, 600));
 	setGeometry(geometry);
 	loadEditorConfigs();
 	//loadPreviewConfigs();
@@ -140,7 +140,7 @@ void MainWindow::loadConfigs()
 
 void MainWindow::loadEditorConfigs()
 {
-	auto font = loadConfig<QFont>("font", m_editor, m_editor->defaulFont());
+	auto font = loadConfig<QFont>(EDITOR_FONT, m_editor, m_editor->defaulFont());
 	m_editor->setFont(font);
 }
 
@@ -151,7 +151,7 @@ void MainWindow::loadEditorConfigs()
 
 void MainWindow::loadMenuBarConfigs()
 {
-	loadConfigPassthrough<QString>("theme", m_editor, [&](QString theme) {
+	loadConfigPassthrough<QString>(EDITOR_THEME, m_editor, [&](QString theme) {
 
 		auto fs_editor_theme = Path::toStdFs(theme);
 		m_stylist->style(m_editor, fs_editor_theme);
@@ -159,7 +159,7 @@ void MainWindow::loadMenuBarConfigs()
 
 		}, Path::toQString(m_menuBar->defaultEditorTheme()));
 
-	loadConfigPassthrough<QString>("theme", this, [&](QString theme) {
+	loadConfigPassthrough<QString>(WINDOW_THEME, this, [&](QString theme) {
 
 		auto fs_window_theme = Path::toStdFs(theme);
 		m_stylist->style(this, fs_window_theme);
@@ -167,7 +167,7 @@ void MainWindow::loadMenuBarConfigs()
 
 		}, Path::toQString(m_menuBar->defaultWindowTheme()));
 
-	loadConfigPassthrough<int>("tab_stop_distance", m_editor, [&](int pixels) {
+	loadConfigPassthrough<int>(EDITOR_TAB_STOPS, m_editor, [&](int pixels) {
 
 		m_editor->setTabStopDistance(pixels);
 		m_menuBar->setSelectedTabStop(pixels);
@@ -185,7 +185,7 @@ void MainWindow::loadMenuBarConfigs()
 
 		}, m_obj->defaultValue());*/
 
-	loadConfigPassthrough<int>("time", m_pomodoroTimer, [&](int timeInSeconds) {
+	loadConfigPassthrough<int>(TOOL_POMO_INTERVAL, m_pomodoroTimer, [&](int timeInSeconds) {
 
 		m_pomodoroTimer->setCountdown(timeInSeconds);
 		m_menuBar->setSelectedPomodoroTime(timeInSeconds);
@@ -195,6 +195,6 @@ void MainWindow::loadMenuBarConfigs()
 
 void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 {
-	saveConfigPassthrough(priorState, "state", this);
-	saveConfigPassthrough(geometry(), "geometry", this);
+	saveConfigPassthrough(priorState, WINDOW_STATE, this);
+	saveConfigPassthrough(geometry(), WINDOW_GEOMETRY, this);
 }

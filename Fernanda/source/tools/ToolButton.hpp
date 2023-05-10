@@ -28,6 +28,7 @@ protected:
 			setChecked(!isChecked());
 			return;
 		}
+
 		QPushButton::mousePressEvent(event);
 	}
 };

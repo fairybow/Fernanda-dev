@@ -11,6 +11,7 @@ class ComboBox : public QComboBox
 {
 public:
 	ComboBox(QWidget* parent = nullptr) : QComboBox(parent) {}
+
 	ComboBox(const QString& idleText, QWidget* parent = nullptr) : QComboBox(parent), m_idleText(idleText) {}
 
 protected:
@@ -20,6 +21,7 @@ protected:
 			QComboBox::paintEvent(event);
 			return;
 		}
+
 		QStylePainter painter(this);
 		QStyleOptionComboBox option;
 		initStyleOption(&option);

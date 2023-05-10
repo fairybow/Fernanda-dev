@@ -13,7 +13,7 @@
 
 constexpr char BACKUP_NAME[] = "backup";
 constexpr char DATA_NAME[] = "data";
-constexpr char TEMP_NAME[] = "tempFiles";
+constexpr char TEMP_NAME[] = "temp_files";
 
 class User : public QObject
 {

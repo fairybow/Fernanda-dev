@@ -53,9 +53,12 @@ namespace Layout
 		(alignment == Line::Horizontally)
 			? layout = new QHBoxLayout(parent)
 			: layout = new QVBoxLayout(parent);
+
 		setBoxProperties(layout, widgets, margins);
+
 		if (parent)
 			parent->setLayout(layout);
+
 		return layout;
 	}
 

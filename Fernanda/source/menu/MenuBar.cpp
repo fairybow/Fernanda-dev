@@ -16,7 +16,7 @@ void MenuBar::makeSubmenus()
 void MenuBar::makeActionGroups() // check that `user_data_path` can be empty
 {
 	auto user_data_path = emit getUserDataPath();
-	m_actionGroups[EDITOR_THEMES] = ActionGroup::fromQrc(QRC_EDITOR,
+	m_actionGroups[GROUP_EDITOR_THEMES] = ActionGroup::fromQrc(QRC_EDITOR,
 		".fernanda_editor", user_data_path, this, [&] {
 
 			auto selection = selectedEditorTheme();
@@ -25,7 +25,7 @@ void MenuBar::makeActionGroups() // check that `user_data_path` can be empty
 
 		});
 
-	m_actionGroups[WINDOW_THEMES] = ActionGroup::fromQrc(QRC_MAIN_WINDOW,
+	m_actionGroups[GROUP_WINDOW_THEMES] = ActionGroup::fromQrc(QRC_MAIN_WINDOW,
 		".fernanda_window", user_data_path, this, [&] {
 
 			auto selection = selectedWindowTheme();
@@ -42,7 +42,7 @@ void MenuBar::makeBespokeActionGroups()
 	wrap_modes << ActionGroup::bespoke("WordWrap", "Wrap at word boundaries");
 	wrap_modes << ActionGroup::bespoke("WrapAnywhere", "Wrap anywhere");
 	wrap_modes << ActionGroup::bespoke("WrapAt", "Wrap at word boundaries or anywhere");
-	m_actionGroups[WRAPS] = ActionGroup::fromBespoke(wrap_modes, this, [&] {
+	m_actionGroups[GROUP_WRAPS] = ActionGroup::fromBespoke(wrap_modes, this, [&] {
 
 		auto selection = selectedWrapMode();
 		if (selection == nullptr) return;
@@ -53,7 +53,7 @@ void MenuBar::makeBespokeActionGroups()
 	ActionGroup::BespokeList indicator_positions;
 	indicator_positions << ActionGroup::bespoke("Top");
 	indicator_positions << ActionGroup::bespoke("Bottom");
-	m_actionGroups[INDICATOR_POS] = ActionGroup::fromBespoke(indicator_positions, this, [&] {
+	m_actionGroups[GROUP_INDICATOR_POS] = ActionGroup::fromBespoke(indicator_positions, this, [&] {
 
 		auto selection = selectedIndicatorPosition();
 		if (selection == nullptr) return;
@@ -64,7 +64,7 @@ void MenuBar::makeBespokeActionGroups()
 	ActionGroup::BespokeList preview_types;
 	preview_types << ActionGroup::bespoke("Fountain");
 	preview_types << ActionGroup::bespoke("Markdown");
-	m_actionGroups[PREVIEW] = ActionGroup::fromBespoke(preview_types, this, [&] {
+	m_actionGroups[GROUP_PREVIEW] = ActionGroup::fromBespoke(preview_types, this, [&] {
 
 		auto selection = selectedPreviewType();
 		if (selection == nullptr) return;
@@ -135,8 +135,8 @@ void MenuBar::appearanceDialog()
 	auto themes_box = new QGroupBox(tr("Themes:"));
 	auto editor_themes_combo_box = new ComboBox;
 	auto window_themes_combo_box = new ComboBox;
-	addActionsToBoxes(editor_themes_combo_box, m_actionGroups[EDITOR_THEMES]);
-	addActionsToBoxes(window_themes_combo_box, m_actionGroups[WINDOW_THEMES]);
+	addActionsToBoxes(editor_themes_combo_box, m_actionGroups[GROUP_EDITOR_THEMES]);
+	addActionsToBoxes(window_themes_combo_box, m_actionGroups[GROUP_WINDOW_THEMES]);
 	for (auto& combo_box : { editor_themes_combo_box, window_themes_combo_box }) {
 		connect(combo_box, &ComboBox::currentIndexChanged, this, [&](int index) {
 			combo_box->itemData(index).value<QAction*>()->trigger();
@@ -154,7 +154,7 @@ void MenuBar::appearanceDialog()
 	auto editor_box = new QGroupBox(tr("Editor:"));
 	auto tab_stops_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Tab stop distance:", true, "pixels", 10);
 	tab_stops_slider->setRange(1, 30);
-	tab_stops_slider->setValue(m_sliderValues[TABS]);
+	tab_stops_slider->setValue(m_sliderValues[SLIDER_TABS]);
 	auto editor_layout = Layout::box(tab_stops_slider, editor_box);
 
 	// Tool settings
@@ -162,7 +162,7 @@ void MenuBar::appearanceDialog()
 	// 3 checkboxes for each tool
 	auto pomodoro_times_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Pomodoro interval:", true, "minutes");
 	pomodoro_times_slider->setRange(1, 60);
-	pomodoro_times_slider->setValue(m_sliderValues[POMODORO] / 60);
+	pomodoro_times_slider->setValue(m_sliderValues[SLIDER_POMODORO] / 60);
 	auto tool_layout = Layout::box(pomodoro_times_slider, tool_box);
 
 	// set initial slider values from ini by setting it to map/key

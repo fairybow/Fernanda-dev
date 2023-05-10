@@ -2,6 +2,7 @@
 
 #include "common/Fx.hpp"
 #include "common/Layout.hpp"
+#include "common/RegexPatterns.hpp"
 #include "common/Widget.hpp"
 #include "common/StatusBarButton.hpp"
 

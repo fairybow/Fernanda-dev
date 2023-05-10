@@ -2,6 +2,7 @@
 
 #include "common/Io.hpp"
 #include "common/Path.hpp"
+#include "common/StylePatterns.hpp"
 
 #include <QRegularExpressionMatchIterator>
 #include <QWidget>

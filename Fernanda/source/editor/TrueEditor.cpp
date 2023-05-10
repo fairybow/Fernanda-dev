@@ -20,7 +20,8 @@ void TrueEditor::lineNumberAreaPaintEvent(QPaintEvent* event)
 	while (block.isValid() && top <= event->rect().bottom()) {
 		if (block.isVisible() && bottom >= event->rect().top()) {
 			auto number = QString::number(block_number + 1);
-			painter.drawText(0, top, m_lineNumberArea->width(), fontMetrics().height(), Qt::AlignRight, number);
+			painter.drawText(0, top, m_lineNumberArea->width(),
+				fontMetrics().height(), Qt::AlignRight, number);
 		}
 		block = block.next();
 		top = bottom;
@@ -73,12 +74,15 @@ void TrueEditor::setLineNumberArea(LineNumberArea* lineNumberArea) // can't defi
 
 void TrueEditor::setCursorStyle(const QString& styleSheet)
 {
-	auto it = QRegularExpression("Cursor[^}]*}").globalMatch(styleSheet);
+	auto it = QRegularExpression(
+		CURSOR_BLOCK).globalMatch(styleSheet);
 	while (it.hasNext()) {
 		auto match = it.next();
 		QString css_block = match.capturedTexts().at(0);
-		auto match_cursor = QRegularExpression("(\\scolor = )(.*)(;)").match(css_block).captured(2);
-		auto match_under_cursor = QRegularExpression("(\\sunder-color = )(.*)(;)").match(css_block).captured(2);
+		auto match_cursor = QRegularExpression(
+			CURSOR_COLOR_LINE).match(css_block).captured(2);
+		auto match_under_cursor = QRegularExpression(
+			CURSOR_UNDER_COLOR_LINE).match(css_block).captured(2);
 		if (QColor(match_cursor).isValid())
 			m_cursor->setColor(match_cursor);
 		if (QColor(match_under_cursor).isValid())

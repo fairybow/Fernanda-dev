@@ -14,8 +14,12 @@ class PomodoroTimer : public ToolButton
 	Q_OBJECT
 
 public:
-	PomodoroTimer(const QString& text, QMainWindow* mainWindow, QWidget* parent = nullptr, int defaultSecondsCountdown = defaultInterval())
-		: ToolButton(text, parent), m_text(text), m_window(mainWindow), m_interval(defaultSecondsCountdown)
+	PomodoroTimer(const QString& text, QMainWindow* mainWindow,
+		QWidget* parent = nullptr, int defaultSecondsCountdown = defaultInterval())
+		: ToolButton(text, parent),
+		m_text(text),
+		m_window(mainWindow),
+		m_interval(defaultSecondsCountdown)
 	{
 		m_timer->setTimerType(Qt::PreciseTimer);
 		connect(m_timer, &QTimer::timeout, this, &PomodoroTimer::countdownDisplay);
