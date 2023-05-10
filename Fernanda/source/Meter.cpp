@@ -63,7 +63,7 @@ void Meter::updateCounts(bool isSelection)
 	auto counts_info = emit getCountsData(isSelection);
 	QStringList elements;
 	if (m_hasLineCount) {
-		auto block_count = Utility::greaterOrEqual(counts_info.blockCount);
+		auto block_count = Utility::greaterOrEqual(counts_info.blockCount, 1);
 		elements << QString::number(block_count) + " lines";
 	}
 	if (m_hasWordCount) {

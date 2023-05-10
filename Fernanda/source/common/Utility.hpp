@@ -27,7 +27,7 @@ namespace Utility
 		return QString::number((seconds / 60) % 60) + separator + seconds_string;
 	}
 
-	inline int greaterOrEqual(int value, int mustExceed = 1)
+	inline int greaterOrEqual(int value, int mustExceed)
 	{
 		return (value < mustExceed) ? mustExceed : value;
 	}
