@@ -39,10 +39,13 @@ public:
 	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_EDITOR_THEMES], path); }
 	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_WINDOW_THEMES], path); }
 	void setSelectedTabStop(int pixels) { m_sliderValues[SLIDER_TABS] = pixels; }
-	void setSelectedWrapMode(const QString& mode) { setGroupSelectedAction(m_actionGroups[GROUP_WRAPS], mode); }
-	void setSelectedIndicatorPosition(const QString& position) { setGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_POS], position); }
-	void setSelectedPreviewType(const QString& type) { setGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
+	void setSelectedWrapMode(const QString& mode) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_WRAPS], mode); }
+	void setSelectedIndicatorPosition(const QString& position) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_POS], position); }
+	void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
 	void setSelectedPomodoroTime(int timeInSeconds) { m_sliderValues[SLIDER_POMODORO] = timeInSeconds; }
+	void setCheckBoxPomodoroTimer(bool state) { m_checkBoxStates[CHECK_BOX_POMODORO] = state; }
+	void setCheckBoxStayAwake(bool state) { m_checkBoxStates[CHECK_BOX_STAY_AWAKE] = state; }
+	void setCheckBoxAlwaysOnTop(bool state) { m_checkBoxStates[CHECK_BOX_ALWAYS_ON_TOP] = state; }
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();
@@ -55,6 +58,9 @@ signals:
 	void askSetIndicatorPosition(const QString& position);
 	void askSetPreviewType(const QString& type);
 	void askSetPomodoroTime(int timeInSeconds);
+	void askTogglePomodoroTimer(bool state);
+	void askToggleStayAwake(bool state);
+	void askToggleAlwaysOnTop(bool state);
 
 private:
 	static constexpr char GROUP_EDITOR_THEMES[] = "editor_themes";
@@ -64,11 +70,15 @@ private:
 	static constexpr char GROUP_PREVIEW[] = "preview_types";
 	static constexpr char SLIDER_TABS[] = "tab_stops";
 	static constexpr char SLIDER_POMODORO[] = "pomodoro_times";
+	static constexpr char CHECK_BOX_POMODORO[] = "pomodoro_timer";
+	static constexpr char CHECK_BOX_STAY_AWAKE[] = "stay_awake";
+	static constexpr char CHECK_BOX_ALWAYS_ON_TOP[] = "always_on_top";
 	static constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
 	static constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
 
 	std::map<QString, ActionGroup*> m_actionGroups;
 	std::map<QString, int> m_sliderValues;
+	std::map<QString, bool> m_checkBoxStates;
 	const bool m_isDev;
 
 	void makeActionGroups();
@@ -96,7 +106,7 @@ private:
 		}
 	}
 
-	void setGroupSelectedAction(ActionGroup* actionGroup, const QString& value)
+	void setBespokeGroupSelectedAction(ActionGroup* actionGroup, const QString& value)
 	{
 		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
 			auto action = actionGroup->actions().at(i);

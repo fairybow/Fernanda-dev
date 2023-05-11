@@ -130,6 +130,27 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
 
+	connect(m_menuBar, &MenuBar::askTogglePomodoroTimer, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::TOOL_POMODORO, m_pomodoroTimer, [&] {
+				m_pomodoroTimer->toggleVisibility(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleStayAwake, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::TOOL_STAY_AWAKE, m_stayAwake, [&] {
+				m_stayAwake->toggleVisibility(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleAlwaysOnTop, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::TOOL_ALWAYS_ON_TOP, m_alwaysOnTop, [&] {
+				m_alwaysOnTop->toggleVisibility(state);
+			});
+		});
+
 	connect(m_menuBar, &MenuBar::askSetPomodoroTime, this, [&](int timeInSeconds) {
 		saveConfigPassthrough(
 			timeInSeconds, Ini::TOOL_POMO_INTERVAL, m_pomodoroTimer, [&] {
@@ -183,10 +204,20 @@ void MainWindow::loadMenuBarConfigs()
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
 
-	/*loadConfigPassthrough<>("", m_obj, [&]() {
-		//m_obj->
-		//m_obj->set
-		}, m_obj->defaultValue());*/
+	loadConfigPassthrough<bool>(Ini::TOOL_POMODORO, m_pomodoroTimer, [&](bool state) {
+		m_pomodoroTimer->toggleVisibility(state);
+		m_menuBar->setCheckBoxPomodoroTimer(state);
+		}, false);
+
+	loadConfigPassthrough<bool>(Ini::TOOL_STAY_AWAKE, m_stayAwake, [&](bool state) {
+		m_stayAwake->toggleVisibility(state);
+		m_menuBar->setCheckBoxStayAwake(state);
+		}, false);
+
+	loadConfigPassthrough<bool>(Ini::TOOL_ALWAYS_ON_TOP, m_alwaysOnTop, [&](bool state) {
+		m_alwaysOnTop->toggleVisibility(state);
+		m_menuBar->setCheckBoxAlwaysOnTop(state);
+		}, false);
 
 	loadConfigPassthrough<int>(Ini::TOOL_POMO_INTERVAL, m_pomodoroTimer, [&](int timeInSeconds) {
 		m_pomodoroTimer->setCountdown(timeInSeconds);

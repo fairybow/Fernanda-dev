@@ -129,6 +129,8 @@ void MenuBar::appearanceDialog()
 {
 	// split-up
 
+	// function for each groupbox below
+
 	QDialog dialog(this);
 
 	// Themes
@@ -169,7 +171,9 @@ void MenuBar::appearanceDialog()
 		QString(Emoji::PUSHPIN) + " Always on top");
 	auto tool_check_boxes_layout = Layout::box(Layout::Line::Horizontally,
 		{ pomodoro_timer_check_box, stay_awake_check_box, always_on_top_check_box });
-
+	pomodoro_timer_check_box->setChecked(m_checkBoxStates[CHECK_BOX_POMODORO]);
+	stay_awake_check_box->setChecked(m_checkBoxStates[CHECK_BOX_STAY_AWAKE]);
+	always_on_top_check_box->setChecked(m_checkBoxStates[CHECK_BOX_ALWAYS_ON_TOP]);
 	tool_layout->addLayout(tool_check_boxes_layout);
 
 	auto pomodoro_times_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Pomodoro interval", true, "minutes");
@@ -183,19 +187,16 @@ void MenuBar::appearanceDialog()
 		emit askSetTabStop(value);
 		});
 	connect(pomodoro_timer_check_box, &QCheckBox::stateChanged, this, [&](int state) {
-		//set(value);
-		//emit sig(value);
-		qDebug() << state << pomodoro_timer_check_box;
+		setCheckBoxPomodoroTimer(state);
+		emit askTogglePomodoroTimer(state);
 		});
 	connect(stay_awake_check_box, &QCheckBox::stateChanged, this, [&](int state) {
-		//set(value);
-		//emit sig(value);
-		qDebug() << state << stay_awake_check_box;
+		setCheckBoxStayAwake(state);
+		emit askToggleStayAwake(state);
 		});
 	connect(always_on_top_check_box, &QCheckBox::stateChanged, this, [&](int state) {
-		//set(value);
-		//emit sig(value);
-		qDebug() << state << always_on_top_check_box;
+		setCheckBoxAlwaysOnTop(state);
+		emit askToggleAlwaysOnTop(state);
 		});
 	connect(pomodoro_times_slider, &Slider::valueChanged, this, [&](int value) {
 		setSelectedPomodoroTime(value * 60);

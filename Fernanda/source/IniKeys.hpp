@@ -20,6 +20,15 @@ namespace Ini
 	constexpr char EDITOR_TAB_STOPS[] = \
 		"tab_stop_distance";
 
+	constexpr char TOOL_POMODORO[] = \
+		"pomodoro_timer";
+
+	constexpr char TOOL_STAY_AWAKE[] = \
+		"stay_awake";
+
+	constexpr char TOOL_ALWAYS_ON_TOP[] = \
+		"always_on_top";
+
 	constexpr char TOOL_POMO_INTERVAL[] = \
 		"pomodoro_interval";
 }
