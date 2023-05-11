@@ -31,7 +31,8 @@ void Meter::trigger(Type type, bool force)
 
 void Meter::setVisible(bool visible)
 {
-	// store or recover previous states? (all need to be toggled on or off when toggling entire meter)
+	// store or recover previous states
+	// (all need to be toggled on or off when toggling entire meter)
 	QWidget::setVisible(visible);
 }
 

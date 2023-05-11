@@ -58,6 +58,7 @@ private:
 	StatusBarButton* m_refresh = new StatusBarButton("StatusBarButton", "\U0001F504", this, 0.4);
 
 	bool m_hasAutoCount = true;
+
 	bool m_hasLinePosition = true;
 	bool m_hasColumnPosition = true;
 	bool m_hasLineCount = true;

@@ -161,6 +161,17 @@ void MenuBar::appearanceDialog()
 	tab_stops_slider->setValue(m_sliderValues[SLIDER_TABS]);
 	auto editor_layout = Layout::box(Layout::Line::Horizontally, tab_stops_slider, editor_box);
 
+	/*
+	CursorBlink,
+	CursorBlock,
+	CursorCenterOnScroll,
+	CursorEnsureVisible,
+	CursorTypewriter,
+	LineHighlight,
+	LineNumberArea,
+	Shadow
+	*/
+
 	// Meter settings
 	auto meter_box = new QGroupBox(tr("Meter"));
 	auto line_check_box = new QCheckBox("Line");
