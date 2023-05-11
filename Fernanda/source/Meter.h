@@ -35,6 +35,12 @@ public:
 
 	void trigger(Type type, bool force = false);
 
+	void setHasLinePosition(bool state) { updateAll(m_hasLinePosition, state); }
+	void setHasColumnPosition(bool state) { updateAll(m_hasColumnPosition, state); }
+	void setHasLineCount(bool state) { updateAll(m_hasLineCount, state); }
+	void setHasWordCount(bool state) { updateAll(m_hasWordCount, state); }
+	void setHasCharacterCount(bool state) { updateAll(m_hasCharCount, state); }
+
 signals:
 	void separatorVisibilityCheck();
 	void toggleAutoCount(bool checked);
@@ -57,6 +63,7 @@ private:
 
 	void setupLabels();
 	void connections();
+	void updateAll(bool& memberBool, bool state);
 	void updateCounts(bool isSelection = false);
 	void updatePositions();
 	bool toggleVisibility(QLabel* label, bool hasAnything);

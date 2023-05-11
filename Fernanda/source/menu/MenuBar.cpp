@@ -161,6 +161,53 @@ void MenuBar::appearanceDialog()
 	tab_stops_slider->setValue(m_sliderValues[SLIDER_TABS]);
 	auto editor_layout = Layout::box(Layout::Line::Horizontally, tab_stops_slider, editor_box);
 
+	// Meter settings
+	auto meter_box = new QGroupBox(tr("Meter"));
+	auto line_check_box = new QCheckBox("Line");
+	auto column_check_box = new QCheckBox("Column");
+	auto meter_separator = new QLabel(
+		Utility::padString("/", 4));
+	meter_separator->setAlignment(Qt::AlignCenter);
+	auto lines_check_box = new QCheckBox("Lines");
+	auto words_check_box = new QCheckBox("Words");
+	auto characters_check_box = new QCheckBox("Characters");
+
+	line_check_box->setChecked(m_checkBoxStates[CHECK_BOX_LINE_POS]);
+	column_check_box->setChecked(m_checkBoxStates[CHECK_BOX_COL_POS]);
+	lines_check_box->setChecked(m_checkBoxStates[CHECK_BOX_LINES]);
+	words_check_box->setChecked(m_checkBoxStates[CHECK_BOX_WORDS]);
+	characters_check_box->setChecked(m_checkBoxStates[CHECK_BOX_CHARS]);
+
+	auto positions_layout = Layout::box(Layout::Line::Horizontally, { line_check_box, column_check_box });
+	auto counts_layout = Layout::box(Layout::Line::Horizontally, { lines_check_box, words_check_box, characters_check_box });
+
+	auto meter_layout = Layout::box(Layout::Line::Horizontally,
+		nullptr, meter_box);
+	meter_layout->addLayout(positions_layout, 0);
+	meter_layout->addWidget(meter_separator, 1);
+	meter_layout->addLayout(counts_layout, 0);
+
+	connect(line_check_box, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxLinePosition(state);
+		emit askToggleLinePosition(state);
+		});
+	connect(column_check_box, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxColumnPosition(state);
+		emit askToggleColumnPosition(state);
+		});
+	connect(lines_check_box, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxLineCount(state);
+		emit askToggleLineCount(state);
+		});
+	connect(words_check_box, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxWordCount(state);
+		emit askToggleWordCount(state);
+		});
+	connect(characters_check_box, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxCharacterCount(state);
+		emit askToggleCharacterCount(state);
+		});
+
 	// Tool settings
 	auto tool_box = new QGroupBox(tr("Tools"));
 	auto tool_layout = Layout::box(Layout::Line::Vertically, nullptr, tool_box);
@@ -207,17 +254,16 @@ void MenuBar::appearanceDialog()
 
 	// Tools "all" checkbox
 
-	// Meter checkboxes + toggle all
-
 	auto full_layout = Layout::grid(nullptr, &dialog);
 
 	full_layout->addWidget(themes_box, 0, 0, 1, 2);
-	full_layout->addWidget(font_box, 1, 0, 3, 2);
+	full_layout->addWidget(font_box, 1, 0, 5, 2);
 	full_layout->addWidget(editor_box, 0, 3, 1, 2);
-	full_layout->addWidget(tool_box, 3, 3, 1, 2);
+	full_layout->addWidget(meter_box, 4, 3, 1, 2);
+	full_layout->addWidget(tool_box, 5, 3, 1, 2);
 
 	Layout::setMinAndMaxSize(&dialog, 800, 450);
-	Layout::setUniformSpacing({ themes_layout, font_layout, editor_layout, tool_layout, tool_check_boxes_layout, full_layout });
+	Layout::setUniformSpacing({ themes_layout, font_layout, editor_layout, positions_layout, counts_layout, meter_layout, tool_layout, tool_check_boxes_layout, full_layout });
 
 	font_box_area->setFixedWidth((dialog.width() / 2) - font_layout->spacing());
 

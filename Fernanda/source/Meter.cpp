@@ -57,6 +57,13 @@ void Meter::connections()
 		});
 }
 
+void Meter::updateAll(bool& memberBool, bool state)
+{
+	memberBool = state;
+	updateCounts();
+	updatePositions();
+}
+
 void Meter::updateCounts(bool isSelection)
 {
 	if (!hasAnyCount()) return;

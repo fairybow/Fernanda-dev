@@ -20,6 +20,27 @@ namespace Ini
 	constexpr char EDITOR_TAB_STOPS[] = \
 		"tab_stop_distance";
 
+	constexpr char METER[] = \
+		"meter";
+
+	constexpr char METER_LINE_POS[] = \
+		"line_position";
+
+	constexpr char METER_COL_POS[] = \
+		"column_position";
+
+	constexpr char METER_LINE_COUNT[] = \
+		"line_count";
+
+	constexpr char METER_WORD_COUNT[] = \
+		"word_count";
+
+	constexpr char METER_CHAR_COUNT[] = \
+		"character_count";
+
+	constexpr char TOOLS[] = \
+		"tools";
+
 	constexpr char TOOL_POMODORO[] = \
 		"pomodoro_timer";
 

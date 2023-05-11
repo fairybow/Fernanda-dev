@@ -126,9 +126,49 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 			});
 		});
 
+	// to-do:
 	//void askSetWrapMode(const QString& mode);
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
+	
+	// toggle entire meter
+
+	connect(m_menuBar, &MenuBar::askToggleLinePosition, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::METER_LINE_POS, m_meter, [&] {
+				m_meter->setHasLinePosition(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleColumnPosition, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::METER_COL_POS, m_meter, [&] {
+				m_meter->setHasColumnPosition(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleLineCount, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::METER_LINE_COUNT, m_meter, [&] {
+				m_meter->setHasLineCount(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleWordCount, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::METER_WORD_COUNT, m_meter, [&] {
+				m_meter->setHasWordCount(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleCharacterCount, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::METER_CHAR_COUNT, m_meter, [&] {
+				m_meter->setHasCharacterCount(state);
+			});
+		});
+
+	// toggle all tools
 
 	connect(m_menuBar, &MenuBar::askTogglePomodoroTimer, this, [&](bool state) {
 		saveConfigPassthrough(
@@ -203,6 +243,35 @@ void MainWindow::loadMenuBarConfigs()
 	//void askSetWrapMode(const QString& mode);
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
+
+	// load entire meter box
+
+	loadConfigPassthrough<bool>(Ini::METER_LINE_POS, m_meter, [&](bool state) {
+		m_meter->setHasLinePosition(state);
+		m_menuBar->setCheckBoxLinePosition(state);
+		}, true);
+
+	loadConfigPassthrough<bool>(Ini::METER_COL_POS, m_meter, [&](bool state) {
+		m_meter->setHasColumnPosition(state);
+		m_menuBar->setCheckBoxColumnPosition(state);
+		}, true);
+
+	loadConfigPassthrough<bool>(Ini::METER_LINE_COUNT, m_meter, [&](bool state) {
+		m_meter->setHasLineCount(state);
+		m_menuBar->setCheckBoxLineCount(state);
+		}, false);
+
+	loadConfigPassthrough<bool>(Ini::METER_WORD_COUNT, m_meter, [&](bool state) {
+		m_meter->setHasWordCount(state);
+		m_menuBar->setCheckBoxWordCount(state);
+		}, true);
+
+	loadConfigPassthrough<bool>(Ini::METER_CHAR_COUNT, m_meter, [&](bool state) {
+		m_meter->setHasCharacterCount(state);
+		m_menuBar->setCheckBoxCharacterCount(state);
+		}, false);
+
+	// load entire tools box
 
 	loadConfigPassthrough<bool>(Ini::TOOL_POMODORO, m_pomodoroTimer, [&](bool state) {
 		m_pomodoroTimer->setVisible(state);

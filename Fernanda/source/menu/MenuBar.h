@@ -2,6 +2,7 @@
 
 #include "../common/Emoji.hpp"
 #include "../common/Layout.hpp"
+#include "../common/Utility.hpp"
 #include "../common/Widget.hpp"
 #include "ActionGroup.h"
 #include "ComboBox.hpp"
@@ -42,10 +43,15 @@ public:
 	void setSelectedWrapMode(const QString& mode) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_WRAPS], mode); }
 	void setSelectedIndicatorPosition(const QString& position) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_POS], position); }
 	void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
-	void setSelectedPomodoroTime(int timeInSeconds) { m_sliderValues[SLIDER_POMODORO] = timeInSeconds; }
+	void setCheckBoxLinePosition(bool state) { m_checkBoxStates[CHECK_BOX_LINE_POS] = state; }
+	void setCheckBoxColumnPosition(bool state) { m_checkBoxStates[CHECK_BOX_COL_POS] = state; }
+	void setCheckBoxLineCount(bool state) { m_checkBoxStates[CHECK_BOX_LINES] = state; }
+	void setCheckBoxWordCount(bool state) { m_checkBoxStates[CHECK_BOX_WORDS] = state; }
+	void setCheckBoxCharacterCount(bool state) { m_checkBoxStates[CHECK_BOX_CHARS] = state; }
 	void setCheckBoxPomodoroTimer(bool state) { m_checkBoxStates[CHECK_BOX_POMODORO] = state; }
 	void setCheckBoxStayAwake(bool state) { m_checkBoxStates[CHECK_BOX_STAY_AWAKE] = state; }
 	void setCheckBoxAlwaysOnTop(bool state) { m_checkBoxStates[CHECK_BOX_ALWAYS_ON_TOP] = state; }
+	void setSelectedPomodoroTime(int timeInSeconds) { m_sliderValues[SLIDER_POMODORO] = timeInSeconds; }
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();
@@ -57,10 +63,15 @@ signals:
 	void askSetWrapMode(const QString& mode);
 	void askSetIndicatorPosition(const QString& position);
 	void askSetPreviewType(const QString& type);
-	void askSetPomodoroTime(int timeInSeconds);
+	void askToggleLinePosition(bool state);
+	void askToggleColumnPosition(bool state);
+	void askToggleLineCount(bool state);
+	void askToggleWordCount(bool state);
+	void askToggleCharacterCount(bool state);
 	void askTogglePomodoroTimer(bool state);
 	void askToggleStayAwake(bool state);
 	void askToggleAlwaysOnTop(bool state);
+	void askSetPomodoroTime(int timeInSeconds);
 
 private:
 	static constexpr char GROUP_EDITOR_THEMES[] = "editor_themes";
@@ -70,6 +81,11 @@ private:
 	static constexpr char GROUP_PREVIEW[] = "preview_types";
 	static constexpr char SLIDER_TABS[] = "tab_stops";
 	static constexpr char SLIDER_POMODORO[] = "pomodoro_times";
+	static constexpr char CHECK_BOX_LINE_POS[] = "line_position";
+	static constexpr char CHECK_BOX_COL_POS[] = "column_position";
+	static constexpr char CHECK_BOX_LINES[] = "line_count";
+	static constexpr char CHECK_BOX_WORDS[] = "word_count";
+	static constexpr char CHECK_BOX_CHARS[] = "character_count";
 	static constexpr char CHECK_BOX_POMODORO[] = "pomodoro_timer";
 	static constexpr char CHECK_BOX_STAY_AWAKE[] = "stay_awake";
 	static constexpr char CHECK_BOX_ALWAYS_ON_TOP[] = "always_on_top";
