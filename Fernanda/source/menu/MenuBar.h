@@ -41,8 +41,18 @@ public:
 	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_WINDOW_THEMES], path); }
 	void setSelectedTabStop(int pixels) { m_sliderValues[SLIDER_TABS] = pixels; }
 	void setSelectedWrapMode(const QString& mode) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_WRAPS], mode); }
-	void setSelectedIndicatorPosition(const QString& position) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_POS], position); }
-	void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
+
+	/*bool m_hasCursorBlink = true;
+	bool m_hasCursorBlock = true;
+	bool m_hasCursorCenterOnScroll = true;
+	bool m_hasCursorEnsureVisible = true;
+	bool m_hasCursorTypewriter = true;
+	bool m_hasLineHighlight = true;
+	bool m_hasLineNumberArea = true;
+	bool m_hasShadow = true;*/
+
+	//void setSelectedIndicatorPosition(const QString& position) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_POS], position); }
+	//void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
 	void setCheckBoxLinePosition(bool state) { m_checkBoxStates[CHECK_BOX_LINE_POS] = state; }
 	void setCheckBoxColumnPosition(bool state) { m_checkBoxStates[CHECK_BOX_COL_POS] = state; }
 	void setCheckBoxLineCount(bool state) { m_checkBoxStates[CHECK_BOX_LINES] = state; }
@@ -104,6 +114,12 @@ private:
 	void addActionsToBoxes(QComboBox* comboBox, ActionGroup* actionGroup);
 	void addFontDialog(QMdiArea* multiDocArea);
 	LiveFontDialog* fontDialog();
+	QGroupBox* themesGroupBox();
+	QGroupBox* fontGroupBox();
+	QGroupBox* editorGroupBox();
+	QGroupBox* cursorGroupBox();
+	QGroupBox* meterGroupBox();
+	QGroupBox* toolsGroupBox();
 
 	QAction* selectedEditorTheme() const { return m_actionGroups.at(GROUP_EDITOR_THEMES)->checkedAction(); }
 	QAction* selectedWindowTheme() const { return m_actionGroups.at(GROUP_WINDOW_THEMES)->checkedAction(); }

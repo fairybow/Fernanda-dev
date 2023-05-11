@@ -51,15 +51,19 @@ private:
 	QLabel* m_shadow = new QLabel(this);
 	QLabel* m_overlay = new QLabel(this);
 	QLabel* m_underlay = new QLabel(this);
-	
+
+	bool m_hasLineHighlight = true;
 	bool m_hasCursorBlink = true;
+	bool m_hasCursorBlock = true;
+
+	/*bool m_hasCursorBlink = true;
 	bool m_hasCursorBlock = true;
 	bool m_hasCursorCenterOnScroll = true;
 	bool m_hasCursorEnsureVisible = true;
 	bool m_hasCursorTypewriter = true;
 	bool m_hasLineHighlight = true;
 	bool m_hasLineNumberArea = true;
-	bool m_hasShadow = true;
+	bool m_hasShadow = true;*/
 
 	void nameObjects(const char* name);
 	void setupTrueEditor();

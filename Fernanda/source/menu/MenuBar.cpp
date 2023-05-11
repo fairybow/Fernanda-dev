@@ -125,55 +125,81 @@ LiveFontDialog* MenuBar::fontDialog()
 	return dialog;
 }
 
-void MenuBar::appearanceDialog()
+QGroupBox* MenuBar::themesGroupBox()
 {
-	// split-up
-
-	// function for each groupbox below
-
-	QDialog dialog(this);
-
-	// Themes
-	auto themes_box = new QGroupBox(tr("Themes"));
-	auto editor_themes_combo_box = new ComboBox;
-	auto window_themes_combo_box = new ComboBox;
-	addActionsToBoxes(editor_themes_combo_box, m_actionGroups[GROUP_EDITOR_THEMES]);
-	addActionsToBoxes(window_themes_combo_box, m_actionGroups[GROUP_WINDOW_THEMES]);
-	for (auto& combo_box : { editor_themes_combo_box, window_themes_combo_box }) {
+	auto box = new QGroupBox(tr("Themes"));
+	auto editor_themes = new ComboBox;
+	auto window_themes = new ComboBox;
+	addActionsToBoxes(editor_themes, m_actionGroups[GROUP_EDITOR_THEMES]);
+	addActionsToBoxes(window_themes, m_actionGroups[GROUP_WINDOW_THEMES]);
+	for (auto& combo_box : { editor_themes, window_themes }) {
 		connect(combo_box, &ComboBox::currentIndexChanged, this, [&](int index) {
 			combo_box->itemData(index).value<QAction*>()->trigger();
 			});
 	}
-	auto labeled_editor_themes_combo_box = Layout::container(editor_themes_combo_box, nullptr, "Editor");
-	auto labeled_window_themes_combo_box = Layout::container(window_themes_combo_box, nullptr, "Window");
-	auto themes_layout = Layout::box(Layout::Line::Horizontally, { labeled_editor_themes_combo_box, labeled_window_themes_combo_box }, themes_box);
+	auto labeled_editor_themes = Layout::container(editor_themes, nullptr, "Editor");
+	auto labeled_window_themes = Layout::container(window_themes, nullptr, "Window");
+	auto themes_layout = Layout::box(Layout::Line::Horizontally, { labeled_editor_themes, labeled_window_themes }, box);
+	Layout::setUniformSpacing(themes_layout);
+	return box;
+}
 
-	// Font box
-	auto font_box = new QGroupBox(tr("Font"));
-	auto font_box_area = new QMdiArea;
-	addFontDialog(font_box_area);
-	auto font_layout = Layout::box(Layout::Line::Horizontally, font_box_area, font_box);
+QGroupBox* MenuBar::fontGroupBox()
+{
+	auto box = new QGroupBox(tr("Font"));
+	auto mdi_area = new QMdiArea;
+	addFontDialog(mdi_area);
+	auto font_layout = Layout::box(Layout::Line::Horizontally, mdi_area, box);
+	Layout::setUniformSpacing(font_layout);
+	return box;
+}
 
-	// Editor settings
-	auto editor_box = new QGroupBox(tr("Editor"));
+QGroupBox* MenuBar::editorGroupBox()
+{
+	/*auto wrap_modes_combo_box = new ComboBox;
+	addActionsToBoxes(wrap_modes_combo_box, m_actionGroups[GROUP_WRAPS]);
+	connect(wrap_modes_combo_box, &ComboBox::currentIndexChanged, this, [&](int index) {
+		wrap_modes_combo_box->itemData(index).value<QAction*>()->trigger();
+		});*/
+
+		/*
+		Wrap Modes (combo)
+		LineHighlight, (rest check)
+		LineNumberArea,
+		Shadow
+		*/
+
+	auto box = new QGroupBox(tr("Editor"));
 	auto tab_stops_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Tab stop distance", true, "pixels", 10);
 	tab_stops_slider->setRange(1, 30);
 	tab_stops_slider->setValue(m_sliderValues[SLIDER_TABS]);
-	auto editor_layout = Layout::box(Layout::Line::Horizontally, tab_stops_slider, editor_box);
+	auto editor_layout = Layout::box(Layout::Line::Horizontally, tab_stops_slider, box);
 
-	/*
-	CursorBlink,
+	connect(tab_stops_slider, &Slider::valueChanged, this, [&](int value) {
+		setSelectedTabStop(value);
+		emit askSetTabStop(value);
+		});
+
+	Layout::setUniformSpacing(editor_layout);
+	return box;
+}
+
+QGroupBox* MenuBar::cursorGroupBox()
+{
+	// Cursor (all check box)
+	/*CursorBlink,
 	CursorBlock,
 	CursorCenterOnScroll,
 	CursorEnsureVisible,
-	CursorTypewriter,
-	LineHighlight,
-	LineNumberArea,
-	Shadow
-	*/
+	CursorTypewriter,*/
 
-	// Meter settings
-	auto meter_box = new QGroupBox(tr("Meter"));
+	//Layout::setUniformSpacing(...);
+	return new QGroupBox;
+}
+
+QGroupBox* MenuBar::meterGroupBox()
+{
+	auto box = new QGroupBox(tr("Meter"));
 	auto line_check_box = new QCheckBox("Line");
 	auto column_check_box = new QCheckBox("Column");
 	auto meter_separator = new QLabel(
@@ -193,7 +219,7 @@ void MenuBar::appearanceDialog()
 	auto counts_layout = Layout::box(Layout::Line::Horizontally, { lines_check_box, words_check_box, characters_check_box });
 
 	auto meter_layout = Layout::box(Layout::Line::Horizontally,
-		nullptr, meter_box);
+		nullptr, box);
 	meter_layout->addLayout(positions_layout, 0);
 	meter_layout->addWidget(meter_separator, 1);
 	meter_layout->addLayout(counts_layout, 0);
@@ -218,10 +244,14 @@ void MenuBar::appearanceDialog()
 		setCheckBoxCharacterCount(state);
 		emit askToggleCharacterCount(state);
 		});
+	Layout::setUniformSpacing({ positions_layout, counts_layout, meter_layout });
+	return box;
+}
 
-	// Tool settings
-	auto tool_box = new QGroupBox(tr("Tools"));
-	auto tool_layout = Layout::box(Layout::Line::Vertically, nullptr, tool_box);
+QGroupBox* MenuBar::toolsGroupBox()
+{
+	auto box = new QGroupBox(tr("Tools"));
+	auto tool_layout = Layout::box(Layout::Line::Vertically, nullptr, box);
 
 	auto pomodoro_timer_check_box = new QCheckBox(
 		QString(Emoji::TOMATO) + " Pomodoro timer");
@@ -242,10 +272,6 @@ void MenuBar::appearanceDialog()
 
 	tool_layout->addWidget(pomodoro_times_slider);
 
-	connect(tab_stops_slider, &Slider::valueChanged, this, [&](int value) {
-		setSelectedTabStop(value);
-		emit askSetTabStop(value);
-		});
 	connect(pomodoro_timer_check_box, &QCheckBox::stateChanged, this, [&](int state) {
 		setCheckBoxPomodoroTimer(state);
 		emit askTogglePomodoroTimer(state);
@@ -262,21 +288,20 @@ void MenuBar::appearanceDialog()
 		setSelectedPomodoroTime(value * 60);
 		emit askSetPomodoroTime(value * 60);
 		});
+	Layout::setUniformSpacing({ tool_layout, tool_check_boxes_layout });
+	return box;
+}
 
-	// Tools "all" checkbox
 
+void MenuBar::appearanceDialog()
+{
+	QDialog dialog(this);
 	auto full_layout = Layout::grid(nullptr, &dialog);
-
-	full_layout->addWidget(themes_box, 0, 0, 1, 2);
-	full_layout->addWidget(font_box, 1, 0, 5, 2);
-	full_layout->addWidget(editor_box, 0, 3, 1, 2);
-	full_layout->addWidget(meter_box, 4, 3, 1, 2);
-	full_layout->addWidget(tool_box, 5, 3, 1, 2);
-
+	full_layout->addWidget(themesGroupBox(), 0, 0, 1, 2);
+	full_layout->addWidget(fontGroupBox(), 1, 0, 5, 2);
+	full_layout->addWidget(editorGroupBox(), 0, 3, 1, 2);
+	full_layout->addWidget(meterGroupBox(), 4, 3, 1, 2);
+	full_layout->addWidget(toolsGroupBox(), 5, 3, 1, 2);
 	Layout::setMinAndMaxSize(&dialog, 800, 450);
-	Layout::setUniformSpacing({ themes_layout, font_layout, editor_layout, positions_layout, counts_layout, meter_layout, tool_layout, tool_check_boxes_layout, full_layout });
-
-	font_box_area->setFixedWidth((dialog.width() / 2) - font_layout->spacing());
-
 	dialog.exec();
 }

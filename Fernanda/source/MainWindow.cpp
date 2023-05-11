@@ -98,6 +98,8 @@ void MainWindow::menuBarConnections() // things MenuBar needs in order to functi
 
 void MainWindow::menuBarConfigConnections() // things that *other things* need in order to function, controlled via menu
 {
+	// further subdivide menuBarConfigConnection fuctions
+
 	connect(m_menuBar, &MenuBar::askStyleEditor, this, [&](StdFsPath path) {
 		saveConfigPassthrough(
 			Path::toQString(path), Ini::EDITOR_THEME, m_editor, [&] {
@@ -130,6 +132,14 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 	//void askSetWrapMode(const QString& mode);
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
+	/*bool m_hasCursorBlink = true;
+	bool m_hasCursorBlock = true;
+	bool m_hasCursorCenterOnScroll = true;
+	bool m_hasCursorEnsureVisible = true;
+	bool m_hasCursorTypewriter = true;
+	bool m_hasLineHighlight = true;
+	bool m_hasLineNumberArea = true;
+	bool m_hasShadow = true;*/
 	
 	// toggle entire meter
 
