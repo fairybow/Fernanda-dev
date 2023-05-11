@@ -161,9 +161,12 @@ void MenuBar::appearanceDialog()
 	auto tool_box = new QGroupBox(tr("Tools"));
 	auto tool_layout = Layout::box(Layout::Line::Vertically, nullptr, tool_box);
 
-	auto pomodoro_timer_check_box = new QCheckBox(QString(TOMATO) + " Pomodoro timer");
-	auto stay_awake_check_box = new QCheckBox(QString(TEACUP) + " Stay awake");
-	auto always_on_top_check_box = new QCheckBox(QString(PUSHPIN) + " Always on top");
+	auto pomodoro_timer_check_box = new QCheckBox(
+		QString(Emoji::TOMATO) + " Pomodoro timer");
+	auto stay_awake_check_box = new QCheckBox(
+		QString(Emoji::TEACUP) + " Stay awake");
+	auto always_on_top_check_box = new QCheckBox(
+		QString(Emoji::PUSHPIN) + " Always on top");
 	auto tool_check_boxes_layout = Layout::box(Layout::Line::Horizontally,
 		{ pomodoro_timer_check_box, stay_awake_check_box, always_on_top_check_box });
 

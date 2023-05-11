@@ -47,9 +47,9 @@ private:
 	Editor* m_editor = new Editor("Editor", QFont("mononoki", 12));
 	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");
-	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer(TOMATO, this, m_statusBar);
-	StayAwake* m_stayAwake = new StayAwake(TEACUP, m_statusBar);
-	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop(PUSHPIN, this, m_statusBar);
+	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer(Emoji::TOMATO, this, m_statusBar);
+	StayAwake* m_stayAwake = new StayAwake(Emoji::TEACUP, m_statusBar);
+	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop(Emoji::PUSHPIN, this, m_statusBar);
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 	User* m_user = new User(QCoreApplication::applicationName(), this);
 

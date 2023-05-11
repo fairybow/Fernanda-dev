@@ -11,10 +11,6 @@
 #include <filesystem>
 #include <map>
 
-constexpr char BACKUP_NAME[] = "backup";
-constexpr char DATA_NAME[] = "data";
-constexpr char TEMP_NAME[] = "temp_files";
-
 class User : public QObject
 {
 	using StdFsPath = std::filesystem::path;
@@ -73,6 +69,10 @@ public:
 	StdFsPath dataFolder() { return m_folders[DATA_NAME]; }
 
 private:
+	static constexpr char BACKUP_NAME[] = "backup";
+	static constexpr char DATA_NAME[] = "data";
+	static constexpr char TEMP_NAME[] = "temp_files";
+
 	std::map<QString, StdFsPath> m_folders;
 	const StdFsPath m_configFileName;
 

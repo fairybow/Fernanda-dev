@@ -68,7 +68,7 @@ void Meter::updateCounts(bool isSelection)
 	}
 	if (m_hasWordCount) {
 		auto words = counts_info.text.split(
-			QRegularExpression(LEADING_WHITESPACE), Qt::SkipEmptyParts);
+			QRegularExpression(Regex::LEADING_WHITESPACE), Qt::SkipEmptyParts);
 		elements << QString::number(words.count()) + " words";
 	}
 	auto character_count = counts_info.text.count();

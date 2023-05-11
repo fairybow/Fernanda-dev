@@ -81,7 +81,7 @@ void TrueEditor::setLineNumberArea(LineNumberArea* lineNumberArea) // can't defi
 void TrueEditor::setCursorStyle(const QString& styleSheet)
 {
 	auto it = QRegularExpression(
-		CURSOR_BLOCK).globalMatch(styleSheet);
+		StyleRegex::CURSOR_BLOCK).globalMatch(styleSheet);
 
 	while (it.hasNext()) {
 		auto match = it.next();
@@ -89,9 +89,9 @@ void TrueEditor::setCursorStyle(const QString& styleSheet)
 		QString css_block = match.capturedTexts().at(0);
 
 		auto match_cursor = QRegularExpression(
-			CURSOR_COLOR_LINE).match(css_block).captured(2);
+			StyleRegex::CURSOR_COLOR_LINE).match(css_block).captured(2);
 		auto match_under_cursor = QRegularExpression(
-			CURSOR_UNDER_COLOR_LINE).match(css_block).captured(2);
+			StyleRegex::CURSOR_UNDER_COLOR_LINE).match(css_block).captured(2);
 
 		if (QColor(match_cursor).isValid())
 			m_cursor->setColor(match_cursor);

@@ -85,7 +85,7 @@ QString Stylist::buildFullStyleSheet(const Stylee& stylee)
 
 const QString Stylist::buildThemedStyleSheet(QString styleSheet, const QString& themeSheet)
 {
-	static const auto theme_sheet_line = QRegularExpression(THEME_SHEET_LINE);
+	static const auto theme_sheet_line = QRegularExpression(StyleRegex::THEME_SHEET_LINE);
 	auto matches = theme_sheet_line.globalMatch(themeSheet);
 	while (matches.hasNext()) {
 		auto match = matches.next();
@@ -98,8 +98,8 @@ const QString Stylist::buildThemedStyleSheet(QString styleSheet, const QString& 
 
 Stylist::QStringPair Stylist::variableAndValue(const QRegularExpressionMatch& themeSheetMatch)
 {
-	static const auto theme_sheet_value = QRegularExpression(THEME_SHEET_VALUE);
-	static const auto theme_sheet_variable = QRegularExpression(THEME_SHEET_VARIABLE);
+	static const auto theme_sheet_value = QRegularExpression(StyleRegex::THEME_SHEET_VALUE);
+	static const auto theme_sheet_variable = QRegularExpression(StyleRegex::THEME_SHEET_VARIABLE);
 	QString variable = themeSheetMatch.captured(0).replace(theme_sheet_value, nullptr);
 	QString value = themeSheetMatch.captured(0).replace(theme_sheet_variable, nullptr);
 	return { variable, value };

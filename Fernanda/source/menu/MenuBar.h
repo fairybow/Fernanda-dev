@@ -22,16 +22,6 @@
 #include <map>
 #include <filesystem>
 
-constexpr char GROUP_EDITOR_THEMES[] = "editor_themes";
-constexpr char GROUP_WINDOW_THEMES[] = "window_themes";
-constexpr char GROUP_WRAPS[] = "wrap_modes";
-constexpr char GROUP_INDICATOR_POS[] = "indicator_alignments";
-constexpr char GROUP_PREVIEW[] = "preview_types";
-constexpr char SLIDER_TABS[] = "tab_stops";
-constexpr char SLIDER_POMODORO[] = "pomodoro_times";
-constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
-constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
-
 class MenuBar : public Widget<QMenuBar>
 {
 	using StdFsPath = std::filesystem::path;
@@ -67,6 +57,16 @@ signals:
 	void askSetPomodoroTime(int timeInSeconds);
 
 private:
+	static constexpr char GROUP_EDITOR_THEMES[] = "editor_themes";
+	static constexpr char GROUP_WINDOW_THEMES[] = "window_themes";
+	static constexpr char GROUP_WRAPS[] = "wrap_modes";
+	static constexpr char GROUP_INDICATOR_POS[] = "indicator_alignments";
+	static constexpr char GROUP_PREVIEW[] = "preview_types";
+	static constexpr char SLIDER_TABS[] = "tab_stops";
+	static constexpr char SLIDER_POMODORO[] = "pomodoro_times";
+	static constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
+	static constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
+
 	std::map<QString, ActionGroup*> m_actionGroups;
 	std::map<QString, int> m_sliderValues;
 	const bool m_isDev;

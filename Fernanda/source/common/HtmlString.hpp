@@ -8,15 +8,6 @@
 
 #include <string>
 
-constexpr char TABLE_START[] = "<table><td>";
-constexpr char TABLE_DATA_START[] = "<td>";
-constexpr char TABLE_DATA_END[] = "</td>";
-constexpr char TABLE_END[] = "</table>";
-constexpr char EMPTY_TABLE_DATA[] = "<td>\n</td>";
-constexpr char FORMAT_BOLD[] = "<b>%1</b>";
-constexpr char FORMAT_HEADING[] = "<h%1>%2</h%1>";
-constexpr char FORMAT_LINK[] = "<a href='%1'>%2</a>";
-
 inline QString operator%(const QString& lhs, const QString& rhs)
 {
 	return lhs + "<p>" + rhs;
@@ -44,6 +35,15 @@ inline QString operator/(const std::string& lhs, const QString& rhs) { return QS
 namespace HtmlString
 {
 	namespace StdFs = std::filesystem;
+
+	constexpr char TABLE_START[] = "<table><td>";
+	constexpr char TABLE_DATA_START[] = "<td>";
+	constexpr char TABLE_DATA_END[] = "</td>";
+	constexpr char TABLE_END[] = "</table>";
+	constexpr char EMPTY_TABLE_DATA[] = "<td>\n</td>";
+	constexpr char FORMAT_BOLD[] = "<b>%1</b>";
+	constexpr char FORMAT_HEADING[] = "<h%1>%2</h%1>";
+	constexpr char FORMAT_LINK[] = "<a href='%1'>%2</a>";
 
 	inline QString multiply(const char* character, int defaultArgument = 2)
 	{
@@ -97,7 +97,7 @@ namespace HtmlString
 	{
 		if (displayName.isEmpty()) {
 			QString url_copy = url;
-			displayName = url_copy.replace(QRegularExpression(URL_BEGINNING), "");
+			displayName = url_copy.replace(QRegularExpression(Regex::URL_BEGINNING), "");
 		}
 		return QString(FORMAT_LINK).arg(url).arg(displayName);
 	}
