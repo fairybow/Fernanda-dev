@@ -1,5 +1,6 @@
 #pragma once
 
+#include "common/Emoji.hpp"
 #include "common/Layout.hpp"
 #include "common/Widget.hpp"
 #include "editor/Editor.h"
@@ -41,12 +42,14 @@ private:
 	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
 	Indicator* m_indicator = new Indicator("Indicator", this);
 	TabBar* m_tabBar = new TabBar("TabBar", this);
+	//Document* m_document = new Document(this);
+	//Project* m_project = new Project(this);
 	Editor* m_editor = new Editor("Editor", QFont("mononoki", 12));
 	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");
-	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer("\U0001F345", this, m_statusBar);
-	StayAwake* m_stayAwake = new StayAwake("\U0001F375", m_statusBar);
-	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop("\U0001F4CC", this, m_statusBar);
+	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer(TOMATO, this, m_statusBar);
+	StayAwake* m_stayAwake = new StayAwake(TEACUP, m_statusBar);
+	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop(PUSHPIN, this, m_statusBar);
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 	User* m_user = new User(QCoreApplication::applicationName(), this);
 

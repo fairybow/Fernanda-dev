@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common/Layout.hpp"
+#include "../common/Utility.hpp"
 #include "../common/Widget.hpp"
 
 #include <QLabel>
@@ -64,12 +65,14 @@ private:
 
 		if (hasDisplay) {
 			m_valueDisplay = new QLabel(this);
+
 			connect(m_slider, &QSlider::valueChanged, this, [&](int value) {
-
-				auto value_string = QString::number(value * m_multiplier);
-				auto text = m_displayUnit.isEmpty() ? value_string : QString(value_string + " " + m_displayUnit);
+				auto final_value = value * m_multiplier;
+				auto value_string = QString::number(final_value);
+				auto text = m_displayUnit.isEmpty()
+					? value_string
+					: QString(value_string + " " + Utility::pluralCheck(m_displayUnit, final_value));
 				m_valueDisplay.value()->setText(text);
-
 				});
 		}
 	}

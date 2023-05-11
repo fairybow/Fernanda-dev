@@ -159,17 +159,40 @@ void MenuBar::appearanceDialog()
 
 	// Tool settings
 	auto tool_box = new QGroupBox(tr("Tools"));
-	// 3 checkboxes for each tool
+	auto tool_layout = Layout::box(Layout::Line::Vertically, nullptr, tool_box);
+
+	auto pomodoro_timer_check_box = new QCheckBox(QString(TOMATO) + " Pomodoro timer");
+	auto stay_awake_check_box = new QCheckBox(QString(TEACUP) + " Stay awake");
+	auto always_on_top_check_box = new QCheckBox(QString(PUSHPIN) + " Always on top");
+	auto tool_check_boxes_layout = Layout::box(Layout::Line::Horizontally,
+		{ pomodoro_timer_check_box, stay_awake_check_box, always_on_top_check_box });
+
+	tool_layout->addLayout(tool_check_boxes_layout);
+
 	auto pomodoro_times_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Pomodoro interval", true, "minutes");
 	pomodoro_times_slider->setRange(1, 60);
 	pomodoro_times_slider->setValue(m_sliderValues[SLIDER_POMODORO] / 60);
-	auto tool_layout = Layout::box(Layout::Line::Horizontally, pomodoro_times_slider, tool_box);
 
-	// set initial slider values from ini by setting it to map/key
+	tool_layout->addWidget(pomodoro_times_slider);
 
 	connect(tab_stops_slider, &Slider::valueChanged, this, [&](int value) {
 		setSelectedTabStop(value);
 		emit askSetTabStop(value);
+		});
+	connect(pomodoro_timer_check_box, &QCheckBox::stateChanged, this, [&](int state) {
+		//set(value);
+		//emit sig(value);
+		qDebug() << state << pomodoro_timer_check_box;
+		});
+	connect(stay_awake_check_box, &QCheckBox::stateChanged, this, [&](int state) {
+		//set(value);
+		//emit sig(value);
+		qDebug() << state << stay_awake_check_box;
+		});
+	connect(always_on_top_check_box, &QCheckBox::stateChanged, this, [&](int state) {
+		//set(value);
+		//emit sig(value);
+		qDebug() << state << always_on_top_check_box;
 		});
 	connect(pomodoro_times_slider, &Slider::valueChanged, this, [&](int value) {
 		setSelectedPomodoroTime(value * 60);
@@ -186,7 +209,7 @@ void MenuBar::appearanceDialog()
 	full_layout->addWidget(tool_box, 3, 3, 1, 2);
 
 	Layout::setMinAndMaxSize(&dialog, 800, 400);
-	Layout::setUniformSpacing({ themes_layout, font_layout, editor_layout, tool_layout, full_layout });
+	Layout::setUniformSpacing({ themes_layout, font_layout, editor_layout, tool_layout, tool_check_boxes_layout, full_layout });
 
 	font_box_area->setFixedWidth(dialog.width() / 2);
 

@@ -5,8 +5,6 @@
 #include <QStyleOptionComboBox>
 #include <QStylePainter>
 
-#include <optional>
-
 class ComboBox : public QComboBox
 {
 public:

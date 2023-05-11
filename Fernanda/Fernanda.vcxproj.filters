@@ -330,6 +330,12 @@
     <ClInclude Include="source\common\Utility.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
+    <ClInclude Include="source\document\Document.hpp">
+      <Filter>Source\Document</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\Emoji.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">

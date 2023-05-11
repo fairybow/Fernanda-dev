@@ -139,7 +139,9 @@
     <ClCompile Include="unused\splitter\Splitter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\common\Emoji.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
+    <ClInclude Include="source\document\Document.hpp" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
     <ClInclude Include="source\document\TabBar.hpp" />
     <ClInclude Include="unused\Archiver.hpp" />

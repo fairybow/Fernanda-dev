@@ -38,4 +38,10 @@ namespace Utility
 			return string;
 		return string + QString(desiredLength - string.length(), padChar);
 	}
+
+	inline QString pluralCheck(const QString& text, int value)
+	{
+		if (!text.endsWith("s") || value != 1) return text;
+		return text.left(text.length() - 1);
+	}
 }

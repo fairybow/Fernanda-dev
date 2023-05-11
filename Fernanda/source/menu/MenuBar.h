@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../common/Emoji.hpp"
 #include "../common/Layout.hpp"
 #include "../common/Widget.hpp"
 #include "ActionGroup.h"
@@ -8,6 +9,7 @@
 #include "Popup.hpp"
 #include "Slider.hpp"
 
+#include <QCheckBox>
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QGroupBox>
