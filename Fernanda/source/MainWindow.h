@@ -16,14 +16,18 @@
 #include "StatusBar.hpp"
 #include "Stylist.h"
 
-#include "document/TabBar.hpp"
-
 #include <QCloseEvent>
 #include <QMainWindow>
 #include <QString>
 
 #include <filesystem>
 #include <functional>
+
+// testing
+
+#include "document/TabBar.hpp"
+
+//
 
 class MainWindow : public Widget<QMainWindow>
 {
@@ -41,7 +45,7 @@ private:
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_isDev, this);
 	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
 	Indicator* m_indicator = new Indicator("Indicator", this);
-	TabBar* m_tabBar = new TabBar("TabBar", this);
+	//TabBar* m_tabBar = new TabBar("TabBar", this);
 	//Document* m_document = new Document(this);
 	//Project* m_project = new Project(this);
 	Editor* m_editor = new Editor("Editor", QFont("mononoki", 12));

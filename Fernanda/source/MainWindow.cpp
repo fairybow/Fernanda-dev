@@ -37,7 +37,7 @@ void MainWindow::setupWidgets()
 	//
 
 	Layout::setCentralWidgets(this,
-		{ m_tabBar, m_editor }, { 4, 0, 4, 0 }, Layout::Line::Vertically);
+		{ /*m_tabBar, m_indicator,*/ m_editor}, {4, 0, 4, 0}, Layout::Line::Vertically);
 }
 
 void MainWindow::connections()
