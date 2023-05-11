@@ -41,6 +41,9 @@ public:
 	void setHasWordCount(bool state) { updateAll(m_hasWordCount, state); }
 	void setHasCharacterCount(bool state) { updateAll(m_hasCharCount, state); }
 
+public slots:
+	virtual void setVisible(bool visible);
+
 signals:
 	void separatorVisibilityCheck();
 	void toggleAutoCount(bool checked);
