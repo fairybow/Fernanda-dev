@@ -8,9 +8,11 @@
 class ComboBox : public QComboBox
 {
 public:
-	ComboBox(QWidget* parent = nullptr) : QComboBox(parent) {}
+	ComboBox(QWidget* parent = nullptr)
+		: QComboBox(parent) {}
 
-	ComboBox(const QString& idleText, QWidget* parent = nullptr) : QComboBox(parent), m_idleText(idleText) {}
+	ComboBox(const QString& idleText, QWidget* parent = nullptr)
+		: QComboBox(parent), m_idleText(idleText) {}
 
 protected:
 	virtual void paintEvent(QPaintEvent* event)

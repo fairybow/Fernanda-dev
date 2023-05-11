@@ -14,11 +14,12 @@ public:
 		setCheckable(true);
 	}
 
-	void toggleVisibility(bool value)
+public slots:
+	virtual void setVisible(bool visible)
 	{
 		if (isChecked())
 			setChecked(false);
-		setVisible(value);
+		StatusBarButton::setVisible(visible);
 	}
 
 protected:

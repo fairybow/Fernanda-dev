@@ -133,21 +133,21 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 	connect(m_menuBar, &MenuBar::askTogglePomodoroTimer, this, [&](bool state) {
 		saveConfigPassthrough(
 			state, Ini::TOOL_POMODORO, m_pomodoroTimer, [&] {
-				m_pomodoroTimer->toggleVisibility(state);
+				m_pomodoroTimer->setVisible(state);
 			});
 		});
 
 	connect(m_menuBar, &MenuBar::askToggleStayAwake, this, [&](bool state) {
 		saveConfigPassthrough(
 			state, Ini::TOOL_STAY_AWAKE, m_stayAwake, [&] {
-				m_stayAwake->toggleVisibility(state);
+				m_stayAwake->setVisible(state);
 			});
 		});
 
 	connect(m_menuBar, &MenuBar::askToggleAlwaysOnTop, this, [&](bool state) {
 		saveConfigPassthrough(
 			state, Ini::TOOL_ALWAYS_ON_TOP, m_alwaysOnTop, [&] {
-				m_alwaysOnTop->toggleVisibility(state);
+				m_alwaysOnTop->setVisible(state);
 			});
 		});
 
@@ -205,17 +205,17 @@ void MainWindow::loadMenuBarConfigs()
 	//void askSetPreviewType(const QString& type);
 
 	loadConfigPassthrough<bool>(Ini::TOOL_POMODORO, m_pomodoroTimer, [&](bool state) {
-		m_pomodoroTimer->toggleVisibility(state);
+		m_pomodoroTimer->setVisible(state);
 		m_menuBar->setCheckBoxPomodoroTimer(state);
 		}, false);
 
 	loadConfigPassthrough<bool>(Ini::TOOL_STAY_AWAKE, m_stayAwake, [&](bool state) {
-		m_stayAwake->toggleVisibility(state);
+		m_stayAwake->setVisible(state);
 		m_menuBar->setCheckBoxStayAwake(state);
 		}, false);
 
 	loadConfigPassthrough<bool>(Ini::TOOL_ALWAYS_ON_TOP, m_alwaysOnTop, [&](bool state) {
-		m_alwaysOnTop->toggleVisibility(state);
+		m_alwaysOnTop->setVisible(state);
 		m_menuBar->setCheckBoxAlwaysOnTop(state);
 		}, false);
 

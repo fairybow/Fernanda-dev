@@ -2,9 +2,11 @@
 
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QMainWindow>
 #include <QMargins>
 #include <QStackedLayout>
+#include <QString>
 #include <QVBoxLayout>
 #include <QVector>
 
@@ -169,5 +171,21 @@ namespace Layout
 	inline void setUniformSpacing(QLayout* layout, int spacing = 5)
 	{
 		setUniformSpacing(QVector<QLayout*>{ layout }, spacing);
+	}
+
+	inline QWidget* container(QWidgetList widgets, QWidget* parent = nullptr, const QString& label = QString(), Line alignment = Line::Vertically)
+	{
+		auto container = new QWidget(parent);
+		auto layout = box(alignment, widgets, container);
+		if (label.isEmpty()) return container;
+		auto q_label = new QLabel(label);
+		layout->insertWidget(0, q_label);
+		setUniformSpacing(layout);
+		return container;
+	}
+
+	inline QWidget* container(QWidget* widget, QWidget* parent = nullptr, const QString& label = QString(), Line alignment = Line::Vertically)
+	{
+		return container(QWidgetList{ widget }, parent, label, alignment);
 	}
 }
