@@ -65,11 +65,19 @@ private:
 	void meterConnections();
 	//void previewConnections();
 	void menuBarConnections();
-	void menuBarConfigConnections();
+	void menuBarStyleConfigConnections();
+	void menuBarEditorConfigConnections();
+	void menuBarMeterConfigConnections();
+	void menuBarToolConfigConnections();
+	void menuBarMiscConfigConnections();
 	void loadConfigs();
 	void loadEditorConfigs();
 	//void loadPreviewConfigs();
-	void loadMenuBarConfigs();
+	void loadMenuBarStyleConfigs();
+	void loadMenuBarEditorConfigs();
+	void loadMenuBarMeterConfigs();
+	void loadMenuBarToolConfigs();
+	void loadMenuBarMiscConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
 
 	template<typename T>

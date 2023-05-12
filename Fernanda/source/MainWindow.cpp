@@ -34,7 +34,11 @@ void MainWindow::connections()
 	meterConnections();
 	//previewConnections();
 	menuBarConnections();
-	menuBarConfigConnections();
+	menuBarStyleConfigConnections();
+	menuBarEditorConfigConnections();
+	menuBarMeterConfigConnections();
+	menuBarToolConfigConnections();
+	menuBarMiscConfigConnections();
 }
 
 void MainWindow::editorConnections()
@@ -74,7 +78,7 @@ void MainWindow::meterConnections()
 	//
 }*/
 
-void MainWindow::menuBarConnections() // things MenuBar needs in order to function
+void MainWindow::menuBarConnections()
 {
 	connect(m_menuBar, &MenuBar::getUserDataPath, this, [&] {
 		return m_user->dataFolder();
@@ -84,10 +88,8 @@ void MainWindow::menuBarConnections() // things MenuBar needs in order to functi
 		});
 }
 
-void MainWindow::menuBarConfigConnections() // things that *other things* need in order to function, controlled via menu
+void MainWindow::menuBarStyleConfigConnections()
 {
-	// further subdivide menuBarConfigConnection fuctions
-
 	connect(m_menuBar, &MenuBar::askStyleEditor, this, [&](StdFsPath path) {
 		saveConfigPassthrough(
 			Path::toQString(path), Ini::EDITOR_THEME, m_editor, [&] {
@@ -101,7 +103,10 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 				m_stylist->style(this, path);
 			});
 		});
+}
 
+void MainWindow::menuBarEditorConfigConnections()
+{
 	connect(m_menuBar, &MenuBar::askChangeFont, this, [&](const QFont& font) {
 		saveConfigPassthrough(
 			font, Ini::EDITOR_FONT, m_editor, [&] {
@@ -178,7 +183,10 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 				m_editor->setHasCursorTypewriter(state);
 			});
 		});
-	
+}
+
+void MainWindow::menuBarMeterConfigConnections()
+{
 	// toggle entire meter
 
 	connect(m_menuBar, &MenuBar::askToggleLinePosition, this, [&](bool state) {
@@ -215,7 +223,10 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 				m_meter->setHasCharacterCount(state);
 			});
 		});
+}
 
+void MainWindow::menuBarToolConfigConnections()
+{
 	// toggle all tools
 
 	connect(m_menuBar, &MenuBar::askTogglePomodoroTimer, this, [&](bool state) {
@@ -245,7 +256,10 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 				m_pomodoroTimer->setCountdown(timeInSeconds);
 			});
 		});
+}
 
+void MainWindow::menuBarMiscConfigConnections()
+{
 	// to-do:
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
@@ -259,7 +273,11 @@ void MainWindow::loadConfigs()
 	setGeometry(geometry);
 	loadEditorConfigs();
 	//loadPreviewConfigs();
-	loadMenuBarConfigs();
+	loadMenuBarStyleConfigs();
+	loadMenuBarEditorConfigs();
+	loadMenuBarMeterConfigs();
+	loadMenuBarToolConfigs();
+	loadMenuBarMiscConfigs();
 }
 
 void MainWindow::loadEditorConfigs()
@@ -273,7 +291,7 @@ void MainWindow::loadEditorConfigs()
 	//
 }*/
 
-void MainWindow::loadMenuBarConfigs()
+void MainWindow::loadMenuBarStyleConfigs()
 {
 	loadConfigPassthrough<QString>(Ini::EDITOR_THEME, m_editor, [&](QString theme) {
 		auto fs_editor_theme = Path::toStdFs(theme);
@@ -286,7 +304,10 @@ void MainWindow::loadMenuBarConfigs()
 		m_stylist->style(this, fs_window_theme);
 		m_menuBar->setSelectedWindowTheme(fs_window_theme);
 		}, Path::toQString(m_menuBar->defaultWindowTheme()));
+}
 
+void MainWindow::loadMenuBarEditorConfigs()
+{
 	loadConfigPassthrough<int>(Ini::EDITOR_TAB_STOP, m_editor, [&](int pixels) {
 		m_editor->setTabStopDistance(pixels);
 		m_menuBar->setSelectedTabStop(pixels);
@@ -336,7 +357,10 @@ void MainWindow::loadMenuBarConfigs()
 		m_editor->setHasCursorTypewriter(state);
 		m_menuBar->setCheckBoxTypewriter(state);
 		}, false);
-	
+}
+
+void MainWindow::loadMenuBarMeterConfigs()
+{
 	// load entire meter box
 
 	loadConfigPassthrough<bool>(Ini::METER_LINE_POS, m_meter, [&](bool state) {
@@ -363,7 +387,10 @@ void MainWindow::loadMenuBarConfigs()
 		m_meter->setHasCharacterCount(state);
 		m_menuBar->setCheckBoxCharacterCount(state);
 		}, false);
+}
 
+void MainWindow::loadMenuBarToolConfigs()
+{
 	// load entire tools box
 
 	loadConfigPassthrough<bool>(Ini::TOOL_POMODORO, m_pomodoroTimer, [&](bool state) {
@@ -385,7 +412,10 @@ void MainWindow::loadMenuBarConfigs()
 		m_pomodoroTimer->setCountdown(timeInSeconds);
 		m_menuBar->setSelectedPomodoroTime(timeInSeconds);
 		}, m_pomodoroTimer->defaultInterval());
+}
 
+void MainWindow::loadMenuBarMiscConfigs()
+{
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
 }
