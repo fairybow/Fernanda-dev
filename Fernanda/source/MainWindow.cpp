@@ -6,9 +6,6 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	setupWidgets();
 	connections();
 	loadConfigs();
-
-	// testing
-
 	m_editor->setFocus();
 }
 
@@ -27,15 +24,6 @@ void MainWindow::setupWidgets()
 	setStatusBar(m_statusBar);
 	m_statusBar->addWidgets({ m_meter }, { m_pomodoroTimer, m_stayAwake, m_alwaysOnTop });
 	m_menuBar->makeSubmenus();
-
-	// testing
-
-	//m_tabBar->addTab("Untitled 1");
-	//m_tabBar->addTab("Untitled 2");
-	//m_tabBar->addTab("Untitled 3");
-
-	//
-
 	Layout::setCentralWidgets(this,
 		{ /*m_tabBar, m_indicator,*/ m_editor}, {4, 0, 4, 0}, Layout::Line::Vertically);
 }

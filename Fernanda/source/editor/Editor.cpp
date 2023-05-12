@@ -60,9 +60,7 @@ void Editor::nameObjects(const char* name)
 
 void Editor::setupTrueEditor()
 {
-	//m_trueEditor->setReadOnly(true);
 	m_trueEditor->setLineNumberArea(m_lineNumberArea);
-	//m_trueEditor->viewport()->setCursor(Qt::ArrowCursor);
 }
 
 void Editor::setupShadow()

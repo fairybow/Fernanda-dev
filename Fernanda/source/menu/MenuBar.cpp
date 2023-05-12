@@ -340,6 +340,7 @@ QGroupBox* MenuBar::toolsGroupBox()
 QGroupBox* MenuBar::mixedGroupBox()
 {
 	auto box = new QGroupBox(tr(""));
+	//Layout::setUniformSpacing(...);
 	return box;
 }
 
