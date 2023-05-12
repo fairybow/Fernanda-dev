@@ -164,6 +164,14 @@ QGroupBox* MenuBar::editorGroupBox()
 		wrap_modes->itemData(index).value<QAction*>()->trigger();
 		});
 
+	auto tab_stops_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Tab stop distance", true, "pixels", 10);
+	tab_stops_slider->setRange(1, 30);
+	tab_stops_slider->setValue(m_sliderValues[SLIDER_TABS]);
+	connect(tab_stops_slider, &Slider::valueChanged, this, [&](int value) {
+		setSelectedTabStop(value);
+		emit askSetTabStop(value);
+		});
+
 	auto line_highlight = new QCheckBox("Line highlight");
 	auto line_number_area = new QCheckBox("Line number area");
 	auto shadow = new QCheckBox("Shadow");
@@ -185,19 +193,11 @@ QGroupBox* MenuBar::editorGroupBox()
 		emit askToggleShadow(state);
 		});
 
-	auto tab_stops_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Tab stop distance", true, "pixels", 10);
-	tab_stops_slider->setRange(1, 30);
-	tab_stops_slider->setValue(m_sliderValues[SLIDER_TABS]);
-	connect(tab_stops_slider, &Slider::valueChanged, this, [&](int value) {
-		setSelectedTabStop(value);
-		emit askSetTabStop(value);
-		});
-
-	auto top_layout = Layout::box(Layout::Line::Horizontally, { wrap_modes, line_highlight, line_number_area, shadow });
-	auto layout = Layout::box(Layout::Line::Vertically, nullptr, box);
-	layout->addLayout(top_layout);
+	auto layout = Layout::box(Layout::Line::Vertically, { wrap_modes }, box);
+	auto middle_layout = Layout::box(Layout::Line::Horizontally, { line_highlight, line_number_area, shadow });
+	layout->addLayout(middle_layout);
 	layout->addWidget(tab_stops_slider);
-	Layout::setUniformSpacing({ top_layout, layout });
+	Layout::setUniformSpacing({ middle_layout, layout });
 	return box;
 }
 
