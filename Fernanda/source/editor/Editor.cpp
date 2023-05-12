@@ -79,12 +79,12 @@ void Editor::buildScrollBar()
 void Editor::connections()
 {
 	trueEditorConnections();
-	//cursorConnections();
+	cursorConnections();
 	//lineNumberAreaConnections();
 }
 
 void Editor::trueEditorConnections()
-{
+{	
 	connect(m_trueEditor, &TrueEditor::getHasLineHighlight, this, [&] {
 		return m_hasLineHighlight;
 		});
@@ -106,11 +106,20 @@ void Editor::trueEditorConnections()
 		});
 }
 
-/*void Editor::cursorConnections()
+void Editor::cursorConnections()
 {
-	//
+	connect(m_trueEditor, &TrueEditor::textChanged, this, [&] {
+		if (m_hasCursorEnsureVisible)
+			m_trueEditor->ensureCursorVisible(); // it is unclear to me what this actually does...
+		});
+
+	connectMultipleSignals(m_trueEditor, this, [&] {
+		if (m_hasCursorTypewriter)
+			m_trueEditor->centerCursor();
+		}, &TrueEditor::cursorPositionChanged, &TrueEditor::textChanged);
 }
 
+/*
 void Editor::lineNumberAreaConnections()
 {
 	//

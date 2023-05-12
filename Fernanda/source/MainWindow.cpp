@@ -156,16 +156,40 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 			});
 		});
 
-	// to-do:
-	//void askSetIndicatorPosition(const QString& position);
-	//void askSetPreviewType(const QString& type);
-	/*
-	bool m_hasCursorBlink = true;
-	bool m_hasCursorBlock = true;
-	bool m_hasCursorCenterOnScroll = true;
-	bool m_hasCursorEnsureVisible = true;
-	bool m_hasCursorTypewriter = true;
-	*/
+	connect(m_menuBar, &MenuBar::askToggleBlink, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::CURSOR_BLINK, m_editor, [&] {
+				m_editor->setHasCursorBlink(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleBlock, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::CURSOR_BLOCK, m_editor, [&] {
+				m_editor->setHasCursorBlock(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleCenterOnScroll, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::CURSOR_CENTER_ON_SCROLL, m_editor, [&] {
+				m_editor->setCenterOnScroll(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleEnsureVisible, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::CURSOR_ENSURE_VISIBLE, m_editor, [&] {
+				m_editor->setHasCursorEnsureVisible(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleTypewriter, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::CURSOR_TYPEWRITER, m_editor, [&] {
+				m_editor->setHasCursorTypewriter(state);
+			});
+		});
 	
 	// toggle entire meter
 
@@ -233,6 +257,10 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 				m_pomodoroTimer->setCountdown(timeInSeconds);
 			});
 		});
+
+	// to-do:
+	//void askSetIndicatorPosition(const QString& position);
+	//void askSetPreviewType(const QString& type);
 }
 
 void MainWindow::loadConfigs()
@@ -295,10 +323,32 @@ void MainWindow::loadMenuBarConfigs()
 		m_editor->setHasShadow(state);
 		m_menuBar->setCheckBoxShadow(state);
 		}, false);
-	
-	//void askSetIndicatorPosition(const QString& position);
-	//void askSetPreviewType(const QString& type);
 
+	loadConfigPassthrough<bool>(Ini::CURSOR_BLINK, m_editor, [&](bool state) {
+		m_editor->setHasCursorBlink(state);
+		m_menuBar->setCheckBoxBlink(state);
+		}, true);
+
+	loadConfigPassthrough<bool>(Ini::CURSOR_BLOCK, m_editor, [&](bool state) {
+		m_editor->setHasCursorBlock(state);
+		m_menuBar->setCheckBoxBlock(state);
+		}, true);
+
+	loadConfigPassthrough<bool>(Ini::CURSOR_CENTER_ON_SCROLL, m_editor, [&](bool state) {
+		m_editor->setCenterOnScroll(state);
+		m_menuBar->setCheckBoxCenterOnScroll(state);
+		}, false);
+
+	loadConfigPassthrough<bool>(Ini::CURSOR_ENSURE_VISIBLE, m_editor, [&](bool state) {
+		m_editor->setHasCursorEnsureVisible(state);
+		m_menuBar->setCheckBoxEnsureVisible(state);
+		}, true);
+
+	loadConfigPassthrough<bool>(Ini::CURSOR_TYPEWRITER, m_editor, [&](bool state) {
+		m_editor->setHasCursorTypewriter(state);
+		m_menuBar->setCheckBoxTypewriter(state);
+		}, false);
+	
 	// load entire meter box
 
 	loadConfigPassthrough<bool>(Ini::METER_LINE_POS, m_meter, [&](bool state) {
@@ -347,6 +397,9 @@ void MainWindow::loadMenuBarConfigs()
 		m_pomodoroTimer->setCountdown(timeInSeconds);
 		m_menuBar->setSelectedPomodoroTime(timeInSeconds);
 		}, m_pomodoroTimer->defaultInterval());
+
+	//void askSetIndicatorPosition(const QString& position);
+	//void askSetPreviewType(const QString& type);
 }
 
 void MainWindow::closeEventConfigs(Qt::WindowStates priorState)

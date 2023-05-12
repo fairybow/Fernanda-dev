@@ -191,21 +191,53 @@ QGroupBox* MenuBar::editorGroupBox()
 	auto middle_layout = Layout::box(Layout::Line::Horizontally, { line_highlight, line_number_area, shadow });
 	layout->addLayout(middle_layout);
 	layout->addWidget(tab_stops_slider);
+	layout->addWidget(cursorGroupBox());
 	Layout::setUniformSpacing({ middle_layout, layout });
 	return box;
 }
 
 QGroupBox* MenuBar::cursorGroupBox()
 {
-	// Cursor (all check box)
-	/*CursorBlink,
-	CursorBlock,
-	CursorCenterOnScroll,
-	CursorEnsureVisible,
-	CursorTypewriter,*/
+	auto box = new QGroupBox(tr("Cursor"));
 
-	//Layout::setUniformSpacing(...);
-	return new QGroupBox;
+	auto blink = new QCheckBox("Blink");
+	auto block = new QCheckBox("Block");
+	auto center_on_scroll = new QCheckBox("Center on scroll");
+	auto ensure_visible = new QCheckBox("Ensure visible");
+	auto typewriter = new QCheckBox("Typewriter");
+
+	blink->setChecked(m_checkBoxStates[CHECK_BOX_BLINK]);
+	block->setChecked(m_checkBoxStates[CHECK_BOX_BLOCK]);
+	center_on_scroll->setChecked(m_checkBoxStates[CHECK_BOX_CENTER_ON_SCROLL]);
+	ensure_visible->setChecked(m_checkBoxStates[CHECK_BOX_ENSURE_VISIBLE]);
+	typewriter->setChecked(m_checkBoxStates[CHECK_BOX_TYPEWRITER]);
+
+	connect(blink, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxBlink(state);
+		emit askToggleBlink(state);
+		});
+	connect(block, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxBlock(state);
+		emit askToggleBlock(state);
+		});
+	connect(center_on_scroll, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxCenterOnScroll(state);
+		emit askToggleCenterOnScroll(state);
+		});
+	connect(ensure_visible, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxEnsureVisible(state);
+		emit askToggleEnsureVisible(state);
+		});
+	connect(typewriter, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxTypewriter(state);
+		emit askToggleTypewriter(state);
+		});
+
+	auto layout = Layout::box(Layout::Line::Horizontally, { blink, block, center_on_scroll, ensure_visible, typewriter }, box);
+
+	Layout::setUniformSpacing(layout);
+
+	return box;
 }
 
 QGroupBox* MenuBar::meterGroupBox()
@@ -305,15 +337,22 @@ QGroupBox* MenuBar::toolsGroupBox()
 	return box;
 }
 
+QGroupBox* MenuBar::mixedGroupBox()
+{
+	auto box = new QGroupBox(tr(""));
+	return box;
+}
+
 void MenuBar::appearanceDialog()
 {
 	QDialog dialog(this);
 	auto full_layout = Layout::grid(nullptr, &dialog);
 	full_layout->addWidget(themesGroupBox(), 0, 0, 1, 2);
 	full_layout->addWidget(fontGroupBox(), 1, 0, 5, 2);
-	full_layout->addWidget(editorGroupBox(), 0, 3, 2, 2);
-	full_layout->addWidget(meterGroupBox(), 4, 3, 1, 2);
-	full_layout->addWidget(toolsGroupBox(), 5, 3, 1, 2);
+	full_layout->addWidget(editorGroupBox(), 0, 3, 3, 2);
+	full_layout->addWidget(meterGroupBox(), 3, 3, 1, 2);
+	full_layout->addWidget(toolsGroupBox(), 4, 3, 1, 2);
+	full_layout->addWidget(mixedGroupBox(), 5, 3, 1, 2);
 	Layout::setMinAndMaxSize(&dialog, 800, 450);
 	Layout::setUniformSpacing(full_layout);
 	dialog.exec();

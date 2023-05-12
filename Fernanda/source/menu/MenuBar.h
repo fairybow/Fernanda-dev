@@ -44,16 +44,11 @@ public:
 	void setCheckBoxLineHighlight(bool state) { m_checkBoxStates[CHECK_BOX_LINE_HIGHLIGHT] = state; }
 	void setCheckBoxLineNumbers(bool state) { m_checkBoxStates[CHECK_BOX_LINE_NUMBERS] = state; }
 	void setCheckBoxShadow(bool state) { m_checkBoxStates[CHECK_BOX_SHADOW] = state; }
-
-	/*bool m_hasCursorBlink = true;
-	bool m_hasCursorBlock = true;
-	bool m_hasCursorCenterOnScroll = true;
-	bool m_hasCursorEnsureVisible = true;
-	bool m_hasCursorTypewriter = true;
-	*/
-
-	//void setSelectedIndicatorPosition(const QString& position) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_POS], position); }
-	//void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
+	void setCheckBoxBlink(bool state) { m_checkBoxStates[CHECK_BOX_BLINK] = state; }
+	void setCheckBoxBlock(bool state) { m_checkBoxStates[CHECK_BOX_BLOCK] = state; }
+	void setCheckBoxCenterOnScroll(bool state) { m_checkBoxStates[CHECK_BOX_CENTER_ON_SCROLL] = state; }
+	void setCheckBoxEnsureVisible(bool state) { m_checkBoxStates[CHECK_BOX_ENSURE_VISIBLE] = state; }
+	void setCheckBoxTypewriter(bool state) { m_checkBoxStates[CHECK_BOX_TYPEWRITER] = state; }
 	void setCheckBoxLinePosition(bool state) { m_checkBoxStates[CHECK_BOX_LINE_POS] = state; }
 	void setCheckBoxColumnPosition(bool state) { m_checkBoxStates[CHECK_BOX_COL_POS] = state; }
 	void setCheckBoxLineCount(bool state) { m_checkBoxStates[CHECK_BOX_LINES] = state; }
@@ -63,6 +58,8 @@ public:
 	void setCheckBoxStayAwake(bool state) { m_checkBoxStates[CHECK_BOX_STAY_AWAKE] = state; }
 	void setCheckBoxAlwaysOnTop(bool state) { m_checkBoxStates[CHECK_BOX_ALWAYS_ON_TOP] = state; }
 	void setSelectedPomodoroTime(int timeInSeconds) { m_sliderValues[SLIDER_POMODORO] = timeInSeconds; }
+	//void setSelectedIndicatorPosition(const QString& position) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_POS], position); }
+	//void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
 
 signals:
 	MenuBar::StdFsPath getUserDataPath();
@@ -75,8 +72,11 @@ signals:
 	void askToggleLineHighlight(bool state);
 	void askToggleLineNumbers(bool state);
 	void askToggleShadow(bool state);
-	void askSetIndicatorPosition(const QString& position);
-	void askSetPreviewType(const QString& type);
+	void askToggleBlink(bool state);
+	void askToggleBlock(bool state);
+	void askToggleCenterOnScroll(bool state);
+	void askToggleEnsureVisible(bool state);
+	void askToggleTypewriter(bool state);
 	void askToggleLinePosition(bool state);
 	void askToggleColumnPosition(bool state);
 	void askToggleLineCount(bool state);
@@ -86,22 +86,22 @@ signals:
 	void askToggleStayAwake(bool state);
 	void askToggleAlwaysOnTop(bool state);
 	void askSetPomodoroTime(int timeInSeconds);
+	void askSetIndicatorPosition(const QString& position);
+	void askSetPreviewType(const QString& type);
 
 private:
 	static constexpr char GROUP_EDITOR_THEMES[] = "editor_themes";
 	static constexpr char GROUP_WINDOW_THEMES[] = "window_themes";
-
-	//
 	static constexpr char GROUP_WRAPS[] = "wrap_modes";
+	static constexpr char SLIDER_TABS[] = "tab_stops";
 	static constexpr char CHECK_BOX_LINE_HIGHLIGHT[] = "line_highlight";
 	static constexpr char CHECK_BOX_LINE_NUMBERS[] = "line_number_area";
 	static constexpr char CHECK_BOX_SHADOW[] = "editor_shadow";
-	//
-
-	static constexpr char GROUP_INDICATOR_POS[] = "indicator_alignments";
-	static constexpr char GROUP_PREVIEW[] = "preview_types";
-	static constexpr char SLIDER_TABS[] = "tab_stops";
-	static constexpr char SLIDER_POMODORO[] = "pomodoro_times";
+	static constexpr char CHECK_BOX_BLINK[] = "cursor_blink";
+	static constexpr char CHECK_BOX_BLOCK[] = "cursor_block";
+	static constexpr char CHECK_BOX_CENTER_ON_SCROLL[] = "center_on_scroll";
+	static constexpr char CHECK_BOX_ENSURE_VISIBLE[] = "ensure_visible";
+	static constexpr char CHECK_BOX_TYPEWRITER[] = "typewriter";
 	static constexpr char CHECK_BOX_LINE_POS[] = "line_position";
 	static constexpr char CHECK_BOX_COL_POS[] = "column_position";
 	static constexpr char CHECK_BOX_LINES[] = "line_count";
@@ -110,6 +110,9 @@ private:
 	static constexpr char CHECK_BOX_POMODORO[] = "pomodoro_timer";
 	static constexpr char CHECK_BOX_STAY_AWAKE[] = "stay_awake";
 	static constexpr char CHECK_BOX_ALWAYS_ON_TOP[] = "always_on_top";
+	static constexpr char SLIDER_POMODORO[] = "pomodoro_times";
+	static constexpr char GROUP_INDICATOR_POS[] = "indicator_alignments";
+	static constexpr char GROUP_PREVIEW[] = "preview_types";
 	static constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
 	static constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
 
@@ -131,6 +134,7 @@ private:
 	QGroupBox* cursorGroupBox();
 	QGroupBox* meterGroupBox();
 	QGroupBox* toolsGroupBox();
+	QGroupBox* mixedGroupBox();
 
 	QAction* selectedEditorTheme() const { return m_actionGroups.at(GROUP_EDITOR_THEMES)->checkedAction(); }
 	QAction* selectedWindowTheme() const { return m_actionGroups.at(GROUP_WINDOW_THEMES)->checkedAction(); }

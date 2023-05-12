@@ -32,6 +32,21 @@ namespace Ini
 	constexpr char EDITOR_SHADOW[] = \
 		"shadow";
 
+	constexpr char CURSOR_BLINK[] = \
+		"blink";
+
+	constexpr char CURSOR_BLOCK[] = \
+		"block";
+
+	constexpr char CURSOR_CENTER_ON_SCROLL[] = \
+		"center_on_scroll";
+
+	constexpr char CURSOR_ENSURE_VISIBLE[] = \
+		"ensure_visible";
+
+	constexpr char CURSOR_TYPEWRITER[] = \
+		"typewriter";
+
 	//constexpr char METER[] = \
 		//"meter";
 
