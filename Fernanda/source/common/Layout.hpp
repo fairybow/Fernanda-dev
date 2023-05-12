@@ -136,17 +136,6 @@ namespace Layout
 		setCentralWidgets(parentWindow, QWidgetList{ widget }, QMargins(), alignment);
 	}*/
 
-	inline void setMinAndMaxSize(QWidget* widget, int width, int height)
-	{
-		widget->setMinimumSize(width, height);
-		widget->setMaximumSize(width, height);
-	}
-
-	inline void setMinAndMaxSize(QWidget* widget, int sides)
-	{
-		setMinAndMaxSize(widget, sides, sides);
-	}
-
 	inline void transpareForMouse(QWidgetList widgets)
 	{
 		for (auto& widget : widgets) {

@@ -18,20 +18,16 @@ void MenuBar::makeActionGroups() // check that `user_data_path` can be empty
 	auto user_data_path = emit getUserDataPath();
 	m_actionGroups[GROUP_EDITOR_THEMES] = ActionGroup::fromQrc(QRC_EDITOR,
 		".fernanda_editor", user_data_path, this, [&] {
-
 			auto selection = selectedEditorTheme();
 			if (selection == nullptr) return;
 			emit askStyleEditor(Path::toStdFs(selection->data()));
-
 		});
 
 	m_actionGroups[GROUP_WINDOW_THEMES] = ActionGroup::fromQrc(QRC_MAIN_WINDOW,
 		".fernanda_window", user_data_path, this, [&] {
-
 			auto selection = selectedWindowTheme();
 			if (selection == nullptr) return;
 			emit askStyleWindow(Path::toStdFs(selection->data()));
-
 		});
 }
 
@@ -80,6 +76,7 @@ void MenuBar::help()
 {
 	auto about = new QAction(tr("&About..."), this);
 	auto check_for_updates = new QAction(tr("&Check for updates..."), this);
+
 	connect(about, &QAction::triggered, this, [&] {
 		if (!Popup::about(this)) return;
 		Popup::version(this);
@@ -87,6 +84,7 @@ void MenuBar::help()
 	connect(check_for_updates, &QAction::triggered, this, [&] {
 		Popup::version(this);
 		});
+
 	auto menu = addMenu(tr("&Help"));
 	for (const auto& action : { about, check_for_updates })
 		menu->addAction(action);
@@ -124,6 +122,7 @@ QGroupBox* MenuBar::themesGroupBox()
 	auto box = new QGroupBox(tr("Themes"));
 	auto editor_themes = new ComboBox;
 	auto window_themes = new ComboBox;
+
 	addActionsToBoxes(editor_themes, m_actionGroups[GROUP_EDITOR_THEMES]);
 	addActionsToBoxes(window_themes, m_actionGroups[GROUP_WINDOW_THEMES]);
 	for (auto& combo_box : { editor_themes, window_themes }) {
@@ -131,10 +130,11 @@ QGroupBox* MenuBar::themesGroupBox()
 			combo_box->itemData(index).value<QAction*>()->trigger();
 			});
 	}
+
 	auto labeled_editor_themes = Layout::container(editor_themes, nullptr, "Editor");
 	auto labeled_window_themes = Layout::container(window_themes, nullptr, "Window");
-	auto themes_layout = Layout::box(Layout::Line::Horizontally, { labeled_editor_themes, labeled_window_themes }, box);
-	Layout::setUniformSpacing(themes_layout);
+	auto layout = Layout::box(Layout::Line::Horizontally, { labeled_editor_themes, labeled_window_themes }, box);
+	Layout::setUniformSpacing(layout);
 	return box;
 }
 
@@ -143,8 +143,8 @@ QGroupBox* MenuBar::fontGroupBox()
 	auto box = new QGroupBox(tr("Font"));
 	auto mdi_area = new QMdiArea;
 	addFontDialog(mdi_area);
-	auto font_layout = Layout::box(Layout::Line::Horizontally, mdi_area, box);
-	Layout::setUniformSpacing(font_layout);
+	auto layout = Layout::box(Layout::Line::Horizontally, mdi_area, box);
+	Layout::setUniformSpacing(layout);
 	return box;
 }
 
@@ -154,17 +154,10 @@ QGroupBox* MenuBar::editorGroupBox()
 
 	auto wrap_modes = new ComboBox;
 	addActionsToBoxes(wrap_modes, m_actionGroups[GROUP_WRAPS]);
-	connect(wrap_modes, &ComboBox::currentIndexChanged, this, [&, wrap_modes](int index) {
-		wrap_modes->itemData(index).value<QAction*>()->trigger();
-		});
 
 	auto tab_stops_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Tab stop distance", true, "pixels", 10);
 	tab_stops_slider->setRange(1, 30);
 	tab_stops_slider->setValue(m_sliderValues[SLIDER_TABS]);
-	connect(tab_stops_slider, &Slider::valueChanged, this, [&](int value) {
-		setSelectedTabStop(value);
-		emit askSetTabStop(value);
-		});
 
 	auto line_highlight = new QCheckBox("Line highlight");
 	auto line_number_area = new QCheckBox("Line number area");
@@ -174,6 +167,13 @@ QGroupBox* MenuBar::editorGroupBox()
 	line_number_area->setChecked(m_checkBoxStates[CHECK_BOX_LINE_NUMBERS]);
 	shadow->setChecked(m_checkBoxStates[CHECK_BOX_SHADOW]);
 
+	connect(wrap_modes, &ComboBox::currentIndexChanged, this, [&, wrap_modes](int index) {
+		wrap_modes->itemData(index).value<QAction*>()->trigger();
+		});
+	connect(tab_stops_slider, &Slider::valueChanged, this, [&](int value) {
+		setSelectedTabStop(value);
+		emit askSetTabStop(value);
+		});
 	connect(line_highlight, &QCheckBox::stateChanged, this, [&](int state) {
 		setCheckBoxLineHighlight(state);
 		emit askToggleLineHighlight(state);
@@ -234,15 +234,14 @@ QGroupBox* MenuBar::cursorGroupBox()
 		});
 
 	auto layout = Layout::box(Layout::Line::Horizontally, { blink, block, center_on_scroll, ensure_visible, typewriter }, box);
-
 	Layout::setUniformSpacing(layout);
-
 	return box;
 }
 
 QGroupBox* MenuBar::meterGroupBox()
 {
 	auto box = new QGroupBox(tr("Meter"));
+
 	auto line_check_box = new QCheckBox("Line");
 	auto column_check_box = new QCheckBox("Column");
 	auto meter_separator = new QLabel(
@@ -260,12 +259,11 @@ QGroupBox* MenuBar::meterGroupBox()
 
 	auto positions_layout = Layout::box(Layout::Line::Horizontally, { line_check_box, column_check_box });
 	auto counts_layout = Layout::box(Layout::Line::Horizontally, { lines_check_box, words_check_box, characters_check_box });
-
-	auto meter_layout = Layout::box(Layout::Line::Horizontally,
+	auto layout = Layout::box(Layout::Line::Horizontally,
 		nullptr, box);
-	meter_layout->addLayout(positions_layout, 0);
-	meter_layout->addWidget(meter_separator, 1);
-	meter_layout->addLayout(counts_layout, 0);
+	layout->addLayout(positions_layout, 0);
+	layout->addWidget(meter_separator, 1);
+	layout->addLayout(counts_layout, 0);
 
 	connect(line_check_box, &QCheckBox::stateChanged, this, [&](int state) {
 		setCheckBoxLinePosition(state);
@@ -288,14 +286,13 @@ QGroupBox* MenuBar::meterGroupBox()
 		emit askToggleCharacterCount(state);
 		});
 
-	Layout::setUniformSpacing({ positions_layout, counts_layout, meter_layout });
+	Layout::setUniformSpacing({ positions_layout, counts_layout, layout });
 	return box;
 }
 
 QGroupBox* MenuBar::toolsGroupBox()
 {
 	auto box = new QGroupBox(tr("Tools"));
-	auto tool_layout = Layout::box(Layout::Line::Vertically, nullptr, box);
 
 	auto pomodoro_timer_check_box = new QCheckBox(
 		QString(Emoji::TOMATO) + " Pomodoro timer");
@@ -303,18 +300,16 @@ QGroupBox* MenuBar::toolsGroupBox()
 		QString(Emoji::TEACUP) + " Stay awake");
 	auto always_on_top_check_box = new QCheckBox(
 		QString(Emoji::PUSHPIN) + " Always on top");
-	auto tool_check_boxes_layout = Layout::box(Layout::Line::Horizontally,
+	auto check_boxes_layout = Layout::box(Layout::Line::Horizontally,
 		{ pomodoro_timer_check_box, stay_awake_check_box, always_on_top_check_box });
+
 	pomodoro_timer_check_box->setChecked(m_checkBoxStates[CHECK_BOX_POMODORO]);
 	stay_awake_check_box->setChecked(m_checkBoxStates[CHECK_BOX_STAY_AWAKE]);
 	always_on_top_check_box->setChecked(m_checkBoxStates[CHECK_BOX_ALWAYS_ON_TOP]);
-	tool_layout->addLayout(tool_check_boxes_layout);
 
 	auto pomodoro_times_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Pomodoro interval", true, "minutes");
 	pomodoro_times_slider->setRange(1, 60);
 	pomodoro_times_slider->setValue(m_sliderValues[SLIDER_POMODORO] / 60);
-
-	tool_layout->addWidget(pomodoro_times_slider);
 
 	connect(pomodoro_timer_check_box, &QCheckBox::stateChanged, this, [&](int state) {
 		setCheckBoxPomodoroTimer(state);
@@ -333,13 +328,18 @@ QGroupBox* MenuBar::toolsGroupBox()
 		emit askSetPomodoroTime(value * 60);
 		});
 
-	Layout::setUniformSpacing({ tool_layout, tool_check_boxes_layout });
+	auto layout = Layout::box(Layout::Line::Vertically, nullptr, box);
+	layout->addLayout(check_boxes_layout);
+	layout->addWidget(pomodoro_times_slider);
+	Layout::setUniformSpacing({ layout, check_boxes_layout });
 	return box;
 }
 
 QGroupBox* MenuBar::mixedGroupBox()
 {
 	auto box = new QGroupBox(tr(""));
+	// indicator position
+	// preview type
 	//Layout::setUniformSpacing(...);
 	return box;
 }
@@ -347,6 +347,7 @@ QGroupBox* MenuBar::mixedGroupBox()
 void MenuBar::appearanceDialog()
 {
 	QDialog dialog(this);
+
 	auto full_layout = Layout::grid(nullptr, &dialog);
 	full_layout->addWidget(themesGroupBox(), 0, 0, 1, 2);
 	full_layout->addWidget(fontGroupBox(), 1, 0, 5, 2);
@@ -354,7 +355,8 @@ void MenuBar::appearanceDialog()
 	full_layout->addWidget(meterGroupBox(), 3, 3, 1, 2);
 	full_layout->addWidget(toolsGroupBox(), 4, 3, 1, 2);
 	full_layout->addWidget(mixedGroupBox(), 5, 3, 1, 2);
-	Layout::setMinAndMaxSize(&dialog, 800, 450);
+
+	dialog.setFixedSize(800, 450);
 	Layout::setUniformSpacing(full_layout);
 	dialog.exec();
 }
