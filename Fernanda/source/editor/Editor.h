@@ -19,7 +19,7 @@ class Editor : public Widget<>
 public:
 	Editor(const char* name, const QFont& defaultFont = QFont(), QWidget* parent = nullptr);
 
-	void setWrapMode(const QString& mode); // refactor to use QTextOption enum (`void setWordWrapMode(QTextOption::WrapMode policy)`)
+	void setWrapMode(const QString& mode); // refactor to use QTextOption enum (`void setWordWrapMode(QTextOption::WrapMode policy)`), move to passthroughs
 	void setHasLineHighlight(bool state);
 	void setHasLineNumberArea(bool state);
 
@@ -34,7 +34,7 @@ public:
 	void setHasCursorEnsureVisible(bool state) { m_hasCursorEnsureVisible = state; }
 	void setHasCursorTypewriter(bool state) { m_hasCursorTypewriter = state; }
 
-	// QPlainTextEdit passthroughs
+passthroughs:
 	void setCenterOnScroll(bool enabled) { m_trueEditor->setCenterOnScroll(enabled); };
 	void setFocus() { m_trueEditor->setFocus(); }
 	void setFont(const QFont& font) { m_trueEditor->setFont(font); }
@@ -43,8 +43,6 @@ public:
 	bool isReadOnly() const { return m_trueEditor->isReadOnly(); }
 	QString toPlainText() const { return m_trueEditor->toPlainText(); }
 	int blockCount() const { return m_trueEditor->blockCount(); }
-
-	// Cursor passthroughs
 	QString selectedText() const { return m_trueEditor->textCursor().selectedText(); }
 	int cursorBlockNumber() const { return m_trueEditor->textCursor().blockNumber(); }
 	int cursorPositionInBlock() const { return m_trueEditor->textCursor().positionInBlock(); }

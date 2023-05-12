@@ -4,6 +4,8 @@
 
 #include <utility>
 
+#define passthroughs public
+
 template<typename T = QWidget, typename... Args>
 class Widget : public T
 {
