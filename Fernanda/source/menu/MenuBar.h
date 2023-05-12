@@ -20,8 +20,8 @@
 #include <QVector>
 #include <QWidgetAction>
 
-#include <map>
 #include <filesystem>
+#include <map>
 
 class MenuBar : public Widget<QMenuBar>
 {

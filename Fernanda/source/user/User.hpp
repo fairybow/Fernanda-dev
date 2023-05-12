@@ -25,9 +25,6 @@ public:
 		connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &User::destroyTemp);
 	}
 
-	StdFsPath dataFolder() { return m_folders[DATA_NAME]; }
-	StdFsPath documentsFolder() { return m_folders[USER_DOCS_NAME]; }
-
 	template<typename T>
 	void save(T value, const QString& valueKey, const QString& groupPrefix = QString())
 	{
@@ -59,6 +56,11 @@ public:
 	{
 		return load(valueKey, QString(), fallbackValue);
 	}*/
+
+	StdFsPath backup() const { return m_folders.at(BACKUP_NAME); }
+	StdFsPath data() const { return m_folders.at(DATA_NAME); }
+	StdFsPath documents() const { return m_folders.at(USER_DOCS_NAME); }
+	StdFsPath temp() const { return m_folders.at(TEMP_NAME); }
 
 private:
 	static constexpr char BACKUP_NAME[] = "backup";

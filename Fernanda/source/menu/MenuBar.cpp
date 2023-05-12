@@ -18,14 +18,8 @@ void MenuBar::makeSubmenus()
 	help();
 }
 
-void MenuBar::makeActionGroups() // check that `user_data_path` can be empty
+void MenuBar::makeActionGroups()
 {
-	// inject "no theme" options for Base sheets
-
-	// this: emit askToggleHasWindowTheme()
-	// window: calls m_stylist->toggleTheme(this);
-	// stylist styles
-
 	m_actionGroups[GROUP_EDITOR_THEMES] = ActionGroup::fromQrc(QRC_EDITOR,
 		".fernanda_editor", m_userData, this, [&] {
 			auto selection = selectedEditorTheme();
@@ -148,6 +142,11 @@ LiveFontDialog* MenuBar::fontDialog()
 
 QGroupBox* MenuBar::themesGroupBox()
 {
+	// Checks to toggle theme
+	// this: emit askToggleHasWindowTheme()
+	// window: calls m_stylist->toggleTheme(this);
+	// stylist styles
+
 	auto box = new QGroupBox(tr("Themes"));
 	auto editor_themes = new ComboBox;
 	auto window_themes = new ComboBox;
