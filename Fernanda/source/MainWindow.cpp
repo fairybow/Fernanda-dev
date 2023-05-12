@@ -80,11 +80,11 @@ void MainWindow::meterConnections()
 
 void MainWindow::menuBarConnections()
 {
-	connect(m_menuBar, &MenuBar::getUserDataPath, this, [&] {
-		return m_user->dataFolder();
-		});
 	connect(m_menuBar, &MenuBar::getUserFont, this, [&] {
 		return loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
+		});
+	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
+		m_editor->setPlainText(m_document->open(path));
 		});
 }
 

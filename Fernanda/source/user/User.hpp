@@ -21,18 +21,12 @@ public:
 	User(const QString& applicationName = QCoreApplication::applicationName(), QObject* parent = nullptr, const QString& configFileName = "Settings.ini")
 		: QObject(parent), m_configFileName(fileName(configFileName))
 	{
-		auto data_folder_name = "." + applicationName.toLower();
-		auto data_folder_path = Path::toStdFs(QDir::homePath()) / Path::toStdFs(data_folder_name);
-		m_folders[DATA_NAME] = data_folder_path;
-		m_folders[TEMP_NAME] = data_folder_path / ".temp";
-		m_folders[BACKUP_NAME] = data_folder_path / BACKUP_NAME;
-		auto system_documents = Path::toStdFs(QStandardPaths::locate(
-			QStandardPaths::DocumentsLocation, nullptr, QStandardPaths::LocateDirectory));
-		m_folders["documents"] = system_documents / Path::toStdFs(applicationName);
-		for (auto& [key, data_folder] : m_folders)
-			Path::make(data_folder);
+		makeUserDataFolders(applicationName);
 		connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &User::destroyTemp);
 	}
+
+	StdFsPath dataFolder() { return m_folders[DATA_NAME]; }
+	StdFsPath documentsFolder() { return m_folders[USER_DOCS_NAME]; }
 
 	template<typename T>
 	void save(T value, const QString& valueKey, const QString& groupPrefix = QString())
@@ -66,12 +60,11 @@ public:
 		return load(valueKey, QString(), fallbackValue);
 	}*/
 
-	StdFsPath dataFolder() { return m_folders[DATA_NAME]; }
-
 private:
 	static constexpr char BACKUP_NAME[] = "backup";
 	static constexpr char DATA_NAME[] = "data";
 	static constexpr char TEMP_NAME[] = "temp_files";
+	static constexpr char USER_DOCS_NAME[] = "documents";
 
 	std::map<QString, StdFsPath> m_folders;
 	const StdFsPath m_configFileName;
@@ -82,6 +75,23 @@ private:
 		if (!fs_name.has_extension())
 			fs_name.replace_extension(".ini");
 		return fs_name;
+	}
+
+	void makeUserDataFolders(const QString& applicationName)
+	{
+		auto data_folder_name = "." + applicationName.toLower();
+
+		auto data_folder_path = Path::toStdFs(QDir::homePath()) / Path::toStdFs(data_folder_name);
+		m_folders[DATA_NAME] = data_folder_path;
+		m_folders[TEMP_NAME] = data_folder_path / ".temp";
+		m_folders[BACKUP_NAME] = data_folder_path / BACKUP_NAME;
+
+		auto system_documents = Path::toStdFs(QStandardPaths::locate(
+			QStandardPaths::DocumentsLocation, nullptr, QStandardPaths::LocateDirectory));
+		m_folders[USER_DOCS_NAME] = system_documents / Path::toStdFs(applicationName);
+
+		for (auto& [key, data_folder] : m_folders)
+			Path::make(data_folder);
 	}
 
 private slots:

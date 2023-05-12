@@ -1,7 +1,10 @@
 #include "MenuBar.h"
 
-MenuBar::MenuBar(const char* name, bool isDev, QWidget* parent)
-	: Widget(name, parent), m_isDev(isDev)
+MenuBar::MenuBar(const char* name, StdFsPath userData, StdFsPath userDocuments, bool isDev, QWidget* parent)
+	: Widget(name, parent),
+	m_userData(userData),
+	m_userDocuments(userDocuments),
+	m_isDev(isDev)
 {
 	makeActionGroups();
 	makeBespokeActionGroups();
@@ -9,22 +12,29 @@ MenuBar::MenuBar(const char* name, bool isDev, QWidget* parent)
 
 void MenuBar::makeSubmenus()
 {
+	file();
+	//project();
 	view();
 	help();
 }
 
 void MenuBar::makeActionGroups() // check that `user_data_path` can be empty
 {
-	auto user_data_path = emit getUserDataPath();
+	// inject "no theme" options for Base sheets
+
+	// this: emit askToggleHasWindowTheme()
+	// window: calls m_stylist->toggleTheme(this);
+	// stylist styles
+
 	m_actionGroups[GROUP_EDITOR_THEMES] = ActionGroup::fromQrc(QRC_EDITOR,
-		".fernanda_editor", user_data_path, this, [&] {
+		".fernanda_editor", m_userData, this, [&] {
 			auto selection = selectedEditorTheme();
 			if (selection == nullptr) return;
 			emit askStyleEditor(Path::toStdFs(selection->data()));
 		});
 
 	m_actionGroups[GROUP_WINDOW_THEMES] = ActionGroup::fromQrc(QRC_MAIN_WINDOW,
-		".fernanda_window", user_data_path, this, [&] {
+		".fernanda_window", m_userData, this, [&] {
 			auto selection = selectedWindowTheme();
 			if (selection == nullptr) return;
 			emit askStyleWindow(Path::toStdFs(selection->data()));
@@ -63,10 +73,29 @@ void MenuBar::makeBespokeActionGroups()
 		});
 }
 
+void MenuBar::file()
+{
+	auto open = new QAction(tr("&Open..."), this);
+	connect(open, &QAction::triggered, this, [&] {
+		auto path = QFileDialog::getOpenFileName(this, tr("Open an existing file..."), Path::toQString(m_userDocuments), tr("Plain text file (*.txt)"));
+		emit askOpenFile(Path::toStdFs(path));
+		});
+
+	auto menu = addMenu(tr("&File"));
+	for (const auto& action : { open })
+		menu->addAction(action);
+}
+
+void MenuBar::project()
+{
+	
+}
+
 void MenuBar::view()
 {
 	auto appearance = new QAction(tr("&Appearance..."), this);
 	connect(appearance, &QAction::triggered, this, &MenuBar::appearanceDialog);
+
 	auto menu = addMenu(tr("&View"));
 	for (const auto& action : { appearance })
 		menu->addAction(action);
@@ -85,7 +114,7 @@ void MenuBar::help()
 		Popup::version(this);
 		});
 
-	auto menu = addMenu(tr("&Help"));
+	auto menu = addMenu(tr("&Help..."));
 	for (const auto& action : { about, check_for_updates })
 		menu->addAction(action);
 }

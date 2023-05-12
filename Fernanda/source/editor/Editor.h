@@ -42,6 +42,7 @@ passthroughs:
 	void setReadOnly(bool readOnly) { m_trueEditor->setReadOnly(readOnly); }
 	bool isReadOnly() const { return m_trueEditor->isReadOnly(); }
 	QString toPlainText() const { return m_trueEditor->toPlainText(); }
+	void setPlainText(const QString& text) { m_trueEditor->setPlainText(text); }
 	int blockCount() const { return m_trueEditor->blockCount(); }
 	QString selectedText() const { return m_trueEditor->textCursor().selectedText(); }
 	int cursorBlockNumber() const { return m_trueEditor->textCursor().blockNumber(); }

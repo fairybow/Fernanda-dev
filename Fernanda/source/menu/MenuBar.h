@@ -30,7 +30,7 @@ class MenuBar : public Widget<QMenuBar>
 	Q_OBJECT
 
 public:
-	MenuBar(const char* name, bool isDev = false, QWidget* parent = nullptr);
+	MenuBar(const char* name, StdFsPath userData, StdFsPath userDocuments, bool isDev = false, QWidget* parent = nullptr);
 
 	void makeSubmenus();
 
@@ -62,8 +62,8 @@ public:
 	//void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
 
 signals:
-	MenuBar::StdFsPath getUserDataPath();
 	QFont getUserFont();
+	void askOpenFile(StdFsPath path);
 	void askStyleEditor(StdFsPath path);
 	void askStyleWindow(StdFsPath path);
 	void askChangeFont(const QFont& font);
@@ -116,6 +116,8 @@ private:
 	static constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
 	static constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
 
+	const StdFsPath m_userData;
+	const StdFsPath m_userDocuments;
 	std::map<QString, ActionGroup*> m_actionGroups;
 	std::map<QString, int> m_sliderValues;
 	std::map<QString, bool> m_checkBoxStates;
@@ -123,6 +125,8 @@ private:
 
 	void makeActionGroups();
 	void makeBespokeActionGroups();
+	void file();
+	void project();
 	void view();
 	void help();
 	void addActionsToBoxes(QComboBox* comboBox, ActionGroup* actionGroup);
