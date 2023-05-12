@@ -42,8 +42,6 @@ namespace Utility
 	inline QString pluralCheck(const QString& text, int value)
 	{
 		if (!text.endsWith("s") || value != 1) return text;
-		if (text.endsWith("es"))
-			return text.left(text.length() - 2);
 		return text.left(text.length() - 1);
 	}
 }

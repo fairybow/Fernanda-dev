@@ -43,33 +43,27 @@ void MenuBar::makeBespokeActionGroups()
 	wrap_modes << ActionGroup::bespoke("WrapAnywhere", "Wrap anywhere");
 	wrap_modes << ActionGroup::bespoke("WrapAt", "Wrap at word boundaries or anywhere");
 	m_actionGroups[GROUP_WRAPS] = ActionGroup::fromBespoke(wrap_modes, this, [&] {
-
 		auto selection = selectedWrapMode();
 		if (selection == nullptr) return;
 		emit askSetWrapMode(selection->data().toString());
-
 		});
 
 	ActionGroup::BespokeList indicator_positions;
 	indicator_positions << ActionGroup::bespoke("Top");
 	indicator_positions << ActionGroup::bespoke("Bottom");
 	m_actionGroups[GROUP_INDICATOR_POS] = ActionGroup::fromBespoke(indicator_positions, this, [&] {
-
 		auto selection = selectedIndicatorPosition();
 		if (selection == nullptr) return;
 		emit askSetIndicatorPosition(selection->data().toString());
-
 		});
 
 	ActionGroup::BespokeList preview_types;
 	preview_types << ActionGroup::bespoke("Fountain");
 	preview_types << ActionGroup::bespoke("Markdown");
 	m_actionGroups[GROUP_PREVIEW] = ActionGroup::fromBespoke(preview_types, this, [&] {
-
 		auto selection = selectedPreviewType();
 		if (selection == nullptr) return;
 		emit askSetPreviewType(selection->data().toString());
-
 		});
 }
 
@@ -261,6 +255,7 @@ QGroupBox* MenuBar::meterGroupBox()
 		setCheckBoxCharacterCount(state);
 		emit askToggleCharacterCount(state);
 		});
+
 	Layout::setUniformSpacing({ positions_layout, counts_layout, meter_layout });
 	return box;
 }
@@ -305,10 +300,10 @@ QGroupBox* MenuBar::toolsGroupBox()
 		setSelectedPomodoroTime(value * 60);
 		emit askSetPomodoroTime(value * 60);
 		});
+
 	Layout::setUniformSpacing({ tool_layout, tool_check_boxes_layout });
 	return box;
 }
-
 
 void MenuBar::appearanceDialog()
 {
