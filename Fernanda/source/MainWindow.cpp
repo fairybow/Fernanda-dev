@@ -123,23 +123,49 @@ void MainWindow::menuBarConfigConnections() // things that *other things* need i
 
 	connect(m_menuBar, &MenuBar::askSetTabStop, this, [&](int pixels) {
 		saveConfigPassthrough(
-			pixels, Ini::EDITOR_TAB_STOPS, m_editor, [&] {
+			pixels, Ini::EDITOR_TAB_STOP, m_editor, [&] {
 				m_editor->setTabStopDistance(pixels);
 			});
 		});
 
+	connect(m_menuBar, &MenuBar::askSetWrapMode, this, [&](const QString& mode) {
+		saveConfigPassthrough(
+			mode, Ini::EDITOR_WRAP_MODE, m_editor, [&] {
+				m_editor->setWrapMode(mode);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleLineHighlight, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::EDITOR_LINE_HIHGLIGHT, m_editor, [&] {
+				m_editor->setHasLineHighlight(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleLineNumbers, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::EDITOR_LINE_NUMBER_AREA, m_editor, [&] {
+				m_editor->setHasLineNumberArea(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleShadow, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::EDITOR_SHADOW, m_editor, [&] {
+				m_editor->setHasShadow(state);
+			});
+		});
+
 	// to-do:
-	//void askSetWrapMode(const QString& mode);
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
-	/*bool m_hasCursorBlink = true;
+	/*
+	bool m_hasCursorBlink = true;
 	bool m_hasCursorBlock = true;
 	bool m_hasCursorCenterOnScroll = true;
 	bool m_hasCursorEnsureVisible = true;
 	bool m_hasCursorTypewriter = true;
-	bool m_hasLineHighlight = true;
-	bool m_hasLineNumberArea = true;
-	bool m_hasShadow = true;*/
+	*/
 	
 	// toggle entire meter
 
@@ -245,12 +271,31 @@ void MainWindow::loadMenuBarConfigs()
 		m_menuBar->setSelectedWindowTheme(fs_window_theme);
 		}, Path::toQString(m_menuBar->defaultWindowTheme()));
 
-	loadConfigPassthrough<int>(Ini::EDITOR_TAB_STOPS, m_editor, [&](int pixels) {
+	loadConfigPassthrough<int>(Ini::EDITOR_TAB_STOP, m_editor, [&](int pixels) {
 		m_editor->setTabStopDistance(pixels);
 		m_menuBar->setSelectedTabStop(pixels);
 		}, m_editor->defaulTabStop());
 
-	//void askSetWrapMode(const QString& mode);
+	loadConfigPassthrough<QString>(Ini::EDITOR_WRAP_MODE, m_editor, [&](QString mode) {
+		m_editor->setWrapMode(mode);
+		m_menuBar->setSelectedWrapMode(mode);
+		}, m_editor->defaultWrap());
+
+	loadConfigPassthrough<bool>(Ini::EDITOR_LINE_HIHGLIGHT, m_editor, [&](bool state) {
+		m_editor->setHasLineHighlight(state);
+		m_menuBar->setCheckBoxLineHighlight(state);
+		}, true);
+
+	loadConfigPassthrough<bool>(Ini::EDITOR_LINE_NUMBER_AREA, m_editor, [&](bool state) {
+		m_editor->setHasLineNumberArea(state);
+		m_menuBar->setCheckBoxLineNumbers(state);
+		}, true);
+
+	loadConfigPassthrough<bool>(Ini::EDITOR_SHADOW, m_editor, [&](bool state) {
+		m_editor->setHasShadow(state);
+		m_menuBar->setCheckBoxShadow(state);
+		}, false);
+	
 	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
 

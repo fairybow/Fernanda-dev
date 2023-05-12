@@ -17,11 +17,23 @@ namespace Ini
 	constexpr char EDITOR_FONT[] = \
 		"font";
 
-	constexpr char EDITOR_TAB_STOPS[] = \
+	constexpr char EDITOR_TAB_STOP[] = \
 		"tab_stop_distance";
 
-	constexpr char METER[] = \
-		"meter";
+	constexpr char EDITOR_WRAP_MODE[] = \
+		"wrap_mode";
+
+	constexpr char EDITOR_LINE_HIHGLIGHT[] = \
+		"line_highlight";
+
+	constexpr char EDITOR_LINE_NUMBER_AREA[] = \
+		"line_number_area";
+
+	constexpr char EDITOR_SHADOW[] = \
+		"shadow";
+
+	//constexpr char METER[] = \
+		//"meter";
 
 	constexpr char METER_LINE_POS[] = \
 		"line_position";
@@ -38,8 +50,8 @@ namespace Ini
 	constexpr char METER_CHAR_COUNT[] = \
 		"character_count";
 
-	constexpr char TOOLS[] = \
-		"tools";
+	//constexpr char TOOLS[] = \
+		//"tools";
 
 	constexpr char TOOL_POMODORO[] = \
 		"pomodoro_timer";

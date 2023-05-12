@@ -133,7 +133,7 @@ QGroupBox* MenuBar::themesGroupBox()
 	addActionsToBoxes(editor_themes, m_actionGroups[GROUP_EDITOR_THEMES]);
 	addActionsToBoxes(window_themes, m_actionGroups[GROUP_WINDOW_THEMES]);
 	for (auto& combo_box : { editor_themes, window_themes }) {
-		connect(combo_box, &ComboBox::currentIndexChanged, this, [&](int index) {
+		connect(combo_box, &ComboBox::currentIndexChanged, this, [&, combo_box](int index) {
 			combo_box->itemData(index).value<QAction*>()->trigger();
 			});
 	}
@@ -156,31 +156,48 @@ QGroupBox* MenuBar::fontGroupBox()
 
 QGroupBox* MenuBar::editorGroupBox()
 {
-	/*auto wrap_modes_combo_box = new ComboBox;
-	addActionsToBoxes(wrap_modes_combo_box, m_actionGroups[GROUP_WRAPS]);
-	connect(wrap_modes_combo_box, &ComboBox::currentIndexChanged, this, [&](int index) {
-		wrap_modes_combo_box->itemData(index).value<QAction*>()->trigger();
-		});*/
-
-		/*
-		Wrap Modes (combo)
-		LineHighlight, (rest check)
-		LineNumberArea,
-		Shadow
-		*/
-
 	auto box = new QGroupBox(tr("Editor"));
+
+	auto wrap_modes = new ComboBox;
+	addActionsToBoxes(wrap_modes, m_actionGroups[GROUP_WRAPS]);
+	connect(wrap_modes, &ComboBox::currentIndexChanged, this, [&, wrap_modes](int index) {
+		wrap_modes->itemData(index).value<QAction*>()->trigger();
+		});
+
+	auto line_highlight = new QCheckBox("Line highlight");
+	auto line_number_area = new QCheckBox("Line number area");
+	auto shadow = new QCheckBox("Shadow");
+
+	line_highlight->setChecked(m_checkBoxStates[CHECK_BOX_LINE_HIGHLIGHT]);
+	line_number_area->setChecked(m_checkBoxStates[CHECK_BOX_LINE_NUMBERS]);
+	shadow->setChecked(m_checkBoxStates[CHECK_BOX_SHADOW]);
+
+	connect(line_highlight, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxLineHighlight(state);
+		emit askToggleLineHighlight(state);
+		});
+	connect(line_number_area, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxLineNumbers(state);
+		emit askToggleLineNumbers(state);
+		});
+	connect(shadow, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxShadow(state);
+		emit askToggleShadow(state);
+		});
+
 	auto tab_stops_slider = new Slider("Slider", Qt::Horizontal, nullptr, "Tab stop distance", true, "pixels", 10);
 	tab_stops_slider->setRange(1, 30);
 	tab_stops_slider->setValue(m_sliderValues[SLIDER_TABS]);
-	auto editor_layout = Layout::box(Layout::Line::Horizontally, tab_stops_slider, box);
-
 	connect(tab_stops_slider, &Slider::valueChanged, this, [&](int value) {
 		setSelectedTabStop(value);
 		emit askSetTabStop(value);
 		});
 
-	Layout::setUniformSpacing(editor_layout);
+	auto top_layout = Layout::box(Layout::Line::Horizontally, { wrap_modes, line_highlight, line_number_area, shadow });
+	auto layout = Layout::box(Layout::Line::Vertically, nullptr, box);
+	layout->addLayout(top_layout);
+	layout->addWidget(tab_stops_slider);
+	Layout::setUniformSpacing({ top_layout, layout });
 	return box;
 }
 
@@ -299,9 +316,10 @@ void MenuBar::appearanceDialog()
 	auto full_layout = Layout::grid(nullptr, &dialog);
 	full_layout->addWidget(themesGroupBox(), 0, 0, 1, 2);
 	full_layout->addWidget(fontGroupBox(), 1, 0, 5, 2);
-	full_layout->addWidget(editorGroupBox(), 0, 3, 1, 2);
+	full_layout->addWidget(editorGroupBox(), 0, 3, 2, 2);
 	full_layout->addWidget(meterGroupBox(), 4, 3, 1, 2);
 	full_layout->addWidget(toolsGroupBox(), 5, 3, 1, 2);
 	Layout::setMinAndMaxSize(&dialog, 800, 450);
+	Layout::setUniformSpacing(full_layout);
 	dialog.exec();
 }

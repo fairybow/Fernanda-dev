@@ -27,6 +27,9 @@ public:
 	void setLineNumberArea(LineNumberArea* lineNumberArea);
 	void setCursorStyle(const QString& styleSheet);
 	int selectedLineCount();
+	void highlightCurrentLine();
+
+	void updateLineNumberAreaWidth() { setViewportMargins(lineNumberAreaWidth(), 0, 0, 0); }
 
 signals:
 	bool getHasLineHighlight();
@@ -43,9 +46,6 @@ private:
 
 	void connections();
 	void cursorConnections();
-	void highlightCurrentLine();
 	void updateLineNumberArea(const QRect& rect, int dy);
 	const QColor highlight();
-
-	void updateLineNumberAreaWidth() { setViewportMargins(lineNumberAreaWidth(), 0, 0, 0); }
 };

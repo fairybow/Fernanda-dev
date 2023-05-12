@@ -41,15 +41,16 @@ public:
 	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_WINDOW_THEMES], path); }
 	void setSelectedTabStop(int pixels) { m_sliderValues[SLIDER_TABS] = pixels; }
 	void setSelectedWrapMode(const QString& mode) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_WRAPS], mode); }
+	void setCheckBoxLineHighlight(bool state) { m_checkBoxStates[CHECK_BOX_LINE_HIGHLIGHT] = state; }
+	void setCheckBoxLineNumbers(bool state) { m_checkBoxStates[CHECK_BOX_LINE_NUMBERS] = state; }
+	void setCheckBoxShadow(bool state) { m_checkBoxStates[CHECK_BOX_SHADOW] = state; }
 
 	/*bool m_hasCursorBlink = true;
 	bool m_hasCursorBlock = true;
 	bool m_hasCursorCenterOnScroll = true;
 	bool m_hasCursorEnsureVisible = true;
 	bool m_hasCursorTypewriter = true;
-	bool m_hasLineHighlight = true;
-	bool m_hasLineNumberArea = true;
-	bool m_hasShadow = true;*/
+	*/
 
 	//void setSelectedIndicatorPosition(const QString& position) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_POS], position); }
 	//void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
@@ -71,6 +72,9 @@ signals:
 	void askChangeFont(const QFont& font);
 	void askSetTabStop(int pixels);
 	void askSetWrapMode(const QString& mode);
+	void askToggleLineHighlight(bool state);
+	void askToggleLineNumbers(bool state);
+	void askToggleShadow(bool state);
 	void askSetIndicatorPosition(const QString& position);
 	void askSetPreviewType(const QString& type);
 	void askToggleLinePosition(bool state);
@@ -86,7 +90,14 @@ signals:
 private:
 	static constexpr char GROUP_EDITOR_THEMES[] = "editor_themes";
 	static constexpr char GROUP_WINDOW_THEMES[] = "window_themes";
+
+	//
 	static constexpr char GROUP_WRAPS[] = "wrap_modes";
+	static constexpr char CHECK_BOX_LINE_HIGHLIGHT[] = "line_highlight";
+	static constexpr char CHECK_BOX_LINE_NUMBERS[] = "line_number_area";
+	static constexpr char CHECK_BOX_SHADOW[] = "editor_shadow";
+	//
+
 	static constexpr char GROUP_INDICATOR_POS[] = "indicator_alignments";
 	static constexpr char GROUP_PREVIEW[] = "preview_types";
 	static constexpr char SLIDER_TABS[] = "tab_stops";

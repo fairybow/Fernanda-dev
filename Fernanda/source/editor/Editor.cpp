@@ -16,6 +16,32 @@ Editor::Editor(const char* name, const QFont& defaultFont, QWidget* parent)
 	m_overlay->hide();
 }
 
+void Editor::setWrapMode(const QString& mode)
+{
+	if (mode == "NoWrap")
+		m_trueEditor->setWordWrapMode(QTextOption::NoWrap);
+	else if (mode == "WordWrap")
+		m_trueEditor->setWordWrapMode(QTextOption::WordWrap);
+	else if (mode == "WrapAnywhere")
+		m_trueEditor->setWordWrapMode(QTextOption::WrapAnywhere);
+	else if (mode == "WrapAt")
+		m_trueEditor->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+	else
+		m_trueEditor->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+}
+
+void Editor::setHasLineHighlight(bool state)
+{
+	m_hasLineHighlight = state;
+	m_trueEditor->highlightCurrentLine();
+
+}
+void Editor::setHasLineNumberArea(bool state)
+{
+	m_lineNumberArea->setVisible(state);
+	m_trueEditor->updateLineNumberAreaWidth();
+}
+
 void Editor::changeEvent(QEvent* event)
 {
 	if (event->type() == QEvent::StyleChange)

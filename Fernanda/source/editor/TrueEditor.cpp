@@ -6,8 +6,8 @@ TrueEditor::TrueEditor(QWidget* parent)
 	connections();
 
 	Utility::delayCall(this, [&] {
-		updateLineNumberAreaWidth();
 		highlightCurrentLine();
+		updateLineNumberAreaWidth();
 		});
 }
 
@@ -107,6 +107,22 @@ int TrueEditor::selectedLineCount()
 	return cursor.selectedText().count(QChar(0x2029)) + 1;
 }
 
+void TrueEditor::highlightCurrentLine()
+{
+	QVector<QTextEdit::ExtraSelection> extra_selections;
+
+	if (!isReadOnly()) {
+		QTextEdit::ExtraSelection selection;
+		selection.format.setBackground(highlight());
+		selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+		selection.cursor = textCursor();
+		selection.cursor.clearSelection();
+		extra_selections.append(selection);
+	}
+
+	setExtraSelections(extra_selections);
+}
+
 void TrueEditor::connections()
 {
 	connect(this, &TrueEditor::blockCountChanged, this, [&](int) {
@@ -132,22 +148,6 @@ void TrueEditor::cursorConnections()
 	connect(m_cursor, &BlockCursor::getHasBlock, this, [&] {
 		return emit getHasCursorBlock();
 		});
-}
-
-void TrueEditor::highlightCurrentLine()
-{
-	QVector<QTextEdit::ExtraSelection> extra_selections;
-
-	if (!isReadOnly()) {
-		QTextEdit::ExtraSelection selection;
-		selection.format.setBackground(highlight());
-		selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-		selection.cursor = textCursor();
-		selection.cursor.clearSelection();
-		extra_selections.append(selection);
-	}
-
-	setExtraSelections(extra_selections);
 }
 
 void TrueEditor::updateLineNumberArea(const QRect& rect, int dy)
