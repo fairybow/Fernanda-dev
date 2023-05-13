@@ -287,8 +287,21 @@ void MainWindow::menuBarToolConfigConnections()
 void MainWindow::menuBarMiscConfigConnections()
 {
 	// to-do:
-	//void askSetIndicatorPosition(const QString& position);
 	//void askSetPreviewType(const QString& type);
+
+	connect(m_menuBar, &MenuBar::askToggleIndicator, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::IDICATOR, m_indicator, [&] {
+				m_indicator->setVisible(state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askSetIndicatorAlignment, this, [&](const QString& alignment) {
+		saveConfigPassthrough(
+			alignment, Ini::IDICATOR_ALIGNMENT, m_indicator, [&] {
+				m_indicator->setAlignment(alignment);
+			});
+		});
 }
 
 void MainWindow::loadConfigs()
@@ -452,7 +465,16 @@ void MainWindow::loadMenuBarToolConfigs()
 
 void MainWindow::loadMenuBarMiscConfigs()
 {
-	//void askSetIndicatorPosition(const QString& position);
+	loadConfigPassthrough<bool>(Ini::IDICATOR, m_indicator, [&](bool state) {
+		m_indicator->setVisible(state);
+		m_menuBar->setCheckBoxIndicator(state);
+		}, true);
+
+	loadConfigPassthrough<QString>(Ini::IDICATOR_ALIGNMENT, m_indicator, [&](const QString& alignment) {
+		m_indicator->setAlignment(alignment);
+		m_menuBar->setSelectedIndicatorAlignment(alignment);
+		}, QString("Top"));
+
 	//void askSetPreviewType(const QString& type);
 }
 

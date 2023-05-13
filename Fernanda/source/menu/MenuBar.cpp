@@ -48,13 +48,13 @@ void MenuBar::makeBespokeActionGroups()
 		emit askSetWrapMode(selection->data().toString());
 		});
 
-	ActionGroup::BespokeList indicator_positions;
-	indicator_positions << ActionGroup::bespoke("Top");
-	indicator_positions << ActionGroup::bespoke("Bottom");
-	m_actionGroups[GROUP_INDICATOR_POS] = ActionGroup::fromBespoke(indicator_positions, this, [&] {
-		auto selection = selectedIndicatorPosition();
+	ActionGroup::BespokeList indicator_alignments;
+	indicator_alignments << ActionGroup::bespoke("Top");
+	indicator_alignments << ActionGroup::bespoke("Bottom");
+	m_actionGroups[GROUP_INDICATOR_ALIGN] = ActionGroup::fromBespoke(indicator_alignments, this, [&] {
+		auto selection = selectedIndicatorAlignment();
 		if (selection == nullptr) return;
-		emit askSetIndicatorPosition(selection->data().toString());
+		emit askSetIndicatorAlignment(selection->data().toString());
 		});
 
 	ActionGroup::BespokeList preview_types;
@@ -108,7 +108,7 @@ void MenuBar::help()
 		Popup::version(this);
 		});
 
-	auto menu = addMenu(tr("&Help..."));
+	auto menu = addMenu(tr("&Help"));
 	for (const auto& action : { about, check_for_updates })
 		menu->addAction(action);
 }
@@ -143,6 +143,7 @@ LiveFontDialog* MenuBar::fontDialog()
 QGroupBox* MenuBar::themesGroupBox()
 {
 	auto box = new QGroupBox(tr("Themes"));
+
 	auto editor_theme_check = new QCheckBox;
 	auto window_theme_check = new QCheckBox;
 	auto editor_themes = new ComboBox;
@@ -183,6 +184,7 @@ QGroupBox* MenuBar::themesGroupBox()
 QGroupBox* MenuBar::fontGroupBox()
 {
 	auto box = new QGroupBox(tr("Font"));
+
 	auto mdi_area = new QMdiArea;
 	addFontDialog(mdi_area);
 	auto layout = Layout::box(Layout::Line::Horizontally, mdi_area, box);
@@ -380,9 +382,31 @@ QGroupBox* MenuBar::toolsGroupBox()
 QGroupBox* MenuBar::mixedGroupBox()
 {
 	auto box = new QGroupBox(tr(""));
-	// indicator position
-	// preview type
-	//Layout::setUniformSpacing(...);
+
+	auto indicator_check = new QCheckBox;
+	auto indicator_alignments = new ComboBox;
+	addActionsToBoxes(indicator_alignments, m_actionGroups[GROUP_INDICATOR_ALIGN]);
+
+	indicator_check->setChecked(m_checkBoxStates[CHECK_BOX_INDICATOR]);
+
+	connect(indicator_check, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxIndicator(state);
+		emit askToggleIndicator(state);
+		});
+	connect(indicator_alignments, &ComboBox::currentIndexChanged, this, [&, indicator_alignments](int index) {
+		indicator_alignments->itemData(index).value<QAction*>()->trigger();
+		});
+
+	auto alignments_container = Layout::container(indicator_alignments, nullptr, "Indicator alignment");
+
+	auto layout = Layout::grid(nullptr, box);
+	auto spacer_1 = new QWidget;
+	auto spacer_2 = new QWidget;
+	layout->addWidget(spacer_1, 0, 0, 1, 1);
+	layout->addWidget(indicator_check, 0, 1, 1, 1);
+	layout->addWidget(alignments_container, 0, 2, 1, 15);
+	layout->addWidget(spacer_2, 0, 17, 1, 15);
+	Layout::setUniformSpacing(layout);
 	return box;
 }
 

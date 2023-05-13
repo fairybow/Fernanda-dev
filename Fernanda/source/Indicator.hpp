@@ -23,12 +23,18 @@ public:
 		buildProgressBar(name);
 		Layout::transpareForMouse({ this, m_progressBar });
 		Layout::box(Layout::Line::Vertically, m_progressBar, this);
-		layout()->setAlignment(Qt::AlignTop);
 	}
 
 	void pastel(int delay = 0) { run(StdFsPath(":/indicator/Pastels.qss"), delay); }
 	void green(int delay = 0) { run(StdFsPath(":/indicator/Green.qss"), delay); }
 	void red(int delay = 0) { run(StdFsPath(":/indicator/Red.qss"), delay); }
+
+	void setAlignment(const QString& alignment)
+	{
+		(alignment == QString("Top"))
+			? layout()->setAlignment(Qt::AlignTop)
+			: layout()->setAlignment(Qt::AlignBottom);
+	}
 
 private:
 	QProgressBar* m_progressBar = new QProgressBar(this);
@@ -49,11 +55,12 @@ private:
 
 	void run(const StdFsPath& styleSheetPath, int delay)
 	{
+		if (!isVisible()) return;
 		m_progressBar->setStyleSheet(Io::readFile(styleSheetPath));
 		auto fill = new QTimeLine(300, this);
 		connect(fill, &QTimeLine::frameChanged, m_progressBar, &QProgressBar::setValue);
 		fill->setFrameRange(0, 100);
-		QTimer::singleShot(delay, [&, fill] {
+		QTimer::singleShot(qBound(0, delay, 3000), [&, fill] {
 			m_progressBar->show();
 			m_timer->start(1500);
 			fill->start();

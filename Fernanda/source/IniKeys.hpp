@@ -85,4 +85,10 @@ namespace Ini
 
 	constexpr char TOOL_POMO_INTERVAL[] = \
 		"pomodoro_interval";
+
+	constexpr char IDICATOR[] = \
+		"indicator";
+
+	constexpr char IDICATOR_ALIGNMENT[] = \
+		"alignment";
 }

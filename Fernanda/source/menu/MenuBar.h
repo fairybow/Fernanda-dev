@@ -42,7 +42,7 @@ public:
 	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_EDITOR_THEMES], path); }
 	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_WINDOW_THEMES], path); }
 	void setSelectedTabStop(int pixels) { m_sliderValues[SLIDER_TABS] = pixels; }
-	void setSelectedWrapMode(const QString& mode) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_WRAPS], mode); }
+	void setSelectedWrapMode(const QString& mode) { setGroupSelectedAction(m_actionGroups[GROUP_WRAPS], mode); }
 	void setCheckBoxLineHighlight(bool state) { m_checkBoxStates[CHECK_BOX_LINE_HIGHLIGHT] = state; }
 	void setCheckBoxLineNumbers(bool state) { m_checkBoxStates[CHECK_BOX_LINE_NUMBERS] = state; }
 	void setCheckBoxShadow(bool state) { m_checkBoxStates[CHECK_BOX_SHADOW] = state; }
@@ -60,7 +60,8 @@ public:
 	void setCheckBoxStayAwake(bool state) { m_checkBoxStates[CHECK_BOX_STAY_AWAKE] = state; }
 	void setCheckBoxAlwaysOnTop(bool state) { m_checkBoxStates[CHECK_BOX_ALWAYS_ON_TOP] = state; }
 	void setSelectedPomodoroTime(int timeInSeconds) { m_sliderValues[SLIDER_POMODORO] = timeInSeconds; }
-	//void setSelectedIndicatorPosition(const QString& position) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_POS], position); }
+	void setCheckBoxIndicator(bool state) { m_checkBoxStates[CHECK_BOX_INDICATOR] = state; }
+	void setSelectedIndicatorAlignment(const QString& alignment) { setGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_ALIGN], alignment); }
 	//void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
 
 signals:
@@ -90,7 +91,8 @@ signals:
 	void askToggleStayAwake(bool state);
 	void askToggleAlwaysOnTop(bool state);
 	void askSetPomodoroTime(int timeInSeconds);
-	void askSetIndicatorPosition(const QString& position);
+	void askToggleIndicator(bool state);
+	void askSetIndicatorAlignment(const QString& alignment);
 	void askSetPreviewType(const QString& type);
 
 private:
@@ -117,7 +119,8 @@ private:
 	static constexpr char CHECK_BOX_STAY_AWAKE[] = "stay_awake";
 	static constexpr char CHECK_BOX_ALWAYS_ON_TOP[] = "always_on_top";
 	static constexpr char SLIDER_POMODORO[] = "pomodoro_times";
-	static constexpr char GROUP_INDICATOR_POS[] = "indicator_alignments";
+	static constexpr char CHECK_BOX_INDICATOR[] = "has_indicator";
+	static constexpr char GROUP_INDICATOR_ALIGN[] = "indicator_alignments";
 	static constexpr char GROUP_PREVIEW[] = "preview_types";
 	static constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
 	static constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
@@ -149,10 +152,10 @@ private:
 	QAction* selectedEditorTheme() const { return m_actionGroups.at(GROUP_EDITOR_THEMES)->checkedAction(); }
 	QAction* selectedWindowTheme() const { return m_actionGroups.at(GROUP_WINDOW_THEMES)->checkedAction(); }
 	QAction* selectedWrapMode() const { return m_actionGroups.at(GROUP_WRAPS)->checkedAction(); }
-	QAction* selectedIndicatorPosition() const { return m_actionGroups.at(GROUP_INDICATOR_POS)->checkedAction(); }
+	QAction* selectedIndicatorAlignment() const { return m_actionGroups.at(GROUP_INDICATOR_ALIGN)->checkedAction(); }
 	QAction* selectedPreviewType() const { return m_actionGroups.at(GROUP_PREVIEW)->checkedAction(); }
 
-	void setGroupSelectedAction(ActionGroup* actionGroup, const StdFsPath& value)
+	/*void setGroupSelectedAction(ActionGroup* actionGroup, const StdFsPath& value)
 	{
 		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
 			auto action = actionGroup->actions().at(i);
@@ -161,9 +164,21 @@ private:
 				return;
 			}
 		}
+	}*/
+
+	template<typename T>
+	void setGroupSelectedAction(ActionGroup* actionGroup, T value)
+	{
+		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
+			auto action = actionGroup->actions().at(i);
+			if (action->data().value<T>() == value) {
+				action->setChecked(true);
+				return;
+			}
+		}
 	}
 
-	void setBespokeGroupSelectedAction(ActionGroup* actionGroup, const QString& value)
+	/*void setBespokeGroupSelectedAction(ActionGroup* actionGroup, const QString& value)
 	{
 		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
 			auto action = actionGroup->actions().at(i);
@@ -172,7 +187,7 @@ private:
 				return;
 			}
 		}
-	}
+	}*/
 
 private slots:
 	void appearanceDialog();
