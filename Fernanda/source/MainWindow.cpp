@@ -496,6 +496,7 @@ void MainWindow::serveFileAndTab(StdFsPath path)
 		m_indicator->red();
 		return;
 	}
+	m_document->saveCurrent(m_editor->toPlainText());
 	m_editor->setPlainText(m_document->open(path));
 	m_tabBar->findOrAdd(Path::toQString(path));
 }

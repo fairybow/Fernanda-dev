@@ -17,10 +17,20 @@ public:
 	Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent = nullptr)
 		: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(100) {}
 
+	void saveCurrent(const QString& text)
+	{
+		if (m_currentPath.empty()) return;
+		auto document = textDocument(findId(m_currentPath), m_currentPath);
+		document->setPlainText(text);
+		// temp save at some point, maybe here, maybe not
+		//Io::writeFile(temp_path, text);
+	}
+
 	const QString open(StdFsPath path)
 	{
+		m_currentPath = path;
 		auto id = findId(path);
-		auto document = textDocument(id, path);
+		auto document = textDocument(id, m_currentPath);
 		return document->toPlainText();
 	}
 
@@ -28,6 +38,7 @@ private:
 	DocumentCache m_cache;
 	const StdFsPath m_tempFolder;
 	const StdFsPath m_backupFolder;
+	StdFsPath m_currentPath;
 	std::map<StdFsPath, QUuid> m_pathsToIds;
 
 	QUuid findId(StdFsPath path)
