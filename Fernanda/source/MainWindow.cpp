@@ -33,9 +33,8 @@ void MainWindow::setupWidgets()
 	m_statusBar->addWidgets({ m_meter }, { m_pomodoroTimer, m_stayAwake, m_alwaysOnTop });
 	m_menuBar->makeSubmenus();
 	auto layout = Layout::box(Layout::Line::Vertically, nullptr, this, { 4, 0, 4, 0 });
-	// add m_tabBar
-	auto stack = Layout::stack({ m_editor, m_indicator });
-	layout->addLayout(stack);
+	layout->addWidget(m_tabBar);
+	layout->addLayout(Layout::stack({ m_editor, m_indicator }));
 	auto container = Layout::container(layout);
 	setCentralWidget(container);
 }
@@ -97,6 +96,9 @@ void MainWindow::menuBarConnections()
 		});
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
 		m_editor->setPlainText(m_document->open(path));
+		// associate each newly made tab with the path?
+		auto index = m_tabBar->addTab(Path::qStringName(path));
+		m_tabBar->setTabData(index, Path::toQString(path));
 		});
 }
 

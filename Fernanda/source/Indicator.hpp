@@ -17,7 +17,7 @@ class Indicator : public Widget<>
 	Q_OBJECT
 
 public:
-	Indicator(const char* name, QWidget* parent)
+	Indicator(const char* name, QWidget* parent = nullptr)
 		: Widget(name, parent)
 	{
 		buildProgressBar(name);

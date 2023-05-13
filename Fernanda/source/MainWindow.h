@@ -43,17 +43,16 @@ private:
 	User* m_user = new User(QCoreApplication::applicationName(), this);
 	Document* m_document = new Document(m_user->temp(), m_user->backup(), this);
 	//Project* m_project = new Project(this);
-
-	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_user->documents(), m_isDev, this);
-	StatusBar* m_statusBar = new StatusBar("StatusBar", this);
-	Indicator* m_indicator = new Indicator("Indicator", this);
-	//TabBar* m_tabBar = new TabBar("TabBar", this);
+	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_user->documents(), m_isDev);
+	StatusBar* m_statusBar = new StatusBar("StatusBar");
+	Indicator* m_indicator = new Indicator("Indicator");
+	TabBar* m_tabBar = new TabBar("TabBar");
 	Editor* m_editor = new Editor("Editor", QFont("mononoki", 12));
 	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");
-	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer(Emoji::TOMATO, this, m_statusBar);
-	StayAwake* m_stayAwake = new StayAwake(Emoji::TEACUP, m_statusBar);
-	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop(Emoji::PUSHPIN, this, m_statusBar);
+	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer(Emoji::TOMATO, this);
+	StayAwake* m_stayAwake = new StayAwake(Emoji::TEACUP);
+	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop(Emoji::PUSHPIN, this);
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 
 	const bool m_isDev;
