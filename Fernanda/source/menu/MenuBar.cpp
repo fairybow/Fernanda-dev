@@ -148,6 +148,8 @@ QGroupBox* MenuBar::themesGroupBox()
 	// stylist styles
 
 	auto box = new QGroupBox(tr("Themes"));
+	auto editor_theme_check = new QCheckBox;
+	auto window_theme_check = new QCheckBox;
 	auto editor_themes = new ComboBox;
 	auto window_themes = new ComboBox;
 
@@ -161,7 +163,12 @@ QGroupBox* MenuBar::themesGroupBox()
 
 	auto labeled_editor_themes = Layout::container(editor_themes, nullptr, "Editor");
 	auto labeled_window_themes = Layout::container(window_themes, nullptr, "Window");
-	auto layout = Layout::box(Layout::Line::Horizontally, { labeled_editor_themes, labeled_window_themes }, box);
+
+	auto layout = Layout::grid(nullptr, box);
+	layout->addWidget(editor_theme_check, 0, 0, 1, 1);
+	layout->addWidget(labeled_editor_themes, 0, 1, 1, 11);
+	layout->addWidget(window_theme_check, 0, 12, 1, 1);
+	layout->addWidget(labeled_window_themes, 0, 13, 1, 11);
 	Layout::setUniformSpacing(layout);
 	return box;
 }
