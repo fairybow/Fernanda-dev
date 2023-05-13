@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/Widget.hpp"
+#include "common/Widget.hpp"
 
 #include <QTabBar>
 

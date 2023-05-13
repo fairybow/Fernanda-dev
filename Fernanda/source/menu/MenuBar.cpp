@@ -71,7 +71,8 @@ void MenuBar::file()
 {
 	auto open = new QAction(tr("&Open..."), this);
 	connect(open, &QAction::triggered, this, [&] {
-		auto path = QFileDialog::getOpenFileName(this, tr("Open an existing file..."), Path::toQString(m_userDocuments), tr("Plain text file (*.txt)"));
+		auto path = QFileDialog::getOpenFileName(this, tr("Open an existing file..."),
+		Path::toQString(m_userDocuments), tr("Plain text file (*.txt)"));
 		emit askOpenFile(Path::toStdFs(path));
 		});
 

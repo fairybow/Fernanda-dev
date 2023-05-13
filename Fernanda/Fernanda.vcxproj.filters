@@ -336,9 +336,6 @@
     <ClInclude Include="source\document\DocumentCache.hpp">
       <Filter>Source\Document</Filter>
     </ClInclude>
-    <ClInclude Include="source\document\TabBar.hpp">
-      <Filter>Source\Document</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\Utility.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
@@ -347,6 +344,9 @@
     </ClInclude>
     <ClInclude Include="source\common\Emoji.hpp">
       <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\TabBar.hpp">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,20 +2,21 @@
 
 #include <QCache>
 #include <QTextDocument>
+#include <QUuid>
 
-class DocumentCache : public QCache<QString, QTextDocument>
+class DocumentCache : public QCache<QUuid, QTextDocument>
 {
 public:
 	DocumentCache(int maxCost)
 		: QCache(maxCost) {}
 
-	void insertDocument(const QString& fileName, QTextDocument* document)
+	void insertDocument(const QUuid& fileId, QTextDocument* document)
 	{
-		insert(fileName, document);
+		insert(fileId, document);
 	}
 
-	QTextDocument* document(const QString& fileName)
+	QTextDocument* document(const QUuid& fileId)
 	{
-		return object(fileName);
+		return object(fileId);
 	}
 };
