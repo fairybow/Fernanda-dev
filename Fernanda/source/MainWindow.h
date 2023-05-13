@@ -60,6 +60,7 @@ private:
 
 	void setupWidgets();
 	void connections();
+	void tabBarConnections();
 	void editorConnections();
 	void meterConnections();
 	//void previewConnections();
@@ -99,4 +100,7 @@ private:
 	{
 		return m_user->load<T>(valueKey, associatedObject, fallbackValue);
 	}
+	
+private slots:
+	void serveFileAndTab(StdFsPath path);
 };

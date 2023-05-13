@@ -41,6 +41,7 @@ void MainWindow::setupWidgets()
 
 void MainWindow::connections()
 {
+	tabBarConnections();
 	editorConnections();
 	meterConnections();
 	//previewConnections();
@@ -50,6 +51,14 @@ void MainWindow::connections()
 	menuBarMeterConfigConnections();
 	menuBarToolConfigConnections();
 	menuBarMiscConfigConnections();
+}
+
+void MainWindow::tabBarConnections()
+{
+	connect(m_tabBar, &TabBar::currentChanged, this, [&](int index) {
+		auto path = m_tabBar->tabData(index).toString();
+		serveFileAndTab(Path::toStdFs(path));
+		});
 }
 
 void MainWindow::editorConnections()
@@ -94,12 +103,7 @@ void MainWindow::menuBarConnections()
 	connect(m_menuBar, &MenuBar::getUserFont, this, [&] {
 		return loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
 		});
-	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
-		m_editor->setPlainText(m_document->open(path));
-		// associate each newly made tab with the path?
-		auto index = m_tabBar->addTab(Path::qStringName(path));
-		m_tabBar->setTabData(index, Path::toQString(path));
-		});
+	connect(m_menuBar, &MenuBar::askOpenFile, this, &MainWindow::serveFileAndTab);
 }
 
 void MainWindow::menuBarStyleConfigConnections()
@@ -484,4 +488,14 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 {
 	saveConfigPassthrough(priorState, Ini::WINDOW_STATE, this);
 	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
+}
+
+void MainWindow::serveFileAndTab(StdFsPath path)
+{
+	if (path.empty()) {
+		m_indicator->red();
+		return;
+	}
+	m_editor->setPlainText(m_document->open(path));
+	m_tabBar->findOrAdd(Path::toQString(path));
 }

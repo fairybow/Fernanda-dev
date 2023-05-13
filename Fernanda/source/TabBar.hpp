@@ -12,4 +12,24 @@ public:
 	{
 		setShape(Shape::RoundedNorth);
 	}
+
+	int findOrAdd(const QString& path, bool switchTo = true)
+	{
+		auto index = -1;
+		for (auto i = 0; i < count(); ++i) {
+			if (tabData(i).toString() == path) {
+				index = i;
+				break;
+			}
+		}
+		if (index == -1) {
+			blockSignals(true);
+			index = addTab(Path::qStringName(path));
+			setTabData(index, path);
+			blockSignals(false);
+		}
+		if (switchTo)
+			setCurrentIndex(index);
+		return index;
+	}
 };
