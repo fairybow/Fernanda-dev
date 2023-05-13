@@ -6,9 +6,8 @@
 #include <QString>
 #include <QUuid>
 
-//#include <algorithm>
 #include <filesystem>
-//#include <map>
+#include <map>
 
 class Document
 {
@@ -20,37 +19,38 @@ public:
 
 	const QString open(StdFsPath path)
 	{
-		// check cache first
-		// clean text
-		
-
-
-
-
-
-		// pull from temp or cache, etc.
-		//
-		return Io::readFile(path);
+		auto id = findId(path);
+		auto document = textDocument(id, path);
+		return document->toPlainText();
 	}
 
 private:
 	DocumentCache m_cache;
 	const StdFsPath m_tempFolder;
 	const StdFsPath m_backupFolder;
+	std::map<StdFsPath, QUuid> m_pathsToIds;
 
-	//std::map<QUuid, StdFsPath> m_openFiles;
-};
-
-/*QUuid id;
-
-		auto it = std::find_if(m_openFiles.begin(), m_openFiles.end(),
-			[&](const auto& open_file) { return open_file.second == path; });
-		if (it != m_openFiles.end()) {
-			id = it->first;
-		}
+	QUuid findId(StdFsPath path)
+	{
+		QUuid id;
+		auto it = m_pathsToIds.find(path);
+		if (it != m_pathsToIds.end())
+			id = it->second;
 		else {
 			id = QUuid::createUuid();
-			m_openFiles[id] = path;
+			m_pathsToIds[path] = id;
 		}
+		return id;
+	}
 
-		auto temp_path = m_tempFolder / Path::toStdFs(QString(id.toString() + ".txt"));*/
+	QTextDocument* textDocument(QUuid id, StdFsPath path)
+	{
+		auto document = m_cache.document(id);
+		if (!document) {
+			auto text = Io::readFile(path);
+			document = new QTextDocument(text);
+			m_cache.insertDocument(id, document);
+		}
+		return document;
+	}
+};
