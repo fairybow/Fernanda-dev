@@ -94,8 +94,8 @@ signals:
 	void askSetPreviewType(const QString& type);
 
 private:
-	static constexpr char CHECK_BOX_EDITOR_THEME[] = "editor_theme";
-	static constexpr char CHECK_BOX_WINDOW_THEME[] = "window_theme";
+	static constexpr char CHECK_BOX_EDITOR_THEME[] = "has_editor_theme";
+	static constexpr char CHECK_BOX_WINDOW_THEME[] = "has_window_theme";
 	static constexpr char GROUP_EDITOR_THEMES[] = "editor_themes";
 	static constexpr char GROUP_WINDOW_THEMES[] = "window_themes";
 	static constexpr char GROUP_WRAPS[] = "wrap_modes";

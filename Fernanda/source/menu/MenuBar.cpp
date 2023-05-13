@@ -156,6 +156,9 @@ QGroupBox* MenuBar::themesGroupBox()
 			});
 	}
 
+	editor_theme_check->setChecked(m_checkBoxStates[CHECK_BOX_EDITOR_THEME]);
+	window_theme_check->setChecked(m_checkBoxStates[CHECK_BOX_WINDOW_THEME]);
+
 	connect(editor_theme_check, &QCheckBox::stateChanged, this, [&](int state) {
 		setCheckBoxEditorTheme(state);
 		emit askToggleEditorTheme(state);

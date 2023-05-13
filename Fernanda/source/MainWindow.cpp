@@ -309,7 +309,7 @@ void MainWindow::loadMenuBarStyleConfigs()
 {
 	loadConfigPassthrough<bool>(Ini::HAS_EDITOR_THEME, m_editor, [&](bool state) {
 		m_stylist->setThemeEnabled(m_editor, state);
-		m_menuBar->setCheckBoxEditorTheme(state); // i am not sure menu bar is receiving the fallbacks if value not present?
+		m_menuBar->setCheckBoxEditorTheme(state);
 		}, true);
 
 	loadConfigPassthrough<bool>(Ini::HAS_WINDOW_THEME, this, [&](bool state) {
