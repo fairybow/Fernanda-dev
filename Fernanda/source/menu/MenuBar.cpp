@@ -153,8 +153,10 @@ QGroupBox* MenuBar::themesGroupBox()
 	addActionsToBoxes(editor_themes, m_actionGroups[GROUP_EDITOR_THEMES]);
 	addActionsToBoxes(window_themes, m_actionGroups[GROUP_WINDOW_THEMES]);
 	for (auto& combo_box : { editor_themes, window_themes }) {
-		connect(combo_box, &ComboBox::currentIndexChanged, this, [&, combo_box](int index) {
-			combo_box->itemData(index).value<QAction*>()->trigger();
+		connect(combo_box, &ComboBox::currentIndexChanged, this, [this, combo_box](int index) {
+			auto action = combo_box->itemData(index).value<QAction*>();
+			if (action == nullptr) return; // why is it ever, though
+			action->trigger();
 			});
 	}
 

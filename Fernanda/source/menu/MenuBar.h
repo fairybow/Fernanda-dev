@@ -42,7 +42,7 @@ public:
 	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_EDITOR_THEMES], path); }
 	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_WINDOW_THEMES], path); }
 	void setSelectedTabStop(int pixels) { m_sliderValues[SLIDER_TABS] = pixels; }
-	void setSelectedWrapMode(const QString& mode) { setGroupSelectedAction(m_actionGroups[GROUP_WRAPS], mode); }
+	void setSelectedWrapMode(const QString& mode) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_WRAPS], mode); }
 	void setCheckBoxLineHighlight(bool state) { m_checkBoxStates[CHECK_BOX_LINE_HIGHLIGHT] = state; }
 	void setCheckBoxLineNumbers(bool state) { m_checkBoxStates[CHECK_BOX_LINE_NUMBERS] = state; }
 	void setCheckBoxShadow(bool state) { m_checkBoxStates[CHECK_BOX_SHADOW] = state; }
@@ -61,7 +61,7 @@ public:
 	void setCheckBoxAlwaysOnTop(bool state) { m_checkBoxStates[CHECK_BOX_ALWAYS_ON_TOP] = state; }
 	void setSelectedPomodoroTime(int timeInSeconds) { m_sliderValues[SLIDER_POMODORO] = timeInSeconds; }
 	void setCheckBoxIndicator(bool state) { m_checkBoxStates[CHECK_BOX_INDICATOR] = state; }
-	void setSelectedIndicatorAlignment(const QString& alignment) { setGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_ALIGN], alignment); }
+	void setSelectedIndicatorAlignment(const QString& alignment) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_ALIGN], alignment); }
 	//void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
 
 signals:
@@ -155,7 +155,7 @@ private:
 	QAction* selectedIndicatorAlignment() const { return m_actionGroups.at(GROUP_INDICATOR_ALIGN)->checkedAction(); }
 	QAction* selectedPreviewType() const { return m_actionGroups.at(GROUP_PREVIEW)->checkedAction(); }
 
-	/*void setGroupSelectedAction(ActionGroup* actionGroup, const StdFsPath& value)
+	void setGroupSelectedAction(ActionGroup* actionGroup, const StdFsPath& value)
 	{
 		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
 			auto action = actionGroup->actions().at(i);
@@ -164,21 +164,9 @@ private:
 				return;
 			}
 		}
-	}*/
-
-	template<typename T>
-	void setGroupSelectedAction(ActionGroup* actionGroup, T value)
-	{
-		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
-			auto action = actionGroup->actions().at(i);
-			if (action->data().value<T>() == value) {
-				action->setChecked(true);
-				return;
-			}
-		}
 	}
 
-	/*void setBespokeGroupSelectedAction(ActionGroup* actionGroup, const QString& value)
+	void setBespokeGroupSelectedAction(ActionGroup* actionGroup, const QString& value)
 	{
 		for (auto i = 0; i < actionGroup->actions().count(); ++i) {
 			auto action = actionGroup->actions().at(i);
@@ -187,7 +175,7 @@ private:
 				return;
 			}
 		}
-	}*/
+	}
 
 private slots:
 	void appearanceDialog();

@@ -32,7 +32,7 @@ void MainWindow::setupWidgets()
 	setStatusBar(m_statusBar);
 	m_statusBar->addWidgets({ m_meter }, { m_pomodoroTimer, m_stayAwake, m_alwaysOnTop });
 	m_menuBar->makeSubmenus();
-	auto layout = Layout::box(Layout::Line::Vertically, nullptr, this, { 4, 0, 4, 0 });
+	auto layout = Layout::box(Layout::Line::Vertically, nullptr, nullptr, { 4, 0, 4, 0 });
 	layout->addWidget(m_tabBar);
 	layout->addLayout(Layout::stack({ m_editor, m_indicator }));
 	auto container = Layout::container(layout);
