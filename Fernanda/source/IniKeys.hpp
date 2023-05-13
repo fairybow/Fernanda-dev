@@ -8,6 +8,12 @@ namespace Ini
 	constexpr char WINDOW_STATE[] = \
 		"state";
 
+	constexpr char HAS_EDITOR_THEME[] = \
+		"has_theme";
+
+	constexpr char HAS_WINDOW_THEME[] = \
+		"has_theme";
+
 	constexpr char EDITOR_THEME[] = \
 		"theme";
 

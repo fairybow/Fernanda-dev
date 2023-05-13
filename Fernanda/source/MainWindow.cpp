@@ -90,6 +90,20 @@ void MainWindow::menuBarConnections()
 
 void MainWindow::menuBarStyleConfigConnections()
 {
+	connect(m_menuBar, &MenuBar::askToggleEditorTheme, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::HAS_EDITOR_THEME, m_editor, [&] {
+				m_stylist->setThemeEnabled(m_editor, state);
+			});
+		});
+
+	connect(m_menuBar, &MenuBar::askToggleWindowTheme, this, [&](bool state) {
+		saveConfigPassthrough(
+			state, Ini::HAS_WINDOW_THEME, this, [&] {
+				m_stylist->setThemeEnabled(this, state);
+			});
+		});
+
 	connect(m_menuBar, &MenuBar::askStyleEditor, this, [&](StdFsPath path) {
 		saveConfigPassthrough(
 			Path::toQString(path), Ini::EDITOR_THEME, m_editor, [&] {
@@ -293,6 +307,16 @@ void MainWindow::loadEditorConfigs()
 
 void MainWindow::loadMenuBarStyleConfigs()
 {
+	loadConfigPassthrough<bool>(Ini::HAS_EDITOR_THEME, m_editor, [&](bool state) {
+		m_stylist->setThemeEnabled(m_editor, state);
+		m_menuBar->setCheckBoxEditorTheme(state); // i am not sure menu bar is receiving the fallbacks if value not present?
+		}, true);
+
+	loadConfigPassthrough<bool>(Ini::HAS_WINDOW_THEME, this, [&](bool state) {
+		m_stylist->setThemeEnabled(this, state);
+		m_menuBar->setCheckBoxWindowTheme(state);
+		}, true);
+
 	loadConfigPassthrough<QString>(Ini::EDITOR_THEME, m_editor, [&](QString theme) {
 		auto fs_editor_theme = Path::toStdFs(theme);
 		m_stylist->style(m_editor, fs_editor_theme);

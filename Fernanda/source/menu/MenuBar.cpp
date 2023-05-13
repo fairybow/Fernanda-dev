@@ -142,11 +142,6 @@ LiveFontDialog* MenuBar::fontDialog()
 
 QGroupBox* MenuBar::themesGroupBox()
 {
-	// Checks to toggle theme
-	// this: emit askToggleHasWindowTheme()
-	// window: calls m_stylist->toggleTheme(this);
-	// stylist styles
-
 	auto box = new QGroupBox(tr("Themes"));
 	auto editor_theme_check = new QCheckBox;
 	auto window_theme_check = new QCheckBox;
@@ -160,6 +155,15 @@ QGroupBox* MenuBar::themesGroupBox()
 			combo_box->itemData(index).value<QAction*>()->trigger();
 			});
 	}
+
+	connect(editor_theme_check, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxEditorTheme(state);
+		emit askToggleEditorTheme(state);
+		});
+	connect(window_theme_check, &QCheckBox::stateChanged, this, [&](int state) {
+		setCheckBoxWindowTheme(state);
+		emit askToggleWindowTheme(state);
+		});
 
 	auto labeled_editor_themes = Layout::container(editor_themes, nullptr, "Editor");
 	auto labeled_window_themes = Layout::container(window_themes, nullptr, "Window");

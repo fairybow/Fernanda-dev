@@ -37,6 +37,8 @@ public:
 	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; }
 	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; }
 
+	void setCheckBoxEditorTheme(bool state) { m_checkBoxStates[CHECK_BOX_EDITOR_THEME] = state; }
+	void setCheckBoxWindowTheme(bool state) { m_checkBoxStates[CHECK_BOX_WINDOW_THEME] = state; }
 	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_EDITOR_THEMES], path); }
 	void setSelectedWindowTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_WINDOW_THEMES], path); }
 	void setSelectedTabStop(int pixels) { m_sliderValues[SLIDER_TABS] = pixels; }
@@ -64,6 +66,8 @@ public:
 signals:
 	QFont getUserFont();
 	void askOpenFile(StdFsPath path);
+	void askToggleEditorTheme(bool state);
+	void askToggleWindowTheme(bool state);
 	void askStyleEditor(StdFsPath path);
 	void askStyleWindow(StdFsPath path);
 	void askChangeFont(const QFont& font);
@@ -90,6 +94,8 @@ signals:
 	void askSetPreviewType(const QString& type);
 
 private:
+	static constexpr char CHECK_BOX_EDITOR_THEME[] = "editor_theme";
+	static constexpr char CHECK_BOX_WINDOW_THEME[] = "window_theme";
 	static constexpr char GROUP_EDITOR_THEMES[] = "editor_themes";
 	static constexpr char GROUP_WINDOW_THEMES[] = "window_themes";
 	static constexpr char GROUP_WRAPS[] = "wrap_modes";
