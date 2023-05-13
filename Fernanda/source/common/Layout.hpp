@@ -96,46 +96,6 @@ namespace Layout
 		return grid(QWidgetList{ widget }, parent, margins);
 	}
 
-	inline void setCentralWidgets(QMainWindow* parentWindow, QWidgetList widgets, QMargins margins, Line alignment = Line::Horizontally)
-	{
-		auto container = new QWidget(parentWindow);
-		auto layout = box(alignment, widgets, container);
-		container->setContentsMargins(margins);
-		parentWindow->setCentralWidget(container);
-	}
-
-	inline void setCentralWidgets(QMainWindow* parentWindow, int margins, QWidgetList widgets, Line alignment = Line::Horizontally)
-	{
-		setCentralWidgets(parentWindow, widgets, { margins, margins, margins, margins }, alignment);
-	}
-
-	inline void setCentralWidgets(QMainWindow* parentWindow, QWidgetList widgets, Line alignment = Line::Horizontally)
-	{
-		setCentralWidgets(parentWindow, widgets, QMargins(), alignment);
-	}
-
-	inline void setCentralWidget(QMainWindow* parentWindow, QWidget* widget, QMargins margins, Line alignment = Line::Horizontally)
-	{
-		setCentralWidgets(parentWindow, QWidgetList{ widget }, margins, alignment);
-	}
-
-	inline void setCentralWidget(QMainWindow* parentWindow, int margins, QWidget* widget, Line alignment = Line::Horizontally)
-	{
-		setCentralWidgets(parentWindow, QWidgetList{ widget }, { margins, margins, margins, margins }, alignment);
-	}
-
-	inline void setCentralWidget(QMainWindow* parentWindow, QWidget* widget, Line alignment = Line::Horizontally)
-	{
-		setCentralWidgets(parentWindow, QWidgetList{ widget }, QMargins(), alignment);
-	}
-
-	/*inline void setCentralWidget(QMainWindow* parentWindow, QLayout* layout, Line alignment = Line::Horizontally)
-	{
-		auto widget = new QWidget;
-		widget->setLayout(layout);
-		setCentralWidgets(parentWindow, QWidgetList{ widget }, QMargins(), alignment);
-	}*/
-
 	inline void transpareForMouse(QWidgetList widgets)
 	{
 		for (auto& widget : widgets) {
@@ -176,5 +136,12 @@ namespace Layout
 	inline QWidget* container(QWidget* widget, QWidget* parent = nullptr, const QString& label = QString(), Line alignment = Line::Vertically)
 	{
 		return container(QWidgetList{ widget }, parent, label, alignment);
+	}
+
+	inline QWidget* container(QLayout* layout, QWidget* parent = nullptr)
+	{
+		auto container = new QWidget(parent);
+		container->setLayout(layout);
+		return container;
 	}
 }

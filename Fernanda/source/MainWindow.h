@@ -11,7 +11,7 @@
 #include "tools/StayAwake.hpp"
 #include "tools/PomodoroTimer.hpp"
 #include "user/User.hpp"
-#include "Indicator.h"
+#include "Indicator.hpp"
 #include "IniKeys.hpp"
 #include "Meter.h"
 #include "StatusBar.hpp"
@@ -19,6 +19,7 @@
 
 #include <QCloseEvent>
 #include <QMainWindow>
+#include <QShowEvent>
 #include <QString>
 
 #include <filesystem>
@@ -40,7 +41,8 @@ public:
 	MainWindow(const char* name, bool isDev = false, StdFsPath file = StdFsPath(), QWidget* parent = nullptr);
 
 protected:
-	virtual void closeEvent(QCloseEvent* event);
+	virtual void closeEvent(QCloseEvent* event) override;
+	virtual void showEvent(QShowEvent* event) override;
 
 private:
 	User* m_user = new User(QCoreApplication::applicationName(), this);
@@ -61,6 +63,7 @@ private:
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 
 	const bool m_isDev;
+	bool m_isInitialized = false;
 
 	void setupWidgets();
 	void connections();

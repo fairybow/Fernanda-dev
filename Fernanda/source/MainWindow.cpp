@@ -18,14 +18,26 @@ void MainWindow::closeEvent(QCloseEvent* event)
 	event->accept();
 }
 
+void MainWindow::showEvent(QShowEvent* event)
+{
+	QMainWindow::showEvent(event);
+	if (m_isInitialized || event->spontaneous()) return;
+	m_indicator->pastel(1500);
+	m_isInitialized = true;
+}
+
 void MainWindow::setupWidgets()
 {
 	setMenuBar(m_menuBar);
 	setStatusBar(m_statusBar);
 	m_statusBar->addWidgets({ m_meter }, { m_pomodoroTimer, m_stayAwake, m_alwaysOnTop });
 	m_menuBar->makeSubmenus();
-	Layout::setCentralWidgets(this,
-		{ /*m_tabBar, m_indicator,*/ m_editor}, {4, 0, 4, 0}, Layout::Line::Vertically);
+	auto layout = Layout::box(Layout::Line::Vertically, nullptr, this, { 4, 0, 4, 0 });
+	// add m_tabBar
+	auto stack = Layout::stack({ m_editor, m_indicator });
+	layout->addLayout(stack);
+	auto container = Layout::container(layout);
+	setCentralWidget(container);
 }
 
 void MainWindow::connections()

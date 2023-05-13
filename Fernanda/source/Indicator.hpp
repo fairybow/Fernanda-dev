@@ -1,13 +1,19 @@
 #pragma once
 
+#include "common/Io.hpp"
 #include "common/Layout.hpp"
 #include "common/Widget.hpp"
 
 #include <QProgressBar>
+#include <QTimeLine>
 #include <QTimer>
+
+#include <filesystem>
 
 class Indicator : public Widget<>
 {
+	using StdFsPath = std::filesystem::path;
+
 	Q_OBJECT
 
 public:
@@ -17,7 +23,12 @@ public:
 		buildProgressBar(name);
 		Layout::transpareForMouse({ this, m_progressBar });
 		Layout::box(Layout::Line::Vertically, m_progressBar, this);
+		layout()->setAlignment(Qt::AlignTop);
 	}
+
+	void pastel(int delay = 0) { run(StdFsPath(":/indicator/Pastels.qss"), delay); }
+	void green(int delay = 0) { run(StdFsPath(":/indicator/Green.qss"), delay); }
+	void red(int delay = 0) { run(StdFsPath(":/indicator/Red.qss"), delay); }
 
 private:
 	QProgressBar* m_progressBar = new QProgressBar(this);
@@ -33,6 +44,19 @@ private:
 		connect(m_timer, &QTimer::timeout, this, [&] {
 			m_progressBar->hide();
 			m_progressBar->reset();
+			});
+	}
+
+	void run(const StdFsPath& styleSheetPath, int delay)
+	{
+		m_progressBar->setStyleSheet(Io::readFile(styleSheetPath));
+		auto fill = new QTimeLine(300, this);
+		connect(fill, &QTimeLine::frameChanged, m_progressBar, &QProgressBar::setValue);
+		fill->setFrameRange(0, 100);
+		QTimer::singleShot(delay, [&, fill] {
+			m_progressBar->show();
+			m_timer->start(1500);
+			fill->start();
 			});
 	}
 };

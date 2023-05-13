@@ -70,6 +70,9 @@
     <Filter Include="Source\Document">
       <UniqueIdentifier>{4148ff82-b621-4d53-97fd-fc587ea06125}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\Indicator">
+      <UniqueIdentifier>{42fcc18a-eacc-44e8-a26a-87fcae06bdf4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -147,6 +150,15 @@
     <None Include="resources\editor\Shadow.qss">
       <Filter>Resources\Editor</Filter>
     </None>
+    <None Include="resources\indicator\Green.qss">
+      <Filter>Resources\Indicator</Filter>
+    </None>
+    <None Include="resources\indicator\Pastels.qss">
+      <Filter>Resources\Indicator</Filter>
+    </None>
+    <None Include="resources\indicator\Red.qss">
+      <Filter>Resources\Indicator</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="source\MainWindow.h">
@@ -158,7 +170,7 @@
     <QtMoc Include="source\editor\TrueEditor.h">
       <Filter>Source\Editor</Filter>
     </QtMoc>
-    <QtMoc Include="source\Indicator.h">
+    <QtMoc Include="source\Indicator.hpp">
       <Filter>Source</Filter>
     </QtMoc>
     <QtMoc Include="source\common\StatusBarButton.hpp">
@@ -213,9 +225,6 @@
     </ClCompile>
     <ClCompile Include="source\editor\TrueEditor.cpp">
       <Filter>Source\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Indicator.cpp">
-      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="source\menu\MenuBar.cpp">
       <Filter>Source\Menu</Filter>
@@ -354,6 +363,9 @@
     </QtRcc>
     <QtRcc Include="external\bit7z\Fernanda-bit7z\DLLs.qrc">
       <Filter>Resources\External</Filter>
+    </QtRcc>
+    <QtRcc Include="resources\Indicator.qrc">
+      <Filter>Resources</Filter>
     </QtRcc>
   </ItemGroup>
 </Project>

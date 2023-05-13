@@ -100,6 +100,9 @@
     <None Include="installer\Installer.nsi" />
     <None Include="notes\Snippets.md" />
     <None Include="resources\editor\Shadow.qss" />
+    <None Include="resources\indicator\Green.qss" />
+    <None Include="resources\indicator\Pastels.qss" />
+    <None Include="resources\indicator\Red.qss" />
     <None Include="resources\menu\themes\editor\Amber.fernanda_editor" />
     <None Include="resources\menu\themes\editor\Blue.fernanda_editor" />
     <None Include="resources\menu\themes\editor\Green.fernanda_editor" />
@@ -129,7 +132,6 @@
     <ClCompile Include="source\editor\Editor.cpp" />
     <ClCompile Include="source\editor\LineNumberArea.cpp" />
     <ClCompile Include="source\editor\TrueEditor.cpp" />
-    <ClCompile Include="source\Indicator.cpp" />
     <ClCompile Include="source\Main.cpp" />
     <ClCompile Include="source\MainWindow.cpp" />
     <ClCompile Include="source\menu\ActionGroup.cpp" />
@@ -163,7 +165,7 @@
     <ClInclude Include="source\common\Widget.hpp" />
     <QtMoc Include="source\editor\BlockCursor.hpp" />
     <ClInclude Include="source\editor\LineNumberArea.h" />
-    <QtMoc Include="source\Indicator.h" />
+    <QtMoc Include="source\Indicator.hpp" />
     <ClInclude Include="source\IniKeys.hpp" />
     <ClInclude Include="source\menu\ComboBox.hpp" />
     <ClInclude Include="source\menu\LiveFontDialog.hpp" />
@@ -194,6 +196,7 @@
   <ItemGroup>
     <QtRcc Include="external\bit7z\Fernanda-bit7z\DLLs.qrc" />
     <QtRcc Include="resources\Editor.qrc" />
+    <QtRcc Include="resources\Indicator.qrc" />
     <QtRcc Include="resources\MenuBar.qrc" />
     <QtRcc Include="resources\Stylist.qrc" />
   </ItemGroup>
