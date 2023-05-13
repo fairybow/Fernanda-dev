@@ -98,6 +98,7 @@
     <None Include="cpp.hint" />
     <None Include="installer\Fonts.nsh" />
     <None Include="installer\Installer.nsi" />
+    <None Include="notes\Git.md" />
     <None Include="notes\Snippets.md" />
     <None Include="resources\editor\Shadow.qss" />
     <None Include="resources\indicator\Green.qss" />

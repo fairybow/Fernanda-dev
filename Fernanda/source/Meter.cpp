@@ -39,12 +39,9 @@ void Meter::setVisible(bool visible)
 void Meter::setupLabels()
 {
 	m_separator->setText("/");
-	m_positions->setGraphicsEffect(
-		Fx::opacify(0.8, m_positions));
-	m_separator->setGraphicsEffect(
-		Fx::opacify(0.3, m_separator));
-	m_counts->setGraphicsEffect(
-		Fx::opacify(0.8, m_counts));
+	Fx::opacify(0.8, m_positions);
+	Fx::opacify(0.3, m_separator);
+	Fx::opacify(0.8, m_counts);
 }
 
 void Meter::connections()

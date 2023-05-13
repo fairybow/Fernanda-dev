@@ -159,6 +159,9 @@
     <None Include="resources\indicator\Red.qss">
       <Filter>Resources\Indicator</Filter>
     </None>
+    <None Include="notes\Git.md">
+      <Filter>Notes</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="source\MainWindow.h">

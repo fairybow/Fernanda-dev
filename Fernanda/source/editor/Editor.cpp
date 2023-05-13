@@ -66,7 +66,7 @@ void Editor::setupTrueEditor()
 void Editor::setupShadow()
 {
 	m_shadow->setStyleSheet(Io::readFile(":/editor/Shadow.qss"));
-	m_shadow->setGraphicsEffect(Fx::blur(15, m_shadow));
+	Fx::blur(15, m_shadow);
 }
 
 void Editor::buildScrollBar()
