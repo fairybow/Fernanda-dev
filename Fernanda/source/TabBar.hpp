@@ -16,7 +16,7 @@ public:
 	TabBar(const char* name, QWidget* parent = nullptr)
 		: Widget(name, parent)
 	{
-		setAutoHide(true);
+		//setAutoHide(true);
 	}
 
 	void add(QUuid id, StdFsPath path = StdFsPath())
@@ -25,7 +25,7 @@ public:
 		// optional path for name only
 		// if no name, name dynamically created from first text block on keystroke
 		blockSignals(true);
-		QString text = path.empty() ? "" : Path::qStringName(path);
+		QString text = path.empty() ? QString() : Path::qStringName(path);
 		auto index = addTab(text);
 		setTabData(index, id);
 		blockSignals(false);
