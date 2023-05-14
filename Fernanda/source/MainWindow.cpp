@@ -490,21 +490,21 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
 }
 
+void MainWindow::newFileAndTab()
+{
+	// called on start (if no MRU file) and on MenuBar new file
+	m_document->saveCurrent(m_editor->toPlainText()); // need a way to track saving text with no path and so only quuid
+	m_editor->clear();
+	m_tabBar->addTab("");
+}
+
 void MainWindow::serveFileAndTab(StdFsPath path)
 {
 	if (path.empty()) {
-		// handle creation of new file, and fire on startup with available recent file data (empty or not)
-		//m_tabBar->findOrAdd();
-		//m_editor->setPlainText();
-		//
 		m_indicator->red();
 		return;
 	}
 	m_document->saveCurrent(m_editor->toPlainText());
 	m_editor->setPlainText(m_document->open(path));
 	m_tabBar->findOrAdd(Path::toQString(path));
-
-	// need to serve a tab for Untitled (hidden) on start, or last opened file if available
-	// how to detect changes outside Fernanda?
-
 }

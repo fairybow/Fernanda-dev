@@ -29,6 +29,11 @@ public:
 		tempSave(id, text);
 	}
 
+	void openNew()
+	{
+
+	}
+
 	const QString open(StdFsPath path)
 	{
 		m_currentPath = path;
@@ -42,6 +47,8 @@ private:
 	const StdFsPath m_tempFolder;
 	const StdFsPath m_backupFolder;
 	StdFsPath m_currentPath;
+	//std::map<int, QUuid> m_unsavedIds; // not best way. how to keep track of them outside this class (with tab bar--data for if new?)
+	// perhaps if new, return the QUuid and store that as the tab data
 	std::map<StdFsPath, QUuid> m_pathsToIds;
 
 	QUuid findId(StdFsPath path)

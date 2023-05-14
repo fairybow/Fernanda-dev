@@ -102,5 +102,6 @@ private:
 	}
 	
 private slots:
+	void newFileAndTab();
 	void serveFileAndTab(StdFsPath path);
 };

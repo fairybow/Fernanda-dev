@@ -48,6 +48,7 @@ passthroughs:
 	int cursorBlockNumber() const { return m_trueEditor->textCursor().blockNumber(); }
 	int cursorPositionInBlock() const { return m_trueEditor->textCursor().positionInBlock(); }
 	bool hasSelection() const { return m_trueEditor->textCursor().hasSelection(); }
+	void clear() { m_trueEditor->clear(); }
 
 signals:
 	void selectionChanged();
