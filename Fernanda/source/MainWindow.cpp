@@ -499,4 +499,8 @@ void MainWindow::serveFileAndTab(StdFsPath path)
 	m_document->saveCurrent(m_editor->toPlainText());
 	m_editor->setPlainText(m_document->open(path));
 	m_tabBar->findOrAdd(Path::toQString(path));
+
+	// need to serve a tab for Untitled (hidden) on start, or last opened file if available
+	// how to detect changes outside Fernanda?
+
 }
