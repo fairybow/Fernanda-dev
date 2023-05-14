@@ -80,6 +80,11 @@ private:
 	void loadMenuBarMiscConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
 
+	//
+	void newFile();
+	void openFile(StdFsPath path);
+	//
+
 	template<typename T>
 	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction = nullptr)
 	{
@@ -100,8 +105,4 @@ private:
 	{
 		return m_user->load<T>(valueKey, associatedObject, fallbackValue);
 	}
-	
-private slots:
-	void newFileAndTab();
-	void serveFileAndTab(StdFsPath path);
 };
