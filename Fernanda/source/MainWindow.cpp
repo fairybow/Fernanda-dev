@@ -493,6 +493,10 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 void MainWindow::serveFileAndTab(StdFsPath path)
 {
 	if (path.empty()) {
+		// handle creation of new file, and fire on startup with available recent file data (empty or not)
+		//m_tabBar->findOrAdd();
+		//m_editor->setPlainText();
+		//
 		m_indicator->red();
 		return;
 	}

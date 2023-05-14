@@ -10,6 +10,8 @@
 #include <filesystem>
 #include <map>
 
+// file system watcher
+
 class Document
 {
 	using StdFsPath = std::filesystem::path;
