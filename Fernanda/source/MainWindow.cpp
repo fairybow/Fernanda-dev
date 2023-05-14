@@ -494,8 +494,9 @@ void MainWindow::newFileAndTab()
 {
 	// called on start (if no MRU file) and on MenuBar new file
 	m_document->saveCurrent(m_editor->toPlainText()); // need a way to track saving text with no path and so only quuid
+	// whatever is being saved is going right back to document to be verified as new or not...
 	m_editor->clear();
-	m_tabBar->addTab("");
+	m_tabBar->addTab(""); // tab needs something to verify it by, though
 }
 
 void MainWindow::serveFileAndTab(StdFsPath path)
