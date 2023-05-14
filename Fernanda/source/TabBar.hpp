@@ -1,7 +1,9 @@
 #pragma once
 
+#include "common/Path.hpp"
 #include "common/Widget.hpp"
 
+#include <QString>
 #include <QTabBar>
 
 class TabBar : public Widget<QTabBar>
@@ -10,7 +12,7 @@ public:
 	TabBar(const char* name, QWidget* parent = nullptr)
 		: Widget(name, parent)
 	{
-		setShape(Shape::RoundedNorth);
+		setAutoHide(true);
 	}
 
 	int findOrAdd(const QString& path, bool switchTo = true)

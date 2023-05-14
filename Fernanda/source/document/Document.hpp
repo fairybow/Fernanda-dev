@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common/Io.hpp"
+#include "../common/Path.hpp"
 #include "DocumentCache.hpp"
 
 #include <QString>
@@ -20,10 +21,10 @@ public:
 	void saveCurrent(const QString& text)
 	{
 		if (m_currentPath.empty()) return;
-		auto document = textDocument(findId(m_currentPath), m_currentPath);
+		auto id = findId(m_currentPath);
+		auto document = textDocument(id, m_currentPath);
 		document->setPlainText(text);
-		// temp save at some point, maybe here, maybe not
-		//Io::writeFile(temp_path, text);
+		tempSave(id, text);
 	}
 
 	const QString open(StdFsPath path)
@@ -48,7 +49,7 @@ private:
 		if (it != m_pathsToIds.end())
 			id = it->second;
 		else {
-			id = QUuid::createUuid();
+			id = QUuid::createUuid(); // QUuid::WithoutBraces
 			m_pathsToIds[path] = id;
 		}
 		return id;
@@ -63,5 +64,15 @@ private:
 			m_cache.insertDocument(id, document);
 		}
 		return document;
+	}
+
+	void tempSave(QUuid id, const QString& text)
+	{
+		Io::writeFile(tempPath(id), text);
+	}
+
+	StdFsPath tempPath(QUuid id)
+	{
+		return m_tempFolder / Path::toStdFs(id.toString() + ".txt~");
 	}
 };
