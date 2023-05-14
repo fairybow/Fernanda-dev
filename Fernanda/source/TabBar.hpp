@@ -25,7 +25,8 @@ public:
 		// optional path for name only
 		// if no name, name dynamically created from first text block on keystroke
 		blockSignals(true);
-		auto index = addTab(Path::qStringName(path));
+		QString text = path.empty() ? "" : Path::qStringName(path);
+		auto index = addTab(text);
 		setTabData(index, id);
 		blockSignals(false);
 	}
@@ -39,7 +40,9 @@ public:
 				break;
 			}
 		}
-		if (switchTo && index > -1)
+		if (index < 0)
+			index = 0;
+		if (switchTo)
 			setCurrentIndex(index);
 		return index;
 	}
