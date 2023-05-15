@@ -5,6 +5,7 @@
 #include "DocumentCache.hpp"
 
 #include <QString>
+#include <QTextDocument>
 #include <QUuid>
 
 #include <filesystem>

@@ -115,6 +115,15 @@ void Editor::cursorConnections()
 		if (m_hasCursorTypewriter)
 			m_trueEditor->centerCursor();
 		}, &TrueEditor::cursorPositionChanged, &TrueEditor::textChanged);
+
+	/*connect(m_trueEditor, &TrueEditor::cursorPositionChanged, this, [&] {
+		if (m_hasCursorTypewriter)
+			m_trueEditor->centerCursor();
+		});
+	connect(m_trueEditor, &TrueEditor::textChanged, this, [&] {
+		if (m_hasCursorTypewriter)
+			m_trueEditor->centerCursor();
+		});*/
 }
 
 /*
