@@ -491,9 +491,14 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
 }
 
-void MainWindow::newFile()
+void MainWindow::newFile(StdFsPath path) // from menu, by path, saved to disk first
 {
 	//
+}
+
+void MainWindow::newTab()
+{
+
 }
 
 void MainWindow::openFile(StdFsPath path)

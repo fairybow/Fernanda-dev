@@ -81,7 +81,8 @@ private:
 	void closeEventConfigs(Qt::WindowStates priorState);
 
 	//
-	void newFile();
+	void newFile(StdFsPath path);
+	void newTab();
 	void openFile(StdFsPath path);
 	void openTab(int index);
 	//

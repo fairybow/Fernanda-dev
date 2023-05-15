@@ -3,6 +3,7 @@
 #include "common/Path.hpp"
 #include "common/Widget.hpp"
 
+#include <QSize>
 #include <QTabBar>
 #include <QUuid>
 
@@ -17,6 +18,9 @@ public:
 		: Widget(name, parent)
 	{
 		//setAutoHide(true);
+		//setTabsClosable(true);
+		setMovable(true);
+		setExpanding(false);
 	}
 
 	int find(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true)
@@ -44,4 +48,10 @@ public:
 	{
 		return tabData(index).value<QUuid>();
 	}
+
+protected:
+	/*virtual QSize minimumTabSizeHint(int index) const override
+	{
+		return QSize(100, QTabBar::minimumTabSizeHint(index).height());
+	}*/
 };
