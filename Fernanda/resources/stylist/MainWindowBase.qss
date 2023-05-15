@@ -3,7 +3,7 @@
 	border: none;
 }
 
-#MenuBar, #Meter, QDialog, QDialog QLabel, QDialog QPushButton, QMenu, #StatusBar, #TreeView
+#MenuBar, #Meter, QDialog, QDialog QLabel, QDialog QPushButton, QMenu, #StatusBar, #TabBar, #TreeView
 {
 	font-size: 9pt;
 }

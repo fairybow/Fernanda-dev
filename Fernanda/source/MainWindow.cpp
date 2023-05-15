@@ -56,8 +56,7 @@ void MainWindow::connections()
 void MainWindow::tabBarConnections()
 {
 	connect(m_tabBar, &TabBar::currentChanged, this, [&](int index) {
-		auto path = m_tabBar->tabData(index).toString();
-		serveFileAndTab(Path::toStdFs(path));
+		openTab(index);
 		});
 }
 
@@ -103,7 +102,12 @@ void MainWindow::menuBarConnections()
 	connect(m_menuBar, &MenuBar::getUserFont, this, [&] {
 		return loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
 		});
-	connect(m_menuBar, &MenuBar::askOpenFile, this, &MainWindow::serveFileAndTab);
+	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&](StdFsPath path) {
+		menuBarOpenNewFile(path);
+		});
+	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
+		menuBarOpenFile(path);
+		});
 }
 
 void MainWindow::menuBarStyleConfigConnections()
@@ -490,22 +494,28 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
 }
 
-void MainWindow::newFileAndTab()
+void MainWindow::newTab() // from tab bar, no path, not saved
 {
-	// called on start (if no MRU file) and on MenuBar new file
-	m_document->saveCurrent(m_editor->toPlainText()); // need a way to track saving text with no path and so only quuid
-	// whatever is being saved is going right back to document to be verified as new or not...
-	m_editor->clear();
-	m_tabBar->addTab(""); // tab needs something to verify it by, though
+
 }
 
-void MainWindow::serveFileAndTab(StdFsPath path)
+void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 {
 	if (path.empty()) {
 		m_indicator->red();
 		return;
 	}
-	m_document->saveCurrent(m_editor->toPlainText());
+	if (writeNew)
+		m_document->writeEmpty(path);
+	m_document->save(m_editor->toPlainText());
 	m_editor->setPlainText(m_document->open(path));
-	m_tabBar->findOrAdd(Path::toQString(path));
+	m_tabBar->find(m_document->currentId(), path);
+}
+
+void MainWindow::openTab(int index)
+{
+	m_document->save(m_editor->toPlainText());
+	auto id = m_tabBar->id(index);
+	m_editor->setPlainText(m_document->open(id));
+	// m_editor-> restore cursor by id
 }

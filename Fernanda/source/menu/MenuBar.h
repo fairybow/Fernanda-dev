@@ -66,6 +66,7 @@ public:
 
 signals:
 	QFont getUserFont();
+	void askOpenNewFile(StdFsPath path);
 	void askOpenFile(StdFsPath path);
 	void askToggleEditorTheme(bool state);
 	void askToggleWindowTheme(bool state);

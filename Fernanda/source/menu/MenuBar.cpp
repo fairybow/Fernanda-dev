@@ -69,15 +69,25 @@ void MenuBar::makeBespokeActionGroups()
 
 void MenuBar::file()
 {
+	auto new_file = new QAction(tr("&New..."), this);
 	auto open = new QAction(tr("&Open..."), this);
+
+	connect(new_file, &QAction::triggered, this, [&] {
+		auto path = QFileDialog::getSaveFileName(
+			this, tr("Create a new file..."), Path::toQString(
+				m_userDocuments), tr("Plain text file (*.txt)"));
+		emit askOpenNewFile(Path::toStdFs(path));
+		});
+
 	connect(open, &QAction::triggered, this, [&] {
-		auto path = QFileDialog::getOpenFileName(this, tr("Open an existing file..."),
-		Path::toQString(m_userDocuments), tr("Plain text file (*.txt)"));
+		auto path = QFileDialog::getOpenFileName(
+			this, tr("Open an existing file..."), Path::toQString(
+				m_userDocuments), tr("Plain text file (*.txt)"));
 		emit askOpenFile(Path::toStdFs(path));
 		});
 
 	auto menu = addMenu(tr("&File"));
-	for (const auto& action : { open })
+	for (const auto& action : { new_file, open })
 		menu->addAction(action);
 }
 

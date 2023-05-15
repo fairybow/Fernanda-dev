@@ -16,7 +16,7 @@
 #include "Meter.h"
 #include "StatusBar.hpp"
 #include "Stylist.h"
-#include "TabBar.hpp"
+#include "TabBar.h"
 
 #include <QCloseEvent>
 #include <QMainWindow>
@@ -79,6 +79,11 @@ private:
 	void loadMenuBarToolConfigs();
 	void loadMenuBarMiscConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
+	void newTab();
+	void menuBarOpenFile(StdFsPath path, bool writeNew = false);
+	void openTab(int index);
+
+	void menuBarOpenNewFile(StdFsPath path) { menuBarOpenFile(path, true); };
 
 	template<typename T>
 	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction = nullptr)
@@ -100,8 +105,4 @@ private:
 	{
 		return m_user->load<T>(valueKey, associatedObject, fallbackValue);
 	}
-	
-private slots:
-	void newFileAndTab();
-	void serveFileAndTab(StdFsPath path);
 };
