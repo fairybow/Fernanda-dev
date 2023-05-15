@@ -19,7 +19,7 @@ class Editor : public Widget<>
 public:
 	Editor(const char* name, const QFont& defaultFont = QFont(), QWidget* parent = nullptr);
 
-	void setWrapMode(const QString& mode); // refactor to use QTextOption enum (`void setWordWrapMode(QTextOption::WrapMode policy)`), move to passthroughs
+	void setWrapMode(const QString& mode); // refactor to use QTextOption enum (`void setWordWrapMode(QTextOption::WrapMode policy)`), move to intermediaries
 	void setHasLineHighlight(bool state);
 	void setHasLineNumberArea(bool state);
 
@@ -34,7 +34,7 @@ public:
 	void setHasCursorEnsureVisible(bool state) { m_hasCursorEnsureVisible = state; }
 	void setHasCursorTypewriter(bool state) { m_hasCursorTypewriter = state; }
 
-	// TrueEditor intermediary
+	// TrueEditor intermediaries
 	void setCenterOnScroll(bool enabled) { m_trueEditor->setCenterOnScroll(enabled); };
 	void setFocus() { m_trueEditor->setFocus(); }
 	void setFont(const QFont& font) { m_trueEditor->setFont(font); }
