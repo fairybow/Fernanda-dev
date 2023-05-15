@@ -16,7 +16,7 @@
 #include "Meter.h"
 #include "StatusBar.hpp"
 #include "Stylist.h"
-#include "TabBar.hpp"
+#include "TabBar.h"
 
 #include <QCloseEvent>
 #include <QMainWindow>

@@ -250,6 +250,9 @@
     <ClCompile Include="unused\splitter\Splitter.cpp">
       <Filter>Unused\Splitter</Filter>
     </ClCompile>
+    <ClCompile Include="source\TabBar.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\preview\WebDocument.hpp">
@@ -345,7 +348,7 @@
     <ClInclude Include="source\common\Emoji.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
-    <ClInclude Include="source\TabBar.hpp">
+    <ClInclude Include="source\TabBar.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
