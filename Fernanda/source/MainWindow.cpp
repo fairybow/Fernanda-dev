@@ -56,7 +56,7 @@ void MainWindow::connections()
 void MainWindow::tabBarConnections()
 {
 	connect(m_tabBar, &TabBar::currentChanged, this, [&](int index) {
-		//
+		openTab(index);
 		});
 }
 
@@ -103,7 +103,7 @@ void MainWindow::menuBarConnections()
 		return loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
 		});
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
-		//
+		openFile(path);
 		});
 }
 
@@ -502,10 +502,15 @@ void MainWindow::openFile(StdFsPath path)
 		m_indicator->red();
 		return;
 	}
-	// new document
-	// add tab, supply title or connection
-	// use QObj::connect here?
-	// set editor
+	m_document->save(m_editor->toPlainText());
+	m_editor->setPlainText(m_document->open(path));
+	m_tabBar->find(m_document->currentId(), path);
+}
 
-	// separate function for now for tab switching, re: ln ~59
+void MainWindow::openTab(int index)
+{
+	m_document->save(m_editor->toPlainText());
+	auto id = m_tabBar->id(index);
+	m_editor->setPlainText(m_document->open(id));
+	// editor, restore cursor by id?
 }

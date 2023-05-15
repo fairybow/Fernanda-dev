@@ -83,6 +83,7 @@ private:
 	//
 	void newFile();
 	void openFile(StdFsPath path);
+	void openTab(int index);
 	//
 
 	template<typename T>

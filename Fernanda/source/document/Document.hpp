@@ -20,31 +20,73 @@ public:
 	Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent = nullptr)
 		: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(100) {}
 
-	void saveCurrent(const QString& text)
+	void save(const QString& text)
 	{
-		if (m_currentPath.empty()) return;
-		auto id = findId(m_currentPath);
-		auto document = textDocument(id, m_currentPath);
+		if (m_currentId.isNull()) return;
+
+		auto document = textDocument(m_currentId);
 		document->setPlainText(text);
-		tempSave(id, text);
+		//tempSave(id, text);
 	}
 
 	const QString open(StdFsPath path)
+	{
+		m_currentId = idByPath(path);
+		auto document = textDocument(m_currentId, path);
+		return document->toPlainText();
+	}
+
+	const QString open(QUuid id)
+	{
+		m_currentId = id;
+		auto document = textDocument(m_currentId);
+		return document->toPlainText();
+	}
+
+	QUuid currentId() const { return m_currentId; }
+
+	/*const QString open(StdFsPath path)
 	{
 		m_currentPath = path;
 		auto id = findId(path);
 		auto document = textDocument(id, m_currentPath);
 		return document->toPlainText();
-	}
+	}*/
 
 private:
 	DocumentCache m_cache;
 	const StdFsPath m_tempFolder;
 	const StdFsPath m_backupFolder;
-	StdFsPath m_currentPath;
-	std::map<StdFsPath, QUuid> m_pathsToIds;
+	QUuid m_currentId;
+	std::map<StdFsPath, QUuid> m_extantPathsToIds;
 
-	QUuid findId(StdFsPath path)
+	QUuid idByPath(StdFsPath path)
+	{
+		QUuid id;
+		auto it = m_extantPathsToIds.find(path);
+		if (it != m_extantPathsToIds.end())
+			id = it->second;
+		else {
+			id = QUuid::createUuid();
+			m_extantPathsToIds[path] = id;
+		}
+		return id;
+	}
+
+	QTextDocument* textDocument(QUuid id, StdFsPath path = StdFsPath())
+	{
+		auto document = m_cache.document(id);
+		if (!document) {
+			QString text;
+			if (!path.empty())
+				text = Io::readFile(path);
+			document = new QTextDocument(text);
+			m_cache.insertDocument(id, document);
+		}
+		return document;
+	}
+
+	/*QUuid findId(StdFsPath path)
 	{
 		QUuid id;
 		auto it = m_pathsToIds.find(path);
@@ -55,18 +97,7 @@ private:
 			m_pathsToIds[path] = id;
 		}
 		return id;
-	}
-
-	QTextDocument* textDocument(QUuid id, StdFsPath path)
-	{
-		auto document = m_cache.document(id);
-		if (!document) {
-			auto text = Io::readFile(path);
-			document = new QTextDocument(text);
-			m_cache.insertDocument(id, document);
-		}
-		return document;
-	}
+	}*/
 
 	void tempSave(QUuid id, const QString& text)
 	{

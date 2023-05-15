@@ -19,19 +19,7 @@ public:
 		//setAutoHide(true);
 	}
 
-	void add(QUuid id, StdFsPath path = StdFsPath())
-	{
-		// add based on uuid received from Document::create()/find()
-		// optional path for name only
-		// if no name, name dynamically created from first text block on keystroke
-		blockSignals(true);
-		QString text = path.empty() ? QString() : Path::qStringName(path);
-		auto index = addTab(text);
-		setTabData(index, id);
-		blockSignals(false);
-	}
-
-	int find(QUuid id, bool switchTo = true)
+	int find(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true)
 	{
 		auto index = -1;
 		for (auto i = 0; i < count(); ++i) {
@@ -40,10 +28,20 @@ public:
 				break;
 			}
 		}
-		if (index < 0)
-			index = 0;
+		if (index == -1) {
+			blockSignals(true);
+			index = addTab(
+				pathForTitle.empty() ? QString() : Path::qStringName(pathForTitle));
+			setTabData(index, id);
+			blockSignals(false);
+		}
 		if (switchTo)
 			setCurrentIndex(index);
 		return index;
+	}
+
+	QUuid id(int index)
+	{
+		return tabData(index).value<QUuid>();
 	}
 };
