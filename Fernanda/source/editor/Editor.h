@@ -34,7 +34,7 @@ public:
 	void setHasCursorEnsureVisible(bool state) { m_hasCursorEnsureVisible = state; }
 	void setHasCursorTypewriter(bool state) { m_hasCursorTypewriter = state; }
 
-passthroughs:
+	// TrueEditor intermediary
 	void setCenterOnScroll(bool enabled) { m_trueEditor->setCenterOnScroll(enabled); };
 	void setFocus() { m_trueEditor->setFocus(); }
 	void setFont(const QFont& font) { m_trueEditor->setFont(font); }

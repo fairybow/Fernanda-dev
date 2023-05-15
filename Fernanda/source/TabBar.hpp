@@ -18,7 +18,7 @@ public:
 		: Widget(name, parent)
 	{
 		//setAutoHide(true);
-		//setTabsClosable(true);
+		setTabsClosable(true);
 		setMovable(true);
 		setExpanding(false);
 	}
