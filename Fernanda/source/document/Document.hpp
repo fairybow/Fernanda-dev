@@ -45,14 +45,6 @@ public:
 
 	QUuid currentId() const { return m_currentId; }
 
-	/*const QString open(StdFsPath path)
-	{
-		m_currentPath = path;
-		auto id = findId(path);
-		auto document = textDocument(id, m_currentPath);
-		return document->toPlainText();
-	}*/
-
 private:
 	DocumentCache m_cache;
 	const StdFsPath m_tempFolder;
@@ -85,19 +77,6 @@ private:
 		}
 		return document;
 	}
-
-	/*QUuid findId(StdFsPath path)
-	{
-		QUuid id;
-		auto it = m_pathsToIds.find(path);
-		if (it != m_pathsToIds.end())
-			id = it->second;
-		else {
-			id = QUuid::createUuid();
-			m_pathsToIds[path] = id;
-		}
-		return id;
-	}*/
 
 	void tempSave(QUuid id, const QString& text)
 	{
