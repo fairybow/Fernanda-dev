@@ -55,9 +55,8 @@ void MainWindow::connections()
 
 void MainWindow::tabBarConnections()
 {
-	connect(m_tabBar, &TabBar::currentChanged, this, [&](int index) {
-		openTab(index);
-		});
+	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::openTab);
+	connect(m_tabBar, &TabBar::askNew, this, &MainWindow::newTab);
 }
 
 void MainWindow::editorConnections()
@@ -494,11 +493,6 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
 }
 
-void MainWindow::newTab() // from tab bar, no path, not saved
-{
-
-}
-
 void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 {
 	if (path.empty()) {
@@ -518,4 +512,10 @@ void MainWindow::openTab(int index)
 	auto id = m_tabBar->id(index);
 	m_editor->setPlainText(m_document->open(id));
 	// m_editor-> restore cursor by id
+}
+
+void MainWindow::newTab()
+{
+	m_document->save(m_editor->toPlainText());
+	// create new doc and make new tab + switch
 }

@@ -22,6 +22,9 @@ public:
 	int find(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
 	QUuid id(int index);
 
+signals:
+	void askNew();
+
 protected:
 	virtual void mousePressEvent(QMouseEvent* event) override;
 	virtual void mouseMoveEvent(QMouseEvent* event) override;
@@ -36,5 +39,6 @@ private:
 	bool m_dragging = false;
 	QToolButton* m_add = new QToolButton(this);
 
+	void setupAddButton();
 	void moveAddButton();
 };

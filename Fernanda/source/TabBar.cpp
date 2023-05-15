@@ -3,11 +3,11 @@
 TabBar::TabBar(const char* name, QWidget* parent)
 	: Widget(name, parent)
 {
-	m_add->setText("+");
 	//setAutoHide(true);
 	setTabsClosable(true);
 	setMovable(true);
 	setExpanding(false);
+	setupAddButton();
 }
 
 int TabBar::find(QUuid id, StdFsPath pathForTitle, bool switchTo)
@@ -81,6 +81,15 @@ void TabBar::tabRemoved(int index)
 {
 	QTabBar::tabRemoved(index);
 	moveAddButton();
+}
+
+void TabBar::setupAddButton()
+{
+	m_add->setText("+");
+
+	connect(m_add, &QToolButton::clicked, this, [&] {
+		emit askNew();
+		});
 }
 
 void TabBar::moveAddButton()
