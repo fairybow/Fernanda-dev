@@ -102,6 +102,9 @@ void MainWindow::menuBarConnections()
 	connect(m_menuBar, &MenuBar::getUserFont, this, [&] {
 		return loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
 		});
+	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&](StdFsPath path) {
+		// write then open file
+		});
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
 		openFile(path);
 		});
@@ -496,7 +499,7 @@ void MainWindow::newFile(StdFsPath path) // from menu, by path, saved to disk fi
 	//
 }
 
-void MainWindow::newTab()
+void MainWindow::newTab() // from tab bar, no path, not saved
 {
 
 }
