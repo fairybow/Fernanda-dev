@@ -43,6 +43,11 @@ public:
 		return document->toPlainText();
 	}
 
+	void writeEmpty(StdFsPath path)
+	{
+		Io::writeFile(path);
+	}
+
 	QUuid currentId() const { return m_currentId; }
 
 private:

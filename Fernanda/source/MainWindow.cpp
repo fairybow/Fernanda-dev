@@ -103,10 +103,10 @@ void MainWindow::menuBarConnections()
 		return loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
 		});
 	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&](StdFsPath path) {
-		// write then open file
+		menuBarOpenNewFile(path);
 		});
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
-		openFile(path);
+		menuBarOpenFile(path);
 		});
 }
 
@@ -494,22 +494,19 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
 }
 
-void MainWindow::newFile(StdFsPath path) // from menu, by path, saved to disk first
-{
-	//
-}
-
 void MainWindow::newTab() // from tab bar, no path, not saved
 {
 
 }
 
-void MainWindow::openFile(StdFsPath path)
+void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 {
 	if (path.empty()) {
 		m_indicator->red();
 		return;
 	}
+	if (writeNew)
+		m_document->writeEmpty(path);
 	m_document->save(m_editor->toPlainText());
 	m_editor->setPlainText(m_document->open(path));
 	m_tabBar->find(m_document->currentId(), path);
@@ -520,5 +517,5 @@ void MainWindow::openTab(int index)
 	m_document->save(m_editor->toPlainText());
 	auto id = m_tabBar->id(index);
 	m_editor->setPlainText(m_document->open(id));
-	// editor, restore cursor by id?
+	// m_editor-> restore cursor by id
 }

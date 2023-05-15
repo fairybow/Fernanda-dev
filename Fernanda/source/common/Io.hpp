@@ -23,7 +23,7 @@ namespace Io
 		return text;
 	}
 
-	inline bool writeFile(StdFsPath filePath, QString text, bool createDirectories = true)
+	inline bool writeFile(StdFsPath filePath, QString text = QString(), bool createDirectories = true)
 	{
 		if (createDirectories) {
 			auto parent = filePath.parent_path();

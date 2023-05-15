@@ -79,13 +79,11 @@ private:
 	void loadMenuBarToolConfigs();
 	void loadMenuBarMiscConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
-
-	//
-	void newFile(StdFsPath path);
 	void newTab();
-	void openFile(StdFsPath path);
+	void menuBarOpenFile(StdFsPath path, bool writeNew = false);
 	void openTab(int index);
-	//
+
+	void menuBarOpenNewFile(StdFsPath path) { menuBarOpenFile(path, true); };
 
 	template<typename T>
 	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction = nullptr)
