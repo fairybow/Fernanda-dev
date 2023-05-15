@@ -36,6 +36,29 @@ QUuid TabBar::id(int index)
 	return tabData(index).value<QUuid>();
 }
 
+void TabBar::mousePressEvent(QMouseEvent* event)
+{
+	QTabBar::mousePressEvent(event);
+	m_aboutToBeDragged = true;
+}
+
+void TabBar::mouseMoveEvent(QMouseEvent* event)
+{
+	QTabBar::mouseMoveEvent(event);
+	if (m_aboutToBeDragged)
+		m_dragging = true;
+	if (m_dragging)
+		m_add->setVisible(false);
+}
+
+void TabBar::mouseReleaseEvent(QMouseEvent* event)
+{
+	QTabBar::mouseReleaseEvent(event);
+	m_aboutToBeDragged = false;
+	m_dragging = false;
+	m_add->setVisible(true);
+}
+
 void TabBar::resizeEvent(QResizeEvent* event)
 {
 	QTabBar::resizeEvent(event);
@@ -58,29 +81,6 @@ void TabBar::tabRemoved(int index)
 {
 	QTabBar::tabRemoved(index);
 	moveAddButton();
-}
-
-void TabBar::mousePressEvent(QMouseEvent* event)
-{
-	QTabBar::mousePressEvent(event);
-	m_aboutToBeDragged = true;
-}
-
-void TabBar::mouseMoveEvent(QMouseEvent* event)
-{
-	QTabBar::mouseMoveEvent(event);
-	if (m_aboutToBeDragged)
-		m_dragging = true;
-	if (m_dragging)
-		m_add->setVisible(false);
-}
-
-void TabBar::mouseReleaseEvent(QMouseEvent* event)
-{
-	QTabBar::mouseReleaseEvent(event);
-	m_aboutToBeDragged = false;
-	m_dragging = false;
-	m_add->setVisible(true);
 }
 
 void TabBar::moveAddButton()

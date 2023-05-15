@@ -23,13 +23,13 @@ public:
 	QUuid id(int index);
 
 protected:
+	virtual void mousePressEvent(QMouseEvent* event) override;
+	virtual void mouseMoveEvent(QMouseEvent* event) override;
+	virtual void mouseReleaseEvent(QMouseEvent* event) override;
 	virtual void resizeEvent(QResizeEvent* event) override;
 	virtual void tabInserted(int index) override;
 	virtual void tabLayoutChange() override;
 	virtual void tabRemoved(int index) override;
-	virtual void mousePressEvent(QMouseEvent* event) override;
-	virtual void mouseMoveEvent(QMouseEvent* event) override;
-	virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
 	bool m_aboutToBeDragged = false;
