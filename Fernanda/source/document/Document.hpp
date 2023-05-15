@@ -49,6 +49,13 @@ public:
 		Io::writeFile(path);
 	}
 
+	QUuid create()
+	{
+		auto id = QUuid::createUuid();
+		textDocument(id);
+		return id;
+	}
+
 	QUuid currentId() const { return m_currentId; }
 
 private:

@@ -147,7 +147,7 @@
     <ClInclude Include="source\common\Utility.hpp" />
     <ClInclude Include="source\document\Document.hpp" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
-    <ClInclude Include="source\TabBar.h" />
+    <QtMoc Include="source\TabBar.h" />
     <ClInclude Include="unused\Archiver.hpp" />
     <ClInclude Include="unused\splitter\SplitterHandle.hpp" />
     <ClInclude Include="unused\splitter\TrueSplitter.hpp" />

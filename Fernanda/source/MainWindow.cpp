@@ -516,6 +516,9 @@ void MainWindow::openTab(int index)
 
 void MainWindow::newTab()
 {
-	m_document->save(m_editor->toPlainText());
 	// create new doc and make new tab + switch
+	auto id = m_document->create();
+	m_document->save(m_editor->toPlainText());
+	m_editor->setPlainText(m_document->open(id));
+	m_tabBar->find(id);
 }

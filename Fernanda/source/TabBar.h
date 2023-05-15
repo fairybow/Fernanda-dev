@@ -16,6 +16,8 @@ class TabBar : public Widget<QTabBar>
 {
 	using StdFsPath = std::filesystem::path;
 
+	Q_OBJECT
+
 public:
 	TabBar(const char* name, QWidget* parent = nullptr);
 
