@@ -501,24 +501,26 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 	}
 	if (writeNew)
 		m_document->writeEmpty(path);
-	m_document->save(m_editor->toPlainText());
-	m_editor->setPlainText(m_document->open(path));
-	m_tabBar->find(m_document->currentId(), path);
+	m_document->setText(m_editor->toPlainText());
+	auto text = m_document->open(path);
+	m_editor->setPlainText(text);
+	m_tabBar->serve(m_document->currentId(), path);
 }
 
 void MainWindow::openTab(int index)
 {
-	m_document->save(m_editor->toPlainText());
-	auto id = m_tabBar->id(index);
-	m_editor->setPlainText(m_document->open(id));
+	m_document->setText(m_editor->toPlainText());
+	auto extant_id = m_tabBar->id(index);
+	auto document_text = m_document->open(extant_id);
+	m_editor->setPlainText(document_text);
 	// m_editor-> restore cursor by id
 }
 
 void MainWindow::newTab()
 {
-	// create new doc and make new tab + switch
-	auto id = m_document->create();
-	m_document->save(m_editor->toPlainText());
-	m_editor->setPlainText(m_document->open(id));
-	m_tabBar->find(id);
+	m_document->setText(m_editor->toPlainText());
+	auto new_id = m_document->create();
+	m_document->open(new_id);
+	m_editor->clear();
+	m_tabBar->serve(new_id);
 }

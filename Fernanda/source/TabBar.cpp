@@ -8,9 +8,11 @@ TabBar::TabBar(const char* name, QWidget* parent)
 	setMovable(true);
 	setExpanding(false);
 	setupAddButton();
+
+	// set minimum size
 }
 
-int TabBar::find(QUuid id, StdFsPath pathForTitle, bool switchTo)
+int TabBar::serve(QUuid id, StdFsPath pathForTitle, bool switchTo)
 {
 	auto index = -1;
 	for (auto i = 0; i < count(); ++i) {

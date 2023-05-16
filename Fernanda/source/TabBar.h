@@ -21,7 +21,7 @@ class TabBar : public Widget<QTabBar>
 public:
 	TabBar(const char* name, QWidget* parent = nullptr);
 
-	int find(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
+	int serve(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
 	QUuid id(int index);
 
 signals:

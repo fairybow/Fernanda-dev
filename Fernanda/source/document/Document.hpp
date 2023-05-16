@@ -21,10 +21,9 @@ public:
 	Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent = nullptr)
 		: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(100) {}
 
-	void save(const QString& text)
+	void setText(const QString& text)
 	{
 		if (m_currentId.isNull()) return;
-
 		auto document = textDocument(m_currentId);
 		document->setPlainText(text);
 		//tempSave(id, text);
