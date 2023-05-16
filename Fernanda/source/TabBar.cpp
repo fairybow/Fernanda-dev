@@ -8,8 +8,6 @@ TabBar::TabBar(const char* name, QWidget* parent)
 	setMovable(true);
 	setExpanding(false);
 	setupAddButton();
-
-	// set minimum size
 }
 
 int TabBar::serve(QUuid id, StdFsPath pathForTitle, bool switchTo)
@@ -73,7 +71,7 @@ void TabBar::tabInserted(int index)
 void TabBar::tabLayoutChange()
 {
 	QTabBar::tabLayoutChange();
-	moveAddButton();
+	//moveAddButton();
 }
 
 void TabBar::tabRemoved(int index)
@@ -92,9 +90,14 @@ void TabBar::setupAddButton()
 
 void TabBar::moveAddButton()
 {
-	if (count() < 1) return;
-	auto rect = tabRect(count() - 1);
-	auto x = rect.right() + 3;
-	auto y = rect.center().y() - (m_add->height() / 2);
-	m_add->move(x, y);
+	Utility::delayCall(this, [&] {
+		if (count() < 1) return;
+		auto rect = tabRect(count() - 1);
+		auto x = rect.right() + 3;
+		auto y = rect.center().y() - (m_add->height() / 2) + 1;
+		auto max_x = width() - m_add->width();
+		if (x > max_x)
+			x = max_x;
+		m_add->move(x, y);
+		});
 }

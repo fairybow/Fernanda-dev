@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\common\Fx.hpp" />
+    <ClCompile Include="source\document\Document.cpp" />
     <ClCompile Include="source\editor\Editor.cpp" />
     <ClCompile Include="source\editor\LineNumberArea.cpp" />
     <ClCompile Include="source\editor\TrueEditor.cpp" />
@@ -145,7 +146,7 @@
   <ItemGroup>
     <ClInclude Include="source\common\Emoji.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
-    <ClInclude Include="source\document\Document.hpp" />
+    <QtMoc Include="source\document\Document.h" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
     <QtMoc Include="source\TabBar.h" />
     <ClInclude Include="unused\Archiver.hpp" />

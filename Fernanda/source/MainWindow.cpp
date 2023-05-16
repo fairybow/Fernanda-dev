@@ -42,6 +42,7 @@ void MainWindow::setupWidgets()
 
 void MainWindow::connections()
 {
+	documentConnections();
 	tabBarConnections();
 	editorConnections();
 	meterConnections();
@@ -52,6 +53,13 @@ void MainWindow::connections()
 	menuBarMeterConfigConnections();
 	menuBarToolConfigConnections();
 	menuBarMiscConfigConnections();
+}
+
+void MainWindow::documentConnections()
+{
+	connect(m_document, &Document::askSetText, this, [&] {
+		m_document->setText(m_editor->toPlainText());
+		});
 }
 
 void MainWindow::tabBarConnections()
@@ -501,8 +509,7 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 		return;
 	}
 	if (writeNew)
-		m_document->writeEmpty(path);
-	m_document->setText(m_editor->toPlainText());
+		m_document->writeEmptyFile(path);
 	auto text = m_document->open(path);
 	m_editor->setPlainText(text);
 	m_tabBar->serve(m_document->currentId(), path);
@@ -510,7 +517,6 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 
 void MainWindow::openTab(int index)
 {
-	m_document->setText(m_editor->toPlainText());
 	auto extant_id = m_tabBar->id(index);
 	auto document_text = m_document->open(extant_id);
 	m_editor->setPlainText(document_text);
@@ -519,7 +525,6 @@ void MainWindow::openTab(int index)
 
 void MainWindow::newTab()
 {
-	m_document->setText(m_editor->toPlainText());
 	auto new_id = m_document->create();
 	m_document->open(new_id);
 	m_editor->clear();

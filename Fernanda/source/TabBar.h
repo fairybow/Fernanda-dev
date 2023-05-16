@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/Path.hpp"
+#include "common/Utility.hpp"
 #include "common/Widget.hpp"
 
 #include <QMouseEvent>

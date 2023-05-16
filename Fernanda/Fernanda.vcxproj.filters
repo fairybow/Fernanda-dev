@@ -218,6 +218,9 @@
     <QtMoc Include="source\TabBar.h">
       <Filter>Source</Filter>
     </QtMoc>
+    <QtMoc Include="source\document\Document.h">
+      <Filter>Source\Document</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -255,6 +258,9 @@
     </ClCompile>
     <ClCompile Include="source\TabBar.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\document\Document.cpp">
+      <Filter>Source\Document</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -344,9 +350,6 @@
     </ClInclude>
     <ClInclude Include="source\common\Utility.hpp">
       <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\document\Document.hpp">
-      <Filter>Source\Document</Filter>
     </ClInclude>
     <ClInclude Include="source\common\Emoji.hpp">
       <Filter>Source\Common</Filter>
