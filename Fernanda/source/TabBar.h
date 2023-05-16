@@ -38,7 +38,6 @@ protected:
 
 private:
 	bool m_aboutToBeDragged = false;
-	bool m_dragging = false;
 	QToolButton* m_add = new QToolButton(this);
 
 	void setupAddButton();

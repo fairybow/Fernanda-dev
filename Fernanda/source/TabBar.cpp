@@ -48,8 +48,6 @@ void TabBar::mouseMoveEvent(QMouseEvent* event)
 {
 	QTabBar::mouseMoveEvent(event);
 	if (m_aboutToBeDragged)
-		m_dragging = true;
-	if (m_dragging)
 		m_add->setVisible(false);
 }
 
@@ -57,7 +55,6 @@ void TabBar::mouseReleaseEvent(QMouseEvent* event)
 {
 	QTabBar::mouseReleaseEvent(event);
 	m_aboutToBeDragged = false;
-	m_dragging = false;
 	m_add->setVisible(true);
 }
 
@@ -88,7 +85,6 @@ void TabBar::tabRemoved(int index)
 void TabBar::setupAddButton()
 {
 	m_add->setText("+");
-
 	connect(m_add, &QToolButton::clicked, this, [&] {
 		emit askNew();
 		});

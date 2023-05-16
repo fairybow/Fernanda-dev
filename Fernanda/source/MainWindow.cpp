@@ -6,6 +6,7 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	setupWidgets();
 	connections();
 	loadConfigs();
+	newTab();
 	m_editor->setFocus();
 }
 
