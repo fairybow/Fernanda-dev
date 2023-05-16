@@ -6,6 +6,7 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	setupWidgets();
 	connections();
 	loadConfigs();
+	newTab();
 	m_editor->setFocus();
 }
 
@@ -41,6 +42,7 @@ void MainWindow::setupWidgets()
 
 void MainWindow::connections()
 {
+	documentConnections();
 	tabBarConnections();
 	editorConnections();
 	meterConnections();
@@ -53,11 +55,17 @@ void MainWindow::connections()
 	menuBarMiscConfigConnections();
 }
 
+void MainWindow::documentConnections()
+{
+	connect(m_document, &Document::askSetText, this, [&] {
+		m_document->setText(m_editor->toPlainText());
+		});
+}
+
 void MainWindow::tabBarConnections()
 {
-	connect(m_tabBar, &TabBar::currentChanged, this, [&](int index) {
-		openTab(index);
-		});
+	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::openTab);
+	connect(m_tabBar, &TabBar::askNew, this, &MainWindow::newTab);
 }
 
 void MainWindow::editorConnections()
@@ -494,11 +502,6 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
 }
 
-void MainWindow::newTab() // from tab bar, no path, not saved
-{
-
-}
-
 void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 {
 	if (path.empty()) {
@@ -506,16 +509,24 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 		return;
 	}
 	if (writeNew)
-		m_document->writeEmpty(path);
-	m_document->save(m_editor->toPlainText());
-	m_editor->setPlainText(m_document->open(path));
-	m_tabBar->find(m_document->currentId(), path);
+		m_document->writeEmptyFile(path);
+	auto text = m_document->open(path);
+	m_editor->setPlainText(text);
+	m_tabBar->serve(m_document->currentId(), path);
 }
 
 void MainWindow::openTab(int index)
 {
-	m_document->save(m_editor->toPlainText());
-	auto id = m_tabBar->id(index);
-	m_editor->setPlainText(m_document->open(id));
+	auto extant_id = m_tabBar->id(index);
+	auto document_text = m_document->open(extant_id);
+	m_editor->setPlainText(document_text);
 	// m_editor-> restore cursor by id
+}
+
+void MainWindow::newTab()
+{
+	auto new_id = m_document->create();
+	m_document->open(new_id);
+	m_editor->clear();
+	m_tabBar->serve(new_id);
 }

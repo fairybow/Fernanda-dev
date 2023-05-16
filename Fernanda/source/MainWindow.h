@@ -3,7 +3,7 @@
 #include "common/Emoji.hpp"
 #include "common/Layout.hpp"
 #include "common/Widget.hpp"
-#include "document/Document.hpp"
+#include "document/Document.h"
 #include "editor/Editor.h"
 #include "menu/MenuBar.h"
 #include "preview/Preview.hpp"
@@ -60,6 +60,7 @@ private:
 
 	void setupWidgets();
 	void connections();
+	void documentConnections();
 	void tabBarConnections();
 	void editorConnections();
 	void meterConnections();
@@ -79,9 +80,7 @@ private:
 	void loadMenuBarToolConfigs();
 	void loadMenuBarMiscConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
-	void newTab();
 	void menuBarOpenFile(StdFsPath path, bool writeNew = false);
-	void openTab(int index);
 
 	void menuBarOpenNewFile(StdFsPath path) { menuBarOpenFile(path, true); };
 
@@ -105,4 +104,8 @@ private:
 	{
 		return m_user->load<T>(valueKey, associatedObject, fallbackValue);
 	}
+
+private slots:
+	void openTab(int index);
+	void newTab();
 };

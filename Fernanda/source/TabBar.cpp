@@ -3,14 +3,14 @@
 TabBar::TabBar(const char* name, QWidget* parent)
 	: Widget(name, parent)
 {
-	m_add->setText("+");
 	//setAutoHide(true);
 	setTabsClosable(true);
 	setMovable(true);
 	setExpanding(false);
+	setupAddButton();
 }
 
-int TabBar::find(QUuid id, StdFsPath pathForTitle, bool switchTo)
+int TabBar::serve(QUuid id, StdFsPath pathForTitle, bool switchTo)
 {
 	auto index = -1;
 	for (auto i = 0; i < count(); ++i) {
@@ -46,8 +46,6 @@ void TabBar::mouseMoveEvent(QMouseEvent* event)
 {
 	QTabBar::mouseMoveEvent(event);
 	if (m_aboutToBeDragged)
-		m_dragging = true;
-	if (m_dragging)
 		m_add->setVisible(false);
 }
 
@@ -55,7 +53,6 @@ void TabBar::mouseReleaseEvent(QMouseEvent* event)
 {
 	QTabBar::mouseReleaseEvent(event);
 	m_aboutToBeDragged = false;
-	m_dragging = false;
 	m_add->setVisible(true);
 }
 
@@ -74,7 +71,7 @@ void TabBar::tabInserted(int index)
 void TabBar::tabLayoutChange()
 {
 	QTabBar::tabLayoutChange();
-	moveAddButton();
+	//moveAddButton();
 }
 
 void TabBar::tabRemoved(int index)
@@ -83,11 +80,24 @@ void TabBar::tabRemoved(int index)
 	moveAddButton();
 }
 
+void TabBar::setupAddButton()
+{
+	m_add->setText("+");
+	connect(m_add, &QToolButton::clicked, this, [&] {
+		emit askNew();
+		});
+}
+
 void TabBar::moveAddButton()
 {
-	if (count() < 1) return;
-	auto rect = tabRect(count() - 1);
-	auto x = rect.right() + 3;
-	auto y = rect.center().y() - (m_add->height() / 2);
-	m_add->move(x, y);
+	Utility::delayCall(this, [&] {
+		if (count() < 1) return;
+		auto rect = tabRect(count() - 1);
+		auto x = rect.right() + 3;
+		auto y = rect.center().y() - (m_add->height() / 2) + 1;
+		auto max_x = width() - m_add->width();
+		if (x > max_x)
+			x = max_x;
+		m_add->move(x, y);
+		});
 }

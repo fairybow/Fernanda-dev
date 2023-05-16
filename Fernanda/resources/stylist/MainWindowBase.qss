@@ -28,3 +28,8 @@
 {
 	font-size: 10pt;
 }
+
+#TabBar::tab
+{
+	min-width: 115px;
+}

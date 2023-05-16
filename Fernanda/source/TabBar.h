@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/Path.hpp"
+#include "common/Utility.hpp"
 #include "common/Widget.hpp"
 
 #include <QMouseEvent>
@@ -16,11 +17,16 @@ class TabBar : public Widget<QTabBar>
 {
 	using StdFsPath = std::filesystem::path;
 
+	Q_OBJECT
+
 public:
 	TabBar(const char* name, QWidget* parent = nullptr);
 
-	int find(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
+	int serve(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
 	QUuid id(int index);
+
+signals:
+	void askNew();
 
 protected:
 	virtual void mousePressEvent(QMouseEvent* event) override;
@@ -33,8 +39,8 @@ protected:
 
 private:
 	bool m_aboutToBeDragged = false;
-	bool m_dragging = false;
 	QToolButton* m_add = new QToolButton(this);
 
+	void setupAddButton();
 	void moveAddButton();
 };
