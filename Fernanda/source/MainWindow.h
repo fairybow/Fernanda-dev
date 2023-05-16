@@ -7,6 +7,7 @@
 #include "editor/Editor.h"
 #include "menu/MenuBar.h"
 #include "preview/Preview.hpp"
+#include "tab/TabBar.h"
 #include "tools/AlwaysOnTop.hpp"
 #include "tools/StayAwake.hpp"
 #include "tools/PomodoroTimer.hpp"
@@ -16,7 +17,6 @@
 #include "Meter.h"
 #include "StatusBar.hpp"
 #include "Stylist.h"
-#include "TabBar.h"
 
 #include <QCloseEvent>
 #include <QMainWindow>
