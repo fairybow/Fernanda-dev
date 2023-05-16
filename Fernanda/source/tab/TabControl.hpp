@@ -22,6 +22,7 @@ public:
 	{
 		Utility::delayCall(this, [&] {
 			if (m_parent->count() < 1) return;
+			setScrollButtonsVisible(isFull());
 			auto rect = m_parent->tabRect(m_parent->count() - 1);
 			auto x = rect.right() + 3;
 			auto y = rect.center().y() - (height() / 2) + 1;
@@ -62,5 +63,20 @@ private:
 		m_parent->setStyleSheet("QTabBar::scroller { width: 0px; }");
 		auto layout = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight }, this);
 		Layout::setUniformSpacing(layout, 2);
+	}
+
+	void setScrollButtonsVisible(bool visible)
+	{
+		m_scrollLeft->setVisible(visible);
+		m_scrollRight->setVisible(visible);
+		adjustSize();
+	}
+
+	bool isFull()
+	{
+		auto tabs_width = 0;
+		for (auto i = 0; i < m_parent->count(); ++i)
+			tabs_width += m_parent->tabRect(i).width();
+		return (tabs_width > m_parent->width());
 	}
 };

@@ -76,16 +76,9 @@ void TabBar::tabRemoved(int index)
 }
 
 void TabBar::setupControls(const char* name)
-{	
+{
+	m_controller->setObjectName(name + QString("-control"));
 	connect(m_controller, &TabControl::addTabClicked, this, [&] {
 		emit askNew();
 		});
-}
-
-bool TabBar::isFull()
-{
-	auto tabs_width = 0;
-	for (auto i = 0; i < count(); ++i)
-		tabs_width += tabRect(i).width();
-	return (tabs_width > width());
 }

@@ -40,5 +40,4 @@ private:
 	TabControl* m_controller = new TabControl(this);
 
 	void setupControls(const char* name);
-	bool isFull();
 };
