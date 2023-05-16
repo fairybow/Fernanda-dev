@@ -60,7 +60,6 @@ private:
 		m_add->setText("+");
 		m_scrollLeft->setText("<");
 		m_scrollRight->setText(">");
-		m_parent->setStyleSheet("QTabBar::scroller { width: 0px; }");
 		auto layout = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight }, this);
 		Layout::setUniformSpacing(layout, 2);
 	}
