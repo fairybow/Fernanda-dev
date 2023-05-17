@@ -221,10 +221,13 @@
     <QtMoc Include="source\document\Document.h">
       <Filter>Source\Document</Filter>
     </QtMoc>
-    <QtMoc Include="source\tab\TabBar.h">
+    <QtMoc Include="source\tab\TrueTabBar.hpp">
       <Filter>Source\Tab</Filter>
     </QtMoc>
-    <QtMoc Include="source\tab\TabControl.hpp">
+    <QtMoc Include="source\tab\TabControlBox.hpp">
+      <Filter>Source\Tab</Filter>
+    </QtMoc>
+    <QtMoc Include="source\tab\TabBar.h">
       <Filter>Source\Tab</Filter>
     </QtMoc>
   </ItemGroup>
