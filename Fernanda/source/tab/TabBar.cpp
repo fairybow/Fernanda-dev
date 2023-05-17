@@ -108,7 +108,7 @@ bool TabBar::isFull()
 void TabBar::adjustControls()
 {
 	Utility::delayCall(this, [&] {
-		if (m_trueTabBar->count() < 1) return;
+		if (m_trueTabBar->count() < 1 || m_aboutToBeDragged) return;
 
 		showControls();
 

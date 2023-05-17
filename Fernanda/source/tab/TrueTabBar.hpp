@@ -16,6 +16,7 @@ public:
 		setMovable(true);
 		setExpanding(false);
 		setUsesScrollButtons(true);
+		setDrawBase(false);
 	}
 
 signals:
