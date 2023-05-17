@@ -140,6 +140,7 @@
     <ClCompile Include="source\menu\MenuBar.cpp" />
     <ClCompile Include="source\Meter.cpp" />
     <ClCompile Include="source\Stylist.cpp" />
+    <ClCompile Include="source\tab\TabBar.cpp" />
     <ClCompile Include="unused\splitter\Splitter.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,7 +150,7 @@
     <ClInclude Include="source\document\DocumentCache.hpp" />
     <QtMoc Include="source\tab\TrueTabBar.hpp" />
     <QtMoc Include="source\tab\TabControlBox.hpp" />
-    <QtMoc Include="source\tab\TabBar.hpp" />
+    <QtMoc Include="source\tab\TabBar.h" />
     <ClInclude Include="unused\Archiver.hpp" />
     <ClInclude Include="unused\splitter\SplitterHandle.hpp" />
     <ClInclude Include="unused\splitter\TrueSplitter.hpp" />

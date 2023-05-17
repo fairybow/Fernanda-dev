@@ -227,7 +227,7 @@
     <QtMoc Include="source\tab\TabControlBox.hpp">
       <Filter>Source\Tab</Filter>
     </QtMoc>
-    <QtMoc Include="source\tab\TabBar.hpp">
+    <QtMoc Include="source\tab\TabBar.h">
       <Filter>Source\Tab</Filter>
     </QtMoc>
   </ItemGroup>
@@ -267,6 +267,9 @@
     </ClCompile>
     <ClCompile Include="source\document\Document.cpp">
       <Filter>Source\Document</Filter>
+    </ClCompile>
+    <ClCompile Include="source\tab\TabBar.cpp">
+      <Filter>Source\Tab</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

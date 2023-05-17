@@ -1,10 +1,7 @@
 #pragma once
 
-#include "../common/Utility.hpp"
-
 #include <QMouseEvent>
 #include <QTabBar>
-#include <QToolButton>
 
 class TrueTabBar : public QTabBar
 {

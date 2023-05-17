@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../common/Layout.hpp"
-#include "../common/Utility.hpp"
 
 #include <QTabBar>
 #include <QToolButton>
