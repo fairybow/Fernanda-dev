@@ -148,7 +148,7 @@
     <QtMoc Include="source\document\Document.h" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
     <QtMoc Include="source\tab\TrueTabBar.hpp" />
-    <QtMoc Include="source\tab\TabControl.hpp" />
+    <QtMoc Include="source\tab\TabControlBox.hpp" />
     <QtMoc Include="source\tab\TabBar.hpp" />
     <ClInclude Include="unused\Archiver.hpp" />
     <ClInclude Include="unused\splitter\SplitterHandle.hpp" />
