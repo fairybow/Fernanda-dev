@@ -28,6 +28,7 @@ public:
 	void setText(const QString& text);
 	void writeEmptyFile(StdFsPath path);
 	QUuid create();
+
 	QUuid currentId() const { return m_currentId; }
 
 signals:

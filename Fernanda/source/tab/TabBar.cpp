@@ -3,11 +3,12 @@
 TabBar::TabBar(const char* name, QWidget* parent)
 	: Widget(name, parent)
 {
-	//setAutoHide(true);
+	//setAutoHide(false);
 	setTabsClosable(true);
 	setMovable(true);
 	setExpanding(false);
-	setupAddButton();
+	setUsesScrollButtons(true);
+	setupControls(name);
 }
 
 int TabBar::serve(QUuid id, StdFsPath pathForTitle, bool switchTo)
@@ -46,58 +47,38 @@ void TabBar::mouseMoveEvent(QMouseEvent* event)
 {
 	QTabBar::mouseMoveEvent(event);
 	if (m_aboutToBeDragged)
-		m_add->setVisible(false);
+		m_controller->setVisible(false);
 }
 
 void TabBar::mouseReleaseEvent(QMouseEvent* event)
 {
 	QTabBar::mouseReleaseEvent(event);
 	m_aboutToBeDragged = false;
-	m_add->setVisible(true);
+	m_controller->setVisible(true);
 }
 
 void TabBar::resizeEvent(QResizeEvent* event)
 {
 	QTabBar::resizeEvent(event);
-	moveAddButton();
+	m_controller->adjust();
 }
 
 void TabBar::tabInserted(int index)
 {
 	QTabBar::tabInserted(index);
-	moveAddButton();
-}
-
-void TabBar::tabLayoutChange()
-{
-	QTabBar::tabLayoutChange();
-	//moveAddButton();
+	m_controller->adjust();
 }
 
 void TabBar::tabRemoved(int index)
 {
 	QTabBar::tabRemoved(index);
-	moveAddButton();
+	m_controller->adjust();
 }
 
-void TabBar::setupAddButton()
+void TabBar::setupControls(const char* name)
 {
-	m_add->setText("+");
-	connect(m_add, &QToolButton::clicked, this, [&] {
+	m_controller->setObjectName(name + QString("-control"));
+	connect(m_controller, &TabControl::addTabClicked, this, [&] {
 		emit askNew();
-		});
-}
-
-void TabBar::moveAddButton()
-{
-	Utility::delayCall(this, [&] {
-		if (count() < 1) return;
-		auto rect = tabRect(count() - 1);
-		auto x = rect.right() + 3;
-		auto y = rect.center().y() - (m_add->height() / 2) + 1;
-		auto max_x = width() - m_add->width();
-		if (x > max_x)
-			x = max_x;
-		m_add->move(x, y);
 		});
 }

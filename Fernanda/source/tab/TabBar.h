@@ -1,14 +1,13 @@
 #pragma once
 
-#include "common/Path.hpp"
-#include "common/Utility.hpp"
-#include "common/Widget.hpp"
+#include "../common/Path.hpp"
+#include "../common/Widget.hpp"
+#include "TabControl.hpp"
 
 #include <QMouseEvent>
 #include <QResizeEvent>
 #include <QSize>
 #include <QTabBar>
-#include <QToolButton>
 #include <QUuid>
 
 #include <filesystem>
@@ -34,13 +33,11 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent* event) override;
 	virtual void resizeEvent(QResizeEvent* event) override;
 	virtual void tabInserted(int index) override;
-	virtual void tabLayoutChange() override;
 	virtual void tabRemoved(int index) override;
 
 private:
 	bool m_aboutToBeDragged = false;
-	QToolButton* m_add = new QToolButton(this);
+	TabControl* m_controller = new TabControl(this);
 
-	void setupAddButton();
-	void moveAddButton();
+	void setupControls(const char* name);
 };
