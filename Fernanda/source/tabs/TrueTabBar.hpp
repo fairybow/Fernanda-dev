@@ -14,7 +14,6 @@ public:
 		: QTabBar(parent), m_tabSizeRange(minTabSize, maxTabSize)
 	{
 		setAutoHide(false);
-		setTabsClosable(true);
 		setMovable(true);
 		setExpanding(false);
 		setUsesScrollButtons(true);

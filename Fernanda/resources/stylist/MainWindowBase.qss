@@ -29,11 +29,6 @@
 	font-size: 10pt;
 }
 
-#TabBar::close-button, #TabBar::close-button:hover
-{
-	image: url(none);
-}
-
 #TabBar::scroller
 {
 	width: 0px;
