@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMouseEvent>
+#include <QSize>
 #include <QTabBar>
 
 class TrueTabBar : public QTabBar
@@ -62,5 +63,11 @@ protected:
 	{
 		QTabBar::tabRemoved(index);
 		emit removed();
+	}
+
+	virtual QSize tabSizeHint(int index) const override
+	{
+		auto tab_width = qMin(qMax(width() / count(), 50), 200);
+		return QSize(tab_width, QTabBar::tabSizeHint(index).height());
 	}
 };

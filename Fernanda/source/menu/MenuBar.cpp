@@ -93,7 +93,7 @@ void MenuBar::file()
 
 void MenuBar::project()
 {
-	
+	//
 }
 
 void MenuBar::view()

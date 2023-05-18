@@ -17,17 +17,15 @@ public:
 
 	void addWidgets(QWidgetList leftWidgets, QWidgetList rightWidgets)
 	{
-		for (auto& widget : leftWidgets) {
-			if (widget == nullptr) continue;
-			addPermanentWidget(widget, 0);
-		}
+		for (auto& widget : leftWidgets)
+			if (widget != nullptr)
+				addPermanentWidget(widget, 0);
 
 		addPermanentWidget(m_spacer, 1);
 
-		for (auto& widget : rightWidgets) {
-			if (widget == nullptr) continue;
-			addPermanentWidget(widget, 0);
-		}
+		for (auto& widget : rightWidgets)
+			if (widget != nullptr)
+				addPermanentWidget(widget, 0);
 	}
 
 	void addWidgets(QWidget* leftWidget, QWidget* rightWidget)

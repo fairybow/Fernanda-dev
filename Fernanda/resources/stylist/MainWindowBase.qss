@@ -33,8 +33,3 @@
 {
 	width: 0px;
 }
-
-#TabBar::tab
-{
-	min-width: 115px;
-}
