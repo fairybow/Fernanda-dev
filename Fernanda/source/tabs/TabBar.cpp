@@ -37,7 +37,8 @@ QUuid TabBar::id(int index)
 void TabBar::nameObjects(const char* name)
 {
 	m_trueTabBar->setObjectName(name);
-	m_controlBox->setObjectName(name + QString("-control"));
+	m_controlBox->setObjectName(name);
+	//m_controlBox->setObjectName(name + QString("-control"));
 }
 
 void TabBar::setupWidgets()
