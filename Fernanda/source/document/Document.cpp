@@ -70,14 +70,14 @@ QUuid Document::idByPath(StdFsPath path)
 	return id;
 }
 
-QTextDocument* Document::textDocument(QUuid id, StdFsPath path)
+TextDocument* Document::textDocument(QUuid id, StdFsPath path)
 {
 	auto document = m_cache.document(id);
 	if (!document) {
 		QString text;
 		if (!path.empty())
 			text = Io::readFile(path);
-		document = new QTextDocument(text);
+		document = new TextDocument(text);
 		m_cache.insertDocument(id, document);
 	}
 	return document;

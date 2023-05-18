@@ -3,9 +3,9 @@
 #include "../common/Io.hpp"
 #include "../common/Path.hpp"
 #include "DocumentCache.hpp"
+#include "TextDocument.hpp"
 
 #include <QString>
-#include <QTextDocument>
 #include <QTimer>
 #include <QUuid>
 
@@ -46,7 +46,7 @@ private:
 	void setUpAutoCache();
 	const QString read(StdFsPath path = StdFsPath());
 	QUuid idByPath(StdFsPath path);
-	QTextDocument* textDocument(QUuid id, StdFsPath path = StdFsPath());
+	TextDocument* textDocument(QUuid id, StdFsPath path = StdFsPath());
 	void tempSave(QUuid id, const QString& text);
 	StdFsPath tempPath(QUuid id);
 };

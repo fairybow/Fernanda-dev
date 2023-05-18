@@ -73,7 +73,7 @@
     <Filter Include="Resources\Indicator">
       <UniqueIdentifier>{42fcc18a-eacc-44e8-a26a-87fcae06bdf4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Tab">
+    <Filter Include="Source\Tabs">
       <UniqueIdentifier>{3593e33a-7daf-4099-b338-22c663399dc2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -221,14 +221,17 @@
     <QtMoc Include="source\document\Document.h">
       <Filter>Source\Document</Filter>
     </QtMoc>
-    <QtMoc Include="source\tab\TrueTabBar.hpp">
-      <Filter>Source\Tab</Filter>
+    <QtMoc Include="source\tabs\TabBar.h">
+      <Filter>Source\Tabs</Filter>
     </QtMoc>
-    <QtMoc Include="source\tab\TabControlBox.hpp">
-      <Filter>Source\Tab</Filter>
+    <QtMoc Include="source\tabs\TabControlBox.hpp">
+      <Filter>Source\Tabs</Filter>
     </QtMoc>
-    <QtMoc Include="source\tab\TabBar.h">
-      <Filter>Source\Tab</Filter>
+    <QtMoc Include="source\tabs\TrueTabBar.hpp">
+      <Filter>Source\Tabs</Filter>
+    </QtMoc>
+    <QtMoc Include="source\document\TextDocument.hpp">
+      <Filter>Source\Document</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -268,8 +271,8 @@
     <ClCompile Include="source\document\Document.cpp">
       <Filter>Source\Document</Filter>
     </ClCompile>
-    <ClCompile Include="source\tab\TabBar.cpp">
-      <Filter>Source\Tab</Filter>
+    <ClCompile Include="source\tabs\TabBar.cpp">
+      <Filter>Source\Tabs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

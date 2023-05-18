@@ -1,21 +1,22 @@
 #pragma once
 
+#include "TextDocument.hpp"
+
 #include <QCache>
-#include <QTextDocument>
 #include <QUuid>
 
-class DocumentCache : public QCache<QUuid, QTextDocument>
+class DocumentCache : public QCache<QUuid, TextDocument>
 {
 public:
 	DocumentCache(int maxCost)
 		: QCache(maxCost) {}
 
-	void insertDocument(const QUuid& fileId, QTextDocument* document)
+	void insertDocument(const QUuid& fileId, TextDocument* document)
 	{
 		insert(fileId, document);
 	}
 
-	QTextDocument* document(const QUuid& fileId)
+	TextDocument* document(const QUuid& fileId)
 	{
 		return object(fileId);
 	}
