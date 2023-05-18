@@ -2,7 +2,6 @@
 
 #include "../common/Layout.hpp"
 #include "../common/Path.hpp"
-#include "../common/Utility.hpp"
 #include "../common/Widget.hpp"
 #include "TabControlBox.hpp"
 #include "TrueTabBar.hpp"
@@ -20,7 +19,7 @@ class TabBar : public Widget<>
 	Q_OBJECT
 
 public:
-	TabBar(const char* name, QWidget* parent = nullptr);
+	TabBar(const char* name, int minTabSize = 25, int maxTabSize = 100, QWidget* parent = nullptr);
 
 	int serve(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
 	QUuid id(int index);
@@ -30,17 +29,12 @@ signals:
 	void askNew();
 
 private:
-	TrueTabBar* m_trueTabBar = new TrueTabBar;
-	QToolButton* m_floatingAdd = new QToolButton(m_trueTabBar);
+	TrueTabBar* m_trueTabBar;
 	TabControlBox* m_controlBox = new TabControlBox(m_trueTabBar);
-
-	bool m_aboutToBeDragged = false;
 
 	void nameObjects(const char* name);
 	void setupWidgets();
 	void connections();
-	void hideControls();
-	void showControls();
 	bool isFull();
 	void adjustControls();
 };
