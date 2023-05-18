@@ -1,16 +1,17 @@
 #pragma once
 
-#include <QMouseEvent>
 #include <QSize>
 #include <QTabBar>
+
+#include <utility>
 
 class TrueTabBar : public QTabBar
 {
 	Q_OBJECT
 
 public:
-	TrueTabBar(QWidget* parent = nullptr)
-		: QTabBar(parent)
+	TrueTabBar(int minTabSize, int maxTabSize, QWidget* parent = nullptr)
+		: QTabBar(parent), m_tabSizeRange(minTabSize, maxTabSize)
 	{
 		setAutoHide(false);
 		setTabsClosable(true);
@@ -21,32 +22,11 @@ public:
 	}
 
 signals:
-	void mousePressed();
-	void mouseMoved();
-	void mouseReleased();
 	void resized();
 	void inserted();
 	void removed();
 
 protected:
-	virtual void mousePressEvent(QMouseEvent* event) override
-	{
-		QTabBar::mousePressEvent(event);
-		emit mousePressed();
-	}
-
-	virtual void mouseMoveEvent(QMouseEvent* event) override
-	{
-		QTabBar::mouseMoveEvent(event);
-		emit mouseMoved();
-	}
-
-	virtual void mouseReleaseEvent(QMouseEvent* event) override
-	{
-		QTabBar::mouseReleaseEvent(event);
-		emit mouseReleased();
-	}
-
 	virtual void resizeEvent(QResizeEvent* event) override
 	{
 		QTabBar::resizeEvent(event);
@@ -67,7 +47,10 @@ protected:
 
 	virtual QSize tabSizeHint(int index) const override
 	{
-		auto tab_width = qMin(qMax(width() / count(), 50), 200);
+		auto tab_width = qMin(qMax(width() / count(), m_tabSizeRange.first), m_tabSizeRange.second);
 		return QSize(tab_width, QTabBar::tabSizeHint(index).height());
 	}
+
+private:
+	std::pair<int, int> m_tabSizeRange;
 };

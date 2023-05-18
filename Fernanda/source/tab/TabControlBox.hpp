@@ -17,14 +17,21 @@ public:
 		connections();
 	}
 
+	void setScrollerVisible(bool visible)
+	{
+		m_scrollLeft->setVisible(visible);
+		m_scrollRight->setVisible(visible);
+		layout()->update();
+	}
+
 signals:
 	void addTabClicked();
 
 private:
 	QTabBar* m_tabBar;
-	QToolButton* m_add = new QToolButton(this);
-	QToolButton* m_scrollLeft = new QToolButton(this);
-	QToolButton* m_scrollRight = new QToolButton(this);
+	QToolButton* m_add = new QToolButton;
+	QToolButton* m_scrollLeft = new QToolButton;
+	QToolButton* m_scrollRight = new QToolButton;
 
 	void build()
 	{

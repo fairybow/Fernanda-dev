@@ -1,7 +1,7 @@
 #include "TabBar.h"
 
-TabBar::TabBar(const char* name, QWidget* parent)
-	: Widget(name, parent)
+TabBar::TabBar(const char* name, int minTabSize, int maxTabSize, QWidget* parent)
+	: Widget(name, parent), m_trueTabBar(new TrueTabBar(minTabSize, maxTabSize))
 {
 	nameObjects(name);
 	setupWidgets();
@@ -37,42 +37,25 @@ QUuid TabBar::id(int index)
 void TabBar::nameObjects(const char* name)
 {
 	m_trueTabBar->setObjectName(name);
-	auto control_name = name + QString("-control");
-	m_controlBox->setObjectName(control_name);
-	m_floatingAdd->setObjectName(control_name);
+	m_controlBox->setObjectName(name + QString("-control"));
 }
 
 void TabBar::setupWidgets()
 {
-	m_floatingAdd->setText("+");
-	auto layout = Layout::box(Layout::Line::Horizontally, { m_trueTabBar, m_controlBox }, this);
-	layout->setStretch(0, 1);
-	layout->setStretch(1, 0);
+	auto layout = Layout::box(Layout::Line::Horizontally, { m_controlBox, m_trueTabBar }, this);
+	layout->setStretch(0, 0);
+	layout->setStretch(1, 1);
 	Layout::setUniformSpacing(layout, 0);
 }
 
 void TabBar::connections()
 {
-	connect(m_floatingAdd, &QToolButton::clicked, this, [&] {
-		emit askNew();
-		});
 	connect(m_controlBox, &TabControlBox::addTabClicked, this, [&] {
 		emit askNew();
 		});
 
 	connect(m_trueTabBar, &TrueTabBar::currentChanged, this, [&](int index) {
 		emit currentChanged(index);
-		});
-	connect(m_trueTabBar, &TrueTabBar::mousePressed, this, [&] {
-		m_aboutToBeDragged = true;
-		});
-	connect(m_trueTabBar, &TrueTabBar::mouseMoved, this, [&] {
-		if (m_aboutToBeDragged)
-			hideControls();
-		});
-	connect(m_trueTabBar, &TrueTabBar::mouseReleased, this, [&] {
-		m_aboutToBeDragged = false;
-		showControls();
 		});
 	connect(m_trueTabBar, &TrueTabBar::resized, this, [&] {
 		adjustControls();
@@ -85,18 +68,6 @@ void TabBar::connections()
 		});
 }
 
-void TabBar::hideControls()
-{
-	m_controlBox->setVisible(false);
-	m_floatingAdd->setVisible(false);
-}
-
-void TabBar::showControls()
-{
-	m_controlBox->setVisible(isFull());
-	m_floatingAdd->setVisible(!m_controlBox->isVisible());
-}
-
 bool TabBar::isFull()
 {
 	auto tabs_width = 0;
@@ -107,17 +78,5 @@ bool TabBar::isFull()
 
 void TabBar::adjustControls()
 {
-	Utility::delayCall(this, [&] {
-		if (m_trueTabBar->count() < 1 || m_aboutToBeDragged) return;
-
-		showControls();
-
-		auto rect = m_trueTabBar->tabRect(m_trueTabBar->count() - 1);
-		auto x = rect.right() + 3;
-		auto y = rect.center().y() - (m_floatingAdd->height() / 2) + 1;
-		auto max_x = m_trueTabBar->width() - m_floatingAdd->width();
-		if (x > max_x)
-			x = max_x;
-		m_floatingAdd->move(x, y);
-		});
+	m_controlBox->setScrollerVisible(isFull());
 }
