@@ -40,7 +40,7 @@ private:
 	const StdFsPath m_tempFolder;
 	const StdFsPath m_backupFolder;
 	QUuid m_currentId;
-	std::map<StdFsPath, QUuid> m_extantPathsToIds;
+	std::map<StdFsPath, QUuid> m_pathsToIdRegistry;
 	QTimer* m_autoCacheText = new QTimer(this);
 
 	void setUpAutoCache();

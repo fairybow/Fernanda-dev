@@ -25,7 +25,8 @@ void Document::setText(const QString& text)
 	if (m_currentId.isNull()) return;
 	auto document = textDocument(m_currentId);
 	document->setPlainText(text);
-	//tempSave(id, text); // when do we really need to temp save?
+
+	tempSave(m_currentId, text);
 }
 
 void Document::writeEmptyFile(StdFsPath path)
@@ -60,12 +61,12 @@ const QString Document::read(StdFsPath path)
 QUuid Document::idByPath(StdFsPath path)
 {
 	QUuid id;
-	auto it = m_extantPathsToIds.find(path);
-	if (it != m_extantPathsToIds.end())
+	auto it = m_pathsToIdRegistry.find(path);
+	if (it != m_pathsToIdRegistry.end())
 		id = it->second;
 	else {
 		id = QUuid::createUuid();
-		m_extantPathsToIds[path] = id;
+		m_pathsToIdRegistry[path] = id;
 	}
 	return id;
 }
@@ -75,8 +76,16 @@ TextDocument* Document::textDocument(QUuid id, StdFsPath path)
 	auto document = m_cache.document(id);
 	if (!document) {
 		QString text;
-		if (!path.empty())
+		if (!path.empty()) {
+			// check m_pathsToIdRegistry
+			// if found, check temp folder for file
+			// if found, make text that and make original text Io::readFile(path)
+
+			//document = new TextDocument(text);
+			//document = new TextDocument(text, originalText);
+
 			text = Io::readFile(path);
+		}
 		document = new TextDocument(text);
 		m_cache.insertDocument(id, document);
 	}
