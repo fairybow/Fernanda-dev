@@ -525,7 +525,7 @@ void MainWindow::openTab(int index)
 
 void MainWindow::newTab()
 {
-	auto new_id = m_document->create();
+	auto new_id = m_document->createEmpty();
 	m_document->open(new_id);
 	m_editor->clear();
 	m_tabBar->serve(new_id);

@@ -10,6 +10,7 @@
 #include <QUuid>
 #include <QVector>
 
+#include <algorithm>
 #include <filesystem>
 #include <map>
 
@@ -28,7 +29,7 @@ public:
 	const QString open(QUuid id);
 	void setText(const QString& text);
 	void writeEmptyFile(StdFsPath path);
-	QUuid create();
+	QUuid createEmpty();
 
 	QUuid currentId() const { return m_currentId; }
 
@@ -52,4 +53,6 @@ private:
 	TextDocument* textDocument(QUuid id, StdFsPath path = StdFsPath());
 	void tempSave(QUuid id, const QString& text);
 	StdFsPath tempPath(QUuid id);
+	TextDocument* create(QUuid id, StdFsPath path = StdFsPath());
+	bool recoverIfEvicted(QUuid id, QString& initialText, QString& originalText);
 };
