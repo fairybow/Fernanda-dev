@@ -33,3 +33,9 @@
 {
 	width: 0px;
 }
+
+#TabBar QToolButton
+{
+	font-size: 9pt;
+	font-weight: bold;
+}

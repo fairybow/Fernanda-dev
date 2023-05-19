@@ -21,6 +21,7 @@ int TabBar::serve(QUuid id, StdFsPath pathForTitle, bool switchTo)
 		blockSignals(true);
 		index = m_trueTabBar->addTab(
 			pathForTitle.empty() ? QString() : Path::qStringName(pathForTitle));
+		m_trueTabBar->setTabButton(index, QTabBar::ButtonPosition::RightSide, closeButton(id));
 		m_trueTabBar->setTabData(index, id);
 		blockSignals(false);
 	}
@@ -37,7 +38,8 @@ QUuid TabBar::id(int index)
 void TabBar::nameObjects(const char* name)
 {
 	m_trueTabBar->setObjectName(name);
-	m_controlBox->setObjectName(name + QString("-control"));
+	m_controlBox->setObjectName(name);
+	//m_controlBox->setObjectName(name + QString("-control"));
 }
 
 void TabBar::setupWidgets()
@@ -79,4 +81,18 @@ bool TabBar::isFull()
 void TabBar::adjustControls()
 {
 	m_controlBox->setScrollerVisible(isFull());
+}
+
+QToolButton* TabBar::closeButton(QUuid id)
+{
+	auto close_button = new QToolButton;
+	close_button->setText("x");
+	connect(close_button, &QToolButton::clicked, this, [&, id] {
+		for (auto i = 0; i < m_trueTabBar->count(); ++i)
+			if (m_trueTabBar->tabData(i) == id) {
+				emit m_trueTabBar->tabCloseRequested(i);
+				break;
+			}
+		});
+	return close_button;
 }

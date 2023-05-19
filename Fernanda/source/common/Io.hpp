@@ -23,6 +23,13 @@ namespace Io
 		return text;
 	}
 
+	template<typename... Strings>
+	inline void toStrings(StdFsPath filePath, Strings&... string)
+	{
+		auto text = readFile(filePath);
+		(string = ... = text);
+	}
+
 	inline bool writeFile(StdFsPath filePath, QString text = QString(), bool createDirectories = true)
 	{
 		if (createDirectories) {

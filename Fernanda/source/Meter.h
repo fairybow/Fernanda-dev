@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QRegularExpression>
 #include <QString>
+#include <QVector>
 
 class Meter : public Widget<>
 {

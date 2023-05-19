@@ -37,4 +37,5 @@ private:
 	void connections();
 	bool isFull();
 	void adjustControls();
+	QToolButton* closeButton(QUuid id);
 };
