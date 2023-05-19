@@ -1,7 +1,7 @@
 #include "Document.h"
 
 Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent)
-	: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(100)
+	: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(3) /* <-- test */
 {
 	setUpAutoCache();
 }
@@ -36,7 +36,7 @@ void Document::writeEmptyFile(StdFsPath path)
 
 QUuid Document::create()
 {
-	auto id = QUuid::createUuid();
+	auto id = createId();
 	textDocument(id);
 	return id;
 }
@@ -58,16 +58,22 @@ const QString Document::read(StdFsPath path)
 	return document->toPlainText();
 }
 
+QUuid Document::createId(StdFsPath path)
+{
+	auto id = QUuid::createUuid();
+	if (!path.empty())
+		m_extantPathsToIds[path] = id;
+	m_lifetimeIdRegistry << id;
+	return id;
+}
+
 QUuid Document::idByPath(StdFsPath path)
 {
 	QUuid id;
-	auto it = m_pathsToIdRegistry.find(path);
-	if (it != m_pathsToIdRegistry.end())
-		id = it->second;
-	else {
-		id = QUuid::createUuid();
-		m_pathsToIdRegistry[path] = id;
-	}
+	auto it = m_extantPathsToIds.find(path);
+	(it != m_extantPathsToIds.end())
+		? id = it->second
+		: id = createId(path);
 	return id;
 }
 
@@ -75,19 +81,19 @@ TextDocument* Document::textDocument(QUuid id, StdFsPath path)
 {
 	auto document = m_cache.document(id);
 	if (!document) {
-		QString text;
-		if (!path.empty()) {
-			// check m_pathsToIdRegistry
-			// if found, check temp folder for file
-			// if found, make text that and make original text Io::readFile(path)
 
-			//document = new TextDocument(text);
-			//document = new TextDocument(text, originalText);
+		//
 
-			text = Io::readFile(path);
-		}
-		document = new TextDocument(text);
+		QString original_text;
+		QString initial_text;
+
+		if (!path.empty())
+			original_text = Io::readFile(path);
+
+		document = new TextDocument(initial_text, original_text);
 		m_cache.insertDocument(id, document);
+
+		//
 	}
 	return document;
 }

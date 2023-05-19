@@ -8,6 +8,7 @@
 #include <QString>
 #include <QTimer>
 #include <QUuid>
+#include <QVector>
 
 #include <filesystem>
 #include <map>
@@ -40,11 +41,13 @@ private:
 	const StdFsPath m_tempFolder;
 	const StdFsPath m_backupFolder;
 	QUuid m_currentId;
-	std::map<StdFsPath, QUuid> m_pathsToIdRegistry;
+	std::map<StdFsPath, QUuid> m_extantPathsToIds;
+	QVector<QUuid> m_lifetimeIdRegistry;
 	QTimer* m_autoCacheText = new QTimer(this);
 
 	void setUpAutoCache();
 	const QString read(StdFsPath path = StdFsPath());
+	QUuid createId(StdFsPath path = StdFsPath());
 	QUuid idByPath(StdFsPath path);
 	TextDocument* textDocument(QUuid id, StdFsPath path = StdFsPath());
 	void tempSave(QUuid id, const QString& text);
