@@ -14,22 +14,26 @@
 #include <filesystem>
 #include <map>
 
-// file system watcher
+namespace StdFs = std::filesystem;
 
 class Document : public QObject
 {
-	using StdFsPath = std::filesystem::path;
+	using StdFsPath = StdFs::path;
 
 	Q_OBJECT
 
 public:
-	Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent = nullptr);
+	Document(StdFsPath tempFolder, StdFsPath backupFolder, int cacheMaxCost = 100, QWidget* parent = nullptr);
 
-	const QString open(StdFsPath path);
-	const QString open(QUuid id);
+	const QString serve(StdFsPath path);
+	const QString serve(QUuid id);
 	void setText(const QString& text);
 	void writeEmptyFile(StdFsPath path);
 	QUuid createEmpty();
+
+	//
+	bool editedState(const QString& text);
+	//
 
 	QUuid currentId() const { return m_currentId; }
 
@@ -54,5 +58,6 @@ private:
 	void tempSave(QUuid id, const QString& text);
 	StdFsPath tempPath(QUuid id);
 	TextDocument* create(QUuid id, StdFsPath path = StdFsPath());
-	bool recoverIfEvicted(QUuid id, QString& initialText, QString& originalText);
+	bool wasEvicted(QUuid id);
+	void recover(QUuid id, QString& initialText, QString& originalText);
 };

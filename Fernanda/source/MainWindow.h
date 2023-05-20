@@ -41,7 +41,7 @@ protected:
 
 private:
 	User* m_user = new User(QCoreApplication::applicationName(), this);
-	Document* m_document = new Document(m_user->temp(), m_user->backup(), this);
+	Document* m_document = new Document(m_user->temp(), m_user->backup(), 3/* <-- test */, this);
 	//Project* m_project = new Project(this);
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_user->documents(), m_isDev);
 	StatusBar* m_statusBar = new StatusBar("StatusBar");

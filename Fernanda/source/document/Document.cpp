@@ -1,19 +1,19 @@
 #include "Document.h"
 
-Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent)
-	: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(3) /* <-- test */
+Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, int cacheMaxCost, QWidget* parent)
+	: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(cacheMaxCost)
 {
 	setUpAutoCache();
 }
 
-const QString Document::open(StdFsPath path)
+const QString Document::serve(StdFsPath path)
 {
 	emit askSetText();
 	m_currentId = idByPath(path);
 	return read(path);
 }
 
-const QString Document::open(QUuid id)
+const QString Document::serve(QUuid id)
 {
 	emit askSetText();
 	m_currentId = id;
@@ -39,6 +39,15 @@ QUuid Document::createEmpty()
 	auto id = createId();
 	textDocument(id);
 	return id;
+}
+
+bool Document::editedState(const QString& text)
+{
+	if (m_currentId.isNull()) return false;
+	auto document = textDocument(m_currentId);
+	if (text != document->originalText())
+		return true;
+	return false;
 }
 
 void Document::setUpAutoCache()
@@ -97,31 +106,42 @@ Document::StdFsPath Document::tempPath(QUuid id)
 
 TextDocument* Document::create(QUuid id, StdFsPath path)
 {
-	QString original_text;
 	QString initial_text;
-	if (!recoverIfEvicted(id, initial_text, original_text)
-		&& !path.empty())
+	QString original_text;
+
+	if (wasEvicted(id))
+		recover(id, initial_text, original_text);
+	else if (!path.empty())
 		Io::toStrings(path, initial_text, original_text);
+
 	auto document = new TextDocument(initial_text, original_text);
 	m_cache.insertDocument(id, document);
 	return document;
 }
 
-bool Document::recoverIfEvicted(QUuid id, QString& initialText, QString& originalText)
+bool Document::wasEvicted(QUuid id)
 {
 	if (!m_lifetimeIdRegistry.contains(id)) return false;
+	return StdFs::exists(tempPath(id));
+}
+
+void Document::recover(QUuid id, QString& initialText, QString& originalText)
+{
+	qDebug() << __FUNCTION__ << "run";
 
 	auto temp_path = tempPath(id);
-	if (std::filesystem::exists(temp_path))
+	if (StdFs::exists(temp_path))
 		initialText = Io::readFile(temp_path);
 
 	auto it = std::find_if(
 		m_extantPathsToIds.begin(), m_extantPathsToIds.end(),
 		[&id](const auto& pair) { return pair.second == id; });
+
 	if (it != m_extantPathsToIds.end()) {
 		auto& extant_path = it->first;
-		if (std::filesystem::exists(extant_path))
+		if (StdFs::exists(extant_path))
 			originalText = Io::readFile(extant_path);
+		// handle deleted original
+		// file system watcher
 	}
-	return true;
 }

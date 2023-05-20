@@ -27,7 +27,7 @@ namespace Io
 	inline void toStrings(StdFsPath filePath, Strings&... string)
 	{
 		auto text = readFile(filePath);
-		(string = ... = text);
+		((string = text), ...);
 	}
 
 	inline bool writeFile(StdFsPath filePath, QString text = QString(), bool createDirectories = true)
