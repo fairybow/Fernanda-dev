@@ -62,7 +62,14 @@ void MainWindow::documentConnections()
 		});
 
 	connect(m_editor, &Editor::textChanged, this, [&] {
-		//qDebug() << m_document->editedState(m_editor->toPlainText()); // getting multiple printouts on new tab
+		qDebug() << m_document->editedState(m_editor->toPlainText()); // getting multiple printouts on new tab?
+
+		// set document as edited or not
+		// in a second connection, connect a signal from m_document to m_tabBar to update title accordingly
+		// could do this to set title regardless initially, and in separate connection use the modified value
+		// change to send signal with modification telling tab to paint title as edited or not
+		// ???
+
 		});
 }
 

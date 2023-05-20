@@ -116,12 +116,6 @@ TextDocument* Document::create(QUuid id, StdFsPath path)
 			Io::toStrings(path, initial_text, original_text);
 	}
 
-	//qDebug() << wasEvicted(id);
-	//qDebug() << path;
-	//qDebug() << id;
-	//qDebug() << initial_text;
-	//qDebug() << original_text;
-
 	auto document = new TextDocument(initial_text, original_text);
 	m_cache.insertDocument(id, document);
 	return document;
@@ -130,13 +124,13 @@ TextDocument* Document::create(QUuid id, StdFsPath path)
 bool Document::wasEvicted(QUuid id)
 {
 	if (!m_lifetimeIdRegistry.contains(id)) return false;
-	return std::filesystem::exists(tempPath(id));
+	return StdFs::exists(tempPath(id));
 }
 
 void Document::recover(QUuid id, QString& initialText, QString& originalText)
 {
 	auto temp_path = tempPath(id);
-	if (std::filesystem::exists(temp_path))
+	if (StdFs::exists(temp_path))
 		initialText = Io::readFile(temp_path);
 
 	auto it = std::find_if(
@@ -145,7 +139,7 @@ void Document::recover(QUuid id, QString& initialText, QString& originalText)
 
 	if (it != m_extantPathsToIds.end()) {
 		auto& extant_path = it->first;
-		if (std::filesystem::exists(extant_path))
+		if (StdFs::exists(extant_path))
 			originalText = Io::readFile(extant_path);
 		// handle deleted original
 		// file system watcher

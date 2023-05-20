@@ -14,9 +14,11 @@
 #include <filesystem>
 #include <map>
 
+namespace StdFs = std::filesystem;
+
 class Document : public QObject
 {
-	using StdFsPath = std::filesystem::path;
+	using StdFsPath = StdFs::path;
 
 	Q_OBJECT
 
