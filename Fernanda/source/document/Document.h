@@ -25,14 +25,14 @@ class Document : public QObject
 public:
 	Document(StdFsPath tempFolder, StdFsPath backupFolder, int cacheMaxCost = 100, QWidget* parent = nullptr);
 
-	const QString serve(StdFsPath path);
-	const QString serve(QUuid id);
+	const QString setCurrent(StdFsPath path);
+	const QString setCurrent(QUuid id);
 	void setText(const QString& text);
 	void writeEmptyFile(StdFsPath path);
 	QUuid createEmpty();
 
 	//
-	bool editedState(const QString& text);
+	void affirmEditedState(const QString& text);
 	//
 
 	QUuid currentId() const { return m_currentId; }
@@ -40,6 +40,7 @@ public:
 signals:
 	void askSetText();
 	void startAutoCacheTimer();
+	void editedStateChanged(QUuid id, bool edited);
 
 private:
 	DocumentCache m_cache;

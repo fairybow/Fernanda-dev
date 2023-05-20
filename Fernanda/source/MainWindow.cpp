@@ -60,16 +60,12 @@ void MainWindow::documentConnections()
 	connect(m_document, &Document::askSetText, this, [&] {
 		m_document->setText(m_editor->toPlainText());
 		});
-
 	connect(m_editor, &Editor::textChanged, this, [&] {
-		qDebug() << m_document->editedState(m_editor->toPlainText()); // getting multiple printouts on new tab?
-
-		// set document as edited or not
-		// in a second connection, connect a signal from m_document to m_tabBar to update title accordingly
-		// could do this to set title regardless initially, and in separate connection use the modified value
-		// change to send signal with modification telling tab to paint title as edited or not
-		// ???
-
+		auto text = m_editor->toPlainText();
+		m_document->affirmEditedState(text);
+		});
+	connect(m_document, &Document::editedStateChanged, this, [&](QUuid id, bool edited) {
+		// set tab title state
 		});
 }
 
@@ -521,7 +517,7 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 	}
 	if (writeNew)
 		m_document->writeEmptyFile(path);
-	auto text = m_document->serve(path);
+	auto text = m_document->setCurrent(path);
 	m_editor->setPlainText(text);
 	m_tabBar->serve(m_document->currentId(), path);
 }
@@ -529,7 +525,7 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 void MainWindow::openTab(int index)
 {
 	auto extant_id = m_tabBar->id(index);
-	auto document_text = m_document->serve(extant_id);
+	auto document_text = m_document->setCurrent(extant_id);
 	m_editor->setPlainText(document_text);
 	// m_editor-> restore cursor by id
 }
@@ -537,7 +533,7 @@ void MainWindow::openTab(int index)
 void MainWindow::newTab()
 {
 	auto new_id = m_document->createEmpty();
-	m_document->serve(new_id);
+	m_document->setCurrent(new_id);
 	m_editor->clear();
 	m_tabBar->serve(new_id);
 }

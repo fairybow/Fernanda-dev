@@ -6,14 +6,14 @@ Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, int cacheMaxCos
 	setUpAutoCache();
 }
 
-const QString Document::serve(StdFsPath path)
+const QString Document::setCurrent(StdFsPath path)
 {
 	emit askSetText();
 	m_currentId = idByPath(path);
 	return read(path);
 }
 
-const QString Document::serve(QUuid id)
+const QString Document::setCurrent(QUuid id)
 {
 	emit askSetText();
 	m_currentId = id;
@@ -41,13 +41,14 @@ QUuid Document::createEmpty()
 	return id;
 }
 
-bool Document::editedState(const QString& text)
+void Document::affirmEditedState(const QString& text)
 {
-	if (m_currentId.isNull()) return false;
+	if (m_currentId.isNull()) return;
 	auto document = textDocument(m_currentId);
-	if (text != document->originalText())
-		return true;
-	return false;
+	auto new_state = (text != document->originalText());
+	if (new_state == document->edited()) return;
+	document->setEdited(new_state);
+	emit editedStateChanged(m_currentId, new_state);
 }
 
 void Document::setUpAutoCache()
