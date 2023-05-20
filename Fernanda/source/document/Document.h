@@ -25,11 +25,12 @@ class Document : public QObject
 public:
 	Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent = nullptr);
 
-	const QString open(StdFsPath path);
-	const QString open(QUuid id);
+	const QString serve(StdFsPath path);
+	const QString serve(QUuid id);
 	void setText(const QString& text);
 	void writeEmptyFile(StdFsPath path);
 	QUuid createEmpty();
+	bool editedState(const QString& text);
 
 	QUuid currentId() const { return m_currentId; }
 

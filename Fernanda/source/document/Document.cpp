@@ -6,14 +6,14 @@ Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent
 	setUpAutoCache();
 }
 
-const QString Document::open(StdFsPath path)
+const QString Document::serve(StdFsPath path)
 {
 	emit askSetText();
 	m_currentId = idByPath(path);
 	return read(path);
 }
 
-const QString Document::open(QUuid id)
+const QString Document::serve(QUuid id)
 {
 	emit askSetText();
 	m_currentId = id;
@@ -39,6 +39,15 @@ QUuid Document::createEmpty()
 	auto id = createId();
 	textDocument(id);
 	return id;
+}
+
+bool Document::editedState(const QString& text)
+{
+	if (m_currentId.isNull()) return false;
+	auto document = textDocument(m_currentId);
+	if (text != document->originalText())
+		return true;
+	return false;
 }
 
 void Document::setUpAutoCache()
@@ -99,9 +108,23 @@ TextDocument* Document::create(QUuid id, StdFsPath path)
 {
 	QString original_text;
 	QString initial_text;
-	if (!recoverIfEvicted(id, initial_text, original_text)
-		&& !path.empty())
+
+	auto recover = recoverIfEvicted(id, initial_text, original_text); // <-- can't run this because it will appear in the registry
+
+	//
+
+	// change to bool isEvicted() to check.
+
+	//
+	if (!recover && !path.empty())
 		Io::toStrings(path, initial_text, original_text);
+
+	qDebug() << recover;
+	qDebug() << path;
+	qDebug() << id;
+	qDebug() << initial_text;
+	qDebug() << original_text;
+
 	auto document = new TextDocument(initial_text, original_text);
 	m_cache.insertDocument(id, document);
 	return document;

@@ -60,6 +60,10 @@ void MainWindow::documentConnections()
 	connect(m_document, &Document::askSetText, this, [&] {
 		m_document->setText(m_editor->toPlainText());
 		});
+
+	connect(m_editor, &Editor::textChanged, this, [&] {
+		//qDebug() << m_document->editedState(m_editor->toPlainText()); // getting multiple printouts on new tab
+		});
 }
 
 void MainWindow::tabBarConnections()
@@ -510,7 +514,7 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 	}
 	if (writeNew)
 		m_document->writeEmptyFile(path);
-	auto text = m_document->open(path);
+	auto text = m_document->serve(path);
 	m_editor->setPlainText(text);
 	m_tabBar->serve(m_document->currentId(), path);
 }
@@ -518,7 +522,7 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 void MainWindow::openTab(int index)
 {
 	auto extant_id = m_tabBar->id(index);
-	auto document_text = m_document->open(extant_id);
+	auto document_text = m_document->serve(extant_id);
 	m_editor->setPlainText(document_text);
 	// m_editor-> restore cursor by id
 }
@@ -526,7 +530,7 @@ void MainWindow::openTab(int index)
 void MainWindow::newTab()
 {
 	auto new_id = m_document->createEmpty();
-	m_document->open(new_id);
+	m_document->serve(new_id);
 	m_editor->clear();
 	m_tabBar->serve(new_id);
 }
