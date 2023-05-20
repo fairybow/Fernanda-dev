@@ -1,7 +1,7 @@
 #include "Document.h"
 
-Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent)
-	: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(3) /* <-- test */
+Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, int cacheMaxCost, QWidget* parent)
+	: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(cacheMaxCost)
 {
 	setUpAutoCache();
 }
@@ -111,10 +111,8 @@ TextDocument* Document::create(QUuid id, StdFsPath path)
 
 	if (wasEvicted(id))
 		recover(id, initial_text, original_text);
-	else {
-		if (!path.empty())
-			Io::toStrings(path, initial_text, original_text);
-	}
+	else if (!path.empty())
+		Io::toStrings(path, initial_text, original_text);
 
 	auto document = new TextDocument(initial_text, original_text);
 	m_cache.insertDocument(id, document);
@@ -129,6 +127,8 @@ bool Document::wasEvicted(QUuid id)
 
 void Document::recover(QUuid id, QString& initialText, QString& originalText)
 {
+	qDebug() << __FUNCTION__ << "run";
+
 	auto temp_path = tempPath(id);
 	if (StdFs::exists(temp_path))
 		initialText = Io::readFile(temp_path);

@@ -23,7 +23,7 @@ class Document : public QObject
 	Q_OBJECT
 
 public:
-	Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent = nullptr);
+	Document(StdFsPath tempFolder, StdFsPath backupFolder, int cacheMaxCost = 100, QWidget* parent = nullptr);
 
 	const QString serve(StdFsPath path);
 	const QString serve(QUuid id);

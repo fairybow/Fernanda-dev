@@ -8,7 +8,7 @@
 class DocumentCache : public QCache<QUuid, TextDocument>
 {
 public:
-	DocumentCache(int maxCost)
+	DocumentCache(int maxCost = 100)
 		: QCache(maxCost) {}
 
 	void insertDocument(const QUuid& fileId, TextDocument* document)
