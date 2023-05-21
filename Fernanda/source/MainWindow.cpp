@@ -60,12 +60,20 @@ void MainWindow::documentConnections()
 	connect(m_document, &Document::askSetText, this, [&] {
 		m_document->setText(m_editor->toPlainText());
 		});
-	connect(m_editor, &Editor::textChanged, this, [&] {
+	connect(m_document, &Document::editedStateChanged, m_tabBar, &TabBar::updateEditedState);
+
+	auto timer = new QTimer(this);
+	timer->setSingleShot(true);
+	timer->setInterval(1000);
+
+	connect(m_editor, &Editor::textChanged, this, [&, timer] {
+		timer->start();
+		});
+	connect(timer, &QTimer::timeout, this, [&] {
 		auto text = m_editor->toPlainText();
 		m_document->affirmEditedState(text);
 		qDebug() << m_document->editedState();
 		});
-	connect(m_document, &Document::editedStateChanged, m_tabBar, &TabBar::updateEditedState);
 }
 
 void MainWindow::tabBarConnections()

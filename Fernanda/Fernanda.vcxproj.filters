@@ -230,6 +230,9 @@
     <QtMoc Include="source\tabs\TrueTabBar.hpp">
       <Filter>Source\Tabs</Filter>
     </QtMoc>
+    <QtMoc Include="source\tabs\TabButton.hpp">
+      <Filter>Source\Tabs</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -365,9 +368,6 @@
     </ClInclude>
     <ClInclude Include="source\document\TextDocument.hpp">
       <Filter>Source\Document</Filter>
-    </ClInclude>
-    <ClInclude Include="source\tabs\TabButton.hpp">
-      <Filter>Source\Tabs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,11 +8,10 @@
 #include "TrueTabBar.hpp"
 
 #include <QString>
-#include <QToolButton>
 #include <QUuid>
+#include <QVector>
 
 #include <filesystem>
-//#include <map>
 
 class TabBar : public Widget<>
 {
@@ -37,12 +36,11 @@ public slots:
 private:
 	TrueTabBar* m_trueTabBar;
 	TabControlBox* m_controlBox = new TabControlBox(m_trueTabBar);
-	//std::map<QUuid, bool> m_tabEditedStates;
 
 	void nameObjects(const char* name);
 	void setupWidgets();
 	void connections();
 	bool isFull();
 	void adjustControls();
-	QToolButton* closeButton(QUuid id); // replace with tab button
+	int create(QUuid id, StdFsPath pathForTitle = StdFsPath());
 };

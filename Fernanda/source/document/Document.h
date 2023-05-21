@@ -47,7 +47,7 @@ private:
 	QUuid m_currentId;
 	std::map<StdFsPath, QUuid> m_extantPathsToIds;
 	QVector<QUuid> m_lifetimeIdRegistry;
-	QTimer* m_autoCacheText = new QTimer(this);
+	QTimer* m_autoSaveText = new QTimer(this);
 
 	void setUpAutoCache();
 	const QString read(StdFsPath path = StdFsPath());

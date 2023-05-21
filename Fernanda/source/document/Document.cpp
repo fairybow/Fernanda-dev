@@ -54,9 +54,9 @@ void Document::affirmEditedState(const QString& text)
 void Document::setUpAutoCache()
 {
 	connect(this, &Document::startAutoCacheTimer, this, [&] {
-		m_autoCacheText->start(25000);
+		m_autoSaveText->start(25000);
 		});
-	connect(m_autoCacheText, &QTimer::timeout, this, [&] {
+	connect(m_autoSaveText, &QTimer::timeout, this, [&] {
 		emit askSetText();
 		});
 }
