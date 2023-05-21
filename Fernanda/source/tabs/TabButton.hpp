@@ -53,8 +53,7 @@ private:
 
 	void updateText()
 	{
-		setText(m_edited && !m_hoveredOver
-			? QString::fromUtf8("\u25CF")
-			: "x");
+		auto edited_flag = QString::fromUtf8("\u25CF");
+		setText((m_edited && !m_hoveredOver) ? edited_flag : "x");
 	}
 };

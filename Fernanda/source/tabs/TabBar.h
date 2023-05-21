@@ -9,6 +9,7 @@
 
 #include <QString>
 #include <QUuid>
+#include <QVariantMap>
 #include <QVector>
 
 #include <filesystem>
@@ -23,8 +24,11 @@ public:
 	TabBar(const char* name, int minTabSize = 25, int maxTabSize = 100, QWidget* parent = nullptr);
 
 	int serve(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
-	QUuid id(int index);
+	QUuid tabId(int index);
+	const QString title(int index);
 	int index(QUuid id);
+	bool isUntitled();
+	void setUntitledDisplay(const QString& text);
 
 signals:
 	void currentChanged(int index);
@@ -34,6 +38,9 @@ public slots:
 	void updateEditedState(QUuid id, bool edited);
 
 private:
+	static constexpr char DATA_ID[] = "tab_id";
+	static constexpr char DATA_TITLE[] = "tab_title";
+
 	TrueTabBar* m_trueTabBar;
 	TabControlBox* m_controlBox = new TabControlBox(m_trueTabBar);
 
@@ -42,5 +49,7 @@ private:
 	void connections();
 	bool isFull();
 	void adjustControls();
-	int create(QUuid id, StdFsPath pathForTitle = StdFsPath());
+	int create(QUuid id, StdFsPath titlePath = StdFsPath());
+	void setButton(int index, QUuid id);
+	void setData(int index, QUuid id, QString title = QString());
 };

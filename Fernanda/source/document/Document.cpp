@@ -4,6 +4,10 @@ Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, int cacheMaxCos
 	: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(cacheMaxCost)
 {
 	setUpAutoCache();
+	m_editCheckDelay->setSingleShot(true);
+	connect(m_editCheckDelay, &QTimer::timeout, this, [&] {
+		emit askEditCheck();
+		});
 }
 
 const QString Document::setCurrent(StdFsPath path)
@@ -49,6 +53,18 @@ void Document::affirmEditedState(const QString& text)
 	if (new_state == document->edited()) return;
 	document->setEdited(new_state);
 	emit editedStateChanged(m_currentId, new_state);
+}
+
+void Document::startEditCheckTimer()
+{
+	m_editCheckDelay->start();
+}
+
+void Document::setEditCheckDelay(int textLength)
+{
+	(textLength < 10000)
+		? m_editCheckDelay->setInterval(0)
+		: m_editCheckDelay->setInterval((textLength / 10000) * 1000);
 }
 
 void Document::setUpAutoCache()
@@ -128,8 +144,6 @@ bool Document::wasEvicted(QUuid id)
 
 void Document::recover(QUuid id, QString& initialText, QString& originalText)
 {
-	qDebug() << __FUNCTION__ << "run";
-
 	auto temp_path = tempPath(id);
 	if (StdFs::exists(temp_path))
 		initialText = Io::readFile(temp_path);

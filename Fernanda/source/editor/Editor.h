@@ -27,6 +27,7 @@ public:
 	int defaulTabStop() const { return 40; }
 	QString defaultWrap() const { return "WrapAt"; }
 	int selectedLineCount() const { return m_trueEditor->selectedLineCount(); }
+	QString firstBlock() const { return m_trueEditor->document()->begin().text(); }
 
 	void setHasShadow(bool state) { m_shadow->setVisible(state); }
 	void setHasCursorBlink(bool state) { m_hasCursorBlink = state; }

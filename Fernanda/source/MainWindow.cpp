@@ -62,17 +62,14 @@ void MainWindow::documentConnections()
 		});
 	connect(m_document, &Document::editedStateChanged, m_tabBar, &TabBar::updateEditedState);
 
-	auto timer = new QTimer(this);
-	timer->setSingleShot(true);
-	timer->setInterval(1000);
-
-	connect(m_editor, &Editor::textChanged, this, [&, timer] {
-		timer->start();
+	connect(m_editor, &Editor::textChanged, this, [&] {
+		auto text_length = m_editor->toPlainText().length();
+		m_document->setEditCheckDelay(text_length);
+		m_document->startEditCheckTimer();
 		});
-	connect(timer, &QTimer::timeout, this, [&] {
+	connect(m_document, &Document::askEditCheck, this, [&] {
 		auto text = m_editor->toPlainText();
 		m_document->affirmEditedState(text);
-		qDebug() << m_document->editedState();
 		});
 }
 
@@ -80,6 +77,11 @@ void MainWindow::tabBarConnections()
 {
 	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::openTab);
 	connect(m_tabBar, &TabBar::askNew, this, &MainWindow::newTab);
+	connect(m_editor, &Editor::textChanged, this, [&] {
+		if (!m_tabBar->isUntitled()) return;
+		auto block = m_editor->firstBlock();
+		m_tabBar->setUntitledDisplay(block);
+		});
 }
 
 void MainWindow::editorConnections()
@@ -525,13 +527,13 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 	if (writeNew)
 		m_document->writeEmptyFile(path);
 	auto text = m_document->setCurrent(path);
-	m_editor->setPlainText(text);
 	m_tabBar->serve(m_document->currentId(), path);
+	m_editor->setPlainText(text);
 }
 
 void MainWindow::openTab(int index)
 {
-	auto extant_id = m_tabBar->id(index);
+	auto extant_id = m_tabBar->tabId(index);
 	auto document_text = m_document->setCurrent(extant_id);
 	m_editor->setPlainText(document_text);
 	// m_editor-> restore cursor by id
@@ -541,6 +543,6 @@ void MainWindow::newTab()
 {
 	auto new_id = m_document->createEmpty();
 	m_document->setCurrent(new_id);
-	m_editor->clear();
 	m_tabBar->serve(new_id);
+	m_editor->clear();
 }
