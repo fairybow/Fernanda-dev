@@ -25,21 +25,20 @@ class Document : public QObject
 public:
 	Document(StdFsPath tempFolder, StdFsPath backupFolder, int cacheMaxCost = 100, QWidget* parent = nullptr);
 
-	const QString serve(StdFsPath path);
-	const QString serve(QUuid id);
+	const QString setCurrent(StdFsPath path);
+	const QString setCurrent(QUuid id);
 	void setText(const QString& text);
 	void writeEmptyFile(StdFsPath path);
 	QUuid createEmpty();
-
-	//
-	bool editedState(const QString& text);
-	//
+	void affirmEditedState(const QString& text);
 
 	QUuid currentId() const { return m_currentId; }
+	bool editedState() { return textDocument(m_currentId)->edited(); }
 
 signals:
 	void askSetText();
 	void startAutoCacheTimer();
+	void editedStateChanged(QUuid id, bool edited);
 
 private:
 	DocumentCache m_cache;
@@ -48,7 +47,7 @@ private:
 	QUuid m_currentId;
 	std::map<StdFsPath, QUuid> m_extantPathsToIds;
 	QVector<QUuid> m_lifetimeIdRegistry;
-	QTimer* m_autoCacheText = new QTimer(this);
+	QTimer* m_autoSaveText = new QTimer(this);
 
 	void setUpAutoCache();
 	const QString read(StdFsPath path = StdFsPath());

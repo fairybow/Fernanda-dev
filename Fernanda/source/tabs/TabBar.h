@@ -3,12 +3,13 @@
 #include "../common/Layout.hpp"
 #include "../common/Path.hpp"
 #include "../common/Widget.hpp"
+#include "TabButton.hpp"
 #include "TabControlBox.hpp"
 #include "TrueTabBar.hpp"
 
 #include <QString>
-#include <QToolButton>
 #include <QUuid>
+#include <QVector>
 
 #include <filesystem>
 
@@ -23,10 +24,14 @@ public:
 
 	int serve(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
 	QUuid id(int index);
+	int index(QUuid id);
 
 signals:
 	void currentChanged(int index);
 	void askNew();
+
+public slots:
+	void updateEditedState(QUuid id, bool edited);
 
 private:
 	TrueTabBar* m_trueTabBar;
@@ -37,5 +42,5 @@ private:
 	void connections();
 	bool isFull();
 	void adjustControls();
-	QToolButton* closeButton(QUuid id);
+	int create(QUuid id, StdFsPath pathForTitle = StdFsPath());
 };

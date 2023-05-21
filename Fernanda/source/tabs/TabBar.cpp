@@ -10,24 +10,12 @@ TabBar::TabBar(const char* name, int minTabSize, int maxTabSize, QWidget* parent
 
 int TabBar::serve(QUuid id, StdFsPath pathForTitle, bool switchTo)
 {
-	auto index = -1;
-	for (auto i = 0; i < m_trueTabBar->count(); ++i) {
-		if (m_trueTabBar->tabData(i) == id) {
-			index = i;
-			break;
-		}
-	}
-	if (index == -1) {
-		blockSignals(true);
-		index = m_trueTabBar->addTab(
-			pathForTitle.empty() ? QString() : Path::qStringName(pathForTitle));
-		m_trueTabBar->setTabButton(index, QTabBar::ButtonPosition::RightSide, closeButton(id));
-		m_trueTabBar->setTabData(index, id);
-		blockSignals(false);
-	}
+	auto next_index = index(id);
+	if (next_index == -1)
+		next_index = create(id, pathForTitle);
 	if (switchTo)
-		m_trueTabBar->setCurrentIndex(index);
-	return index;
+		m_trueTabBar->setCurrentIndex(next_index);
+	return next_index;
 }
 
 QUuid TabBar::id(int index)
@@ -35,11 +23,31 @@ QUuid TabBar::id(int index)
 	return m_trueTabBar->tabData(index).value<QUuid>();
 }
 
+int TabBar::index(QUuid id)
+{
+	auto index = -1;
+	for (auto i = 0; i < m_trueTabBar->count(); ++i)
+		if (m_trueTabBar->tabData(i) == id) {
+			index = i;
+			break;
+		}
+	return index;
+}
+
+void TabBar::updateEditedState(QUuid id, bool edited)
+{
+	auto changed_index = index(id);
+	if (changed_index == -1) return;
+	auto button = qobject_cast<TabButton*>(
+		m_trueTabBar->tabButton(changed_index, QTabBar::RightSide));
+	if (button)
+		button->setEdited(edited);
+}
+
 void TabBar::nameObjects(const char* name)
 {
 	m_trueTabBar->setObjectName(name);
 	m_controlBox->setObjectName(name);
-	//m_controlBox->setObjectName(name + QString("-control"));
 }
 
 void TabBar::setupWidgets()
@@ -83,16 +91,21 @@ void TabBar::adjustControls()
 	m_controlBox->setScrollerVisible(isFull());
 }
 
-QToolButton* TabBar::closeButton(QUuid id)
+int TabBar::create(QUuid id, StdFsPath pathForTitle)
 {
-	auto close_button = new QToolButton;
-	close_button->setText("x");
-	connect(close_button, &QToolButton::clicked, this, [&, id] {
-		for (auto i = 0; i < m_trueTabBar->count(); ++i)
-			if (m_trueTabBar->tabData(i) == id) {
-				emit m_trueTabBar->tabCloseRequested(i);
-				break;
-			}
+	blockSignals(true);
+
+	auto index = -1;
+	index = m_trueTabBar->addTab(
+		pathForTitle.empty() ? QString() : Path::qStringName(pathForTitle));
+	auto button = new TabButton(id, this);
+	connect(button, &TabButton::askClose, this, [&](QUuid id) {
+		// close tab
 		});
-	return close_button;
+	// delete button after closing tab
+	m_trueTabBar->setTabButton(index, QTabBar::ButtonPosition::RightSide, button);
+	m_trueTabBar->setTabData(index, id);
+
+	blockSignals(false);
+	return index;
 }
