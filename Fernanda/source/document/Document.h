@@ -30,12 +30,10 @@ public:
 	void setText(const QString& text);
 	void writeEmptyFile(StdFsPath path);
 	QUuid createEmpty();
-
-	//
 	void affirmEditedState(const QString& text);
-	//
 
 	QUuid currentId() const { return m_currentId; }
+	bool editedState() { return textDocument(m_currentId)->edited(); }
 
 signals:
 	void askSetText();

@@ -63,10 +63,9 @@ void MainWindow::documentConnections()
 	connect(m_editor, &Editor::textChanged, this, [&] {
 		auto text = m_editor->toPlainText();
 		m_document->affirmEditedState(text);
+		qDebug() << m_document->editedState();
 		});
-	connect(m_document, &Document::editedStateChanged, this, [&](QUuid id, bool edited) {
-		// set tab title state
-		});
+	connect(m_document, &Document::editedStateChanged, m_tabBar, &TabBar::updateEditedState);
 }
 
 void MainWindow::tabBarConnections()

@@ -10,29 +10,47 @@ TabBar::TabBar(const char* name, int minTabSize, int maxTabSize, QWidget* parent
 
 int TabBar::serve(QUuid id, StdFsPath pathForTitle, bool switchTo)
 {
-	auto index = -1;
-	for (auto i = 0; i < m_trueTabBar->count(); ++i) {
-		if (m_trueTabBar->tabData(i) == id) {
-			index = i;
-			break;
-		}
-	}
-	if (index == -1) {
+	auto next_index = index(id);
+	if (next_index == -1) {
 		blockSignals(true);
-		index = m_trueTabBar->addTab(
+		next_index = m_trueTabBar->addTab(
 			pathForTitle.empty() ? QString() : Path::qStringName(pathForTitle));
-		m_trueTabBar->setTabButton(index, QTabBar::ButtonPosition::RightSide, closeButton(id));
-		m_trueTabBar->setTabData(index, id);
+		m_trueTabBar->setTabButton(next_index, QTabBar::ButtonPosition::RightSide, closeButton(id));
+		m_trueTabBar->setTabData(next_index, id);
 		blockSignals(false);
 	}
 	if (switchTo)
-		m_trueTabBar->setCurrentIndex(index);
-	return index;
+		m_trueTabBar->setCurrentIndex(next_index);
+	return next_index;
 }
 
 QUuid TabBar::id(int index)
 {
 	return m_trueTabBar->tabData(index).value<QUuid>();
+}
+
+int TabBar::index(QUuid id)
+{
+	auto index = -1;
+	for (auto i = 0; i < m_trueTabBar->count(); ++i)
+		if (m_trueTabBar->tabData(i) == id) {
+			index = i;
+			break;
+		}
+	return index;
+}
+
+void TabBar::updateEditedState(QUuid id, bool edited)
+{
+	auto changed_index = index(id);
+	if (changed_index == -1) return;
+	//m_tabEditedStates[index] = edited;
+	if (edited) {
+		//show flag
+	}
+	else {
+		//hide flag
+	}
 }
 
 void TabBar::nameObjects(const char* name)

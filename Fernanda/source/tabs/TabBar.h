@@ -11,6 +11,7 @@
 #include <QUuid>
 
 #include <filesystem>
+//#include <map>
 
 class TabBar : public Widget<>
 {
@@ -23,14 +24,19 @@ public:
 
 	int serve(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
 	QUuid id(int index);
+	int index(QUuid id);
 
 signals:
 	void currentChanged(int index);
 	void askNew();
 
+public slots:
+	void updateEditedState(QUuid id, bool edited);
+
 private:
 	TrueTabBar* m_trueTabBar;
 	TabControlBox* m_controlBox = new TabControlBox(m_trueTabBar);
+	//std::map<QUuid, bool> m_tabEditedStates;
 
 	void nameObjects(const char* name);
 	void setupWidgets();
