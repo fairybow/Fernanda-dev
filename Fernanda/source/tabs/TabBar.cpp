@@ -39,6 +39,19 @@ int TabBar::index(QUuid id)
 	return index;
 }
 
+bool TabBar::isUntitled()
+{
+	if (m_trueTabBar->currentIndex() < 0) return false;
+	return title(m_trueTabBar->currentIndex()).isEmpty();
+}
+
+void TabBar::setUntitledDisplay(const QString& text)
+{
+	auto index = m_trueTabBar->currentIndex();
+	if (index < 0 || !isUntitled()) return;
+	m_trueTabBar->setTabText(index, text);
+}
+
 void TabBar::updateEditedState(QUuid id, bool edited)
 {
 	auto changed_index = index(id);
@@ -122,5 +135,5 @@ void TabBar::setData(int index, QUuid id, QString title)
 	QVariantMap data;
 	data[DATA_ID] = id;
 	data[DATA_TITLE] = title;
-	m_trueTabBar->setTabData(index, data); // qvariantmap?
+	m_trueTabBar->setTabData(index, data);
 }

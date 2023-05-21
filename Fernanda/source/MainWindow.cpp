@@ -77,10 +77,10 @@ void MainWindow::tabBarConnections()
 {
 	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::openTab);
 	connect(m_tabBar, &TabBar::askNew, this, &MainWindow::newTab);
-
 	connect(m_editor, &Editor::textChanged, this, [&] {
-		// set tab title if untitled
-		qDebug() << m_editor->firstBlock();
+		if (!m_tabBar->isUntitled()) return;
+		auto block = m_editor->firstBlock();
+		m_tabBar->setUntitledDisplay(block);
 		});
 }
 
@@ -527,8 +527,8 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 	if (writeNew)
 		m_document->writeEmptyFile(path);
 	auto text = m_document->setCurrent(path);
-	m_editor->setPlainText(text);
 	m_tabBar->serve(m_document->currentId(), path);
+	m_editor->setPlainText(text);
 }
 
 void MainWindow::openTab(int index)
@@ -543,6 +543,6 @@ void MainWindow::newTab()
 {
 	auto new_id = m_document->createEmpty();
 	m_document->setCurrent(new_id);
-	m_editor->clear();
 	m_tabBar->serve(new_id);
+	m_editor->clear();
 }

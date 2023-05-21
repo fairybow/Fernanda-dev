@@ -27,7 +27,8 @@ public:
 	QUuid tabId(int index);
 	const QString title(int index);
 	int index(QUuid id);
-	//bool isUntitled();
+	bool isUntitled();
+	void setUntitledDisplay(const QString& text);
 
 signals:
 	void currentChanged(int index);
