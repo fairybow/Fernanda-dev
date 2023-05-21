@@ -62,17 +62,14 @@ void MainWindow::documentConnections()
 		});
 	connect(m_document, &Document::editedStateChanged, m_tabBar, &TabBar::updateEditedState);
 
-	auto timer = new QTimer(this);
-	timer->setSingleShot(true);
-	timer->setInterval(1000);
-
-	connect(m_editor, &Editor::textChanged, this, [&, timer] {
-		timer->start();
+	connect(m_editor, &Editor::textChanged, this, [&] {
+		auto text_length = m_editor->toPlainText().length();
+		m_document->setEditCheckDelay(text_length);
+		m_document->startEditCheckTimer();
 		});
-	connect(timer, &QTimer::timeout, this, [&] {
+	connect(m_document, &Document::askEditCheck, this, [&] {
 		auto text = m_editor->toPlainText();
 		m_document->affirmEditedState(text);
-		qDebug() << m_document->editedState();
 		});
 }
 
@@ -80,6 +77,11 @@ void MainWindow::tabBarConnections()
 {
 	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::openTab);
 	connect(m_tabBar, &TabBar::askNew, this, &MainWindow::newTab);
+
+	connect(m_editor, &Editor::textChanged, this, [&] {
+		// set tab title if untitled
+		qDebug() << m_editor->firstBlock();
+		});
 }
 
 void MainWindow::editorConnections()

@@ -13,7 +13,7 @@ Editor::Editor(const char* name, const QFont& defaultFont, QWidget* parent)
 
 	// testing
 
-	m_overlay->hide();
+	m_overlay->hide(); // <- should be able to remove or use exclusivley for locking for error message display (file not found, etc.)
 }
 
 void Editor::setWrapMode(const QString& mode)

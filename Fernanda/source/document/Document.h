@@ -31,14 +31,18 @@ public:
 	void writeEmptyFile(StdFsPath path);
 	QUuid createEmpty();
 	void affirmEditedState(const QString& text);
+	void startEditCheckTimer();
 
 	QUuid currentId() const { return m_currentId; }
 	bool editedState() { return textDocument(m_currentId)->edited(); }
+
+	void setEditCheckDelay(int textLength);
 
 signals:
 	void askSetText();
 	void startAutoCacheTimer();
 	void editedStateChanged(QUuid id, bool edited);
+	void askEditCheck();
 
 private:
 	DocumentCache m_cache;
@@ -48,6 +52,7 @@ private:
 	std::map<StdFsPath, QUuid> m_extantPathsToIds;
 	QVector<QUuid> m_lifetimeIdRegistry;
 	QTimer* m_autoSaveText = new QTimer(this);
+	QTimer* m_editCheckDelay = new QTimer(this);
 
 	void setUpAutoCache();
 	const QString read(StdFsPath path = StdFsPath());
