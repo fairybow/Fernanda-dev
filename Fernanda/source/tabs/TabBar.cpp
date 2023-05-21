@@ -18,16 +18,21 @@ int TabBar::serve(QUuid id, StdFsPath pathForTitle, bool switchTo)
 	return next_index;
 }
 
-QUuid TabBar::id(int index)
+QUuid TabBar::tabId(int index)
 {
-	return m_trueTabBar->tabData(index).value<QUuid>();
+	return m_trueTabBar->tabData(index).toMap()[DATA_ID].toUuid();
+}
+
+const QString TabBar::title(int index)
+{
+	return m_trueTabBar->tabData(index).toMap()[DATA_TITLE].toString();
 }
 
 int TabBar::index(QUuid id)
 {
 	auto index = -1;
 	for (auto i = 0; i < m_trueTabBar->count(); ++i)
-		if (m_trueTabBar->tabData(i) == id) {
+		if (tabId(i) == id) {
 			index = i;
 			break;
 		}
@@ -114,5 +119,8 @@ void TabBar::setButton(int index, QUuid id)
 
 void TabBar::setData(int index, QUuid id, QString title)
 {
-	m_trueTabBar->setTabData(index, id); // qvariantmap?
+	QVariantMap data;
+	data[DATA_ID] = id;
+	data[DATA_TITLE] = title;
+	m_trueTabBar->setTabData(index, data); // qvariantmap?
 }

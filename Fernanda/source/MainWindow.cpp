@@ -533,7 +533,7 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 
 void MainWindow::openTab(int index)
 {
-	auto extant_id = m_tabBar->id(index);
+	auto extant_id = m_tabBar->tabId(index);
 	auto document_text = m_document->setCurrent(extant_id);
 	m_editor->setPlainText(document_text);
 	// m_editor-> restore cursor by id
