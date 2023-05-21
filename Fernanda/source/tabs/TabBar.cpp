@@ -91,15 +91,13 @@ void TabBar::adjustControls()
 	m_controlBox->setScrollerVisible(isFull());
 }
 
-int TabBar::create(QUuid id, StdFsPath pathForTitle)
+int TabBar::create(QUuid id, StdFsPath titlePath)
 {
 	blockSignals(true);
-
 	auto index = m_trueTabBar->addTab(
-		pathForTitle.empty() ? QString() : Path::qStringName(pathForTitle));
+		titlePath.empty() ? QString() : Path::qStringName(titlePath));
 	setButton(index, id);
-	m_trueTabBar->setTabData(index, id);
-
+	setData(index, id, titlePath);
 	blockSignals(false);
 	return index;
 }
@@ -112,4 +110,9 @@ void TabBar::setButton(int index, QUuid id)
 		});
 	// delete button after closing tab
 	m_trueTabBar->setTabButton(index, QTabBar::ButtonPosition::RightSide, button);
+}
+
+void TabBar::setData(int index, QUuid id, StdFsPath titlePath)
+{
+	m_trueTabBar->setTabData(index, id);
 }
