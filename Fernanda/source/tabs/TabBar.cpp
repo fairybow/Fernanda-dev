@@ -95,8 +95,7 @@ int TabBar::create(QUuid id, StdFsPath pathForTitle)
 {
 	blockSignals(true);
 
-	auto index = -1;
-	index = m_trueTabBar->addTab(
+	auto index = m_trueTabBar->addTab(
 		pathForTitle.empty() ? QString() : Path::qStringName(pathForTitle));
 	auto button = new TabButton(id, this);
 	connect(button, &TabButton::askClose, this, [&](QUuid id) {
