@@ -97,14 +97,19 @@ int TabBar::create(QUuid id, StdFsPath pathForTitle)
 
 	auto index = m_trueTabBar->addTab(
 		pathForTitle.empty() ? QString() : Path::qStringName(pathForTitle));
-	auto button = new TabButton(id, this);
-	connect(button, &TabButton::askClose, this, [&](QUuid id) {
-		// close tab
-		});
-	// delete button after closing tab
-	m_trueTabBar->setTabButton(index, QTabBar::ButtonPosition::RightSide, button);
+	setButton(index, id);
 	m_trueTabBar->setTabData(index, id);
 
 	blockSignals(false);
 	return index;
+}
+
+void TabBar::setButton(int index, QUuid id)
+{
+	auto button = new TabButton(id, this);
+	connect(button, &TabButton::askClose, this, [&](QUuid closing_id) {
+		// close tab
+		});
+	// delete button after closing tab
+	m_trueTabBar->setTabButton(index, QTabBar::ButtonPosition::RightSide, button);
 }

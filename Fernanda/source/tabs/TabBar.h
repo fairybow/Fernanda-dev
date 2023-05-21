@@ -43,4 +43,5 @@ private:
 	bool isFull();
 	void adjustControls();
 	int create(QUuid id, StdFsPath pathForTitle = StdFsPath());
+	void setButton(int index, QUuid id);
 };
