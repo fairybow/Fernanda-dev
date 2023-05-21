@@ -114,5 +114,5 @@ void TabBar::setButton(int index, QUuid id)
 
 void TabBar::setData(int index, QUuid id, StdFsPath titlePath)
 {
-	m_trueTabBar->setTabData(index, id);
+	m_trueTabBar->setTabData(index, id); // qvariantmap?
 }
