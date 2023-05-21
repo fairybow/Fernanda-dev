@@ -16,6 +16,7 @@ int TabBar::serve(QUuid id, StdFsPath pathForTitle, bool switchTo)
 		next_index = m_trueTabBar->addTab(
 			pathForTitle.empty() ? QString() : Path::qStringName(pathForTitle));
 		m_trueTabBar->setTabButton(next_index, QTabBar::ButtonPosition::RightSide, closeButton(id));
+		// store button & QUuid and delete on close
 		m_trueTabBar->setTabData(next_index, id);
 		blockSignals(false);
 	}
@@ -106,11 +107,9 @@ QToolButton* TabBar::closeButton(QUuid id)
 	auto close_button = new QToolButton;
 	close_button->setText("x");
 	connect(close_button, &QToolButton::clicked, this, [&, id] {
-		for (auto i = 0; i < m_trueTabBar->count(); ++i)
-			if (m_trueTabBar->tabData(i) == id) {
-				emit m_trueTabBar->tabCloseRequested(i);
-				break;
-			}
+		auto closing_index = index(id);
+		if (closing_index != -1)
+			emit m_trueTabBar->tabCloseRequested(closing_index);
 		});
 	return close_button;
 }

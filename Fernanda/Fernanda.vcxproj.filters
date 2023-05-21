@@ -366,6 +366,9 @@
     <ClInclude Include="source\document\TextDocument.hpp">
       <Filter>Source\Document</Filter>
     </ClInclude>
+    <ClInclude Include="source\tabs\TabButton.hpp">
+      <Filter>Source\Tabs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">

@@ -3,6 +3,7 @@
 #include "../common/Layout.hpp"
 #include "../common/Path.hpp"
 #include "../common/Widget.hpp"
+#include "TabButton.hpp"
 #include "TabControlBox.hpp"
 #include "TrueTabBar.hpp"
 
@@ -43,5 +44,5 @@ private:
 	void connections();
 	bool isFull();
 	void adjustControls();
-	QToolButton* closeButton(QUuid id);
+	QToolButton* closeButton(QUuid id); // replace with tab button
 };
