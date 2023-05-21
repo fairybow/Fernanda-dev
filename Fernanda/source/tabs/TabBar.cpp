@@ -45,11 +45,11 @@ bool TabBar::isUntitled()
 	return title(m_trueTabBar->currentIndex()).isEmpty();
 }
 
-void TabBar::setUntitledDisplay(const QString& text)
+void TabBar::setUntitledDisplay(const QString& text, int charLimit)
 {
 	auto index = m_trueTabBar->currentIndex();
 	if (index < 0 || !isUntitled()) return;
-	m_trueTabBar->setTabText(index, text);
+	m_trueTabBar->setTabText(index, text.left(charLimit));
 }
 
 void TabBar::updateEditedState(QUuid id, bool edited)

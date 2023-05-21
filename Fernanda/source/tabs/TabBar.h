@@ -28,7 +28,7 @@ public:
 	const QString title(int index);
 	int index(QUuid id);
 	bool isUntitled();
-	void setUntitledDisplay(const QString& text);
+	void setUntitledDisplay(const QString& text, int charLimit = 30);
 
 signals:
 	void currentChanged(int index);
