@@ -44,5 +44,5 @@ private:
 	void adjustControls();
 	int create(QUuid id, StdFsPath titlePath = StdFsPath());
 	void setButton(int index, QUuid id);
-	void setData(int index, QUuid id, StdFsPath titlePath = StdFsPath());
+	void setData(int index, QUuid id, QString title = QString());
 };

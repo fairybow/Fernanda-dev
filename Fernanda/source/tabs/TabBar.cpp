@@ -94,10 +94,10 @@ void TabBar::adjustControls()
 int TabBar::create(QUuid id, StdFsPath titlePath)
 {
 	blockSignals(true);
-	auto index = m_trueTabBar->addTab(
-		titlePath.empty() ? QString() : Path::qStringName(titlePath));
+	QString title = titlePath.empty() ? QString() : Path::qStringName(titlePath);
+	auto index = m_trueTabBar->addTab(title);
 	setButton(index, id);
-	setData(index, id, titlePath);
+	setData(index, id, title);
 	blockSignals(false);
 	return index;
 }
@@ -112,7 +112,7 @@ void TabBar::setButton(int index, QUuid id)
 	m_trueTabBar->setTabButton(index, QTabBar::ButtonPosition::RightSide, button);
 }
 
-void TabBar::setData(int index, QUuid id, StdFsPath titlePath)
+void TabBar::setData(int index, QUuid id, QString title)
 {
 	m_trueTabBar->setTabData(index, id); // qvariantmap?
 }
