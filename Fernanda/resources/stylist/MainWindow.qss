@@ -135,6 +135,24 @@ QSizeGrip
 	color: @statusBarButtonFontHover;
 }
 
+#TabBar
+{
+	background: @tabBarBg;
+	color: @tabBarFont;
+}
+
+#TabBar QToolButton
+{
+	background: @tabBarButton;
+	color: @tabBarButtonFont;
+}
+
+#TabBar QToolButton:hover
+{
+	background: @tabBarButtonHover;
+	color: @tabBarButtonFontHover;
+}
+
 #TreeView
 {
 	background: @treeViewBg;
