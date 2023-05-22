@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../common/Icon.hpp"
 #include "../common/Layout.hpp"
 
 #include <QTabBar>
@@ -35,9 +36,9 @@ private:
 
 	void build()
 	{
-		m_add->setText("+");
-		m_scrollLeft->setText("<");
-		m_scrollRight->setText(">");
+		m_add->setIcon(Icon::add());
+		m_scrollLeft->setIcon(Icon::chevronBack());
+		m_scrollRight->setIcon(Icon::chevronForward());
 		auto layout = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight }, this);
 		layout->setContentsMargins(0, 0, 4, 0);
 	}

@@ -32,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.5.0_msvc2019_64</QtInstall>
-    <QtModules>core;gui;network;widgets;printsupport;webchannel;webenginecore;xml;webenginewidgets</QtModules>
+    <QtModules>core;gui;network;widgets;printsupport;svg;webchannel;webenginecore;xml;webenginewidgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>6.5.0_msvc2019_64</QtInstall>
-    <QtModules>core;gui;network;widgets;printsupport;webchannel;webenginecore;xml;webenginewidgets</QtModules>
+    <QtModules>core;gui;network;widgets;printsupport;svg;webchannel;webenginecore;xml;webenginewidgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Emoji.hpp" />
+    <ClInclude Include="source\common\Icon.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
     <QtMoc Include="source\document\Document.h" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
@@ -206,6 +207,7 @@
     <QtRcc Include="resources\Indicator.qrc" />
     <QtRcc Include="resources\MenuBar.qrc" />
     <QtRcc Include="resources\Stylist.qrc" />
+    <QtRcc Include="resources\Ui.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

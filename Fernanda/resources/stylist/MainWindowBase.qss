@@ -36,8 +36,6 @@
 
 #TabBar QToolButton
 {
-	border: none;
 	border-radius: 3px;
-	font-size: 9pt;
 	padding: 1px;
 }
