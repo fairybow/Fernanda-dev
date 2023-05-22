@@ -1,12 +1,12 @@
 #pragma once
 
+#include "Xml.hpp"
+
 #include <QBuffer>
 #include <QByteArray>
 #include <QColor>
-#include <QDomDocument>
 #include <QFile>
 #include <QIcon>
-#include <QRegularExpression>
 #include <QSize>
 #include <QString>
 #include <QSvgGenerator>
@@ -49,27 +49,13 @@ namespace Svg
 				|| !document.setContent(&file))
 				return QByteArray();
 
-			auto adjust_element_color = [&](const QString& tagName, const QString& attributeName, const QString& valueName) {
-				auto nodes = document.elementsByTagName(tagName);
-				for (auto i = 0; i < nodes.count(); ++i) {
-					auto element = nodes.at(i).toElement();
-					auto style = element.attribute(attributeName);
-					style.replace(QRegularExpression(QString("%1:[^;]+").arg(valueName)), QString("%1:").arg(valueName) + color.name());
-					element.setAttribute(attributeName, style);
-				}
-			};
-
-			auto add_element_attribute_color = [&](const QString& tagName, const QString& attributeName) {
-				auto nodes = document.elementsByTagName(tagName);
-				for (auto i = 0; i < nodes.count(); ++i) {
-					auto element = nodes.at(i).toElement();
-					element.setAttribute(attributeName, color.name());
-				}
-			};
-
-			adjust_element_color("line", "style", "stroke");
-			adjust_element_color("polyline", "style", "stroke");
-			add_element_attribute_color("path", "fill");
+			auto color_name = color.name();
+			Xml::adjustAttributeCssValue(document,
+				"line", "style", "stroke", color_name);
+			Xml::adjustAttributeCssValue(document,
+				"polyline", "style", "stroke", color_name);
+			Xml::addTagAttribute(document,
+				"path", "fill", color_name);
 
 			QBuffer buffer;
 			buffer.open(QIODevice::WriteOnly);
