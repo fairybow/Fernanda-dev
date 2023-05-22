@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/Icon.hpp"
+#include "../common/Svg.hpp"
 
 #include <QEnterEvent>
 #include <QTabBar>
@@ -54,6 +54,8 @@ private:
 
 	void updateIcon()
 	{
-		setIcon((m_edited && !m_hoveredOver) ? Icon::ui(Icon::Ui::Ellipse, 0.5) : Icon::ui(Icon::Ui::Close));
+		auto edited_flag = Svg::ui(Svg::Ui::Ellipse, Qt::red, 0.5);
+		auto close = Svg::ui(Svg::Ui::Close, Qt::red);
+		setIcon((m_edited && !m_hoveredOver) ? edited_flag : close);
 	}
 };

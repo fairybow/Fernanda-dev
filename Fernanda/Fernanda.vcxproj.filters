@@ -369,7 +369,7 @@
     <ClInclude Include="source\document\TextDocument.hpp">
       <Filter>Source\Document</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\Icon.hpp">
+    <ClInclude Include="source\common\Svg.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
   </ItemGroup>

@@ -145,7 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Emoji.hpp" />
-    <ClInclude Include="source\common\Icon.hpp" />
+    <ClInclude Include="source\common\Svg.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
     <QtMoc Include="source\document\Document.h" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
