@@ -54,6 +54,6 @@ private:
 
 	void updateIcon()
 	{
-		setIcon((m_edited && !m_hoveredOver) ? Icon::ellipse() : Icon::close());
+		setIcon((m_edited && !m_hoveredOver) ? Icon::ui(Icon::Ui::Ellipse, 0.5) : Icon::ui(Icon::Ui::Close));
 	}
 };

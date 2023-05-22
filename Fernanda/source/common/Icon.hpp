@@ -1,19 +1,43 @@
 #pragma once
 
 #include <QIcon>
+#include <QSize>
 #include <QString>
 #include <QSvgRenderer>
 #include <QPainter>
 #include <QPixmap>
 
+#include <map>
+
 namespace Icon
 {
+	enum class Ui {
+		Add,
+		ChevronBack,
+		ChevronDown,
+		ChevronForward,
+		ChevronUp,
+		Close,
+		Ellipse
+	};
+
 	namespace
 	{
-		inline QIcon icon(const QString& fileName)
+		const std::map<Ui, QString> uiPaths = {
+		{ Ui::Add, ":/ui/add-outline.svg" },
+		{ Ui::ChevronBack, ":/ui/chevron-back-outline.svg" },
+		{ Ui::ChevronDown, ":/ui/chevron-down-outline.svg" },
+		{ Ui::ChevronForward, ":/ui/chevron-forward-outline.svg" },
+		{ Ui::ChevronUp, ":/ui/chevron-up-outline.svg" },
+		{ Ui::Close, ":/ui/close-outline.svg" },
+		{ Ui::Ellipse, ":/ui/ellipse.svg" }
+		};
+
+		inline QIcon icon(const QString& fileName, double scale = 1.0)
 		{
 			QSvgRenderer renderer(fileName);
-			QPixmap pixmap(renderer.defaultSize());
+			auto size = QSize(18, 18);
+			QPixmap pixmap(size *= scale);
 			pixmap.fill(Qt::transparent);
 			QPainter painter(&pixmap);
 			renderer.render(&painter);
@@ -21,38 +45,11 @@ namespace Icon
 		}
 	}
 
-	inline QIcon add()
+	inline QIcon ui(Ui name, double scale = 1.0)
 	{
-		return icon(":/ui/add-outline.svg");
-	}
-
-	inline QIcon chevronBack()
-	{
-		return icon(":/ui/chevron-back-outline.svg");
-	}
-
-	inline QIcon chevronDown()
-	{
-		return icon(":/ui/chevron-down-outline.svg");
-	}
-
-	inline QIcon chevronForward()
-	{
-		return icon(":/ui/chevron-forward-outline.svg");
-	}
-
-	inline QIcon chevronUp()
-	{
-		return icon(":/ui/chevron-up-outline.svg");
-	}
-
-	inline QIcon close()
-	{
-		return icon(":/ui/close-outline.svg");
-	}
-
-	inline QIcon ellipse()
-	{
-		return icon(":/ui/ellipse.svg");
+		auto it = uiPaths.find(name);
+		if (it != uiPaths.end())
+			return icon(it->second, scale);
+		return QIcon();
 	}
 }

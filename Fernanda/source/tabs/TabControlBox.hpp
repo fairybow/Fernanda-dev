@@ -36,9 +36,9 @@ private:
 
 	void build()
 	{
-		m_add->setIcon(Icon::add());
-		m_scrollLeft->setIcon(Icon::chevronBack());
-		m_scrollRight->setIcon(Icon::chevronForward());
+		m_add->setIcon(Icon::ui(Icon::Ui::Add));
+		m_scrollLeft->setIcon(Icon::ui(Icon::Ui::ChevronBack));
+		m_scrollRight->setIcon(Icon::ui(Icon::Ui::ChevronForward));
 		auto layout = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight }, this);
 		layout->setContentsMargins(0, 0, 4, 0);
 	}
