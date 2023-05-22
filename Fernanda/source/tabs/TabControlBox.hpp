@@ -38,7 +38,8 @@ private:
 		m_add->setText("+");
 		m_scrollLeft->setText("<");
 		m_scrollRight->setText(">");
-		Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight }, this);
+		auto layout = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight }, this);
+		layout->setContentsMargins(0, 0, 4, 0);
 	}
 
 	void connections()

@@ -5,17 +5,6 @@
 @menuFont; = #777e8b;
 @menuFontHover; = #bbb;
 
-@treeViewBg; = #2e323a;
-@treeViewFont; = #6f7581;
-
-@splitterHandle; = #202225;
-
-@statusBarBg; = #202225;
-@statusBarButton; = #202225;
-@statusBarButtonHover; = #333;
-@statusBarButtonFont; = #777e8b;
-@statusBarButtonFontHover; = #bbb;
-
 @meterFont; = #777e8b;
 
 @scrollBg; = #202225;
@@ -28,3 +17,21 @@
 @scrollHandle; = #292b2f;
 @scrollHandleHover; = #333;
 @scrollHandlePress; = #404040;
+
+@splitterHandle; = #202225;
+
+@statusBarBg; = #202225;
+@statusBarButton; = #202225;
+@statusBarButtonHover; = #333;
+@statusBarButtonFont; = #777e8b;
+@statusBarButtonFontHover; = #bbb;
+
+@tabBarBg; = #2e323a;
+@tabBarFont; = #6f7581;
+@tabBarButton; = #202225;
+@tabBarButtonHover; = #333;
+@tabBarButtonFont; = #777e8b;
+@tabBarButtonFontHover; = #bbb;
+
+@treeViewBg; = #2e323a;
+@treeViewFont; = #6f7581;
