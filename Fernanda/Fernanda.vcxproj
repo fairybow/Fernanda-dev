@@ -148,6 +148,7 @@
     <ClInclude Include="source\common\Svg.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
     <QtMoc Include="source\document\Document.h" />
+    <ClInclude Include="source\common\Xml.hpp" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
     <QtMoc Include="source\tabs\TabBar.h" />
     <QtMoc Include="source\tabs\TabControlBox.hpp" />
