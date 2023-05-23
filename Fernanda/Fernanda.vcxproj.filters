@@ -233,6 +233,15 @@
     <QtMoc Include="source\tabs\TabButton.hpp">
       <Filter>Source\Tabs</Filter>
     </QtMoc>
+    <QtMoc Include="source\tabs\CloseTab.hpp">
+      <Filter>Source\Tabs</Filter>
+    </QtMoc>
+    <QtMoc Include="source\tabs\AddTab.hpp">
+      <Filter>Source\Tabs</Filter>
+    </QtMoc>
+    <QtMoc Include="source\tabs\ScrollTabs.hpp">
+      <Filter>Source\Tabs</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">

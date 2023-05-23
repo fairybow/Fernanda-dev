@@ -34,7 +34,7 @@
 	width: 0px;
 }
 
-#TabBar QToolButton
+#TabButton
 {
 	border-radius: 3px;
 	padding: 1px;

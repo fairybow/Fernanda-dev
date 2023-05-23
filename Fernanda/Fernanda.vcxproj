@@ -155,6 +155,9 @@
     <QtMoc Include="source\tabs\TrueTabBar.hpp" />
     <ClInclude Include="source\document\TextDocument.hpp" />
     <QtMoc Include="source\tabs\TabButton.hpp" />
+    <QtMoc Include="source\tabs\CloseTab.hpp" />
+    <QtMoc Include="source\tabs\AddTab.hpp" />
+    <QtMoc Include="source\tabs\ScrollTabs.hpp" />
     <ClInclude Include="unused\Archiver.hpp" />
     <ClInclude Include="unused\splitter\SplitterHandle.hpp" />
     <ClInclude Include="unused\splitter\TrueSplitter.hpp" />

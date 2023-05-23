@@ -1,9 +1,11 @@
 #pragma once
 
 #include "../common/Svg.hpp"
+#include "../common/Widget.hpp"
 
 #include <QColor>
 #include <QEnterEvent>
+#include <QStyle>
 #include <QToolButton>
 
 class TabButton : public Widget<QToolButton>
@@ -20,12 +22,9 @@ public:
 		m_iconScale(iconScale),
 		m_flagScale(flagScale)
 	{
+		style()->unpolish(this);
+		style()->polish(this);
 		updateIcon();
-
-		//
-		// subclass for CloseButton, AddButton, Scrolls
-		//
-
 	}
 
 	bool flagged() const { return m_flagged; }
@@ -39,6 +38,13 @@ public:
 	}
 
 protected:
+	virtual void changeEvent(QEvent* event) override
+	{
+		if (event->type() == QEvent::StyleChange)
+			updateIcon();
+		QToolButton::changeEvent(event);
+	}
+
 	virtual void enterEvent(QEnterEvent* event) override
 	{
 		if (m_flag != Svg::Ui{}) {

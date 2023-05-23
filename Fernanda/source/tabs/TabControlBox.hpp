@@ -2,9 +2,8 @@
 
 #include "../common/Layout.hpp"
 #include "../common/Svg.hpp"
-
-#include <QTabBar>
-#include <QToolButton>
+#include "AddTab.hpp"
+#include "ScrollTabs.hpp"
 
 class TabControlBox : public QWidget
 {
@@ -12,10 +11,11 @@ class TabControlBox : public QWidget
 
 public:
 	TabControlBox(QTabBar* tabBar, QWidget* parent = nullptr)
-		: QWidget(parent), m_tabBar(tabBar)
+		: QWidget(parent),
+		m_scrollLeft(new ScrollTabs(tabBar, ScrollTabs::Side::Left)),
+		m_scrollRight(new ScrollTabs(tabBar, ScrollTabs::Side::Right))
 	{
 		build();
-		connections();
 	}
 
 	void setScrollerVisible(bool visible)
@@ -29,30 +29,16 @@ signals:
 	void addTabClicked();
 
 private:
-	QTabBar* m_tabBar;
-	QToolButton* m_add = new QToolButton;
-	QToolButton* m_scrollLeft = new QToolButton;
-	QToolButton* m_scrollRight = new QToolButton;
+	AddTab* m_add = new AddTab;
+	ScrollTabs* m_scrollLeft;
+	ScrollTabs* m_scrollRight;
 
 	void build()
 	{
-		m_add->setIcon(Svg::ui(Svg::Ui::Add, Qt::red));
-		m_scrollLeft->setIcon(Svg::ui(Svg::Ui::ChevronBack, Qt::red));
-		m_scrollRight->setIcon(Svg::ui(Svg::Ui::ChevronForward, Qt::red));
-		auto layout = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight }, this);
-		layout->setContentsMargins(0, 0, 4, 0);
-	}
-
-	void connections()
-	{
-		connect(m_add, &QToolButton::clicked, this, [&] {
+		connect(m_add, &AddTab::addTabClicked, this, [&] {
 			emit addTabClicked();
 			});
-		connect(m_scrollLeft, &QToolButton::clicked, this, [&] {
-			m_tabBar->setCurrentIndex(m_tabBar->currentIndex() - 1);
-			});
-		connect(m_scrollRight, &QToolButton::clicked, this, [&] {
-			m_tabBar->setCurrentIndex(m_tabBar->currentIndex() + 1);
-			});
+		auto layout = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight }, this);
+		layout->setContentsMargins(0, 0, 4, 0);
 	}
 };

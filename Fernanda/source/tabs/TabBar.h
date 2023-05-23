@@ -3,7 +3,7 @@
 #include "../common/Layout.hpp"
 #include "../common/Path.hpp"
 #include "../common/Widget.hpp"
-#include "TabButton.hpp"
+#include "CloseTab.hpp"
 #include "TabControlBox.hpp"
 #include "TrueTabBar.hpp"
 

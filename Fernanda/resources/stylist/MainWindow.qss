@@ -141,16 +141,18 @@ QSizeGrip
 	color: @tabBarFont;
 }
 
-#TabBar QToolButton
+#TabButton
 {
 	background: @tabBarButton;
 	color: @tabBarButtonFont;
+	qproperty-iconColor: @tabBarButtonFont;
 }
 
-#TabBar QToolButton:hover
+#TabButton:hover
 {
 	background: @tabBarButtonHover;
 	color: @tabBarButtonFontHover;
+	qproperty-iconColor: @tabBarButtonFontHover;
 }
 
 #TreeView

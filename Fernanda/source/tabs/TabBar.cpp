@@ -56,7 +56,7 @@ void TabBar::updateEditedState(QUuid id, bool edited)
 {
 	auto changed_index = index(id);
 	if (changed_index == -1) return;
-	auto button = qobject_cast<TabButton*>(
+	auto button = qobject_cast<CloseTab*>(
 		m_trueTabBar->tabButton(changed_index, QTabBar::RightSide));
 	if (button)
 		button->setEdited(edited);
@@ -122,8 +122,8 @@ int TabBar::create(QUuid id, StdFsPath titlePath)
 
 void TabBar::setButton(int index, QUuid id)
 {
-	auto button = new TabButton(id, this);
-	connect(button, &TabButton::askClose, this, [&](QUuid closing_id) {
+	auto button = new CloseTab(id, this);
+	connect(button, &CloseTab::askClose, this, [&](QUuid closing_id) {
 		// close tab
 		});
 	// delete button after closing tab
