@@ -16,6 +16,11 @@ public:
 		: Widget(name, parent)
 	{
 		updateIcon();
+
+		//
+		// subclass for CloseButton, AddButton, Scrolls
+		//
+
 	}
 
 	bool flagged() const { return m_flagged; }
