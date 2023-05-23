@@ -50,7 +50,7 @@ namespace Svg
 				return QByteArray();
 
 			auto color_name = color.name();
-			Xml::adjustAttributeCssValue(document,
+      Xml::adjustAttributeCssValue(document,
 				"line", "style", "stroke", color_name);
 			Xml::adjustAttributeCssValue(document,
 				"polyline", "style", "stroke", color_name);
