@@ -7,4 +7,7 @@ namespace Regex
 
 	constexpr char LEADING_WHITESPACE[] = \
 		"(\\s|\\n|\\r|\U00002029|^)+";
+
+	constexpr char FORMAT_XML_ATTRIBUTE_CSSVALUE[] = \
+		"%1:[^;]+";
 }

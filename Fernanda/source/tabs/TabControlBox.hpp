@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common/Layout.hpp"
+#include "../common/Svg.hpp"
 
 #include <QTabBar>
 #include <QToolButton>
@@ -35,9 +36,9 @@ private:
 
 	void build()
 	{
-		m_add->setText("+");
-		m_scrollLeft->setText("<");
-		m_scrollRight->setText(">");
+		m_add->setIcon(Svg::ui(Svg::Ui::Add, Qt::red));
+		m_scrollLeft->setIcon(Svg::ui(Svg::Ui::ChevronBack, Qt::red));
+		m_scrollRight->setIcon(Svg::ui(Svg::Ui::ChevronForward, Qt::red));
 		auto layout = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight }, this);
 		layout->setContentsMargins(0, 0, 4, 0);
 	}

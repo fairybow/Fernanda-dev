@@ -369,6 +369,12 @@
     <ClInclude Include="source\document\TextDocument.hpp">
       <Filter>Source\Document</Filter>
     </ClInclude>
+    <ClInclude Include="source\common\Svg.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\Xml.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">
@@ -389,6 +395,9 @@
       <Filter>Resources\External</Filter>
     </QtRcc>
     <QtRcc Include="resources\Indicator.qrc">
+      <Filter>Resources</Filter>
+    </QtRcc>
+    <QtRcc Include="resources\Ui.qrc">
       <Filter>Resources</Filter>
     </QtRcc>
   </ItemGroup>

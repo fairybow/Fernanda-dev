@@ -1,7 +1,8 @@
 #pragma once
 
+#include "../common/Svg.hpp"
+
 #include <QEnterEvent>
-#include <QPainter>
 #include <QTabBar>
 #include <QToolButton>
 #include <QUuid>
@@ -14,7 +15,7 @@ public:
 	TabButton(QUuid id, QWidget* parent = nullptr)
 		: QToolButton(parent), m_id(id)
 	{
-		updateText();
+		updateIcon();
 		connect(this, &QToolButton::clicked, this, [&] {
 			emit askClose(m_id);
 			});
@@ -25,7 +26,7 @@ public:
 	void setEdited(bool edited)
 	{
 		m_edited = edited;
-		updateText();
+		updateIcon();
 	}
 
 signals:
@@ -35,14 +36,14 @@ protected:
 	virtual void enterEvent(QEnterEvent* event) override
 	{
 		m_hoveredOver = true;
-		updateText();
+		updateIcon();
 		QToolButton::enterEvent(event);
 	}
 
 	virtual void leaveEvent(QEvent* event) override
 	{
 		m_hoveredOver = false;
-		updateText();
+		updateIcon();
 		QToolButton::leaveEvent(event);
 	}
 
@@ -51,9 +52,10 @@ private:
 	bool m_edited = false;
 	bool m_hoveredOver = false;
 
-	void updateText()
+	void updateIcon()
 	{
-		auto edited_flag = QString::fromUtf8("\u25CF");
-		setText((m_edited && !m_hoveredOver) ? edited_flag : "x");
+		auto edited_flag = Svg::ui(Svg::Ui::Ellipse, Qt::red, 0.5);
+		auto close = Svg::ui(Svg::Ui::Close, Qt::red);
+		setIcon((m_edited && !m_hoveredOver) ? edited_flag : close);
 	}
 };

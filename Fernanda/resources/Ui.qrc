@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ui/add-outline.svg</file>
+        <file>ui/chevron-back-outline.svg</file>
+        <file>ui/chevron-down-outline.svg</file>
+        <file>ui/chevron-forward-outline.svg</file>
+        <file>ui/chevron-up-outline.svg</file>
+        <file>ui/close-outline.svg</file>
+        <file>ui/ellipse.svg</file>
+    </qresource>
+</RCC>
