@@ -1,30 +1,83 @@
+/*
+
+Solarized color scheme:
+
+Dark background tones
+Base03 - #002b36
+Base02 - #073642
+
+Content tones
+Base01 - #586e75
+Base00 - #657b83
+Base0 - #839496
+Base1 - #93a1a1
+
+Light background tones
+Base2 - #eee8d5
+Base3 - #fdf6e3
+
+Accent colors
+Yellow - #b58900
+Orange - #cb4b16
+Red - #dc322f
+Magenta - #d33682
+Violet - #6c71c4
+Blue - #268bd2
+Cyan - #2aa198
+Green - #859900
+
+*/
+
+/* Solarized dark */
+
 @mainwindow_background; = #002b36;
 
+/* Menu bar */
+
 @menubar_background; = #002b36;
+
 @menubar_color; = #657b83;
+
 @menubar_itemselected_background; = #073642;
+
 @menubar_itemselected_color; = #586e75;
+
+/* Tab bar */
+
+@tabbar_background; = #001a22;
+
+@tabbar_color; = #657b83;
+
+@tabbar_tab_background; = #0f3a44;
+
+@tabbar_tabhover_background; = #1a424c;
+
+@tabbar_tabhover_color; = #586e75;
+
+@tabbar_tabselected_background; = #0f3a44;
+
+@tabbar_tabnotselected_background; = #04313c;
+
+@tabbarbutton_background; = #04313c;
+
+@tabbarbutton_color; = #657b83;
+
+@tabbarbutton_hover_background; = #073642;
+
+@tabbarbutton_hover_color; = #586e75;
+
+@tabbarbutton_pressed_background; = #04313c;
+
+/* Status bar */
 
 @meter_color; = #657b83;
 
 @statusbar_background; = #002b36;
 
 @statusbarbutton_background; = #002b36;
+
 @statusbarbutton_color; = #657b83;
+
 @statusbarbutton_hover_background; = #073642;
+
 @statusbarbutton_hover_color; = #586e75;
-
-@tabbar_background; = #001a22;
-@tabbar_color; = #657b83;
-
-@tabbar_tab_background; = #0f3a44;
-@tabbar_tabhover_background; = #1a424c;
-@tabbar_tabhover_color; = #586e75;
-@tabbar_tabselected_background; = #0f3a44;
-@tabbar_tabnotselected_background; = #04313c;
-
-@tabbarbutton_background; = #04313c;
-@tabbarbutton_color; = #657b83;
-@tabbarbutton_hover_background; = #073642;
-@tabbarbutton_hover_color; = #586e75;
-@tabbarbutton_pressed_background; = #04313c;
