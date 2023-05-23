@@ -132,12 +132,12 @@ QSizeGrip
 #TabBar
 {
 	background: @tabbar_background;
-	color: @tabbar_color;
 }
 
 #TabBar::tab
 {
 	background: @tabbar_tab_background;
+	color: @tabbar_tab_color;
 }
 
 #TabBar::tab:hover
