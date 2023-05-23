@@ -40,27 +40,23 @@ public:
 protected:
 	virtual void changeEvent(QEvent* event) override
 	{
+		QToolButton::changeEvent(event);
 		if (event->type() == QEvent::StyleChange)
 			updateIcon();
-		QToolButton::changeEvent(event);
 	}
 
 	virtual void enterEvent(QEnterEvent* event) override
 	{
-		if (m_flag != Svg::Ui{}) {
-			m_hoveredOver = true;
-			updateIcon();
-		}
 		QToolButton::enterEvent(event);
+		m_hoveredOver = true;
+		updateIcon();
 	}
 
 	virtual void leaveEvent(QEvent* event) override
 	{
-		if (m_flag != Svg::Ui{}) {
-			m_hoveredOver = false;
-			updateIcon();
-		}
 		QToolButton::leaveEvent(event);
+		m_hoveredOver = false;
+		updateIcon();
 	}
 
 private:
@@ -74,7 +70,7 @@ private:
 
 	void updateIcon()
 	{
-		setIcon((m_flagged && !m_hoveredOver)
+		setIcon((m_flagged && !m_hoveredOver && m_flag != Svg::Ui{})
 			? Svg::ui(m_flag, iconColor(), m_flagScale)
 			: Svg::ui(m_icon, iconColor(), m_iconScale));
 	}
