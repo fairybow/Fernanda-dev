@@ -50,9 +50,12 @@ namespace Svg
 				return QByteArray();
 
 			auto color_name = color.name();
-			Xml::adjustAttributeCssValue(document, "line", "style", "stroke", color_name);
-			Xml::adjustAttributeCssValue(document, "polyline", "style", "stroke", color_name);
-			Xml::addTagAttribute(document, "path", "fill", color_name);
+      Xml::adjustAttributeCssValue(document,
+				"line", "style", "stroke", color_name);
+			Xml::adjustAttributeCssValue(document,
+				"polyline", "style", "stroke", color_name);
+			Xml::addTagAttribute(document,
+				"path", "fill", color_name);
 
 			QBuffer buffer;
 			buffer.open(QIODevice::WriteOnly);
