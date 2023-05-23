@@ -2,35 +2,31 @@
 
 #include "../common/Svg.hpp"
 
+#include <QColor>
 #include <QEnterEvent>
-#include <QTabBar>
 #include <QToolButton>
-#include <QUuid>
 
-class TabButton : public QToolButton
+class TabButton : public Widget<QToolButton>
 {
-	Q_OBJECT
+	Q_OBJECT;
+	Q_PROPERTY(QColor iconColor READ iconColor WRITE setIconColor)
 
 public:
-	TabButton(QUuid id, QWidget* parent = nullptr)
-		: QToolButton(parent), m_id(id)
+	TabButton(const char* name, QWidget* parent = nullptr) // 2 scale args for icon and flag separately
+		: Widget(name, parent)
 	{
-		updateIcon();
-		connect(this, &QToolButton::clicked, this, [&] {
-			emit askClose(m_id);
-			});
-	}
-
-	bool edited() const { return m_edited; }
-
-	void setEdited(bool edited)
-	{
-		m_edited = edited;
 		updateIcon();
 	}
 
-signals:
-	void askClose(QUuid id);
+	bool flagged() const { return m_flagged; }
+	QColor iconColor() const { return m_iconColor; }
+	void setIconColor(const QColor& color) { m_iconColor = color; }
+
+	void setFlagged(bool flagged)
+	{
+		m_flagged = flagged;
+		updateIcon();
+	}
 
 protected:
 	virtual void enterEvent(QEnterEvent* event) override
@@ -48,14 +44,14 @@ protected:
 	}
 
 private:
-	QUuid m_id;
-	bool m_edited = false;
+	Svg::Ui m_icon;
+	Svg::Ui m_flag;
+	QColor m_iconColor = Qt::black;
+	bool m_flagged = false;
 	bool m_hoveredOver = false;
 
 	void updateIcon()
 	{
-		auto edited_flag = Svg::ui(Svg::Ui::Ellipse, Qt::red, 0.5);
-		auto close = Svg::ui(Svg::Ui::Close, Qt::red);
-		setIcon((m_edited && !m_hoveredOver) ? edited_flag : close);
+		setIcon((m_flagged && !m_hoveredOver) ? Svg::ui(m_flag, iconColor()) : Svg::ui(m_icon, iconColor()));
 	}
 };

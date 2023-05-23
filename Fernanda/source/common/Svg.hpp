@@ -20,6 +20,7 @@
 namespace Svg
 {
 	enum class Ui {
+		None, // how to handle this? needed?
 		Add,
 		ChevronBack,
 		ChevronDown,
