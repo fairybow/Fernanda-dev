@@ -18,8 +18,6 @@
 @scrollHandleHover; = #93a1a1;
 @scrollHandlePress; = #839496;
 
-@splitterHandle; = #fdf6e3;
-
 @statusBarBg; = #fdf6e3;
 @statusBarButton; = #fdf6e3;
 @statusBarButtonHover; = #eee8d5;
@@ -32,6 +30,8 @@
 @tabBarButtonHover; = #eee8d5;
 @tabBarButtonFont; = #586e75;
 @tabBarButtonFontHover; = #dc322f;
+@tabBg; = #fdf6e3;
+@tabBgHover; = #eee8d5;
 
 @treeViewBg; = #eee8d5;
 @treeViewFont; = #586e75;

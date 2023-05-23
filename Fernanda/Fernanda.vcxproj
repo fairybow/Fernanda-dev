@@ -163,7 +163,7 @@
     <ClInclude Include="unused\splitter\Splitter.h" />
     <ClInclude Include="unused\tree\StyledItemDelegate.hpp" />
     <ClInclude Include="unused\tree\TreeView.hpp" />
-    <QtMoc Include="unused\LaunchCop.hpp" />
+    <ClInclude Include="unused\LaunchCop.hpp" />
     <QtMoc Include="source\editor\Editor.h" />
     <QtMoc Include="source\editor\TrueEditor.h" />
     <ClInclude Include="source\common\HtmlString.hpp" />

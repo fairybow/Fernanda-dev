@@ -1,37 +1,30 @@
-@background; = #073642;
+@mainwindow_background; = #002b36;
 
-@menuBg; = #073642;
-@menuHover; = #002b36;
-@menuFont; = #93a1a1;
-@menuFontHover; = #859900;
+@menubar_background; = #002b36;
+@menubar_color; = #657b83;
+@menubar_itemselected_background; = #073642;
+@menubar_itemselected_color; = #586e75;
 
-@meterFont; = #93a1a1;
+@meter_color; = #657b83;
 
-@scrollBg; = #073642;
-@scrollButtonBg; = #073642;
-@scrollButtonHover; = #002b36;
-@scrollButtonPress; = #93a1a1;
-@scrollButtonFont; = #93a1a1;
-@scrollButtonFontHover; = #859900;
-@scrollButtonFontPress; = #073642;
-@scrollHandle; = #002b36;
-@scrollHandleHover; = #586e75;
-@scrollHandlePress; = #93a1a1;
+@statusbar_background; = #002b36;
 
-@splitterHandle; = #073642;
+@statusbarbutton_background; = #002b36;
+@statusbarbutton_color; = #657b83;
+@statusbarbutton_hover_background; = #073642;
+@statusbarbutton_hover_color; = #586e75;
 
-@statusBarBg; = #073642;
-@statusBarButton; = #073642;
-@statusBarButtonHover; = #002b36;
-@statusBarButtonFont; = #93a1a1;
-@statusBarButtonFontHover; = #859900;
+@tabbar_background; = #001a22;
+@tabbar_color; = #657b83;
 
-@tabBarBg; = #002b36;
-@tabBarFont; = #93a1a1;
-@tabBarButton; = #073642;
-@tabBarButtonHover; = #002b36;
-@tabBarButtonFont; = #93a1a1;
-@tabBarButtonFontHover; = #859900;
+@tabbar_tab_background; = #0f3a44;
+@tabbar_tabhover_background; = #1a424c;
+@tabbar_tabhover_color; = #586e75;
+@tabbar_tabselected_background; = #0f3a44;
+@tabbar_tabnotselected_background; = #04313c;
 
-@treeViewBg; = #002b36;
-@treeViewFont; = #93a1a1;
+@tabbarbutton_background; = #04313c;
+@tabbarbutton_color; = #657b83;
+@tabbarbutton_hover_background; = #073642;
+@tabbarbutton_hover_color; = #586e75;
+@tabbarbutton_pressed_background; = #04313c;

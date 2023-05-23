@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 ```
 */
 
-#pragma once
+/*#pragma once
 
 #include <QApplication>
 #include <QLocalServer>
@@ -100,4 +100,4 @@ private slots:
 
 		main_window->activateWindow();
 	}
-};
+};*/

@@ -212,9 +212,6 @@
     <QtMoc Include="source\tools\PomodoroTimer.hpp">
       <Filter>Source\Tools</Filter>
     </QtMoc>
-    <QtMoc Include="unused\LaunchCop.hpp">
-      <Filter>Unused</Filter>
-    </QtMoc>
     <QtMoc Include="source\menu\Slider.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
@@ -380,6 +377,9 @@
     </ClInclude>
     <ClInclude Include="source\tabs\AddTab.hpp">
       <Filter>Source\Tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="unused\LaunchCop.hpp">
+      <Filter>Unused</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
