@@ -51,10 +51,14 @@ namespace Svg
 				return QByteArray();
 
 			auto color_name = color.name();
-			Xml::adjustAttributeCssValue(document,
+			Xml::replaceAttributeCssValue(document,
+				"line", "style", "fill", color_name);
+			Xml::replaceAttributeCssValue(document,
 				"line", "style", "stroke", color_name);
-			Xml::adjustAttributeCssValue(document,
+			Xml::replaceAttributeCssValue(document,
 				"polyline", "style", "stroke", color_name);
+			Xml::addTagAttribute(document,
+				"path", "fill", color_name);
 			Xml::addTagAttribute(document,
 				"path", "fill", color_name);
 

@@ -5,17 +5,7 @@
 
 class AddTab : public TabButton
 {
-	Q_OBJECT
-
 public:
 	AddTab(QWidget* parent = nullptr)
-		: TabButton("TabButton", Svg::Ui::Add, parent)
-	{
-		connect(this, &TabButton::clicked, this, [&] {
-			emit addTabClicked();
-			});
-	}
-
-signals:
-	void addTabClicked();
+		: TabButton("TabButton", Svg::Ui::Add, parent) {}
 };

@@ -3,8 +3,9 @@
 #include "../common/Layout.hpp"
 #include "../common/Path.hpp"
 #include "../common/Widget.hpp"
+#include "AddTab.hpp"
 #include "CloseTab.hpp"
-#include "TabControlBox.hpp"
+#include "ScrollTabs.hpp"
 #include "TrueTabBar.hpp"
 
 #include <QString>
@@ -42,9 +43,10 @@ private:
 	static constexpr char DATA_TITLE[] = "tab_title";
 
 	TrueTabBar* m_trueTabBar;
-	TabControlBox* m_controlBox = new TabControlBox(m_trueTabBar);
+	AddTab* m_add = new AddTab;
+	ScrollTabs* m_scrollLeft = new ScrollTabs(m_trueTabBar, ScrollTabs::Side::Left);
+	ScrollTabs* m_scrollRight = new ScrollTabs(m_trueTabBar, ScrollTabs::Side::Right);
 
-	void nameObjects(const char* name);
 	void setupWidgets();
 	void connections();
 	bool isFull();

@@ -224,9 +224,6 @@
     <QtMoc Include="source\tabs\TabBar.h">
       <Filter>Source\Tabs</Filter>
     </QtMoc>
-    <QtMoc Include="source\tabs\TabControlBox.hpp">
-      <Filter>Source\Tabs</Filter>
-    </QtMoc>
     <QtMoc Include="source\tabs\TrueTabBar.hpp">
       <Filter>Source\Tabs</Filter>
     </QtMoc>
@@ -234,9 +231,6 @@
       <Filter>Source\Tabs</Filter>
     </QtMoc>
     <QtMoc Include="source\tabs\CloseTab.hpp">
-      <Filter>Source\Tabs</Filter>
-    </QtMoc>
-    <QtMoc Include="source\tabs\AddTab.hpp">
       <Filter>Source\Tabs</Filter>
     </QtMoc>
     <QtMoc Include="source\tabs\ScrollTabs.hpp">
@@ -383,6 +377,9 @@
     </ClInclude>
     <ClInclude Include="source\common\Xml.hpp">
       <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\tabs\AddTab.hpp">
+      <Filter>Source\Tabs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

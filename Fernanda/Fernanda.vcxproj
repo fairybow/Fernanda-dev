@@ -151,12 +151,11 @@
     <ClInclude Include="source\common\Xml.hpp" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
     <QtMoc Include="source\tabs\TabBar.h" />
-    <QtMoc Include="source\tabs\TabControlBox.hpp" />
     <QtMoc Include="source\tabs\TrueTabBar.hpp" />
     <ClInclude Include="source\document\TextDocument.hpp" />
     <QtMoc Include="source\tabs\TabButton.hpp" />
     <QtMoc Include="source\tabs\CloseTab.hpp" />
-    <QtMoc Include="source\tabs\AddTab.hpp" />
+    <ClInclude Include="source\tabs\AddTab.hpp" />
     <QtMoc Include="source\tabs\ScrollTabs.hpp" />
     <ClInclude Include="unused\Archiver.hpp" />
     <ClInclude Include="unused\splitter\SplitterHandle.hpp" />

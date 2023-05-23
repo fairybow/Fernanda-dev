@@ -1,9 +1,10 @@
 #include "TabBar.h"
 
 TabBar::TabBar(const char* name, int minTabSize, int maxTabSize, QWidget* parent)
-	: Widget(name, parent), m_trueTabBar(new TrueTabBar(minTabSize, maxTabSize))
+	: Widget(name, parent),
+	m_trueTabBar(new TrueTabBar(minTabSize, maxTabSize))
 {
-	nameObjects(name);
+	m_trueTabBar->setObjectName(name);
 	setupWidgets();
 	connections();
 }
@@ -62,23 +63,19 @@ void TabBar::updateEditedState(QUuid id, bool edited)
 		button->setEdited(edited);
 }
 
-void TabBar::nameObjects(const char* name)
-{
-	m_trueTabBar->setObjectName(name);
-	m_controlBox->setObjectName(name);
-}
-
 void TabBar::setupWidgets()
 {
-	auto layout = Layout::box(Layout::Line::Horizontally, { m_controlBox, m_trueTabBar }, this);
-	layout->setStretch(0, 0);
-	layout->setStretch(1, 1);
+	auto control_box = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight });
+	control_box->setContentsMargins(0, 0, 4, 0);
+	auto layout = Layout::box(Layout::Line::Horizontally, nullptr, this);
+	layout->addLayout(control_box, 0);
+	layout->addWidget(m_trueTabBar, 1);
 	Layout::setUniformSpacing(layout, 0);
 }
 
 void TabBar::connections()
 {
-	connect(m_controlBox, &TabControlBox::addTabClicked, this, [&] {
+	connect(m_add, &AddTab::clicked, this, [&] {
 		emit askNew();
 		});
 
@@ -106,7 +103,10 @@ bool TabBar::isFull()
 
 void TabBar::adjustControls()
 {
-	m_controlBox->setScrollerVisible(isFull());
+	auto visible = isFull();
+	m_scrollLeft->setVisible(visible);
+	m_scrollRight->setVisible(visible);
+	layout()->update();
 }
 
 int TabBar::create(QUuid id, StdFsPath titlePath)
