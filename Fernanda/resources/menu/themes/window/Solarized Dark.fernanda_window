@@ -22,7 +22,7 @@
 +------------------+---------+---------+
 */
 
-/* added colors: #001a22; #00232c; #012730; */
+/* added colors: #1c1c1c; #262626; #585858; */
 
 
 /* ---------------------------------- */
@@ -45,12 +45,12 @@
 
 /* --- Tab bar ---------------------- */
 
-@tabbar_background; = #001a22;
+@tabbar_background; = #1c1c1c;
 
-@tabbar_tab_background; = #00232c;
+@tabbar_tab_background; = #262626;
 @tabbar_tab_color; = #839496;
 
-@tabbar_tabhover_background; = #012730;
+@tabbar_tabhover_background; = #585858;
 @tabbar_tabhover_color; = #268bd2;
 
 @tabbar_tabselected_background; = #002b36;
@@ -75,5 +75,5 @@
 @statusbarbutton_hover_background; = #073642;
 @statusbarbutton_hover_color; = #268bd2;
 
-@statusbarbutton_pressed_background; = #001a22;
+@statusbarbutton_pressed_background; = #1c1c1c;
 @statusbarbutton_pressed_color; = #839496;
