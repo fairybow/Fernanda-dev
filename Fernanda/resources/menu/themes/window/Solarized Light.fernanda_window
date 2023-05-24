@@ -22,13 +22,14 @@
 +------------------+---------+---------+
 */
 
-/* added colors: #d5e8ee; #e3f1f6; #c7e0e9; */
+/* added colors: #ebebeb; #fcf3d9; */
 
 
 /* ---------------------------------- */
 
 @mainwindow_background; = #fdf6e3;
 @meter_color; = #586e75;
+
 
 
 /* --- Menu bar --------------------- */
@@ -43,14 +44,15 @@
 @menubar_itempressed_color; = #cb4b16;
 
 
+
 /* --- Tab bar ---------------------- */
 
-@tabbar_background; = #001a22;
+@tabbar_background; = #ebebeb;
 
-@tabbar_tab_background; = #00232c;
+@tabbar_tab_background; = #fcf3d9;
 @tabbar_tab_color; = #657b83;
 
-@tabbar_tabhover_background; = #012730;
+@tabbar_tabhover_background; = #eee8d5;
 @tabbar_tabhover_color; = #cb4b16;
 
 @tabbar_tabselected_background; = #fdf6e3;
@@ -65,6 +67,7 @@
 @tabbarbutton_pressed_color; = #657b83;
 
 
+
 /* --- Status bar ------------------- */
 
 @statusbar_background; = #fdf6e3;
@@ -75,5 +78,5 @@
 @statusbarbutton_hover_background; = #eee8d5;
 @statusbarbutton_hover_color; = #cb4b16;
 
-@statusbarbutton_pressed_background; = #001a22;
+@statusbarbutton_pressed_background; = #ebebeb;
 @statusbarbutton_pressed_color; = #657b83;
