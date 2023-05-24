@@ -22,10 +22,14 @@
 +------------------+---------+---------+
 */
 
+/* added colors: #001a22; #00232c; #012730; */
+
+
 /* ---------------------------------- */
 
 @mainwindow_background; = #002b36;
-@meter_color; = #93a1a1;
+@meter_color; = #839496;
+
 
 /* --- Menu bar --------------------- */
 
@@ -35,26 +39,31 @@
 @menubar_itemselected_background; = #073642;
 @menubar_itemselected_color; = #268bd2;
 
+@menubar_itempressed_background; = #073642;
+@menubar_itempressed_color; = #268bd2;
+
+
 /* --- Tab bar ---------------------- */
 
-@tabbar_background; = #fff;
+@tabbar_background; = #001a22;
 
-@tabbar_tab_background; = #fff;
-@tabbar_tab_color; = #fff;
+@tabbar_tab_background; = #00232c;
+@tabbar_tab_color; = #93a1a1;
 
-@tabbar_tabhover_background; = #fff;
-@tabbar_tabhover_color; = #fff;
+@tabbar_tabhover_background; = #012730;
+@tabbar_tabhover_color; = #268bd2;
 
-@tabbar_tabselected_background; = #fff;
-@tabbar_tabnotselected_background; = #fff;
+@tabbar_tabselected_background; = #002b36;
 
-@tabbarbutton_background; = #fff;
-@tabbarbutton_color; = #fff;
+@tabbarbutton_background; = #002b36;
+@tabbarbutton_color; = #93a1a1;
 
-@tabbarbutton_hover_background; = #fff;
-@tabbarbutton_hover_color; = #fff;
+@tabbarbutton_hover_background; = #073642;
+@tabbarbutton_hover_color; = #268bd2;
 
-@tabbarbutton_pressed_background; = #fff;
+@tabbarbutton_pressed_background; = #002b36;
+@tabbarbutton_pressed_color; = #93a1a1;
+
 
 /* --- Status bar ------------------- */
 
@@ -65,3 +74,6 @@
 
 @statusbarbutton_hover_background; = #073642;
 @statusbarbutton_hover_color; = #268bd2;
+
+@statusbarbutton_pressed_background; = #001a22;
+@statusbarbutton_pressed_color; = #93a1a1;

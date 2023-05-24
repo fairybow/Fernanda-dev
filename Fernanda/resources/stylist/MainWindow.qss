@@ -15,6 +15,12 @@
 	color: @menubar_itemselected_color;
 }
 
+#MenuBar::item:pressed
+{
+	background: @menubar_itempressed_background;
+	color: @menubar_itempressed_color;
+}
+
 #Meter
 {
 	color: @meter_color;
@@ -129,6 +135,12 @@ QSizeGrip
 	color: @statusbarbutton_hover_color;
 }
 
+#StatusBarButton:pressed
+{
+	background: @statusbarbutton_pressed_background;
+	color: @statusbarbutton_pressed_color;
+}
+
 #TabBar
 {
 	background: @tabbar_background;
@@ -151,11 +163,6 @@ QSizeGrip
 	background: @tabbar_tabselected_background;
 }
 
-#TabBar::tab:!selected
-{
-	background: @tabbar_tabnotselected_background;
-}
-
 #TabButton
 {
 	background: @tabbarbutton_background;
@@ -167,10 +174,11 @@ QSizeGrip
 {
 	background: @tabbarbutton_hover_background;
 	color: @tabbarbutton_hover_color;
-	qproperty-iconColor: @tabbarbutton_hover_color;
+	qproperty-iconColor: @tabbarbutton_hover_color; /* qproperty doesn't work on hover */
 }
 
 #TabButton:pressed
 {
 	background: @tabbarbutton_pressed_background;
+	color: @tabbarbutton_pressed_color;
 }
