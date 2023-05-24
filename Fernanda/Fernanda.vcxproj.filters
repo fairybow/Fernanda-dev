@@ -58,15 +58,6 @@
     <Filter Include="Source\Tools">
       <UniqueIdentifier>{754514d6-3538-451d-897e-36ad4a7af95e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Unused">
-      <UniqueIdentifier>{b22f5103-7bb4-40fb-a537-6136200f6f0f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Unused\Splitter">
-      <UniqueIdentifier>{82d7f2e5-d306-46a3-b618-c5f2630c3e6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Unused\Tree">
-      <UniqueIdentifier>{e55978b7-707a-49f4-86c0-98357a246181}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Document">
       <UniqueIdentifier>{4148ff82-b621-4d53-97fd-fc587ea06125}</UniqueIdentifier>
     </Filter>
@@ -265,14 +256,14 @@
     <ClCompile Include="source\Meter.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="unused\splitter\Splitter.cpp">
-      <Filter>Unused\Splitter</Filter>
-    </ClCompile>
     <ClCompile Include="source\document\Document.cpp">
       <Filter>Source\Document</Filter>
     </ClCompile>
     <ClCompile Include="source\tabs\TabBar.cpp">
       <Filter>Source\Tabs</Filter>
+    </ClCompile>
+    <ClCompile Include="unused\splitter\Splitter.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -339,24 +330,6 @@
     <ClInclude Include="source\IniKeys.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="unused\splitter\SplitterHandle.hpp">
-      <Filter>Unused\Splitter</Filter>
-    </ClInclude>
-    <ClInclude Include="unused\splitter\Splitter.h">
-      <Filter>Unused\Splitter</Filter>
-    </ClInclude>
-    <ClInclude Include="unused\splitter\TrueSplitter.hpp">
-      <Filter>Unused\Splitter</Filter>
-    </ClInclude>
-    <ClInclude Include="unused\Archiver.hpp">
-      <Filter>Unused</Filter>
-    </ClInclude>
-    <ClInclude Include="unused\tree\StyledItemDelegate.hpp">
-      <Filter>Unused\Tree</Filter>
-    </ClInclude>
-    <ClInclude Include="unused\tree\TreeView.hpp">
-      <Filter>Unused\Tree</Filter>
-    </ClInclude>
     <ClInclude Include="source\document\DocumentCache.hpp">
       <Filter>Source\Document</Filter>
     </ClInclude>
@@ -369,17 +342,11 @@
     <ClInclude Include="source\document\TextDocument.hpp">
       <Filter>Source\Document</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\Svg.hpp">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\Xml.hpp">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
     <ClInclude Include="source\tabs\AddTab.hpp">
       <Filter>Source\Tabs</Filter>
     </ClInclude>
-    <ClInclude Include="unused\LaunchCop.hpp">
-      <Filter>Unused</Filter>
+    <ClInclude Include="source\common\Icon.hpp">
+      <Filter>Source\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

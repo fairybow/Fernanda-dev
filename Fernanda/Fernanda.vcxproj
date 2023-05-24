@@ -145,10 +145,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Emoji.hpp" />
-    <ClInclude Include="source\common\Svg.hpp" />
+    <ClInclude Include="source\common\Icon.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
     <QtMoc Include="source\document\Document.h" />
-    <ClInclude Include="source\common\Xml.hpp" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
     <QtMoc Include="source\tabs\TabBar.h" />
     <QtMoc Include="source\tabs\TrueTabBar.hpp" />
@@ -157,13 +156,6 @@
     <QtMoc Include="source\tabs\CloseTab.hpp" />
     <ClInclude Include="source\tabs\AddTab.hpp" />
     <QtMoc Include="source\tabs\ScrollTabs.hpp" />
-    <ClInclude Include="unused\Archiver.hpp" />
-    <ClInclude Include="unused\splitter\SplitterHandle.hpp" />
-    <ClInclude Include="unused\splitter\TrueSplitter.hpp" />
-    <ClInclude Include="unused\splitter\Splitter.h" />
-    <ClInclude Include="unused\tree\StyledItemDelegate.hpp" />
-    <ClInclude Include="unused\tree\TreeView.hpp" />
-    <ClInclude Include="unused\LaunchCop.hpp" />
     <QtMoc Include="source\editor\Editor.h" />
     <QtMoc Include="source\editor\TrueEditor.h" />
     <ClInclude Include="source\common\HtmlString.hpp" />

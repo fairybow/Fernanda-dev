@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include "Xml.hpp"
 
@@ -89,3 +89,4 @@ namespace Svg
 		return QIcon();
 	}
 }
+*/
