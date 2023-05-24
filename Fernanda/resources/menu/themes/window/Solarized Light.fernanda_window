@@ -22,25 +22,25 @@
 +------------------+---------+---------+
 */
 
-/* added colors: #001a22; #00232c; #012730; */
+/* added colors: #d5e8ee; #e3f1f6; #c7e0e9; */
 
 
 /* ---------------------------------- */
 
-@mainwindow_background; = #002b36;
-@meter_color; = #839496;
+@mainwindow_background; = #fdf6e3;
+@meter_color; = #586e75;
 
 
 /* --- Menu bar --------------------- */
 
-@menubar_background; = #002b36;
-@menubar_color; = #93a1a1;
+@menubar_background; = #fdf6e3;
+@menubar_color; = #657b83;
 
-@menubar_itemselected_background; = #073642;
-@menubar_itemselected_color; = #268bd2;
+@menubar_itemselected_background; = #eee8d5;
+@menubar_itemselected_color; = #cb4b16;
 
-@menubar_itempressed_background; = #073642;
-@menubar_itempressed_color; = #268bd2;
+@menubar_itempressed_background; = #eee8d5;
+@menubar_itempressed_color; = #cb4b16;
 
 
 /* --- Tab bar ---------------------- */
@@ -48,32 +48,32 @@
 @tabbar_background; = #001a22;
 
 @tabbar_tab_background; = #00232c;
-@tabbar_tab_color; = #93a1a1;
+@tabbar_tab_color; = #657b83;
 
 @tabbar_tabhover_background; = #012730;
-@tabbar_tabhover_color; = #268bd2;
+@tabbar_tabhover_color; = #cb4b16;
 
-@tabbar_tabselected_background; = #002b36;
+@tabbar_tabselected_background; = #fdf6e3;
 
-@tabbarbutton_background; = #002b36;
-@tabbarbutton_color; = #93a1a1;
+@tabbarbutton_background; = #fdf6e3;
+@tabbarbutton_color; = #657b83;
 
-@tabbarbutton_hover_background; = #073642;
-@tabbarbutton_hover_color; = #268bd2;
+@tabbarbutton_hover_background; = #eee8d5;
+@tabbarbutton_hover_color; = #cb4b16;
 
-@tabbarbutton_pressed_background; = #002b36;
-@tabbarbutton_pressed_color; = #93a1a1;
+@tabbarbutton_pressed_background; = #fdf6e3;
+@tabbarbutton_pressed_color; = #657b83;
 
 
 /* --- Status bar ------------------- */
 
-@statusbar_background; = #002b36;
+@statusbar_background; = #fdf6e3;
 
-@statusbarbutton_background; = #002b36;
-@statusbarbutton_color; = #93a1a1;
+@statusbarbutton_background; = #fdf6e3;
+@statusbarbutton_color; = #657b83;
 
-@statusbarbutton_hover_background; = #073642;
-@statusbarbutton_hover_color; = #268bd2;
+@statusbarbutton_hover_background; = #eee8d5;
+@statusbarbutton_hover_color; = #cb4b16;
 
 @statusbarbutton_pressed_background; = #001a22;
-@statusbarbutton_pressed_color; = #93a1a1;
+@statusbarbutton_pressed_color; = #657b83;
