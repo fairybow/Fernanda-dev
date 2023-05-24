@@ -1,61 +1,77 @@
 #pragma once
 
 #include "../common/Svg.hpp"
+#include "../common/Widget.hpp"
 
+#include <QColor>
 #include <QEnterEvent>
-#include <QTabBar>
+#include <QStyle>
 #include <QToolButton>
-#include <QUuid>
 
-class TabButton : public QToolButton
+class TabButton : public Widget<QToolButton>
 {
-	Q_OBJECT
+	Q_OBJECT;
+	Q_PROPERTY(QColor iconColor READ iconColor WRITE setIconColor)
 
 public:
-	TabButton(QUuid id, QWidget* parent = nullptr)
-		: QToolButton(parent), m_id(id)
+	TabButton(const char* name, Svg::Ui icon, QWidget* parent = nullptr,
+		Svg::Ui flag = Svg::Ui{}, double iconScale = 1.0, double flagScale = 1.0)
+		: Widget(name, parent),
+		m_icon(icon),
+		m_flag(flag),
+		m_iconScale(iconScale),
+		m_flagScale(flagScale)
 	{
-		updateIcon();
-		connect(this, &QToolButton::clicked, this, [&] {
-			emit askClose(m_id);
-			});
-	}
-
-	bool edited() const { return m_edited; }
-
-	void setEdited(bool edited)
-	{
-		m_edited = edited;
+		style()->unpolish(this);
+		style()->polish(this);
 		updateIcon();
 	}
 
-signals:
-	void askClose(QUuid id);
+	bool flagged() const { return m_flagged; }
+	QColor iconColor() const { return m_iconColor; }
+	void setIconColor(const QColor& color) { m_iconColor = color; }
+
+	void setFlagged(bool flagged)
+	{
+		m_flagged = flagged;
+		updateIcon();
+	}
 
 protected:
+	virtual void changeEvent(QEvent* event) override
+	{
+		QToolButton::changeEvent(event);
+		if (event->type() == QEvent::StyleChange)
+			updateIcon();
+	}
+
 	virtual void enterEvent(QEnterEvent* event) override
 	{
+		QToolButton::enterEvent(event);
 		m_hoveredOver = true;
 		updateIcon();
-		QToolButton::enterEvent(event);
 	}
 
 	virtual void leaveEvent(QEvent* event) override
 	{
+		QToolButton::leaveEvent(event);
 		m_hoveredOver = false;
 		updateIcon();
-		QToolButton::leaveEvent(event);
 	}
 
 private:
-	QUuid m_id;
-	bool m_edited = false;
+	Svg::Ui m_icon;
+	Svg::Ui m_flag;
+	double m_iconScale;
+	double m_flagScale;
+	QColor m_iconColor = Qt::black;
+	bool m_flagged = false;
 	bool m_hoveredOver = false;
 
 	void updateIcon()
 	{
-		auto edited_flag = Svg::ui(Svg::Ui::Ellipse, Qt::red, 0.5);
-		auto close = Svg::ui(Svg::Ui::Close, Qt::red);
-		setIcon((m_edited && !m_hoveredOver) ? edited_flag : close);
+		setIcon((m_flagged && !m_hoveredOver && m_flag != Svg::Ui{})
+			? Svg::ui(m_flag, iconColor(), m_flagScale)
+			: Svg::ui(m_icon, iconColor(), m_iconScale));
 	}
 };

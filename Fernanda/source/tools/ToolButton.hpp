@@ -12,6 +12,12 @@ public:
 		: StatusBarButton("StatusBarButton", text, parent, 0.3)
 	{
 		setCheckable(true);
+
+		// Fix highlighting issue:
+		// even though opacity should reverse,
+		// highlight should remain while hovered;
+		// address like TabButton
+
 	}
 
 public slots:

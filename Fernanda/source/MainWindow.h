@@ -46,7 +46,7 @@ private:
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_user->documents(), m_isDev);
 	StatusBar* m_statusBar = new StatusBar("StatusBar");
 	Indicator* m_indicator = new Indicator("Indicator");
-	TabBar* m_tabBar = new TabBar("TabBar", 50, 200);
+	TabBar* m_tabBar = new TabBar("TabBar", 100, 200);
 	Editor* m_editor = new Editor("Editor", QFont("mononoki", 12));
 	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");

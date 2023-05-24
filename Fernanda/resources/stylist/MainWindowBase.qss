@@ -1,9 +1,15 @@
-#Editor, #TreeView
+#Editor
 {
 	border: none;
 }
 
-#MenuBar, #Meter, QDialog, QDialog QLabel, QDialog QPushButton, QMenu, #StatusBar, #TabBar, #TreeView
+#Indicator
+{
+	background: transparent;
+	border: none;
+}
+
+#MenuBar, #Meter, QDialog, QDialog QLabel, QDialog QPushButton, QMenu, #StatusBar, #TabBar
 {
 	font-size: 9pt;
 }
@@ -34,7 +40,12 @@
 	width: 0px;
 }
 
-#TabBar QToolButton
+#TabBar::tab:!selected
+{
+	margin-top: 2px;
+}
+
+#TabButton
 {
 	border-radius: 3px;
 	padding: 1px;

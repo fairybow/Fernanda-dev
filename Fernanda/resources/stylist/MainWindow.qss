@@ -1,29 +1,29 @@
 #MainWindow
 {
-	background-color: @background;
-}
-
-#Indicator
-{
-	background: transparent;
-	border: none;
+	background-color: @mainwindow_background;
 }
 
 #MenuBar, QMenu
 {
-	background: @menuBg;
-	color: @menuFont;
+	background: @menubar_background;
+	color: @menubar_color;
 }
 
 #MenuBar::item:selected, QMenu::item:selected
 {
-	background: @menuHover;
-	color: @menuFontHover;
+	background: @menubar_itemselected_background;
+	color: @menubar_itemselected_color;
+}
+
+#MenuBar::item:pressed
+{
+	background: @menubar_itempressed_background;
+	color: @menubar_itempressed_color;
 }
 
 #Meter
 {
-	color: @meterFont;
+	color: @meter_color;
 }
 
 QSizeGrip
@@ -112,7 +112,7 @@ QSizeGrip
 
 #StatusBar
 {
-	background-color: @statusBarBg;
+	background-color: @statusbar_background;
 	border: none;
 }
 
@@ -123,38 +123,62 @@ QSizeGrip
 
 #StatusBarButton
 {
-	background: @statusBarButton;
+	background: @statusbarbutton_background;
 	border: transparent;
 	border-radius: 3px;
-	color: @statusBarButtonFont;
+	color: @statusbarbutton_color;
 }
 
 #StatusBarButton:hover
 {
-	background: @statusBarButtonHover;
-	color: @statusBarButtonFontHover;
+	background: @statusbarbutton_hover_background;
+	color: @statusbarbutton_hover_color;
+}
+
+#StatusBarButton:pressed
+{
+	background: @statusbarbutton_pressed_background;
+	color: @statusbarbutton_pressed_color;
 }
 
 #TabBar
 {
-	background: @tabBarBg;
-	color: @tabBarFont;
+	background: @tabbar_background;
 }
 
-#TabBar QToolButton
+#TabBar::tab
 {
-	background: @tabBarButton;
-	color: @tabBarButtonFont;
+	background: @tabbar_tab_background;
+	color: @tabbar_tab_color;
 }
 
-#TabBar QToolButton:hover
+#TabBar::tab:hover
 {
-	background: @tabBarButtonHover;
-	color: @tabBarButtonFontHover;
+	background: @tabbar_tabhover_background;
+	color: @tabbar_tabhover_color;
 }
 
-#TreeView
+#TabBar::tab:selected
 {
-	background: @treeViewBg;
-	color: @treeViewFont;
+	background: @tabbar_tabselected_background;
+}
+
+#TabButton
+{
+	background: @tabbarbutton_background;
+	color: @tabbarbutton_color;
+	qproperty-iconColor: @tabbarbutton_color;
+}
+
+#TabButton:hover
+{
+	background: @tabbarbutton_hover_background;
+	color: @tabbarbutton_hover_color;
+	qproperty-iconColor: @tabbarbutton_hover_color; /* qproperty doesn't work on hover */
+}
+
+#TabButton:pressed
+{
+	background: @tabbarbutton_pressed_background;
+	color: @tabbarbutton_pressed_color;
 }

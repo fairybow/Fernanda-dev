@@ -1,37 +1,82 @@
-@background; = #fdf6e3;
+/* Solarized color scheme:
++------------------+---------+---------+
+| Dark Background  | Base03  | #002b36 |
+| Tones            | Base02  | #073642 |
++------------------+---------+---------+
+| Content Tones    | Base01  | #586e75 |
+|                  | Base00  | #657b83 |
+|                  | Base0   | #839496 |
+|                  | Base1   | #93a1a1 |
++------------------+---------+---------+
+| Light Background | Base2   | #eee8d5 |
+| Tones            | Base3   | #fdf6e3 |
++------------------+---------+---------+
+| Accent Colors    | Yellow  | #b58900 |
+|                  | Orange  | #cb4b16 |
+|                  | Red     | #dc322f |
+|                  | Magenta | #d33682 |
+|                  | Violet  | #6c71c4 |
+|                  | Blue    | #268bd2 |
+|                  | Cyan    | #2aa198 |
+|                  | Green   | #859900 |
++------------------+---------+---------+
+*/
 
-@menuBg; = #fdf6e3;
-@menuHover; = #eee8d5;
-@menuFont; = #586e75;
-@menuFontHover; = #dc322f;
+/* added colors: #ebebeb; #fcf3d9; */
 
-@meterFont; = #586e75;
 
-@scrollBg; = #fdf6e3;
-@scrollButtonBg; = #fdf6e3;
-@scrollButtonHover; = #eee8d5;
-@scrollButtonPress; = #bbb6a7;
-@scrollButtonFont; = #586e75;
-@scrollButtonFontHover; = #dc322f;
-@scrollButtonFontPress; = #fdf6e3;
-@scrollHandle; = #bbb6a7;
-@scrollHandleHover; = #93a1a1;
-@scrollHandlePress; = #839496;
+/* ---------------------------------- */
 
-@splitterHandle; = #fdf6e3;
+@mainwindow_background; = #fdf6e3;
+@meter_color; = #586e75;
 
-@statusBarBg; = #fdf6e3;
-@statusBarButton; = #fdf6e3;
-@statusBarButtonHover; = #eee8d5;
-@statusBarButtonFont; = #586e75;
-@statusBarButtonFontHover; = #dc322f;
 
-@tabBarBg; = #eee8d5;
-@tabBarFont; = #586e75;
-@tabBarButton; = #fdf6e3;
-@tabBarButtonHover; = #eee8d5;
-@tabBarButtonFont; = #586e75;
-@tabBarButtonFontHover; = #dc322f;
 
-@treeViewBg; = #eee8d5;
-@treeViewFont; = #586e75;
+/* --- Menu bar --------------------- */
+
+@menubar_background; = #fdf6e3;
+@menubar_color; = #657b83;
+
+@menubar_itemselected_background; = #eee8d5;
+@menubar_itemselected_color; = #cb4b16;
+
+@menubar_itempressed_background; = #eee8d5;
+@menubar_itempressed_color; = #cb4b16;
+
+
+
+/* --- Tab bar ---------------------- */
+
+@tabbar_background; = #ebebeb;
+
+@tabbar_tab_background; = #fcf3d9;
+@tabbar_tab_color; = #657b83;
+
+@tabbar_tabhover_background; = #eee8d5;
+@tabbar_tabhover_color; = #cb4b16;
+
+@tabbar_tabselected_background; = #fdf6e3;
+
+@tabbarbutton_background; = #fdf6e3;
+@tabbarbutton_color; = #657b83;
+
+@tabbarbutton_hover_background; = #eee8d5;
+@tabbarbutton_hover_color; = #cb4b16;
+
+@tabbarbutton_pressed_background; = #fdf6e3;
+@tabbarbutton_pressed_color; = #657b83;
+
+
+
+/* --- Status bar ------------------- */
+
+@statusbar_background; = #fdf6e3;
+
+@statusbarbutton_background; = #fdf6e3;
+@statusbarbutton_color; = #657b83;
+
+@statusbarbutton_hover_background; = #eee8d5;
+@statusbarbutton_hover_color; = #cb4b16;
+
+@statusbarbutton_pressed_background; = #ebebeb;
+@statusbarbutton_pressed_color; = #657b83;

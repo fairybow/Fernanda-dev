@@ -28,3 +28,5 @@
 @scrollHandle; = #c5c5c5;
 @scrollHandleHover; = #bababa;
 @scrollHandlePress; = #a4a4a4;
+
+/* UPDATE */
