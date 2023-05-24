@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include "RegexPatterns.hpp"
 
@@ -44,3 +44,4 @@ namespace Xml
 		}
 	}
 }
+*/

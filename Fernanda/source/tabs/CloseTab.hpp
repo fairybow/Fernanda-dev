@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/Svg.hpp"
+#include "../common/Icon.hpp"
 #include "TabButton.hpp"
 
 #include <QUuid>
@@ -11,7 +11,7 @@ class CloseTab : public TabButton
 
 public:
 	CloseTab(QUuid id, QWidget* parent = nullptr)
-		: TabButton("TabButton", Svg::Ui::Close, parent, Svg::Ui::Ellipse, 1.0, 0.5),
+		: TabButton("TabButton", Icon::Ui::Close, parent, Icon::Ui::Ellipse),
 		m_id(id)
 	{
 		connect(this, &CloseTab::clicked, this, [&] {

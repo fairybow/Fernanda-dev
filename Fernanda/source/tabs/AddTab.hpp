@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../common/Svg.hpp"
+#include "../common/Icon.hpp"
 #include "TabButton.hpp"
 
 class AddTab : public TabButton
 {
 public:
 	AddTab(QWidget* parent = nullptr)
-		: TabButton("TabButton", Svg::Ui::Add, parent) {}
+		: TabButton("TabButton", Icon::Ui::Add, parent) {}
 };

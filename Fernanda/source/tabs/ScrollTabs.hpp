@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/Svg.hpp"
+#include "../common/Icon.hpp"
 #include "TabButton.hpp"
 
 #include <QTabBar>
@@ -27,8 +27,8 @@ private:
 	QTabBar* m_tabBar;
 	Side m_side;
 
-	Svg::Ui icon(Side side)
+	Icon::Ui icon(Side side)
 	{
-		return (side == Side::Left) ? Svg::Ui::ChevronBack : Svg::Ui::ChevronForward;
+		return (side == Side::Left) ? Icon::Ui::ChevronLeft : Icon::Ui::ChevronRight;
 	}
 };

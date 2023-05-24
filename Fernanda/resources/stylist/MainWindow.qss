@@ -167,14 +167,12 @@ QSizeGrip
 {
 	background: @tabbarbutton_background;
 	color: @tabbarbutton_color;
-	qproperty-iconColor: @tabbarbutton_color;
 }
 
 #TabButton:hover
 {
 	background: @tabbarbutton_hover_background;
 	color: @tabbarbutton_hover_color;
-	qproperty-iconColor: @tabbarbutton_hover_color; /* qproperty doesn't work on hover */
 }
 
 #TabButton:pressed
