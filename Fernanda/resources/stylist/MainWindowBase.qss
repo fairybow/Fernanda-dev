@@ -40,6 +40,11 @@
 	width: 0px;
 }
 
+#TabBar::tab:!selected
+{
+	margin-top: 2px;
+}
+
 #TabButton
 {
 	border-radius: 3px;
