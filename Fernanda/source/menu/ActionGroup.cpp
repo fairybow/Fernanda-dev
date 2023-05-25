@@ -6,7 +6,7 @@ ActionGroup::Bespoke ActionGroup::bespoke(QVariant data, QString label)
 }
 
 ActionGroup* ActionGroup::fromQrc(const QStringList& qrcPaths, QStringList extensions,
-	StdFsPathList systemPaths, QObject* parent, std::function<void()> slot)
+	StdFsPathList systemPaths, QObject* parent, Slot slot)
 {
 	auto group = new ActionGroup(parent);
 	checkExtensions(extensions);
@@ -21,20 +21,20 @@ ActionGroup* ActionGroup::fromQrc(const QStringList& qrcPaths, QStringList exten
 }
 
 ActionGroup* ActionGroup::fromQrc(const QString& qrcPath, QString extension,
-	StdFsPath systemPath, QObject* parent, std::function<void()> slot)
+	StdFsPath systemPath, QObject* parent, Slot slot)
 {
 	return fromQrc(QStringList{ qrcPath }, QStringList{ extension },
 		StdFsPathList{ systemPath }, parent, slot);
 }
 
 ActionGroup* ActionGroup::fromQrc(const QStringList& qrcPaths, QStringList extensions,
-	StdFsPath systemPath, QObject* parent, std::function<void()> slot)
+	StdFsPath systemPath, QObject* parent, Slot slot)
 {
 	return fromQrc(qrcPaths, extensions, StdFsPathList{ systemPath }, parent, slot);
 }
 
 ActionGroup* ActionGroup::fromBespoke(BespokeList entries, QObject* parent,
-	std::function<void()> slot)
+	Slot slot)
 {
 	auto group = new ActionGroup(parent);
 	for (auto& data_pair : entries) {
@@ -49,7 +49,7 @@ ActionGroup* ActionGroup::fromBespoke(BespokeList entries, QObject* parent,
 }
 
 void ActionGroup::addActionToGroup(ActionGroup* actionGroup, const QString& label,
-	const QVariant& data, QObject* parent, std::function<void()> slot)
+	const QVariant& data, QObject* parent, Slot slot)
 {
 	auto action = new QAction(tr(label.toUtf8()), actionGroup);
 	action->setData(data);

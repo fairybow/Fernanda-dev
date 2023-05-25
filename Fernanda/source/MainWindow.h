@@ -40,6 +40,9 @@ protected:
 	virtual void showEvent(QShowEvent* event) override;
 
 private:
+	const bool m_isDev;
+	bool m_isInitialized = false;
+
 	User* m_user = new User(QCoreApplication::applicationName(), this);
 	Document* m_document = new Document(m_user->temp(), m_user->backup(), 3/* <-- test */, this);
 	//Project* m_project = new Project(this);
@@ -55,9 +58,6 @@ private:
 	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop(Emoji::PUSHPIN, this);
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 
-	const bool m_isDev;
-	bool m_isInitialized = false;
-
 	void setupWidgets();
 	void connections();
 	void documentConnections();
@@ -71,6 +71,7 @@ private:
 	void menuBarMeterConfigConnections();
 	void menuBarToolConfigConnections();
 	void menuBarMiscConfigConnections();
+	void menuBarDevConnections();
 	void loadConfigs();
 	void loadEditorConfigs();
 	//void loadPreviewConfigs();

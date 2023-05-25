@@ -26,6 +26,27 @@ public:
 	void unStyle();
 	void setThemeEnabled(QWidget* styleeWidget, bool hasTheme);
 
+	void devClass()
+	{
+		qDebug() << __FUNCTION__;
+		for (auto& stylee : m_stylees) {
+			qDebug() << "Widget:" << stylee.widget;
+			qDebug() << "Base sheet path:" << stylee.baseSheet;
+			qDebug() << "Style sheet path:" << stylee.styleSheet;
+			qDebug() << "Current theme sheet path:" << stylee.currentThemeSheet;
+			qDebug() << "Has theme:" << stylee.hasTheme;
+		}
+	}
+
+	void devStyleSheets()
+	{
+		qDebug() << __FUNCTION__;
+		for (auto& stylee : m_stylees) {
+			qDebug() << "Widget:" << stylee.widget;
+			qDebug() << stylee.widget->styleSheet();
+		}
+	}
+
 private:
 	enum class Mode {
 		Style,

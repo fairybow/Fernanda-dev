@@ -185,9 +185,6 @@
     <QtMoc Include="source\menu\MenuBar.h">
       <Filter>Source\Menu</Filter>
     </QtMoc>
-    <QtMoc Include="source\menu\ActionGroup.h">
-      <Filter>Source\Menu</Filter>
-    </QtMoc>
     <QtMoc Include="source\editor\BlockCursor.hpp">
       <Filter>Source\Editor</Filter>
     </QtMoc>
@@ -347,6 +344,9 @@
     </ClInclude>
     <ClInclude Include="source\common\Icon.hpp">
       <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\ActionGroup.h">
+      <Filter>Source\Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
