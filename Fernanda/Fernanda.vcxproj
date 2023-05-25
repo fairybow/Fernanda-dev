@@ -176,7 +176,7 @@
     <QtMoc Include="source\menu\Popup.hpp" />
     <ClInclude Include="source\menu\PopupText.hpp" />
     <QtMoc Include="source\menu\VersionChecker.hpp" />
-    <QtMoc Include="source\menu\ActionGroup.h" />
+    <ClInclude Include="source\menu\ActionGroup.h" />
     <QtMoc Include="source\Meter.h" />
     <QtMoc Include="source\menu\Slider.hpp" />
     <ClInclude Include="source\preview\Preview.hpp" />
