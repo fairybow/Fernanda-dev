@@ -95,6 +95,8 @@ signals:
 	void askToggleIndicator(bool state);
 	void askSetIndicatorAlignment(const QString& alignment);
 	void askSetPreviewType(const QString& type);
+	void devStylist();
+	void devStylistStyleSheets();
 
 private:
 	static constexpr char CHECK_BOX_EDITOR_THEME[] = "has_editor_theme";
@@ -126,12 +128,12 @@ private:
 	static constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
 	static constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
 
+	const bool m_isDev;
 	const StdFsPath m_userData;
 	const StdFsPath m_userDocuments;
 	std::map<QString, ActionGroup*> m_actionGroups;
 	std::map<QString, int> m_sliderValues;
 	std::map<QString, bool> m_checkBoxStates;
-	const bool m_isDev;
 
 	void makeActionGroups();
 	void makeBespokeActionGroups();
@@ -139,6 +141,7 @@ private:
 	void project();
 	void view();
 	void help();
+	void dev();
 	void addActionsToBoxes(QComboBox* comboBox, ActionGroup* actionGroup);
 	void addFontDialog(QMdiArea* multiDocArea);
 	LiveFontDialog* fontDialog();

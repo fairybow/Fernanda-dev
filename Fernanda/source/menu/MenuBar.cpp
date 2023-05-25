@@ -16,6 +16,8 @@ void MenuBar::makeSubmenus()
 	//project();
 	view();
 	help();
+	if (m_isDev)
+		dev();
 }
 
 void MenuBar::makeActionGroups()
@@ -121,6 +123,21 @@ void MenuBar::help()
 
 	auto menu = addMenu(tr("&Help"));
 	for (const auto& action : { about, check_for_updates })
+		menu->addAction(action);
+}
+
+void MenuBar::dev()
+{
+	auto stylist = new QAction(tr("&Stylist class info"), this);
+	auto stylist_stylesheets = new QAction(tr("&Stylist style sheets"), this);
+	connect(stylist, &QAction::triggered, this, [&] {
+		emit devStylist();
+		});
+	connect(stylist_stylesheets, &QAction::triggered, this, [&] {
+		emit devStylistStyleSheets();
+		});
+	auto menu = addMenu(tr("&Dev"));
+	for (const auto& action : { stylist, stylist_stylesheets })
 		menu->addAction(action);
 }
 

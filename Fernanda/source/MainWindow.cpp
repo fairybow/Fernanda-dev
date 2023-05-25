@@ -53,6 +53,7 @@ void MainWindow::connections()
 	menuBarMeterConfigConnections();
 	menuBarToolConfigConnections();
 	menuBarMiscConfigConnections();
+	menuBarDevConnections();
 }
 
 void MainWindow::documentConnections()
@@ -335,6 +336,16 @@ void MainWindow::menuBarMiscConfigConnections()
 			alignment, Ini::IDICATOR_ALIGNMENT, m_indicator, [&] {
 				m_indicator->setAlignment(alignment);
 			});
+		});
+}
+
+void MainWindow::menuBarDevConnections()
+{
+	connect(m_menuBar, &MenuBar::devStylist, this, [&] {
+		m_stylist->devClass();
+		});
+	connect(m_menuBar, &MenuBar::devStylistStyleSheets, this, [&] {
+		m_stylist->devStyleSheets();
 		});
 }
 
