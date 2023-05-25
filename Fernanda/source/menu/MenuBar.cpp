@@ -128,17 +128,18 @@ void MenuBar::help()
 
 void MenuBar::dev()
 {
-	auto stylist = new QAction(tr("&Stylist class info"), this);
-	auto stylist_stylesheets = new QAction(tr("&Stylist style sheets"), this);
-	connect(stylist, &QAction::triggered, this, [&] {
+	auto stylist_class = new QAction(tr("&Class info"), this);
+	auto stylist_stylesheets = new QAction(tr("&Style sheets"), this);
+	connect(stylist_class, &QAction::triggered, this, [&] {
 		emit devStylist();
 		});
 	connect(stylist_stylesheets, &QAction::triggered, this, [&] {
 		emit devStylistStyleSheets();
 		});
 	auto menu = addMenu(tr("&Dev"));
-	for (const auto& action : { stylist, stylist_stylesheets })
-		menu->addAction(action);
+	auto stylist = menu->addMenu("&Stylist");
+	for (const auto& action : { stylist_class, stylist_stylesheets })
+		stylist->addAction(action);
 }
 
 void MenuBar::addActionsToBoxes(QComboBox* comboBox, ActionGroup* actionGroup)
