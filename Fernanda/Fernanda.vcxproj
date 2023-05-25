@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="source\common\Emoji.hpp" />
     <ClInclude Include="source\common\Icon.hpp" />
+    <ClInclude Include="source\common\StringTools.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
     <QtMoc Include="source\document\Document.h" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="source\document\TextDocument.hpp" />
     <QtMoc Include="source\tabs\TabButton.hpp" />
     <QtMoc Include="source\tabs\CloseTab.hpp" />
+    <ClInclude Include="source\Logger.hpp" />
     <ClInclude Include="source\tabs\AddTab.hpp" />
     <QtMoc Include="source\tabs\ScrollTabs.hpp" />
     <QtMoc Include="source\editor\Editor.h" />

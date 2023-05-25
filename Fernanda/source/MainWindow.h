@@ -35,6 +35,8 @@ class MainWindow : public Widget<QMainWindow>
 public:
 	MainWindow(const char* name, bool isDev = false, StdFsPath file = StdFsPath(), QWidget* parent = nullptr);
 
+	StdFsPath userData() const { return m_user->data(); }
+
 protected:
 	virtual void closeEvent(QCloseEvent* event) override;
 	virtual void showEvent(QShowEvent* event) override;

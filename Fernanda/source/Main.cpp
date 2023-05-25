@@ -1,4 +1,5 @@
 #include "common/Path.hpp"
+#include "Logger.hpp"
 #include "MainWindow.h"
 
 #include <QApplication>
@@ -25,6 +26,7 @@ int main(int argc, char* argv[])
 	MainWindow main_window("MainWindow", fernanda.arguments().contains("-dev"), open_file);
 	setFont(fernanda);
 	main_window.show();
+	Logger::install(main_window.userData());
 	ensureVisible(fernanda, main_window);
 	return fernanda.exec();
 }
