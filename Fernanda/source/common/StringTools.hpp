@@ -12,7 +12,7 @@ namespace StringTools
 
 	namespace
 	{
-		const QVector<QStringPair> escapeSequences = {
+		const QVector<QStringPair> escapeReplacement = {
 		{"\\\\", "\\"},
 		{"\\'", "\'"},
 		{"\\\"", "\""},
@@ -37,7 +37,7 @@ namespace StringTools
 	inline QString clean(const QString& string)
 	{
 		QString cleaned_string = string;
-		for (auto& [from, to] : escapeSequences)
+		for (auto& [from, to] : escapeReplacement)
 			cleaned_string.replace(from, to);
 		return cleaned_string;
 	}
