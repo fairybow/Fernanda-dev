@@ -28,7 +28,8 @@
 
 QSizeGrip
 {
-	image: url(none);
+	height: 0;
+	width: 0;
 }
 
 #Slider::groove:horizontal

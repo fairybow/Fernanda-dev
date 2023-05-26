@@ -12,8 +12,6 @@ Cursor
 #Editor-overlay, #Editor-underlay
 {
 	background: transparent;
-	background-image: url(none);
-	background-repeat: repeat-xy;
 }
 
 #Editor-line-number-area

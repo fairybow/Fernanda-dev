@@ -1,8 +1,6 @@
 #Editor-shadow
 {
 	background: transparent;
-	background-image: url(none);
-	background-repeat: repeat-xy;
 	border-top: 22px solid black;
 	border-left: 22px solid black;
 	border-right: 22px solid black;
