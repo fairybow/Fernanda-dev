@@ -259,9 +259,6 @@
     <ClCompile Include="source\tabs\TabBar.cpp">
       <Filter>Source\Tabs</Filter>
     </ClCompile>
-    <ClCompile Include="unused\splitter\Splitter.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\preview\WebDocument.hpp">

@@ -141,7 +141,6 @@
     <ClCompile Include="source\Meter.cpp" />
     <ClCompile Include="source\Stylist.cpp" />
     <ClCompile Include="source\tabs\TabBar.cpp" />
-    <ClCompile Include="unused\splitter\Splitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Emoji.hpp" />
