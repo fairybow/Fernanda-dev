@@ -65,25 +65,29 @@ namespace StringTools
 		return text.left(text.length() - 1);
 	}
 
-	inline QString pad(const QString& string, int desiredLength, Side side = Side::Right, QChar padChar = ' ', bool separate = false)
+	inline QString pad(const QString& string, int desiredLength, Side side = Side::Right,
+		QChar padChar = ' ', bool separate = false)
 	{
 		auto length = string.length();
 		if (length >= desiredLength)
 			return string;
 
-		if (side == Side::Both && !isEven(desiredLength))
-			--desiredLength;
-
-		auto times = (side == Side::Both)
-			? (desiredLength - length) / 2
-			: desiredLength - length;
+		auto times = desiredLength - length;
+		if (side == Side::Both) {
+			if (!isEven(times))
+				--times;
+			times /= 2;
+		}
 
 		auto padding = QString(padChar).repeated(times);
 
-		QString padded;
 		QString separator;
-		if (separate)
-			separator = " ";
+		if (separate) {
+			separator = ' ';
+			padding = padding.mid(0, padding.length() - 1);
+		}
+
+		QString padded;
 		switch (side) {
 		case Side::Both:
 			padded = padding + separator + string + separator + padding;
