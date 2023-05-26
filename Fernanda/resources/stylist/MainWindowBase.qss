@@ -48,5 +48,7 @@
 #TabButton
 {
 	border-radius: 3px;
-	padding: 1px;
+	font-size: 12pt;
+	font-weight: normal;
+	padding: 0px;
 }

@@ -51,7 +51,7 @@ private:
 		QMessageBox popup(parentWindow);
 		popup.setWindowTitle(parentWindow->windowTitle());
 		popup.setText(
-			StringTools::pad("Time's up!", 20));
+			StringTools::pad("Time's up!", 30));
 		auto ok = popup.addButton(QMessageBox::Ok);
 		popup.setDefaultButton(ok);
 		popup.exec();

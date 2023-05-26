@@ -34,7 +34,7 @@ public:
 			qDebug() << "Base sheet path:" << stylee.baseSheet;
 			qDebug() << "Style sheet path:" << stylee.styleSheet;
 			qDebug() << "Current theme sheet path:" << stylee.currentThemeSheet;
-			qDebug() << "Has theme:" << stylee.hasTheme;
+			qDebug() << "Has theme?:" << stylee.hasTheme;
 		}
 	}
 

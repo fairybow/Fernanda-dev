@@ -11,6 +11,7 @@
 #include "Slider.hpp"
 
 #include <QCheckBox>
+#include <QCoreApplication>
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QGroupBox>
@@ -95,6 +96,9 @@ signals:
 	void askToggleIndicator(bool state);
 	void askSetIndicatorAlignment(const QString& alignment);
 	void askSetPreviewType(const QString& type);
+	void devOpenLogs();
+	void devDocument();
+	void devDocumentCurrent();
 	void devStylist();
 	void devStylistStyleSheets();
 

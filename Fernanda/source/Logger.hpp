@@ -31,6 +31,7 @@ namespace Logger
 
 			auto wstring = message.toStdWString();
 			OutputDebugStringW(wstring.c_str());
+			OutputDebugStringW(L"\n");
 
 #endif
 
@@ -52,7 +53,8 @@ namespace Logger
 			auto timestamp = StringTools::time();
 
 			if (last_timestamp != timestamp || force) {
-				logStream << timestamp
+				logStream << StringTools::pad(timestamp, 50,
+					StringTools::Side::Left, '=', true)
 					<< "\n" << Qt::endl;
 				last_timestamp = timestamp;
 			}
@@ -63,7 +65,7 @@ namespace Logger
 			if (!isInitialized)
 				clearOnFirstWrite();
 			timestamp();
-			logStream << StringTools::clean(message) << "\n" << Qt::endl;
+			logStream << StringTools::fixEscapes(message) << "\n" << Qt::endl;
 		}
 
 		inline void passthrough(QtMsgType type, const QMessageLogContext& context, const QString& message)

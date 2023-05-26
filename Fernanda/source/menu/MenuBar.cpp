@@ -73,6 +73,9 @@ void MenuBar::file()
 {
 	auto new_file = new QAction(tr("&New..."), this);
 	auto open = new QAction(tr("&Open..."), this);
+	auto quit = new QAction(tr("&Quit"), this);
+
+	quit->setShortcut(Qt::CTRL | Qt::Key_Q);
 
 	connect(new_file, &QAction::triggered, this, [&] {
 		auto path = QFileDialog::getSaveFileName(
@@ -87,6 +90,8 @@ void MenuBar::file()
 				m_userDocuments), tr("Plain text file (*.txt)"));
 		emit askOpenFile(Path::toStdFs(path));
 		});
+
+	connect(quit, &QAction::triggered, this, &QCoreApplication::quit, Qt::QueuedConnection);
 
 	auto menu = addMenu(tr("&File"));
 	for (const auto& action : { new_file, open })
@@ -128,16 +133,37 @@ void MenuBar::help()
 
 void MenuBar::dev()
 {
+	auto open_logs = new QAction(tr("&Open log"), this);
+	auto document_class = new QAction(tr("&Class info"), this);
+	auto document_current = new QAction(tr("&Current document"), this);
 	auto stylist_class = new QAction(tr("&Class info"), this);
 	auto stylist_stylesheets = new QAction(tr("&Style sheets"), this);
+
+	connect(open_logs, &QAction::triggered, this, [&] {
+		emit devOpenLogs();
+		});
+	connect(document_class, &QAction::triggered, this, [&] {
+		emit devDocument();
+		});
+	connect(document_current, &QAction::triggered, this, [&] {
+		emit devDocumentCurrent();
+		});
 	connect(stylist_class, &QAction::triggered, this, [&] {
 		emit devStylist();
 		});
 	connect(stylist_stylesheets, &QAction::triggered, this, [&] {
 		emit devStylistStyleSheets();
 		});
+
 	auto menu = addMenu(tr("&Dev"));
-	auto stylist = menu->addMenu("&Stylist");
+	for (const auto& action : { open_logs })
+		menu->addAction(action);
+
+	auto document = menu->addMenu("&Document");
+	for (const auto& action : { document_class, document_current })
+		document->addAction(action);
+
+	auto stylist = menu->addMenu("&Stylist");	
 	for (const auto& action : { stylist_class, stylist_stylesheets })
 		stylist->addAction(action);
 }

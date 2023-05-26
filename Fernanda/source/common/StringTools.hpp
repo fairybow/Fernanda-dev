@@ -10,9 +10,11 @@ namespace StringTools
 {
 	using QStringPair = std::pair<QString, QString>;
 
+	enum class Side { Both, Left, Right };
+
 	namespace
 	{
-		const QVector<QStringPair> escapeReplacement = {
+		const QVector<QStringPair> doubleEscapeReplacements = {
 		{"\\\\", "\\"},
 		{"\\'", "\'"},
 		{"\\\"", "\""},
@@ -25,6 +27,11 @@ namespace StringTools
 		{"\\t", "\t"},
 		{"\\v", "\v"}
 		};
+
+		bool isEven(int x)
+		{
+			return x % 2 == 0;
+		}
 	}
 
 	inline QString time()
@@ -34,10 +41,10 @@ namespace StringTools
 		return QString::fromLocal8Bit(time).trimmed();
 	}
 
-	inline QString clean(const QString& string)
+	inline QString fixEscapes(const QString& string)
 	{
 		QString cleaned_string = string;
-		for (auto& [from, to] : escapeReplacement)
+		for (auto& [from, to] : doubleEscapeReplacements)
 			cleaned_string.replace(from, to);
 		return cleaned_string;
 	}
@@ -58,10 +65,36 @@ namespace StringTools
 		return text.left(text.length() - 1);
 	}
 
-	inline QString pad(const QString& string, int desiredLength, QChar padChar = ' ')
+	inline QString pad(const QString& string, int desiredLength, Side side = Side::Right, QChar padChar = ' ', bool separate = false)
 	{
-		if (string.length() >= desiredLength)
+		auto length = string.length();
+		if (length >= desiredLength)
 			return string;
-		return string + QString(desiredLength - string.length(), padChar);
+
+		if (side == Side::Both && !isEven(desiredLength))
+			--desiredLength;
+
+		auto times = (side == Side::Both)
+			? (desiredLength - length) / 2
+			: desiredLength - length;
+
+		auto padding = QString(padChar).repeated(times);
+
+		QString padded;
+		QString separator;
+		if (separate)
+			separator = " ";
+		switch (side) {
+		case Side::Both:
+			padded = padding + separator + string + separator + padding;
+			break;
+		case Side::Left:
+			padded = padding + separator + string;
+			break;
+		case Side::Right:
+			padded = string + separator + padding;
+			break;
+		}
+		return padded;
 	}
 }
