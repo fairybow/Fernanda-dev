@@ -46,18 +46,29 @@ namespace Logger
 			isInitialized = true;
 		}
 
+		inline void timestamp(bool force = false)
+		{
+			static QString last_timestamp;
+			auto timestamp = StringTools::time();
+
+			if (last_timestamp != timestamp || force) {
+				stream << timestamp
+					<< "\n" << Qt::endl;
+				last_timestamp = timestamp;
+			}
+		}
+
 		inline void log(const QString& message)
 		{
-			stream << StringTools::time()
-				<< "\n" << StringTools::clean(message)
-				<< "\n" << Qt::endl;
+			if (!isInitialized)
+				clearOnFirstWrite();
+			timestamp();
+			stream << StringTools::clean(message) << "\n" << Qt::endl;
 		}
 
 		inline void passthrough(QtMsgType type, const QMessageLogContext& context, const QString& message)
 		{
 			toConsole(message);
-			if (!isInitialized)
-				clearOnFirstWrite();
 			log(message);
 		}
 	}

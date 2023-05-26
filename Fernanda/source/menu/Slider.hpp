@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../common/Layout.hpp"
-#include "../common/Utility.hpp"
+#include "../common/StringTools.hpp"
 #include "../common/Widget.hpp"
 
 #include <QLabel>
@@ -71,7 +71,7 @@ private:
 				auto value_string = QString::number(final_value);
 				auto text = m_displayUnit.isEmpty()
 					? value_string
-					: QString(value_string + " " + Utility::pluralCheck(m_displayUnit, final_value));
+					: QString(value_string + " " + StringTools::sophisticatedPluralCheckThatAlwaysWorks(m_displayUnit, final_value));
 				m_valueDisplay.value()->setText(text);
 				});
 		}

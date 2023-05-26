@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QString>
 #include <QTimer>
 
 namespace Utility
@@ -17,31 +16,8 @@ namespace Utility
 		(QTimer::singleShot(0, context, call), ...);
 	}
 
-	inline const QString secondsToMinutes(int seconds, const char* separator = ":")
-	{
-		auto time_seconds = seconds % 60;
-		QString seconds_string;
-		(time_seconds <= 9)
-			? seconds_string = "0" + QString::number(time_seconds)
-			: seconds_string = QString::number(time_seconds);
-		return QString::number((seconds / 60) % 60) + separator + seconds_string;
-	}
-
 	inline int greaterOrEqual(int value, int mustExceed)
 	{
 		return (value < mustExceed) ? mustExceed : value;
-	}
-
-	inline QString padString(const QString& string, int desiredLength, QChar padChar = ' ')
-	{
-		if (string.length() >= desiredLength)
-			return string;
-		return string + QString(desiredLength - string.length(), padChar);
-	}
-
-	inline QString pluralCheck(const QString& text, int value)
-	{
-		if (!text.endsWith("s") || value != 1) return text;
-		return text.left(text.length() - 1);
 	}
 }

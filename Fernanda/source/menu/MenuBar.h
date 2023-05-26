@@ -2,7 +2,7 @@
 
 #include "../common/Emoji.hpp"
 #include "../common/Layout.hpp"
-#include "../common/Utility.hpp"
+#include "../common/StringTools.hpp"
 #include "../common/Widget.hpp"
 #include "ActionGroup.h"
 #include "ComboBox.hpp"
