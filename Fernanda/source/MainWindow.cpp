@@ -12,6 +12,11 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
+	QMessageBox::information(this,
+		"Test Dialog", StringTools::pad("Closing", 30));
+
+	//
+
 	auto state = windowState();
 	showNormal();
 	// return if canceled
@@ -105,9 +110,9 @@ void MainWindow::meterConnections()
 		});
 
 	connect(m_editor, &Editor::selectionChanged, this, [&] {
-			m_editor->hasSelection()
-				? m_meter->trigger(Meter::Type::Selection, true)
-				: m_meter->trigger(Meter::Type::Counts, true);
+		m_editor->hasSelection()
+			? m_meter->trigger(Meter::Type::Selection, true)
+			: m_meter->trigger(Meter::Type::Counts, true);
 		});
 	connect(m_editor, &Editor::textChanged, m_meter, [&] {
 		m_meter->trigger(Meter::Type::Counts);
@@ -341,6 +346,21 @@ void MainWindow::menuBarMiscConfigConnections()
 
 void MainWindow::menuBarDevConnections()
 {
+	connect(m_menuBar, &MenuBar::devOpenLogs, this, [&] {
+		auto user_data = Path::toQString(m_user->data());
+		QDirIterator it(user_data, { "*.log" }, QDir::Files, QDirIterator::Subdirectories);
+		while (it.hasNext()) {
+			it.next();
+			auto path = Path::toStdFs(it.filePath());
+			menuBarOpenFile(path);
+		}
+		});
+	connect(m_menuBar, &MenuBar::devDocument, this, [&] {
+		m_document->devClass();
+		});
+	connect(m_menuBar, &MenuBar::devDocumentCurrent, this, [&] {
+		m_document->devCurrentInfo();
+		});
 	connect(m_menuBar, &MenuBar::devStylist, this, [&] {
 		m_stylist->devClass();
 		});

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../common/StringTools.hpp"
 #include "../common/Utility.hpp"
 #include "ToolButton.hpp"
 
@@ -50,7 +51,7 @@ private:
 		QMessageBox popup(parentWindow);
 		popup.setWindowTitle(parentWindow->windowTitle());
 		popup.setText(
-			Utility::padString("Time's up!", 20));
+			StringTools::pad("Time's up!", 30));
 		auto ok = popup.addButton(QMessageBox::Ok);
 		popup.setDefaultButton(ok);
 		popup.exec();
@@ -81,7 +82,7 @@ private:
 private slots:
 	void countdownDisplay()
 	{
-		setText("  " + m_text + "  " + Utility::secondsToMinutes(m_countdown, ".") + "  ");
+		setText("  " + m_text + "  " + StringTools::secondsToMinutes(m_countdown, ".") + "  ");
 		if (m_countdown < 1) {
 			timeUp(m_window);
 			setChecked(false);

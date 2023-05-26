@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -88,7 +88,7 @@
       <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -141,11 +141,11 @@
     <ClCompile Include="source\Meter.cpp" />
     <ClCompile Include="source\Stylist.cpp" />
     <ClCompile Include="source\tabs\TabBar.cpp" />
-    <ClCompile Include="unused\splitter\Splitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Emoji.hpp" />
     <ClInclude Include="source\common\Icon.hpp" />
+    <ClInclude Include="source\common\StringTools.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
     <QtMoc Include="source\document\Document.h" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
@@ -154,6 +154,7 @@
     <ClInclude Include="source\document\TextDocument.hpp" />
     <QtMoc Include="source\tabs\TabButton.hpp" />
     <QtMoc Include="source\tabs\CloseTab.hpp" />
+    <ClInclude Include="source\Logger.hpp" />
     <ClInclude Include="source\tabs\AddTab.hpp" />
     <QtMoc Include="source\tabs\ScrollTabs.hpp" />
     <QtMoc Include="source\editor\Editor.h" />

@@ -51,5 +51,5 @@ protected:
 	}
 
 private:
-	std::pair<int, int> m_tabSizeRange;
+	const std::pair<int, int> m_tabSizeRange;
 };

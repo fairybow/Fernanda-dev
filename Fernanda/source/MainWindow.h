@@ -2,6 +2,7 @@
 
 #include "common/Emoji.hpp"
 #include "common/Layout.hpp"
+#include "common/Path.hpp"
 #include "common/Widget.hpp"
 #include "document/Document.h"
 #include "editor/Editor.h"
@@ -19,6 +20,7 @@
 #include "Stylist.h"
 
 #include <QCloseEvent>
+#include <QDirIterator>
 #include <QMainWindow>
 #include <QShowEvent>
 #include <QString>
@@ -34,6 +36,8 @@ class MainWindow : public Widget<QMainWindow>
 
 public:
 	MainWindow(const char* name, bool isDev = false, StdFsPath file = StdFsPath(), QWidget* parent = nullptr);
+
+	StdFsPath userData() const { return m_user->data(); }
 
 protected:
 	virtual void closeEvent(QCloseEvent* event) override;

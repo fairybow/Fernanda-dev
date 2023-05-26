@@ -259,9 +259,6 @@
     <ClCompile Include="source\tabs\TabBar.cpp">
       <Filter>Source\Tabs</Filter>
     </ClCompile>
-    <ClCompile Include="unused\splitter\Splitter.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\preview\WebDocument.hpp">
@@ -347,6 +344,12 @@
     </ClInclude>
     <ClInclude Include="source\menu\ActionGroup.h">
       <Filter>Source\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Logger.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\StringTools.hpp">
+      <Filter>Source\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
