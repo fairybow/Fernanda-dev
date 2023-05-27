@@ -57,25 +57,27 @@
 
 @tabbar_tabselected_background; = #002b36;
 
-@tabbarbutton_background; = #002b36;
+@tabbarbutton_background; = transparent;
 @tabbarbutton_color; = #839496;
 
-@tabbarbutton_hover_background; = #073642;
+@tabbarbutton_hover_background; = transparent;
 @tabbarbutton_hover_color; = #268bd2;
 
 @tabbarbutton_pressed_background; = #002b36;
 @tabbarbutton_pressed_color; = #839496;
 
+/* ellipse needs to be scaled to half and display hover color on tab hover */
+/* tab opacity (inactive), button (statusbar, tab) opacity on hover via code? */
 
 
 /* --- Status bar ------------------- */
 
 @statusbar_background; = #002b36;
 
-@statusbarbutton_background; = #002b36;
+@statusbarbutton_background; = transparent;
 @statusbarbutton_color; = #839496;
 
-@statusbarbutton_hover_background; = #073642;
+@statusbarbutton_hover_background; = transparent;
 @statusbarbutton_hover_color; = #268bd2;
 
 @statusbarbutton_pressed_background; = #1c1c1c;

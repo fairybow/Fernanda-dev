@@ -23,7 +23,7 @@ class Document : public QObject
 	Q_OBJECT
 
 public:
-	Document(StdFsPath tempFolder, StdFsPath backupFolder, int cacheMaxCost = 100, QWidget* parent = nullptr);
+	Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent = nullptr, int cacheMaxCost = 100);
 
 	const QString setCurrent(StdFsPath path);
 	const QString setCurrent(QUuid id);
@@ -34,7 +34,7 @@ public:
 	void startEditCheckTimer();
 
 	QUuid currentId() const { return m_currentId; }
-	bool editedState() { return textDocument(m_currentId)->edited(); }
+	bool isEdited(QUuid id) { return textDocument(id)->edited(); }
 
 	void setEditCheckDelay(int textLength);
 

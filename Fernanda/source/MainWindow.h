@@ -24,6 +24,7 @@
 #include <QMainWindow>
 #include <QShowEvent>
 #include <QString>
+#include <QUuid>
 
 #include <filesystem>
 #include <functional>
@@ -48,7 +49,7 @@ private:
 	bool m_isInitialized = false;
 
 	User* m_user = new User(QCoreApplication::applicationName(), this);
-	Document* m_document = new Document(m_user->temp(), m_user->backup(), 3/* <-- test */, this);
+	Document* m_document = new Document(m_user->temp(), m_user->backup(), this, 3/* <-- test */);
 	//Project* m_project = new Project(this);
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_user->documents(), m_isDev);
 	StatusBar* m_statusBar = new StatusBar("StatusBar");
@@ -85,9 +86,10 @@ private:
 	void loadMenuBarToolConfigs();
 	void loadMenuBarMiscConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
-	void menuBarOpenFile(StdFsPath path, bool writeNew = false);
+	void openFileTab(StdFsPath path, bool writeNew = false);
 
-	void menuBarOpenNewFile(StdFsPath path) { menuBarOpenFile(path, true); };
+	void openNewFileTab(StdFsPath path) { openFileTab(path, true); };
+	void openNewTab() { onAddTabClick(); };
 
 	template<typename T>
 	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction = nullptr)
@@ -111,6 +113,7 @@ private:
 	}
 
 private slots:
-	void openTab(int index);
-	void newTab();
+	void onTabClick(int index);
+	void onAddTabClick();
+	void onCloseTabClick(QUuid id);
 };

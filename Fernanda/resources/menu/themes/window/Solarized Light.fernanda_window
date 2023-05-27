@@ -57,10 +57,10 @@
 
 @tabbar_tabselected_background; = #fdf6e3;
 
-@tabbarbutton_background; = #fdf6e3;
+@tabbarbutton_background; = transparent;
 @tabbarbutton_color; = #657b83;
 
-@tabbarbutton_hover_background; = #eee8d5;
+@tabbarbutton_hover_background; = transparent;
 @tabbarbutton_hover_color; = #cb4b16;
 
 @tabbarbutton_pressed_background; = #fdf6e3;
@@ -72,10 +72,10 @@
 
 @statusbar_background; = #fdf6e3;
 
-@statusbarbutton_background; = #fdf6e3;
+@statusbarbutton_background; = transparent;
 @statusbarbutton_color; = #657b83;
 
-@statusbarbutton_hover_background; = #eee8d5;
+@statusbarbutton_hover_background; = transparent;
 @statusbarbutton_hover_color; = #cb4b16;
 
 @statusbarbutton_pressed_background; = #ebebeb;

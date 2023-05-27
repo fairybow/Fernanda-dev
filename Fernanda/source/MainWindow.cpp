@@ -6,7 +6,7 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	setupWidgets();
 	connections();
 	loadConfigs();
-	newTab();
+	openNewTab();
 	m_editor->setFocus();
 }
 
@@ -81,8 +81,9 @@ void MainWindow::documentConnections()
 
 void MainWindow::tabBarConnections()
 {
-	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::openTab);
-	connect(m_tabBar, &TabBar::askNew, this, &MainWindow::newTab);
+	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::onTabClick);
+	connect(m_tabBar, &TabBar::askAdd, this, &MainWindow::onAddTabClick);
+	connect(m_tabBar, &TabBar::askClose, this, &MainWindow::onCloseTabClick);
 	connect(m_editor, &Editor::textChanged, this, [&] {
 		if (!m_tabBar->isUntitled()) return;
 		auto block = m_editor->firstBlock();
@@ -133,10 +134,10 @@ void MainWindow::menuBarConnections()
 		return loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
 		});
 	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&](StdFsPath path) {
-		menuBarOpenNewFile(path);
+		openNewFileTab(path);
 		});
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
-		menuBarOpenFile(path);
+		openFileTab(path);
 		});
 }
 
@@ -352,7 +353,7 @@ void MainWindow::menuBarDevConnections()
 		while (it.hasNext()) {
 			it.next();
 			auto path = Path::toStdFs(it.filePath());
-			menuBarOpenFile(path);
+			openFileTab(path);
 		}
 		});
 	connect(m_menuBar, &MenuBar::devDocument, this, [&] {
@@ -549,7 +550,7 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
 }
 
-void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
+void MainWindow::openFileTab(StdFsPath path, bool writeNew)
 {
 	if (path.empty()) {
 		m_indicator->red();
@@ -562,18 +563,32 @@ void MainWindow::menuBarOpenFile(StdFsPath path, bool writeNew)
 	m_editor->setPlainText(text);
 }
 
-void MainWindow::openTab(int index)
+void MainWindow::onTabClick(int index)
 {
-	auto extant_id = m_tabBar->tabId(index);
+	auto extant_id = m_tabBar->idByIndex(index);
 	auto document_text = m_document->setCurrent(extant_id);
 	m_editor->setPlainText(document_text);
 	// m_editor-> restore cursor by id
 }
 
-void MainWindow::newTab()
+void MainWindow::onAddTabClick()
 {
 	auto new_id = m_document->createEmpty();
 	m_document->setCurrent(new_id);
 	m_tabBar->serve(new_id);
 	m_editor->clear();
+}
+
+void MainWindow::onCloseTabClick(QUuid id)
+{
+	if (m_document->isEdited(id)) {
+		m_tabBar->serve(id); // is it bad if id == current id (or index == current index for tab)
+		//... save popup
+		// save (or not)
+	}
+
+	// which swaps temp with original
+	// original goes to backup
+	// remove document object and path from extantPaths list?
+	// then run document->setCurrent or open from path?
 }

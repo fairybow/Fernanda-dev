@@ -25,15 +25,16 @@ public:
 	TabBar(const char* name, int minTabSize = 25, int maxTabSize = 100, QWidget* parent = nullptr);
 
 	int serve(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
-	QUuid tabId(int index);
+	QUuid idByIndex(int index);
+	int indexById(QUuid id);
 	const QString title(int index);
-	int index(QUuid id);
 	bool isUntitled();
 	void setUntitledDisplay(const QString& text, int charLimit = 30);
 
 signals:
 	void currentChanged(int index);
-	void askNew();
+	void askAdd();
+	void askClose(QUuid id);
 
 public slots:
 	void updateEditedState(QUuid id, bool edited);
