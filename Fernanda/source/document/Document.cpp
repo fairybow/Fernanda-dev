@@ -1,6 +1,6 @@
 #include "Document.h"
 
-Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, int cacheMaxCost, QWidget* parent)
+Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent, int cacheMaxCost)
 	: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(cacheMaxCost)
 {
 	setUpAutoCache();
