@@ -18,7 +18,7 @@ class Meter : public Widget<>
 
 public:
 	enum class Type {
-		None,
+		All,
 		Counts,
 		Positions,
 		Selection
@@ -57,7 +57,7 @@ private:
 	QLabel* m_positions = new QLabel(this);
 	QLabel* m_counts = new QLabel(this);
 	QLabel* m_separator = new QLabel(this);
-	StatusBarButton* m_refresh = new StatusBarButton("StatusBarButton", "\U0001F504", this, 0.4);
+	StatusBarButton* m_refresh = new StatusBarButton("StatusBarButton", "\U0001F504", this, 0.4); // switch to tool button, ui font
 
 	bool m_hasAutoCount = true;
 

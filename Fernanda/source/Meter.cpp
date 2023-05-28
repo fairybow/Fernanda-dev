@@ -15,7 +15,7 @@ Meter::Meter(const char* name, QWidget* parent)
 
 void Meter::trigger(Type type, bool force)
 {
-	if ((!m_hasAutoCount && type == Type::Counts) && !force) return;
+	if ((!m_hasAutoCount && type == Type::Counts) && !force) return; // for positions, block for > x.
 	switch (type) {
 	case Type::Counts:
 		updateCounts();
