@@ -26,6 +26,10 @@ void Meter::trigger(Type type, bool force)
 	case Type::Selection:
 		updateCounts(true);
 		break;
+	default:
+		updateCounts();
+		updatePositions();
+		break;
 	}
 }
 
@@ -61,11 +65,10 @@ void Meter::connections()
 		});
 }
 
-void Meter::updateAll(bool& memberBool, bool state)
+void Meter::updateOutput(bool& memberBool, bool state)
 {
 	memberBool = state;
-	updateCounts();
-	updatePositions();
+	trigger();
 }
 
 void Meter::updateCounts(bool isSelection)

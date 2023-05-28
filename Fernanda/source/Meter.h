@@ -18,6 +18,7 @@ class Meter : public Widget<>
 
 public:
 	enum class Type {
+		None,
 		Counts,
 		Positions,
 		Selection
@@ -34,13 +35,13 @@ public:
 
 	Meter(const char* name, QWidget* parent = nullptr);
 
-	void trigger(Type type, bool force = false);
+	void trigger(Type type = Type{}, bool force = false);
 
-	void setHasLinePosition(bool state) { updateAll(m_hasLinePosition, state); }
-	void setHasColumnPosition(bool state) { updateAll(m_hasColumnPosition, state); }
-	void setHasLineCount(bool state) { updateAll(m_hasLineCount, state); }
-	void setHasWordCount(bool state) { updateAll(m_hasWordCount, state); }
-	void setHasCharacterCount(bool state) { updateAll(m_hasCharCount, state); }
+	void setHasLinePosition(bool state) { updateOutput(m_hasLinePosition, state); }
+	void setHasColumnPosition(bool state) { updateOutput(m_hasColumnPosition, state); }
+	void setHasLineCount(bool state) { updateOutput(m_hasLineCount, state); }
+	void setHasWordCount(bool state) { updateOutput(m_hasWordCount, state); }
+	void setHasCharacterCount(bool state) { updateOutput(m_hasCharCount, state); }
 
 public slots:
 	virtual void setVisible(bool visible);
@@ -68,7 +69,7 @@ private:
 
 	void setupLabels();
 	void connections();
-	void updateAll(bool& memberBool, bool state);
+	void updateOutput(bool& memberBool, bool state);
 	void updateCounts(bool isSelection = false);
 	void updatePositions();
 	bool toggleVisibility(QLabel* label, bool hasAnything);
