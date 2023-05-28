@@ -20,7 +20,7 @@
 	padding-right: 1px;
 }
 
-#StatusBarButton
+#ToolButton
 {
 	font-size: 9pt;
 	min-width: 33px;
@@ -30,7 +30,7 @@
 	padding-top: 1px;
 }
 
-#StatusBarButton:hover
+#ToolButton:hover
 {
 	font-size: 10pt;
 }
@@ -38,11 +38,6 @@
 #TabBar::scroller
 {
 	width: 0px;
-}
-
-#TabBar::tab:!selected
-{
-	margin-top: 1px;
 }
 
 #TabButton

@@ -59,7 +59,7 @@ void Meter::connections()
 		m_hasAutoCount = checked;
 		m_refresh->setVisible(!checked);
 		});
-	connect(m_refresh, &StatusBarButton::pressed, this, [&] {
+	connect(m_refresh, &UiButton::pressed, this, [&] {
 		trigger(Type::Counts, true);
 		emit editorFocusReturn();
 		});

@@ -170,9 +170,6 @@
     <QtMoc Include="source\Indicator.hpp">
       <Filter>Source</Filter>
     </QtMoc>
-    <QtMoc Include="source\common\StatusBarButton.hpp">
-      <Filter>Source\Common</Filter>
-    </QtMoc>
     <QtMoc Include="source\menu\VersionChecker.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
@@ -220,6 +217,9 @@
     </QtMoc>
     <QtMoc Include="source\tabs\ScrollTabs.hpp">
       <Filter>Source\Tabs</Filter>
+    </QtMoc>
+    <QtMoc Include="source\common\UiButton.hpp">
+      <Filter>Source\Common</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

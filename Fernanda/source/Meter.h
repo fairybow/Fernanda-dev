@@ -3,7 +3,7 @@
 #include "common/Fx.hpp"
 #include "common/Layout.hpp"
 #include "common/RegexPatterns.hpp"
-#include "common/StatusBarButton.hpp"
+#include "common/UiButton.hpp"
 #include "common/Utility.hpp"
 #include "common/Widget.hpp"
 
@@ -57,7 +57,7 @@ private:
 	QLabel* m_positions = new QLabel(this);
 	QLabel* m_counts = new QLabel(this);
 	QLabel* m_separator = new QLabel(this);
-	StatusBarButton* m_refresh = new StatusBarButton("StatusBarButton", "\U0001F504", this, 0.4); // switch to tool button, ui font
+	UiButton* m_refresh = new UiButton("StatusBarButton", "\U0001F504", this, 0.4); // switch to tool button, ui font
 
 	bool m_hasAutoCount = true;
 
