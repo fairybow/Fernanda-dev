@@ -6,7 +6,7 @@
 #include <QGraphicsOpacityEffect>
 #include <QPushButton>
 
-class StatusBarButton : public Widget<QPushButton>
+class StatusBarButton : public Widget<QPushButton> // rename UiButton. can leave separate qss for statusbar vs tab vs other
 {
 	Q_OBJECT
 
