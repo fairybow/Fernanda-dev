@@ -5,6 +5,7 @@
 #include "../common/Utility.hpp"
 #include "ToolButton.hpp"
 
+#include <QEnterEvent>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QMouseEvent>
@@ -32,6 +33,10 @@ public:
 	void setCountdown(int seconds) { m_interval = qBound(30, seconds, 3600); }
 
 protected:
+	virtual void enterEvent(QEnterEvent* event) override {}
+
+	virtual void leaveEvent(QEvent* event) override {}
+
 	virtual void mousePressEvent(QMouseEvent* event) override
 	{
 		if (event->button() != Qt::RightButton)
@@ -40,7 +45,6 @@ protected:
 	}
 
 private:
-	//const QChar m_icon;
 	int m_interval;
 	int m_countdown = 0;
 	QMainWindow* m_window;

@@ -52,13 +52,6 @@ public:
 	}
 
 protected:
-	virtual void changeEvent(QEvent* event) override
-	{
-		QToolButton::changeEvent(event);
-		if (event->type() == QEvent::StyleChange)
-			updateIcon();
-	}
-
 	virtual void enterEvent(QEnterEvent* event) override
 	{
 		QToolButton::enterEvent(event);
