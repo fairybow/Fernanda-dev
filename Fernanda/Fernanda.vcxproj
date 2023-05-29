@@ -144,7 +144,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Emoji.hpp" />
-    <ClInclude Include="source\common\Icon.hpp" />
     <ClInclude Include="source\common\StringTools.hpp" />
     <QtMoc Include="source\common\UiButton.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
@@ -203,7 +202,7 @@
     <QtRcc Include="resources\Indicator.qrc" />
     <QtRcc Include="resources\MenuBar.qrc" />
     <QtRcc Include="resources\Stylist.qrc" />
-    <QtRcc Include="resources\Ui.qrc" />
+    <QtRcc Include="resources\UiButton.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
