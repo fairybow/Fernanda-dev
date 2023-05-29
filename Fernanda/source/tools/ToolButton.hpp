@@ -2,15 +2,14 @@
 
 #include "../common/UiButton.hpp"
 
-#include <QChar>
 #include <QMouseEvent>
 #include <QString>
 
 class ToolButton : public UiButton
 {
 public:
-	ToolButton(const QChar& icon, QWidget* parent = nullptr)
-		: UiButton("ToolButton", icon, parent)
+	ToolButton(const QString& label, QWidget* parent = nullptr)
+		: UiButton("ToolButton", label, parent)
 	{
 		setCheckable(true);
 

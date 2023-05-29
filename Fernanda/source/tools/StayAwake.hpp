@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../common/Emoji.hpp"
 #include "ToolButton.hpp"
 
 #include <QString>
@@ -16,8 +17,8 @@ class StayAwake : public ToolButton
 	Q_OBJECT
 
 public:
-	StayAwake(const QChar& icon, QWidget* parent = nullptr)
-		: ToolButton(icon, parent)
+	StayAwake(QWidget* parent = nullptr)
+		: ToolButton(Emoji::TEACUP, parent)
 	{
 		m_timer->setTimerType(Qt::VeryCoarseTimer);
 		connect(this, &StayAwake::toggled, this, &StayAwake::stayAwake);

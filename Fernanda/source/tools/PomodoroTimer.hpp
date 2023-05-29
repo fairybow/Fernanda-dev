@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../common/Emoji.hpp"
 #include "../common/StringTools.hpp"
 #include "../common/Utility.hpp"
 #include "ToolButton.hpp"
@@ -15,10 +16,9 @@ class PomodoroTimer : public ToolButton
 	Q_OBJECT
 
 public:
-	PomodoroTimer(const QChar& icon, QMainWindow* mainWindow,
+	PomodoroTimer(QMainWindow* mainWindow,
 		QWidget* parent = nullptr, int defaultSecondsCountdown = defaultInterval())
-		: ToolButton(icon, parent),
-		m_icon(icon),
+		: ToolButton(Emoji::TOMATO, parent),
 		m_window(mainWindow),
 		m_interval(defaultSecondsCountdown)
 	{
@@ -40,7 +40,7 @@ protected:
 	}
 
 private:
-	const QChar m_icon;
+	//const QChar m_icon;
 	int m_interval;
 	int m_countdown = 0;
 	QMainWindow* m_window;
@@ -60,7 +60,7 @@ private:
 	bool isStopping(bool checked)
 	{
 		if (!checked) {
-			setText(m_icon);
+			setText(label());
 			m_timer->stop();
 			m_countdown = m_interval;
 			return true;
@@ -83,7 +83,7 @@ private slots:
 	void countdownDisplay()
 	{
 		auto time = StringTools::secondsToMinutes(m_countdown, ".");
-		auto text = StringTools::pad(2, m_icon, time);
+		auto text = StringTools::pad(2, label(), time);
 		setText(text);
 		if (m_countdown < 1) {
 			timeUp(m_window);

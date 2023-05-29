@@ -5,6 +5,7 @@
 #include <QChar>
 #include <QEnterEvent>
 #include <QFontDatabase>
+#include <QString>
 #include <QToolButton>
 
 #include <map>
@@ -26,9 +27,9 @@ public:
 		Refresh
 	};
 
-	UiButton(const char* name, const QChar& icon, QWidget* parent = nullptr,
-		const QChar& flag = QChar())
-		: Widget(name, parent), m_icon(icon), m_flag(flag)
+	UiButton(const char* name, const QString& label, QWidget* parent = nullptr,
+		const QString& flag = QString())
+		: Widget(name, parent), m_label(label), m_flag(flag)
 	{
 		updateIcon();
 	}
@@ -40,10 +41,9 @@ public:
 		setFont(uiFont());
 	}
 
-	bool flagged() const
-	{
-		return m_flagged;
-	}
+	bool flagged() const { return m_flagged; }
+	QString label() const { return m_label; }
+	QString flag() const { return m_flag; }
 
 	void setFlagged(bool flagged)
 	{
@@ -74,8 +74,8 @@ protected:
 	}
 
 private:
-	const QChar m_icon;
-	const QChar m_flag;
+	const QString m_label;
+	const QString m_flag;
 	//double m_iconScale;
 	//double m_flagScale;
 	bool m_flagged = false;
@@ -96,14 +96,14 @@ private:
 		};
 	}
 
-	const QChar fontIcon(Ui icon)
+	const QString fontIcon(Ui icon)
 	{
 		auto map = fontChars();
 		QChar font_icon;
 		auto it = map.find(icon);
 		if (it != map.end())
 			font_icon = it->second;
-		return font_icon;
+		return QString(font_icon);
 	}
 
 	const QFont uiFont()
@@ -116,6 +116,6 @@ private:
 	{
 		(m_flagged && !m_hoveredOver && !m_flag.isNull())
 			? setText(m_flag)
-			: setText(m_icon);
+			: setText(m_label);
 	}
 };
