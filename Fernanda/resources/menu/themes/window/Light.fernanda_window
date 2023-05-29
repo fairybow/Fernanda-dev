@@ -1,15 +1,27 @@
 /*
 
-Light theme palette (wip):
+Light/dark palette:
 
-#f8f8ff = Ghost white
-#e52b50 = Amaranth
-#007fff = Azure
-#28282a = Very dark (mostly black) blue
-#f2f3f4 = Munsell, Anti-flash white
-#dcdcdc = Gainsboro
-#cfcfc4 = Pastel gray
-#e5e4e2 = Platinum
+#fff = 0
+#f4f4f4 = 1
+#eaeaea = 2
+---
+#e2e2e2 = 3.0
+#d9d9d9 = 3.1
+---
+#c8c8c8 = 4
+#848484 = 5
+#545454 = 6
+---
+#444 = 7.0
+#3c3c3c = 7.1
+---
+#333 = 8
+#1f1f1f = 9
+#000 = 10
+---
+#007fff = 11 (Azure)
+#e52b50 = 12 (Amaranth)
 
 */
 
@@ -17,44 +29,44 @@ Light theme palette (wip):
 
 /* ---------------------------------- */
 
-@mainwindow_background; = #f8f8ff;
-@meter_color; = #28282a;
+@mainwindow_background; = #f4f4f4;
+@meter_color; = #545454;
 
 
 
 /* --- Menu bar --------------------- */
 
-@menubar_background; = #f8f8ff;
-@menubar_color; = #28282a;
+@menubar_background; = #f4f4f4;
+@menubar_color; = #545454;
 
-@menubar_itemselected_background; = #dcdcdc;
+@menubar_itemselected_background; = #c8c8c8;
 @menubar_itemselected_color; = #007fff;
 
-@menubar_itempressed_background; = #dcdcdc;
+@menubar_itempressed_background; = #c8c8c8;
 @menubar_itempressed_color; = #007fff;
 
 
 
 /* --- Tab bar ---------------------- */
 
-@tabbar_background; = #e5e4e2;
+@tabbar_background; = #eaeaea;
 
-@tabbar_tab_background; = #f2f3f4;
-@tabbar_tab_color; = #28282a;
+@tabbar_tab_background; = #e2e2e2;
+@tabbar_tab_color; = #545454;
 
-@tabbar_tabhover_background; = #dcdcdc;
+@tabbar_tabhover_background; = #d9d9d9;
 @tabbar_tabhover_color; = #007fff;
 
-@tabbar_tabselected_background; = #f8f8ff;
+@tabbar_tabselected_background; = #f4f4f4;
 
 @tabbutton_background; = transparent;
-@tabbutton_color; = #28282a;
+@tabbutton_color; = #545454;
 
-@tabbutton_hover_background; = #dcdcdc;
+@tabbutton_hover_background; = #c8c8c8;
 @tabbutton_hover_color; = #007fff;
 
-@tabbutton_pressed_background; = #dcdcdc;
-@tabbutton_pressed_color; = #28282a;
+@tabbutton_pressed_background; = #c8c8c8;
+@tabbutton_pressed_color; = #545454;
 
 /* ellipse needs to be scaled to half and display hover color on tab hover */
 /* tab opacity (inactive), button (statusbar, tab) opacity on hover via code? */
@@ -62,13 +74,13 @@ Light theme palette (wip):
 
 /* --- Status bar ------------------- */
 
-@statusbar_background; = #f8f8ff;
+@statusbar_background; = #f4f4f4;
 
 @toolbutton_background; = transparent;
-@toolbutton_color; = #28282a;
+@toolbutton_color; = #545454;
 
-@toolbutton_hover_background; = #dcdcdc;
+@toolbutton_hover_background; = #c8c8c8;
 @toolbutton_hover_color; = #007fff;
 
-@toolbutton_pressed_background; = #dcdcdc;
-@toolbutton_pressed_color; = #28282a;
+@toolbutton_pressed_background; = #c8c8c8;
+@toolbutton_pressed_color; = #545454;
