@@ -122,7 +122,7 @@ QSizeGrip
 	border: none;
 }
 
-#ToolButton
+#ToolButton, #MeterButton
 {
 	background: @toolbutton_background;
 	border: transparent;
@@ -130,13 +130,13 @@ QSizeGrip
 	color: @toolbutton_color;
 }
 
-#ToolButton:hover
+#ToolButton:hover, #MeterButton:hover
 {
 	background: @toolbutton_hover_background;
 	color: @toolbutton_hover_color;
 }
 
-#ToolButton:pressed
+#ToolButton:pressed, #MeterButton:pressed
 {
 	background: @toolbutton_pressed_background;
 	color: @toolbutton_pressed_color;

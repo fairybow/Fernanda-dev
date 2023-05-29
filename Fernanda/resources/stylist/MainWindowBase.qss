@@ -20,14 +20,22 @@
 	padding-right: 1px;
 }
 
+#MeterButton
+{
+	font-size: 12pt;
+	padding: 1px;
+}
+
+#MeterButton:hover
+{
+	font-size: 13pt;
+}
+
 #ToolButton
 {
 	font-size: 9pt;
 	min-width: 33px;
-	padding-bottom: 1px;
-	padding-left: 5px;
-	padding-right: 5px;
-	padding-top: 1px;
+	padding: 1px;
 }
 
 #ToolButton:hover
