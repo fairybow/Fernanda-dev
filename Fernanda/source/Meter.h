@@ -57,7 +57,7 @@ private:
 	QLabel* m_positions = new QLabel(this);
 	QLabel* m_counts = new QLabel(this);
 	QLabel* m_separator = new QLabel(this);
-	UiButton* m_refresh = new UiButton("StatusBarButton", "\U0001F504", this, 0.4); // switch to tool button, ui font
+	UiButton* m_refresh = new UiButton("StatusBarButton", Ui::Refresh, this); // switch to tool button, ui font
 
 	bool m_hasAutoCount = true;
 

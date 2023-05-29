@@ -2,14 +2,15 @@
 
 #include "../common/UiButton.hpp"
 
+#include <QChar>
 #include <QMouseEvent>
 #include <QString>
 
 class ToolButton : public UiButton
 {
 public:
-	ToolButton(const QString& text, QWidget* parent = nullptr)
-		: UiButton("ToolButton", text, parent, 0.3)
+	ToolButton(const QChar& icon, QWidget* parent = nullptr)
+		: UiButton("ToolButton", icon, parent)
 	{
 		setCheckable(true);
 
@@ -36,6 +37,6 @@ protected:
 			return;
 		}
 
-		QPushButton::mousePressEvent(event);
+		UiButton::mousePressEvent(event);
 	}
 };

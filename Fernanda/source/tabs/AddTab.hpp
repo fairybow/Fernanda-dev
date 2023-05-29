@@ -1,11 +1,10 @@
 #pragma once
 
-#include "../common/Icon.hpp"
-#include "TabButton.hpp"
+#include "../common/UiButton.hpp"
 
-class AddTab : public TabButton
+class AddTab : public UiButton
 {
 public:
 	AddTab(QWidget* parent = nullptr)
-		: TabButton("TabButton", Icon::Ui::Add, parent) {}
+		: UiButton("TabButton", Ui::Add, parent) {}
 };

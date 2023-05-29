@@ -152,7 +152,6 @@
     <QtMoc Include="source\tabs\TabBar.h" />
     <QtMoc Include="source\tabs\TrueTabBar.hpp" />
     <ClInclude Include="source\document\TextDocument.hpp" />
-    <QtMoc Include="source\tabs\TabButton.hpp" />
     <QtMoc Include="source\tabs\CloseTab.hpp" />
     <ClInclude Include="source\Logger.hpp" />
     <ClInclude Include="source\tabs\AddTab.hpp" />

@@ -1,15 +1,14 @@
 #pragma once
 
-#include "../common/Icon.hpp"
-#include "TabButton.hpp"
+#include "../common/UiButton.hpp"
 
-class CloseTab : public TabButton
+class CloseTab : public UiButton
 {
 	Q_OBJECT
 
 public:
 	CloseTab(QWidget* parent = nullptr)
-		: TabButton("TabButton", Icon::Ui::Close, parent, Icon::Ui::Ellipse) {}
+		: UiButton("TabButton", Ui::Close, parent, Ui::Ellipse) {}
 
 	bool edited() const { return flagged(); }
 	void setEdited(bool edited) { setFlagged(edited); }

@@ -20,7 +20,8 @@ public:
 		ChevronRight,
 		ChevronUp,
 		Close,
-		Ellipse
+		Ellipse,
+		Refresh
 	};
 
 	UiButton(const char* name, const QChar& icon, QWidget* parent = nullptr,
@@ -78,7 +79,8 @@ private:
 		{ Ui::ChevronRight, QChar(0xe5cc) },
 		{ Ui::ChevronUp, QChar(0xe5ce) },
 		{ Ui::Close, QChar(0xe5cd) },
-		{ Ui::Ellipse, QChar(0xe061) }
+		{ Ui::Ellipse, QChar(0xe061) },
+		{ Ui::Refresh, QChar(0xe5d5) }
 	};
 	bool m_isUiFont = false;
 	const QChar m_icon;
