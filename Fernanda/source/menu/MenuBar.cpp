@@ -346,7 +346,7 @@ QGroupBox* MenuBar::meterGroupBox()
 	auto line_check_box = new QCheckBox("Line");
 	auto column_check_box = new QCheckBox("Column");
 	auto meter_separator = new QLabel(
-		StringTools::pad("/", 4));
+		StringTools::flank("/", 4));
 	meter_separator->setAlignment(Qt::AlignCenter);
 	auto lines_check_box = new QCheckBox("Lines");
 	auto words_check_box = new QCheckBox("Words");

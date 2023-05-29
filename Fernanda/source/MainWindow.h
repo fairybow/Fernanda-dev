@@ -19,6 +19,7 @@
 #include "StatusBar.hpp"
 #include "Stylist.h"
 
+#include <QChar>
 #include <QCloseEvent>
 #include <QDirIterator>
 #include <QMainWindow>
@@ -58,9 +59,9 @@ private:
 	Editor* m_editor = new Editor("Editor", QFont("mononoki", 12));
 	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");
-	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer(Emoji::TOMATO, this);
-	StayAwake* m_stayAwake = new StayAwake(Emoji::TEACUP);
-	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop(Emoji::PUSHPIN, this);
+	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer(QString(Emoji::TOMATO).at(0), this);
+	StayAwake* m_stayAwake = new StayAwake(QString(Emoji::TEACUP).at(0));
+	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop(QString(Emoji::PUSHPIN).at(0), this);
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 
 	void setupWidgets();

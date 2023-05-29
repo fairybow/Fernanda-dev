@@ -15,10 +15,10 @@ class PomodoroTimer : public ToolButton
 	Q_OBJECT
 
 public:
-	PomodoroTimer(const QString& text, QMainWindow* mainWindow,
+	PomodoroTimer(const QChar& icon, QMainWindow* mainWindow,
 		QWidget* parent = nullptr, int defaultSecondsCountdown = defaultInterval())
-		: ToolButton(text, parent),
-		m_text(text),
+		: ToolButton(icon, parent),
+		m_icon(icon),
 		m_window(mainWindow),
 		m_interval(defaultSecondsCountdown)
 	{
@@ -40,7 +40,7 @@ protected:
 	}
 
 private:
-	const QString m_text;
+	const QChar m_icon;
 	int m_interval;
 	int m_countdown = 0;
 	QMainWindow* m_window;
@@ -51,7 +51,7 @@ private:
 		QMessageBox popup(parentWindow);
 		popup.setWindowTitle(parentWindow->windowTitle());
 		popup.setText(
-			StringTools::pad("Time's up!", 30));
+			StringTools::flank("Time's up!", 30));
 		auto ok = popup.addButton(QMessageBox::Ok);
 		popup.setDefaultButton(ok);
 		popup.exec();
@@ -60,7 +60,7 @@ private:
 	bool isStopping(bool checked)
 	{
 		if (!checked) {
-			setText(m_text);
+			setText(m_icon);
 			m_timer->stop();
 			m_countdown = m_interval;
 			return true;
@@ -82,7 +82,9 @@ private:
 private slots:
 	void countdownDisplay()
 	{
-		setText("  " + m_text + "  " + StringTools::secondsToMinutes(m_countdown, ".") + "  ");
+		auto time = StringTools::secondsToMinutes(m_countdown, ".");
+		auto text = StringTools::pad(2, m_icon, time);
+		setText(text);
 		if (m_countdown < 1) {
 			timeUp(m_window);
 			setChecked(false);

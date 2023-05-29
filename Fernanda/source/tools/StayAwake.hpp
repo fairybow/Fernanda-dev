@@ -16,8 +16,8 @@ class StayAwake : public ToolButton
 	Q_OBJECT
 
 public:
-	StayAwake(const QString& text, QWidget* parent = nullptr)
-		: ToolButton(text, parent)
+	StayAwake(const QChar& icon, QWidget* parent = nullptr)
+		: ToolButton(icon, parent)
 	{
 		m_timer->setTimerType(Qt::VeryCoarseTimer);
 		connect(this, &StayAwake::toggled, this, &StayAwake::stayAwake);

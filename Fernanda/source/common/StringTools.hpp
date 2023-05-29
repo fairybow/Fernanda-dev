@@ -65,8 +65,8 @@ namespace StringTools
 		return text.left(text.length() - 1);
 	}
 
-	inline QString pad(const QString& string, int desiredLength, Side side = Side::Right,
-		QChar padChar = ' ', bool separate = false)
+	inline QString flank(const QString& string, int desiredLength, Side side = Side::Right,
+		QChar flankChar = ' ', bool separate = false)
 	{
 		auto length = string.length();
 		if (length >= desiredLength)
@@ -79,26 +79,34 @@ namespace StringTools
 			times /= 2;
 		}
 
-		auto padding = QString(padChar).repeated(times);
+		auto flanking = QString(flankChar).repeated(times);
 
 		QString separator;
 		if (separate) {
 			separator = ' ';
-			padding = padding.mid(0, padding.length() - 1);
+			flanking = flanking.mid(0, flanking.length() - 1);
 		}
 
-		QString padded;
+		QString flanked;
 		switch (side) {
 		case Side::Both:
-			padded = padding + separator + string + separator + padding;
+			flanked = flanking + separator + string + separator + flanking;
 			break;
 		case Side::Left:
-			padded = padding + separator + string;
+			flanked = flanking + separator + string;
 			break;
 		case Side::Right:
-			padded = string + separator + padding;
+			flanked = string + separator + flanking;
 			break;
 		}
-		return padded;
+		return flanked;
+	}
+
+	template<typename... Strings>
+	inline QString pad(int spaces, const Strings&... string)
+	{
+		auto padding = QString(" ").repeated(spaces);
+		QStringList list{ string... };
+		return padding + list.join(padding) + padding;
 	}
 }

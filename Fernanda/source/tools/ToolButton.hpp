@@ -36,7 +36,6 @@ protected:
 			setChecked(!isChecked());
 			return;
 		}
-
 		UiButton::mousePressEvent(event);
 	}
 };

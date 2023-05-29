@@ -10,8 +10,8 @@ class AlwaysOnTop : public ToolButton
 	Q_OBJECT
 
 public:
-	AlwaysOnTop(const QString& text, QMainWindow* mainWindow, QWidget* parent = nullptr)
-		: ToolButton(text, parent), m_window(mainWindow)
+	AlwaysOnTop(const QChar& icon, QMainWindow* mainWindow, QWidget* parent = nullptr)
+		: ToolButton(icon, parent), m_window(mainWindow)
 	{
 		connect(this, &AlwaysOnTop::toggled, this, &AlwaysOnTop::alwaysOnTop);
 	}

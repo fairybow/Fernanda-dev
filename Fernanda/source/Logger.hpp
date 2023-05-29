@@ -53,7 +53,7 @@ namespace Logger
 			auto timestamp = StringTools::time();
 
 			if (last_timestamp != timestamp || force) {
-				logStream << StringTools::pad(timestamp, 50,
+				logStream << StringTools::flank(timestamp, 50,
 					StringTools::Side::Left, '=', true)
 					<< "\n" << Qt::endl;
 				last_timestamp = timestamp;

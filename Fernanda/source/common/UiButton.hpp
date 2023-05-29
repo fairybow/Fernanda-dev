@@ -7,6 +7,8 @@
 #include <QFontDatabase>
 #include <QToolButton>
 
+#include <map>
+
 class UiButton : public Widget<QToolButton>
 {
 	Q_OBJECT
@@ -72,7 +74,17 @@ protected:
 	}
 
 private:
-	const std::map<Ui, QChar> uiFontChars = {
+	const QChar m_icon;
+	const QChar m_flag;
+	//double m_iconScale;
+	//double m_flagScale;
+	bool m_flagged = false;
+	bool m_hoveredOver = false;
+
+	const std::map<Ui, QChar> fontChars()
+	{
+		return {
+		{ Ui::None, QChar() },
 		{ Ui::Add, QChar(0xe145) },
 		{ Ui::ChevronLeft, QChar(0xe5cb) },
 		{ Ui::ChevronDown, QChar(0xe5cf) },
@@ -81,20 +93,15 @@ private:
 		{ Ui::Close, QChar(0xe5cd) },
 		{ Ui::Ellipse, QChar(0xe061) },
 		{ Ui::Refresh, QChar(0xe5d5) }
-	};
-	bool m_isUiFont = false;
-	const QChar m_icon;
-	const QChar m_flag;
-	//double m_iconScale;
-	//double m_flagScale;
-	bool m_flagged = false;
-	bool m_hoveredOver = false;
+		};
+	}
 
 	const QChar fontIcon(Ui icon)
 	{
+		auto map = fontChars();
 		QChar font_icon;
-		auto it = uiFontChars.find(icon);
-		if (it != uiFontChars.end())
+		auto it = map.find(icon);
+		if (it != map.end())
 			font_icon = it->second;
 		return font_icon;
 	}

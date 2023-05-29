@@ -13,7 +13,7 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 void MainWindow::closeEvent(QCloseEvent* event)
 {
 	QMessageBox::information(this,
-		"Test Dialog", StringTools::pad("Closing", 30));
+		"Test Dialog", StringTools::flank("Closing", 30));
 
 	//
 
