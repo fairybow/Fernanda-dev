@@ -66,7 +66,7 @@ void TabBar::updateEditedState(QUuid id, bool edited)
 void TabBar::setupWidgets()
 {
 	auto control_box = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight });
-	control_box->setContentsMargins(0, 0, 4, 0);
+	control_box->setContentsMargins(4, 0, 4, 0);
 	auto layout = Layout::box(Layout::Line::Horizontally, nullptr, this);
 	layout->addLayout(control_box, 0);
 	layout->addWidget(m_trueTabBar, 1);
