@@ -57,8 +57,8 @@ protected:
 	virtual void mousePressEvent(QMouseEvent* event) override
 	{
 		QTabBar::mousePressEvent(event);
-		m_isDragging = true;
 		if (event->button() == Qt::LeftButton) {
+			m_isDragging = true;
 			setAllButtonProperties(false);
 			setButtonProperty(currentIndex(), true);
 		}
@@ -67,10 +67,10 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent* event) override
 	{
 		QTabBar::mouseReleaseEvent(event);
-		m_isDragging = false;
-		if (event->button() == Qt::LeftButton)
+		if (event->button() == Qt::LeftButton) {
+			m_isDragging = false;
 			setAllButtonProperties(false);
-
+		}
 		// need to set current hovered (if hovered) after...
 	}
 
