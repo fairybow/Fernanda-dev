@@ -138,6 +138,7 @@ void MenuBar::dev()
 	auto document_current = new QAction(tr("&Current document"), this);
 	auto stylist_class = new QAction(tr("&Class info"), this);
 	auto stylist_stylesheets = new QAction(tr("&Style sheets"), this);
+	auto stylist_unstyle = new QAction(tr("&Remove all styling"), this);
 
 	connect(open_logs, &QAction::triggered, this, [&] {
 		emit devOpenLogs();
@@ -154,6 +155,9 @@ void MenuBar::dev()
 	connect(stylist_stylesheets, &QAction::triggered, this, [&] {
 		emit devStylistStyleSheets();
 		});
+	connect(stylist_unstyle, &QAction::triggered, this, [&] {
+		emit devStylistUnstyle();
+		});
 
 	auto menu = addMenu(tr("&Dev"));
 	for (const auto& action : { open_logs })
@@ -164,7 +168,7 @@ void MenuBar::dev()
 		document->addAction(action);
 
 	auto stylist = menu->addMenu("&Stylist");	
-	for (const auto& action : { stylist_class, stylist_stylesheets })
+	for (const auto& action : { stylist_class, stylist_stylesheets, stylist_unstyle })
 		stylist->addAction(action);
 }
 
