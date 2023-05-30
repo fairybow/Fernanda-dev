@@ -1,6 +1,8 @@
 #pragma once
 
+#include <QHoverEvent>
 #include <QSize>
+#include <QStyle>
 #include <QTabBar>
 
 #include <utility>
@@ -26,6 +28,26 @@ signals:
 	void removed();
 
 protected:
+	virtual bool event(QEvent* event) override
+	{
+		if (event->type() == QEvent::HoverEnter || event->type() == QEvent::HoverLeave) {
+			qDebug() << "Hover event:" << (event->type() == QEvent::HoverEnter ? "Enter" : "Leave");
+			auto hover_event = static_cast<QHoverEvent*>(event);
+			auto index = tabAt(hover_event->pos());
+			if (index != -1) {
+				auto button = tabButton(index, QTabBar::RightSide);
+				if (button) {
+					button->setProperty("tab-hover", (event->type() == QEvent::HoverEnter));
+					button->style()->unpolish(button);
+					button->style()->polish(button);
+
+					qDebug() << "Tab-hover property:" << button->property("tab-hover");
+				}
+			}
+		}
+		return QTabBar::event(event);
+	}
+
 	virtual void resizeEvent(QResizeEvent* event) override
 	{
 		QTabBar::resizeEvent(event);

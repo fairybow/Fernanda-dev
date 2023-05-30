@@ -170,6 +170,11 @@ QSizeGrip
 	color: @tabbutton_color;
 }
 
+#TabButton[tab-hover="true"]
+{
+	color: @tabbutton_hover_color;
+}
+
 #TabButton:hover
 {
 	background: @tabbutton_hover_background;
