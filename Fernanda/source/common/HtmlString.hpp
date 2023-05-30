@@ -53,7 +53,7 @@ namespace HtmlString
 		if (character[1] == '\0')
 			multiplied = QString(defaultArgument, character[0]);
 		else {
-			for (int i = 0; i < defaultArgument; ++i)
+			for (auto i = 0; i < defaultArgument; ++i)
 				multiplied += character;
 		}
 		return multiplied;

@@ -2,7 +2,6 @@
 
 #include "../common/Emoji.hpp"
 #include "../common/StringTools.hpp"
-//#include "../common/Utility.hpp"
 #include "ToolButton.hpp"
 
 #include <QEnterEvent>
@@ -35,16 +34,17 @@ public:
 	void setCountdown(int seconds) { m_interval = qBound(30, seconds, 3600); }
 
 protected:
-	virtual void changeEvent(QEvent* event) override
+	virtual void enterEvent(QEnterEvent* event) override
 	{
-		UiButton::changeEvent(event);
-		if (event->type() == QEvent::StyleChange)
-			pauseOrResumeIfRunning();
+		if (!m_timer->isActive() && !isMidCountdown())
+			ToolButton::enterEvent(event);
 	}
 
-	virtual void enterEvent(QEnterEvent* event) override {}
-
-	virtual void leaveEvent(QEvent* event) override {}
+	virtual void leaveEvent(QEvent* event) override
+	{
+		if (!m_timer->isActive() && !isMidCountdown())
+			ToolButton::leaveEvent(event);
+	}
 
 	virtual void mousePressEvent(QMouseEvent* event) override
 	{
@@ -81,9 +81,14 @@ private:
 		return false;
 	}
 
+	bool isMidCountdown()
+	{
+		return (m_countdown > 0 && m_countdown < m_interval);
+	}
+
 	bool pauseOrResumeIfRunning()
 	{
-		if (m_countdown > 0 && m_countdown < m_interval) {
+		if (isMidCountdown()) {
 			m_timer->isActive()
 				? m_timer->stop()
 				: m_timer->start(1000);

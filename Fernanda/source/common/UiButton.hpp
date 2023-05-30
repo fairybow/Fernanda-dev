@@ -6,6 +6,7 @@
 #include <QEnterEvent>
 #include <QFontDatabase>
 #include <QString>
+#include <QStyle>
 #include <QToolButton>
 
 #include <map>
@@ -42,6 +43,7 @@ public:
 	}
 
 	bool flagged() const { return m_flagged; }
+	bool hoveredOver() const { return m_hoveredOver; }
 	QString label() const { return m_label; }
 	QString flag() const { return m_flag; }
 
@@ -52,13 +54,6 @@ public:
 	}
 
 protected:
-	/*virtual void changeEvent(QEvent* event) override
-	{
-		QToolButton::changeEvent(event);
-		if (event->type() == QEvent::StyleChange)
-			update();
-	}*/
-
 	virtual void enterEvent(QEnterEvent* event) override
 	{
 		QToolButton::enterEvent(event);
@@ -76,15 +71,12 @@ protected:
 private:
 	const QString m_label;
 	const QString m_flag;
-	//double m_iconScale;
-	//double m_flagScale;
 	bool m_flagged = false;
 	bool m_hoveredOver = false;
 
 	const std::map<Ui, QChar> fontChars()
 	{
 		return {
-		{ Ui::None, QChar() },
 		{ Ui::Add, QChar(0xe145) },
 		{ Ui::ChevronLeft, QChar(0xe5cb) },
 		{ Ui::ChevronDown, QChar(0xe5cf) },
@@ -112,10 +104,23 @@ private:
 		return QFont(QFontDatabase::applicationFontFamilies(id).at(0));
 	}
 
+	bool flagShouldDisplay()
+	{
+		return (m_flagged && !m_hoveredOver && !m_flag.isNull());
+	}
+
 	void updateIcon()
 	{
-		(m_flagged && !m_hoveredOver && !m_flag.isNull())
+		(flagShouldDisplay())
 			? setText(m_flag)
 			: setText(m_label);
+		updateFlaggedProperty();
+	}
+
+	void updateFlaggedProperty()
+	{
+		setProperty("flagged", flagShouldDisplay());
+		style()->unpolish(this);
+		style()->polish(this);
 	}
 };

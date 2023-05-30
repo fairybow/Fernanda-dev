@@ -2,26 +2,23 @@
 
 #include "../common/UiButton.hpp"
 
+#include <QGraphicsOpacityEffect>
 #include <QMouseEvent>
 #include <QString>
 
 class ToolButton : public UiButton
 {
+	Q_OBJECT
+
 public:
-	ToolButton(const QString& label, QWidget* parent = nullptr)
-		: UiButton("ToolButton", label, parent)
+	ToolButton(const QString& label, QWidget* parent = nullptr, double idleOpacity = 0.3)
+		: UiButton("ToolButton", label, parent), m_idleOpacity(idleOpacity)
 	{
-		setCheckable(true);
-
-		// Fix highlighting issue:
-		// even though opacity should reverse,
-		// highlight should remain while hovered;
-		// address like TabButton
-
+		setup();
 	}
 
 public slots:
-	virtual void setVisible(bool visible)
+	virtual void setVisible(bool visible) override
 	{
 		if (isChecked())
 			setChecked(false);
@@ -29,12 +26,40 @@ public slots:
 	}
 
 protected:
+	virtual bool eventFilter(QObject* object, QEvent* event) override
+	{
+		if (event->type() == QEvent::HoverEnter || event->type() == QEvent::HoverLeave) {
+			hoveredOver()
+				? m_effect->setOpacity(1.0)
+				: m_effect->setOpacity(stateOpacity());
+		}
+		return UiButton::eventFilter(object, event);
+	}
+
 	virtual void mousePressEvent(QMouseEvent* event) override
 	{
 		if (event->button() == Qt::RightButton) {
 			setChecked(!isChecked());
+			m_effect->setOpacity(stateOpacity());
 			return;
 		}
 		UiButton::mousePressEvent(event);
+	}
+
+private:
+	double m_idleOpacity;
+	QGraphicsOpacityEffect* m_effect = new QGraphicsOpacityEffect(this);
+
+	void setup()
+	{
+		setCheckable(true);
+		m_effect->setOpacity(m_idleOpacity);
+		setGraphicsEffect(m_effect);
+		installEventFilter(this);
+	}
+
+	double stateOpacity()
+	{
+		return isChecked() ? 1.0 : m_idleOpacity;
 	}
 };

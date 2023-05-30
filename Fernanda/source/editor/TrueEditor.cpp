@@ -23,7 +23,7 @@ void TrueEditor::lineNumberAreaPaintEvent(QPaintEvent* event)
 	while (block.isValid() && top <= event->rect().bottom()) {
 		if (block.isVisible() && bottom >= event->rect().top()) {
 			auto number = QString::number(block_number + 1);
-			painter.drawText(0, top, m_lineNumberArea->width(),
+			painter.drawText(0, top, m_lineNumberArea->width() - 3,
 				fontMetrics().height(), Qt::AlignRight, number);
 		}
 
@@ -45,7 +45,7 @@ int TrueEditor::lineNumberAreaWidth()
 			++digits;
 		}
 
-		auto space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
+		auto space = 8 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
 		return space;
 	}();
 }

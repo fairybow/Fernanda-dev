@@ -106,8 +106,10 @@
     <None Include="resources\indicator\Red.qss" />
     <None Include="resources\menu\themes\editor\Amber.fernanda_editor" />
     <None Include="resources\menu\themes\editor\Blue.fernanda_editor" />
+    <None Include="resources\menu\themes\editor\Dark.fernanda_editor" />
     <None Include="resources\menu\themes\editor\Green.fernanda_editor" />
     <None Include="resources\menu\themes\editor\Grey.fernanda_editor" />
+    <None Include="resources\menu\themes\editor\Light.fernanda_editor" />
     <None Include="resources\menu\themes\editor\Pocket-Alt.fernanda_editor" />
     <None Include="resources\menu\themes\editor\Pocket.fernanda_editor" />
     <None Include="resources\menu\themes\editor\Snooze-Alt.fernanda_editor" />
@@ -187,7 +189,7 @@
     <QtMoc Include="source\tools\AlwaysOnTop.hpp" />
     <QtMoc Include="source\tools\StayAwake.hpp" />
     <QtMoc Include="source\tools\PomodoroTimer.hpp" />
-    <ClInclude Include="source\tools\ToolButton.hpp" />
+    <QtMoc Include="source\tools\ToolButton.hpp" />
     <ClInclude Include="source\user\Settings.hpp" />
     <QtMoc Include="source\user\User.hpp" />
     <ClInclude Include="source\Version.hpp" />

@@ -368,6 +368,9 @@ void MainWindow::menuBarDevConnections()
 	connect(m_menuBar, &MenuBar::devStylistStyleSheets, this, [&] {
 		m_stylist->devStyleSheets();
 		});
+	connect(m_menuBar, &MenuBar::devStylistUnstyle, this, [&] {
+		m_stylist->unStyle();
+		});
 }
 
 void MainWindow::loadConfigs()

@@ -65,7 +65,8 @@ namespace Logger
 			if (!isInitialized)
 				clearOnFirstWrite();
 			timestamp();
-			logStream << StringTools::fixEscapes(message) << "\n" << Qt::endl;
+			logStream << StringTools::fixEscapes(message)
+				<< "\n" << Qt::endl;
 		}
 
 		inline void passthrough(QtMsgType type, const QMessageLogContext& context, const QString& message)

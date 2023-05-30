@@ -156,6 +156,12 @@
     <None Include="notes\Git.md">
       <Filter>Notes</Filter>
     </None>
+    <None Include="resources\menu\themes\editor\Light.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Dark.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="source\MainWindow.h">
@@ -217,6 +223,9 @@
     </QtMoc>
     <QtMoc Include="source\common\UiButton.hpp">
       <Filter>Source\Common</Filter>
+    </QtMoc>
+    <QtMoc Include="source\tools\ToolButton.hpp">
+      <Filter>Source\Tools</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -305,9 +314,6 @@
     </ClInclude>
     <ClInclude Include="source\common\Widget.hpp">
       <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\tools\ToolButton.hpp">
-      <Filter>Source\Tools</Filter>
     </ClInclude>
     <ClInclude Include="source\menu\ComboBox.hpp">
       <Filter>Source\Menu</Filter>
