@@ -20,7 +20,7 @@ public:
 		setMovable(true);
 		setExpanding(false);
 		setUsesScrollButtons(true);
-		setDrawBase(true);
+		setDrawBase(false);
 		installEventFilter(this);
 	}
 

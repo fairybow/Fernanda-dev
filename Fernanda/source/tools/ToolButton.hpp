@@ -28,10 +28,11 @@ public slots:
 protected:
 	virtual bool eventFilter(QObject* object, QEvent* event) override
 	{
-		if (event->type() == QEvent::HoverEnter || event->type() == QEvent::HoverLeave)
-			hoveredOver() ? m_effect->setOpacity(1.0) : m_effect->setOpacity(isChecked() ? 1.0 : m_idleOpacity);
-
-
+		if (event->type() == QEvent::HoverEnter || event->type() == QEvent::HoverLeave) {
+			hoveredOver()
+				? m_effect->setOpacity(1.0)
+				: m_effect->setOpacity(stateOpacity());
+		}
 		return UiButton::eventFilter(object, event);
 	}
 
@@ -39,9 +40,7 @@ protected:
 	{
 		if (event->button() == Qt::RightButton) {
 			setChecked(!isChecked());
-
-			m_effect->setOpacity(isChecked() ? 1.0 : 0.5);
-
+			m_effect->setOpacity(stateOpacity());
 			return;
 		}
 		UiButton::mousePressEvent(event);
@@ -57,6 +56,10 @@ private:
 		m_effect->setOpacity(m_idleOpacity);
 		setGraphicsEffect(m_effect);
 		installEventFilter(this);
-		//setMouseTracking(true);
+	}
+
+	double stateOpacity()
+	{
+		return isChecked() ? 1.0 : m_idleOpacity;
 	}
 };
