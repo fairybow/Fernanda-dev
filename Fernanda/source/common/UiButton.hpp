@@ -84,7 +84,6 @@ private:
 	const std::map<Ui, QChar> fontChars()
 	{
 		return {
-		{ Ui::None, QChar() },
 		{ Ui::Add, QChar(0xe145) },
 		{ Ui::ChevronLeft, QChar(0xe5cb) },
 		{ Ui::ChevronDown, QChar(0xe5cf) },
