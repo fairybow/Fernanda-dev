@@ -21,7 +21,7 @@ namespace PopupText
 			return HtmlString::multiply(" ", spaces);
 		}
 
-		inline const QString pad(QString text, int spaces = 3)
+		inline const QString pad(QString text, int spaces = 3) // replace with StringTools version
 		{
 			QString padding = multiSpaces(spaces);
 			return padding + text + padding;

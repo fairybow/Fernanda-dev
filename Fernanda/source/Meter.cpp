@@ -15,7 +15,7 @@ Meter::Meter(const char* name, QWidget* parent)
 
 void Meter::trigger(Type type, bool force)
 {
-	if ((!m_hasAutoCount && type == Type::Counts) && !force) return;
+	if ((!m_hasAutoCount && type == Type::Counts) && !force) return; // for positions, block for > x.
 	switch (type) {
 	case Type::Counts:
 		updateCounts();
@@ -25,6 +25,10 @@ void Meter::trigger(Type type, bool force)
 		break;
 	case Type::Selection:
 		updateCounts(true);
+		break;
+	default:
+		updateCounts();
+		updatePositions();
 		break;
 	}
 }
@@ -55,17 +59,16 @@ void Meter::connections()
 		m_hasAutoCount = checked;
 		m_refresh->setVisible(!checked);
 		});
-	connect(m_refresh, &StatusBarButton::pressed, this, [&] {
+	connect(m_refresh, &UiButton::pressed, this, [&] {
 		trigger(Type::Counts, true);
 		emit editorFocusReturn();
 		});
 }
 
-void Meter::updateAll(bool& memberBool, bool state)
+void Meter::updateOutput(bool& memberBool, bool state)
 {
 	memberBool = state;
-	updateCounts();
-	updatePositions();
+	trigger();
 }
 
 void Meter::updateCounts(bool isSelection)

@@ -170,9 +170,6 @@
     <QtMoc Include="source\Indicator.hpp">
       <Filter>Source</Filter>
     </QtMoc>
-    <QtMoc Include="source\common\StatusBarButton.hpp">
-      <Filter>Source\Common</Filter>
-    </QtMoc>
     <QtMoc Include="source\menu\VersionChecker.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
@@ -212,14 +209,14 @@
     <QtMoc Include="source\tabs\TrueTabBar.hpp">
       <Filter>Source\Tabs</Filter>
     </QtMoc>
-    <QtMoc Include="source\tabs\TabButton.hpp">
-      <Filter>Source\Tabs</Filter>
-    </QtMoc>
     <QtMoc Include="source\tabs\CloseTab.hpp">
       <Filter>Source\Tabs</Filter>
     </QtMoc>
     <QtMoc Include="source\tabs\ScrollTabs.hpp">
       <Filter>Source\Tabs</Filter>
+    </QtMoc>
+    <QtMoc Include="source\common\UiButton.hpp">
+      <Filter>Source\Common</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -330,17 +327,11 @@
     <ClInclude Include="source\common\Utility.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\Emoji.hpp">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
     <ClInclude Include="source\document\TextDocument.hpp">
       <Filter>Source\Document</Filter>
     </ClInclude>
     <ClInclude Include="source\tabs\AddTab.hpp">
       <Filter>Source\Tabs</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\Icon.hpp">
-      <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="source\menu\ActionGroup.h">
       <Filter>Source\Menu</Filter>
@@ -349,6 +340,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="source\common\StringTools.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\Emoji.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
   </ItemGroup>
@@ -373,7 +367,7 @@
     <QtRcc Include="resources\Indicator.qrc">
       <Filter>Resources</Filter>
     </QtRcc>
-    <QtRcc Include="resources\Ui.qrc">
+    <QtRcc Include="resources\UiButton.qrc">
       <Filter>Resources</Filter>
     </QtRcc>
   </ItemGroup>

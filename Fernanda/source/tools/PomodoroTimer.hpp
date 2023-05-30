@@ -1,24 +1,27 @@
 #pragma once
 
+#include "../common/Emoji.hpp"
 #include "../common/StringTools.hpp"
-#include "../common/Utility.hpp"
+//#include "../common/Utility.hpp"
 #include "ToolButton.hpp"
 
+#include <QEnterEvent>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QString>
 #include <QTimer>
 
+/* Changing style sheets stops the timer display and/or timer */
+
 class PomodoroTimer : public ToolButton
 {
 	Q_OBJECT
 
 public:
-	PomodoroTimer(const QString& text, QMainWindow* mainWindow,
+	PomodoroTimer(QMainWindow* mainWindow,
 		QWidget* parent = nullptr, int defaultSecondsCountdown = defaultInterval())
-		: ToolButton(text, parent),
-		m_text(text),
+		: ToolButton(Emoji::TOMATO, parent),
 		m_window(mainWindow),
 		m_interval(defaultSecondsCountdown)
 	{
@@ -32,6 +35,17 @@ public:
 	void setCountdown(int seconds) { m_interval = qBound(30, seconds, 3600); }
 
 protected:
+	virtual void changeEvent(QEvent* event) override
+	{
+		UiButton::changeEvent(event);
+		if (event->type() == QEvent::StyleChange)
+			pauseOrResumeIfRunning();
+	}
+
+	virtual void enterEvent(QEnterEvent* event) override {}
+
+	virtual void leaveEvent(QEvent* event) override {}
+
 	virtual void mousePressEvent(QMouseEvent* event) override
 	{
 		if (event->button() != Qt::RightButton)
@@ -40,7 +54,6 @@ protected:
 	}
 
 private:
-	const QString m_text;
 	int m_interval;
 	int m_countdown = 0;
 	QMainWindow* m_window;
@@ -51,7 +64,7 @@ private:
 		QMessageBox popup(parentWindow);
 		popup.setWindowTitle(parentWindow->windowTitle());
 		popup.setText(
-			StringTools::pad("Time's up!", 30));
+			StringTools::flank("Time's up!", 30));
 		auto ok = popup.addButton(QMessageBox::Ok);
 		popup.setDefaultButton(ok);
 		popup.exec();
@@ -60,7 +73,7 @@ private:
 	bool isStopping(bool checked)
 	{
 		if (!checked) {
-			setText(m_text);
+			setText(label());
 			m_timer->stop();
 			m_countdown = m_interval;
 			return true;
@@ -82,13 +95,15 @@ private:
 private slots:
 	void countdownDisplay()
 	{
-		setText("  " + m_text + "  " + StringTools::secondsToMinutes(m_countdown, ".") + "  ");
+		auto time = StringTools::secondsToMinutes(m_countdown, ".");
+		auto text = StringTools::pad(2, label(), time);
+		setText(text);
 		if (m_countdown < 1) {
 			timeUp(m_window);
 			setChecked(false);
 			return;
 		}
-		Utility::delayCall(this, [&] { --m_countdown; });
+		--m_countdown;
 	}
 
 	void startCountdown(bool checked)

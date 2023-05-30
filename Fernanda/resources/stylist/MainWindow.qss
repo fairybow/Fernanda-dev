@@ -122,24 +122,24 @@ QSizeGrip
 	border: none;
 }
 
-#StatusBarButton
+#ToolButton, #MeterButton
 {
-	background: @statusbarbutton_background;
+	background: @toolbutton_background;
 	border: transparent;
 	border-radius: 3px;
-	color: @statusbarbutton_color;
+	color: @toolbutton_color;
 }
 
-#StatusBarButton:hover
+#ToolButton:hover, #MeterButton:hover
 {
-	background: @statusbarbutton_hover_background;
-	color: @statusbarbutton_hover_color;
+	background: @toolbutton_hover_background;
+	color: @toolbutton_hover_color;
 }
 
-#StatusBarButton:pressed
+#ToolButton:pressed, #MeterButton:pressed
 {
-	background: @statusbarbutton_pressed_background;
-	color: @statusbarbutton_pressed_color;
+	background: @toolbutton_pressed_background;
+	color: @toolbutton_pressed_color;
 }
 
 #TabBar
@@ -166,18 +166,23 @@ QSizeGrip
 
 #TabButton
 {
-	background: @tabbarbutton_background;
-	color: @tabbarbutton_color;
+	background: @tabbutton_background;
+	color: @tabbutton_color;
+}
+
+#TabButton[tab-hover="true"]
+{
+	color: @tabbutton_hover_color;
 }
 
 #TabButton:hover
 {
-	background: @tabbarbutton_hover_background;
-	color: @tabbarbutton_hover_color;
+	background: @tabbutton_hover_background;
+	color: @tabbutton_hover_color;
 }
 
 #TabButton:pressed
 {
-	background: @tabbarbutton_pressed_background;
-	color: @tabbarbutton_pressed_color;
+	background: @tabbutton_pressed_background;
+	color: @tabbutton_pressed_color;
 }

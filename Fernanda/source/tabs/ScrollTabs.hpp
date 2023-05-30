@@ -1,11 +1,10 @@
 #pragma once
 
-#include "../common/Icon.hpp"
-#include "TabButton.hpp"
+#include "../common/UiButton.hpp"
 
 #include <QTabBar>
 
-class ScrollTabs : public TabButton
+class ScrollTabs : public UiButton
 {
 	Q_OBJECT
 
@@ -13,7 +12,7 @@ public:
 	enum class Side { Left, Right };
 
 	ScrollTabs(QTabBar* tabBar, Side side, QWidget* parent = nullptr)
-		: TabButton("TabButton", icon(side), parent), m_tabBar(tabBar), m_side(side)
+		: UiButton("TabButton", icon(side), parent), m_tabBar(tabBar), m_side(side)
 	{
 		connect(this, &ScrollTabs::clicked, this, [&] {
 			auto delta = (m_side == Side::Left) ? -1 : 1;
@@ -27,8 +26,8 @@ private:
 	QTabBar* m_tabBar;
 	Side m_side;
 
-	Icon::Ui icon(Side side)
+	Ui icon(Side side)
 	{
-		return (side == Side::Left) ? Icon::Ui::ChevronLeft : Icon::Ui::ChevronRight;
+		return (side == Side::Left) ? Ui::ChevronLeft : Ui::ChevronRight;
 	}
 };

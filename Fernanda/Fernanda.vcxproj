@@ -31,12 +31,12 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>6.5.0_msvc2019_64</QtInstall>
+    <QtInstall>6.5.1_msvc2019_64</QtInstall>
     <QtModules>core;gui;network;widgets;printsupport;svg;webchannel;webenginecore;xml;webenginewidgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>6.5.0_msvc2019_64</QtInstall>
+    <QtInstall>6.5.1_msvc2019_64</QtInstall>
     <QtModules>core;gui;network;widgets;printsupport;svg;webchannel;webenginecore;xml;webenginewidgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -144,15 +144,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Emoji.hpp" />
-    <ClInclude Include="source\common\Icon.hpp" />
     <ClInclude Include="source\common\StringTools.hpp" />
+    <QtMoc Include="source\common\UiButton.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
     <QtMoc Include="source\document\Document.h" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
     <QtMoc Include="source\tabs\TabBar.h" />
     <QtMoc Include="source\tabs\TrueTabBar.hpp" />
     <ClInclude Include="source\document\TextDocument.hpp" />
-    <QtMoc Include="source\tabs\TabButton.hpp" />
     <QtMoc Include="source\tabs\CloseTab.hpp" />
     <ClInclude Include="source\Logger.hpp" />
     <ClInclude Include="source\tabs\AddTab.hpp" />
@@ -162,7 +161,6 @@
     <ClInclude Include="source\common\HtmlString.hpp" />
     <ClInclude Include="source\common\Io.hpp" />
     <ClInclude Include="source\common\Layout.hpp" />
-    <QtMoc Include="source\common\StatusBarButton.hpp" />
     <ClInclude Include="source\common\Path.hpp" />
     <ClInclude Include="source\common\RegexPatterns.hpp" />
     <ClInclude Include="source\common\StylePatterns.hpp" />
@@ -203,7 +201,7 @@
     <QtRcc Include="resources\Indicator.qrc" />
     <QtRcc Include="resources\MenuBar.qrc" />
     <QtRcc Include="resources\Stylist.qrc" />
-    <QtRcc Include="resources\Ui.qrc" />
+    <QtRcc Include="resources\UiButton.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

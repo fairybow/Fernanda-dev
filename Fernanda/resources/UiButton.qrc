@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ui/MaterialIcons-Regular.ttf</file>
+    </qresource>
+</RCC>

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../common/Emoji.hpp"
 #include "ToolButton.hpp"
 
 #include <QMainWindow>
@@ -10,8 +11,8 @@ class AlwaysOnTop : public ToolButton
 	Q_OBJECT
 
 public:
-	AlwaysOnTop(const QString& text, QMainWindow* mainWindow, QWidget* parent = nullptr)
-		: ToolButton(text, parent), m_window(mainWindow)
+	AlwaysOnTop(QMainWindow* mainWindow, QWidget* parent = nullptr)
+		: ToolButton(Emoji::PUSHPIN, parent), m_window(mainWindow)
 	{
 		connect(this, &AlwaysOnTop::toggled, this, &AlwaysOnTop::alwaysOnTop);
 	}

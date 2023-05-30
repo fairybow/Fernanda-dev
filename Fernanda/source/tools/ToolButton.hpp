@@ -1,15 +1,15 @@
 #pragma once
 
-#include "../common/StatusBarButton.hpp"
+#include "../common/UiButton.hpp"
 
 #include <QMouseEvent>
 #include <QString>
 
-class ToolButton : public StatusBarButton
+class ToolButton : public UiButton
 {
 public:
-	ToolButton(const QString& text, QWidget* parent = nullptr)
-		: StatusBarButton("StatusBarButton", text, parent, 0.3)
+	ToolButton(const QString& label, QWidget* parent = nullptr)
+		: UiButton("ToolButton", label, parent)
 	{
 		setCheckable(true);
 
@@ -25,7 +25,7 @@ public slots:
 	{
 		if (isChecked())
 			setChecked(false);
-		StatusBarButton::setVisible(visible);
+		UiButton::setVisible(visible);
 	}
 
 protected:
@@ -35,7 +35,6 @@ protected:
 			setChecked(!isChecked());
 			return;
 		}
-
-		QPushButton::mousePressEvent(event);
+		UiButton::mousePressEvent(event);
 	}
 };

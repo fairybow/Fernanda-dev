@@ -20,17 +20,25 @@
 	padding-right: 1px;
 }
 
-#StatusBarButton
+#MeterButton
+{
+	font-size: 12pt;
+	padding: 1px;
+}
+
+#MeterButton:hover
+{
+	font-size: 13pt;
+}
+
+#ToolButton
 {
 	font-size: 9pt;
 	min-width: 33px;
-	padding-bottom: 1px;
-	padding-left: 5px;
-	padding-right: 5px;
-	padding-top: 1px;
+	padding: 1px;
 }
 
-#StatusBarButton:hover
+#ToolButton:hover
 {
 	font-size: 10pt;
 }
@@ -38,11 +46,6 @@
 #TabBar::scroller
 {
 	width: 0px;
-}
-
-#TabBar::tab:!selected
-{
-	margin-top: 1px;
 }
 
 #TabButton
