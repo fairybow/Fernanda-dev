@@ -11,7 +11,7 @@ class ToolButton : public UiButton
 	Q_OBJECT
 
 public:
-	ToolButton(const QString& label, QWidget* parent = nullptr, double idleOpacity = 0.5)
+	ToolButton(const QString& label, QWidget* parent = nullptr, double idleOpacity = 0.3)
 		: UiButton("ToolButton", label, parent), m_idleOpacity(idleOpacity)
 	{
 		setup();
