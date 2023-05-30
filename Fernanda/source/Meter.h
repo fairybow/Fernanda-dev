@@ -57,7 +57,7 @@ private:
 	QLabel* m_positions = new QLabel(this);
 	QLabel* m_counts = new QLabel(this);
 	QLabel* m_separator = new QLabel(this);
-	UiButton* m_refresh = new UiButton("MeterButton", UiButton::Ui::Refresh, this); // switch to tool button, ui font
+	UiButton* m_refresh = new UiButton("MeterButton", UiButton::Ui::Refresh, this);
 
 	bool m_hasAutoCount = true;
 	bool m_hasLinePosition = true;
