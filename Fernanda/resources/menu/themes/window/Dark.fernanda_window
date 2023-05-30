@@ -26,7 +26,6 @@ Light/dark palette:
 +------------------+----------+---------+---------------+
 */
 
-
 /* ---------------------------------- */
 
 @mainwindow_background; = #1f1f1f;
@@ -57,6 +56,9 @@ Light/dark palette:
 @tabbar_tabhover_background; = #444444;
 @tabbar_tabhover_color; = #e52b50;
 
+@tabbar_tabpressed_background; = #444444;
+@tabbar_tabpressed_color; = #e52b50;
+
 @tabbar_tabselected_background; = #1f1f1f;
 
 @tabbutton_background; = transparent;
@@ -68,8 +70,6 @@ Light/dark palette:
 @tabbutton_pressed_background; = #545454;
 @tabbutton_pressed_color; = #c8c8c8;
 
-/* ellipse needs to be scaled to half and display hover color on tab hover */
-/* tab opacity (inactive), button (statusbar, tab) opacity on hover via code? */
 
 
 /* --- Status bar ------------------- */

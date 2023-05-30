@@ -224,6 +224,9 @@
     <QtMoc Include="source\common\UiButton.hpp">
       <Filter>Source\Common</Filter>
     </QtMoc>
+    <QtMoc Include="source\tools\ToolButton.hpp">
+      <Filter>Source\Tools</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -311,9 +314,6 @@
     </ClInclude>
     <ClInclude Include="source\common\Widget.hpp">
       <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\tools\ToolButton.hpp">
-      <Filter>Source\Tools</Filter>
     </ClInclude>
     <ClInclude Include="source\menu\ComboBox.hpp">
       <Filter>Source\Menu</Filter>

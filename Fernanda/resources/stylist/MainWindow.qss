@@ -141,7 +141,8 @@ QSizeGrip
 
 #TabBar::tab:pressed
 {
-	color: @tabbar_tabhover_color;
+	background: @tabbar_tabpressed_background;
+	color: @tabbar_tabpressed_color;
 }
 
 #TabBar::tab:selected

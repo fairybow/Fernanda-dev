@@ -1,8 +1,8 @@
-@bgColor; = #140f00;
-@fontColor; = #ffbf00;
-@selectionBgColor; = #ffbf00;
-@selectionColor; = #140f00;
-@lnaBg; = rgba(66, 66, 66, 0.1);
-@lnaFont; = rgba(255, 255, 255, 0.1);
-@cursorColor; = #ffbf00;
-@cursorUnderColor; = #140f00;
+@bgColor; = #f4f4f4;
+@fontColor; = #3c3c3c;
+@selectionBgColor; = #007fff;
+@selectionColor; = #545454;
+@lnaBg; = #eaeaea;
+@lnaFont; = #3c3c3c;
+@cursorColor; = #007fff;
+@cursorUnderColor; = #f4f4f4;

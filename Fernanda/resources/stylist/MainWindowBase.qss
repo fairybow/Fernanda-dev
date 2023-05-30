@@ -45,11 +45,18 @@
 	padding: 0px;
 }
 
+#TabButton[flagged="true"]
+{
+	font-size: 9pt;
+}
+
 #ToolButton
 {
 	font-size: 9pt;
 	min-width: 33px;
 	padding: 1px;
+	padding-left: 4px;
+	padding-right: 4px;
 }
 
 #ToolButton:hover
