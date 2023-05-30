@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QHoverEvent>
+#include <QMouseEvent>
 #include <QSize>
 #include <QStyle>
 #include <QTabBar>
@@ -20,6 +21,10 @@ public:
 		setExpanding(false);
 		setUsesScrollButtons(true);
 		setDrawBase(false);
+
+		//
+
+		installEventFilter(this);
 	}
 
 signals:
@@ -28,24 +33,45 @@ signals:
 	void removed();
 
 protected:
-	virtual bool event(QEvent* event) override
+	virtual bool eventFilter(QObject* object, QEvent* event) override
 	{
-		if (event->type() == QEvent::HoverEnter || event->type() == QEvent::HoverLeave) {
-			qDebug() << "Hover event:" << (event->type() == QEvent::HoverEnter ? "Enter" : "Leave");
-			auto hover_event = static_cast<QHoverEvent*>(event);
-			auto index = tabAt(hover_event->pos());
+		if (event->type() == QEvent::MouseMove && !m_isDragging)
+		{
+			auto mouse_event = static_cast<QMouseEvent*>(event);
+			auto index = tabAt(mouse_event->pos());
 			if (index != -1) {
-				auto button = tabButton(index, QTabBar::RightSide);
-				if (button) {
-					button->setProperty("tab-hover", (event->type() == QEvent::HoverEnter));
-					button->style()->unpolish(button);
-					button->style()->polish(button);
-
-					qDebug() << "Tab-hover property:" << button->property("tab-hover");
-				}
+				m_lastHoveredIndex = m_hoveredIndex;
+				m_hoveredIndex = index;
+				setButtonProperty(m_lastHoveredIndex, false);
+				setButtonProperty(m_hoveredIndex, true);
 			}
+			else
+				setAllButtonProperties(false);
 		}
-		return QTabBar::event(event);
+		else if (event->type() == QEvent::HoverLeave)
+			setAllButtonProperties(false);
+
+		return QTabBar::eventFilter(object, event);
+	}
+
+	virtual void mousePressEvent(QMouseEvent* event) override
+	{
+		QTabBar::mousePressEvent(event);
+		m_isDragging = true;
+		if (event->button() == Qt::LeftButton) {
+			setAllButtonProperties(false);
+			setButtonProperty(currentIndex(), true);
+		}
+	}
+
+	virtual void mouseReleaseEvent(QMouseEvent* event) override
+	{
+		QTabBar::mouseReleaseEvent(event);
+		m_isDragging = false;
+		if (event->button() == Qt::LeftButton)
+			setAllButtonProperties(false);
+
+		// need to set current hovered (if hovered) after...
 	}
 
 	virtual void resizeEvent(QResizeEvent* event) override
@@ -74,4 +100,32 @@ protected:
 
 private:
 	const std::pair<int, int> m_tabSizeRange;
+
+	//
+
+	int m_hoveredIndex = -1;
+	int m_lastHoveredIndex = -1;
+	bool m_isDragging = false;
+
+	void setButtonProperty(int index, bool value)
+	{
+		if (index < 0) return;
+		auto button = tabButton(index, QTabBar::RightSide);
+		if (!button) return;
+		button->setProperty("tab-hover", value);
+		button->style()->unpolish(button);
+		button->style()->polish(button);
+	}
+
+	void setAllButtonProperties(bool value)
+	{
+		for (auto i = 0; i < count(); ++i)
+			setButtonProperty(i, value);
+
+		//
+		m_lastHoveredIndex = -1;
+		m_hoveredIndex = -1;
+	}
+
+	//
 };
