@@ -2,7 +2,7 @@
 
 #include "../common/Emoji.hpp"
 #include "../common/StringTools.hpp"
-#include "../common/Utility.hpp"
+//#include "../common/Utility.hpp"
 #include "ToolButton.hpp"
 
 #include <QEnterEvent>
@@ -11,6 +11,8 @@
 #include <QMouseEvent>
 #include <QString>
 #include <QTimer>
+
+/* Changing style sheets stops the timer display and/or timer */
 
 class PomodoroTimer : public ToolButton
 {
@@ -33,6 +35,13 @@ public:
 	void setCountdown(int seconds) { m_interval = qBound(30, seconds, 3600); }
 
 protected:
+	virtual void changeEvent(QEvent* event) override
+	{
+		UiButton::changeEvent(event);
+		if (event->type() == QEvent::StyleChange)
+			pauseOrResumeIfRunning();
+	}
+
 	virtual void enterEvent(QEnterEvent* event) override {}
 
 	virtual void leaveEvent(QEvent* event) override {}
@@ -94,7 +103,7 @@ private slots:
 			setChecked(false);
 			return;
 		}
-		Utility::delayCall(this, [&] { --m_countdown; });
+		--m_countdown;
 	}
 
 	void startCountdown(bool checked)
