@@ -156,6 +156,12 @@
     <None Include="notes\Git.md">
       <Filter>Notes</Filter>
     </None>
+    <None Include="resources\menu\themes\editor\Light.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
+    <None Include="resources\menu\themes\editor\Dark.fernanda_editor">
+      <Filter>Resources\Themes\Editor</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="source\MainWindow.h">
