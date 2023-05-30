@@ -21,9 +21,6 @@ public:
 		setExpanding(false);
 		setUsesScrollButtons(true);
 		setDrawBase(false);
-
-		//
-
 		installEventFilter(this);
 	}
 
@@ -71,7 +68,7 @@ protected:
 			m_isDragging = false;
 			setAllButtonProperties(false);
 		}
-		// need to set current hovered (if hovered) after...
+		simulatedMouseMovement(event);
 	}
 
 	virtual void resizeEvent(QResizeEvent* event) override
@@ -100,9 +97,6 @@ protected:
 
 private:
 	const std::pair<int, int> m_tabSizeRange;
-
-	//
-
 	int m_hoveredIndex = -1;
 	int m_lastHoveredIndex = -1;
 	bool m_isDragging = false;
@@ -121,11 +115,15 @@ private:
 	{
 		for (auto i = 0; i < count(); ++i)
 			setButtonProperty(i, value);
-
-		//
 		m_lastHoveredIndex = -1;
 		m_hoveredIndex = -1;
 	}
 
-	//
+	void simulatedMouseMovement(QMouseEvent* event)
+	{
+		QMouseEvent mouseMoveEvent(QEvent::MouseMove,
+			event->localPos(), event->windowPos(), event->screenPos(),
+			Qt::NoButton, event->buttons(), event->modifiers());
+		eventFilter(this, &mouseMoveEvent);
+	}
 };
