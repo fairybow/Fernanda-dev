@@ -3,6 +3,7 @@
 #### Clicking new file:
 
 - AKA, creating a blank **named file by path** and opening a document + new tab for it
+
 - `New file` first opens a dialog, dishes warnings for potential overwriting, regarding path name
 - `MenuBar` emits a signal to `MainWindow` asking to open a new file at the given `path`
 - `MainWindow` handles this by calling the function to open any tab by path and supplying optional `arg` to first write a new file at that path
@@ -29,7 +30,7 @@
 - `Document` returns a string from the "current" document:
 	- It searches by (new) **current ID** and `path`
 	- It sends a signal to start/restart the auto save timer, the timing out of which triggers the above process (of saving the current tab's text to a document object + a temp file) every 25 seconds
-- `MainWindow->TabBar` then serves a tab (using `Documents` **current ID* with the intended `path` (for displaying the title on the tab)
+- `MainWindow->TabBar` then serves a tab (using `Documents` **current ID** with the intended `path` (for displaying the title on the tab)
 	- `TabBar` calls the function to get or make an index via ID
 	- In this case, it will not find one, so it will create one, passing in both arguments
 	- We temporarily block signals and insert a new tab, returning its index
@@ -37,3 +38,16 @@
 	- The new tab's data is a variant map containing its **ID** (same as the corresponding document, which is either in the cache or preserved as a temp file to be recovered), and its title
 	- `TabBar` unblocks signals and sets its current index to the new tab
 - `MainWindow->Editor` sets its current text to the string retrieved from `Document` above
+
+#### Clicking open file:
+
+- AKA, opening a **named file by path** and switching to (if already opened) or creating its tab and document
+
+- `Open file` opens file section dialog and sends the `path` to `MainWindow` via signal
+- The same initial `MainWindow` function above is run (opening a new file), minus the argument for writing a new file
+- Instead, `MainWindow->Document` sets the current `TextDocument` by `path`
+- `Document` runs through the same processes as above, returning a `QString` to be sent, by `MainWindow`, to the `Editor` after first serving a (possibly new) tab
+- If a user selects a currently opened tab via `MenuBar`'s dialog, then `MainWindow->TabBar->serve` will just find the extant index and switch to it
+
+### From `TabBar` interaction:
+...
