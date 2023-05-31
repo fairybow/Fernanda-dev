@@ -571,10 +571,9 @@ void MainWindow::openFileTab(StdFsPath path, bool writeNew)
 	m_editor->setPlainText(text);
 }
 
-void MainWindow::onTabClick(int index)
+void MainWindow::onTabClick(QUuid id)
 {
-	auto extant_id = m_tabBar->idByIndex(index);
-	auto document_text = m_document->setCurrent(extant_id);
+	auto document_text = m_document->setCurrent(id);
 	m_editor->setPlainText(document_text);
 	// m_editor-> restore cursor by id
 }

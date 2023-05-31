@@ -112,7 +112,7 @@ private:
 	}
 
 private slots:
-	void onTabClick(int index);
+	void onTabClick(QUuid id);
 	void onAddTabClick();
 	void onCloseTabClick(QUuid id);
 };

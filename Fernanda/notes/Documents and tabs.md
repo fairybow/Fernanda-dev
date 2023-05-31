@@ -1,4 +1,4 @@
-### From file menu:
+### By `MenuBar` interaction:
 
 #### Clicking new file:
 
@@ -49,5 +49,33 @@
 - `Document` runs through the same processes as above, returning a `QString` to be sent, by `MainWindow`, to the `Editor` after first serving a (possibly new) tab
 - If a user selects a currently opened tab via `MenuBar`'s dialog, then `MainWindow->TabBar->serve` will just find the extant index and switch to it
 
-### From `TabBar` interaction:
-...
+### By `TabBar` interaction:
+
+#### Clicking on a tab:
+
+- AKA, opening (switching to, visually) a **named or unnamed file's document text by ID**
+
+- Clicking on a tab changes `TrueTabBar`'s current index
+- Its container, the overarching `TabBar` (holding the tab bar + its controls) emits a signal with the new, current `index`'s **ID**
+- `MainWindow->Document` sets its current document by this **ID**, returning a `QString` that's then sent to `Editor`
+- (`Document` again runs through the same processes to save before returning the string)
+
+#### Clicking "add tab":
+
+- AKA, opening an **unnamed, non-existent, pathless file :pensive:**
+
+- Clicking the `+` button causes `TabBar` to emit a signal asking `MainWindow` to start the process
+- `MainWindow->Document` creates an empty document, returning a **new ID**
+	- It first makes an ID, which is added only to the **lifetime registry**, and then sends it through the document retrieval function (args: a new ID, and no path)
+	- The search of the cache will come up empty, and so the new document will be created
+	- In the creation process, we'll start out again with 2 strings (**intial** and **original** texts)
+	- The **ID** will not be found to have been evicted
+	- The path is empty
+	- So, the strings remain empty and are added to a new `TextDocument`, which is cached under the new **ID**
+- `MainWindow->Document` then sets its current document to newly created `TextDocument` via the returned **ID**
+- `MainWindow->TabBar` is called to serve a tab
+	- Since the **ID** is new, signals are blocked, and a new tab is inserted
+	- The tab's variant map data is given the **ID** and an empty `QString` in place of the title
+	- Signals are unblocked and `TrueTabBar`'s current index is switched to the new tab's
+	- This causes everything in the above section ("Clicking on a tab") to happen
+- `MainWindow->Editor` clears itself for the new tab

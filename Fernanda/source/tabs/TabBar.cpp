@@ -80,7 +80,7 @@ void TabBar::connections()
 		});
 
 	connect(m_trueTabBar, &TrueTabBar::currentChanged, this, [&](int index) {
-		emit currentChanged(index);
+		emit currentChanged(idByIndex(index));
 		});
 	connect(m_trueTabBar, &TrueTabBar::resized, this, [&] {
 		adjustControls();

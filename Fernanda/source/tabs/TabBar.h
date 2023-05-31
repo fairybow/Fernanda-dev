@@ -32,7 +32,7 @@ public:
 	void setUntitledDisplay(const QString& text, int charLimit = 30);
 
 signals:
-	void currentChanged(int index);
+	void currentChanged(QUuid id);
 	void askAdd();
 	void askClose(QUuid id);
 
