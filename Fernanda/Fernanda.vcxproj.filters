@@ -135,10 +135,10 @@
     <None Include="resources\menu\themes\window\Light.fernanda_window">
       <Filter>Resources\Themes\Window</Filter>
     </None>
-    <None Include="resources\menu\themes\window\Solarized Dark.fernanda_window">
+    <None Include="resources\menu\themes\window\Solarized Dark %28Modified%29.fernanda_window">
       <Filter>Resources\Themes\Window</Filter>
     </None>
-    <None Include="resources\menu\themes\window\Solarized Light.fernanda_window">
+    <None Include="resources\menu\themes\window\Solarized Light %28Modified%29.fernanda_window">
       <Filter>Resources\Themes\Window</Filter>
     </None>
     <None Include="resources\editor\Shadow.qss">

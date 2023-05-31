@@ -120,8 +120,8 @@
     <None Include="resources\menu\themes\sample\Sample.fernanda_window" />
     <None Include="resources\menu\themes\window\Dark.fernanda_window" />
     <None Include="resources\menu\themes\window\Light.fernanda_window" />
-    <None Include="resources\menu\themes\window\Solarized Dark.fernanda_window" />
-    <None Include="resources\menu\themes\window\Solarized Light.fernanda_window" />
+    <None Include="resources\menu\themes\window\Solarized Dark %28Modified%29.fernanda_window" />
+    <None Include="resources\menu\themes\window\Solarized Light %28Modified%29.fernanda_window" />
     <None Include="resources\stylist\Editor.qss" />
     <None Include="resources\stylist\EditorBase.qss" />
     <None Include="resources\stylist\MainWindow.qss" />
