@@ -19,27 +19,6 @@ int TabBar::serve(QUuid id, StdFsPath pathForTitle, bool switchTo)
 	return next_index;
 }
 
-QUuid TabBar::idByIndex(int index)
-{
-	return m_trueTabBar->tabData(index).toMap()[DATA_ID].toUuid();
-}
-
-int TabBar::indexById(QUuid id)
-{
-	auto index = -1;
-	for (auto i = 0; i < m_trueTabBar->count(); ++i)
-		if (idByIndex(i) == id) {
-			index = i;
-			break;
-		}
-	return index;
-}
-
-const QString TabBar::title(int index)
-{
-	return m_trueTabBar->tabData(index).toMap()[DATA_TITLE].toString();
-}
-
 bool TabBar::isUntitled()
 {
 	if (m_trueTabBar->currentIndex() < 0) return false;
@@ -91,6 +70,27 @@ void TabBar::connections()
 	connect(m_trueTabBar, &TrueTabBar::removed, this, [&] {
 		adjustControls();
 		});
+}
+
+QUuid TabBar::idByIndex(int index)
+{
+	return m_trueTabBar->tabData(index).toMap()[DATA_ID].toUuid();
+}
+
+int TabBar::indexById(QUuid id)
+{
+	auto index = -1;
+	for (auto i = 0; i < m_trueTabBar->count(); ++i)
+		if (idByIndex(i) == id) {
+			index = i;
+			break;
+		}
+	return index;
+}
+
+const QString TabBar::title(int index)
+{
+	return m_trueTabBar->tabData(index).toMap()[DATA_TITLE].toString();
 }
 
 bool TabBar::isFull()
