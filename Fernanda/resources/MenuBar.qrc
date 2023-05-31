@@ -17,7 +17,7 @@
         <file>menu/themes/sample/Sample.fernanda_window</file>
         <file>menu/themes/window/Dark.fernanda_window</file>
         <file>menu/themes/window/Light.fernanda_window</file>
-        <file>menu/themes/window/Solarized Dark.fernanda_window</file>
-        <file>menu/themes/window/Solarized Light.fernanda_window</file>
+        <file>menu/themes/window/Solarized Dark (Modified).fernanda_window</file>
+        <file>menu/themes/window/Solarized Light (Modified).fernanda_window</file>
     </qresource>
 </RCC>
