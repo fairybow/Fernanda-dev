@@ -59,6 +59,7 @@
 - Its container, the overarching `TabBar` (holding the tab bar + its controls) emits a signal with the new, current `index`'s **ID**
 - `MainWindow->Document` sets its current document by this **ID**, returning a `QString` that's then sent to `Editor`
 - (`Document` again runs through the same processes to save before returning the string)
+- If the document was evicted, then recovery should find initial text (for the document) and, if the document was created as a file from disk, original text (for checking/setting edited state)
 
 #### Clicking "add tab":
 
