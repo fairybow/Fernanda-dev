@@ -143,6 +143,7 @@
     <ClCompile Include="source\Meter.cpp" />
     <ClCompile Include="source\Stylist.cpp" />
     <ClCompile Include="source\tabs\TabBar.cpp" />
+    <ClCompile Include="source\tools\PomodoroTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Emoji.hpp" />
@@ -188,7 +189,7 @@
     <ClInclude Include="source\Stylist.h" />
     <QtMoc Include="source\tools\AlwaysOnTop.hpp" />
     <QtMoc Include="source\tools\StayAwake.hpp" />
-    <QtMoc Include="source\tools\PomodoroTimer.hpp" />
+    <QtMoc Include="source\tools\PomodoroTimer.h" />
     <QtMoc Include="source\tools\ToolButton.hpp" />
     <ClInclude Include="source\user\Settings.hpp" />
     <QtMoc Include="source\user\User.hpp" />

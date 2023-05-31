@@ -200,7 +200,7 @@
     <QtMoc Include="source\tools\StayAwake.hpp">
       <Filter>Source\Tools</Filter>
     </QtMoc>
-    <QtMoc Include="source\tools\PomodoroTimer.hpp">
+    <QtMoc Include="source\tools\PomodoroTimer.h">
       <Filter>Source\Tools</Filter>
     </QtMoc>
     <QtMoc Include="source\menu\Slider.hpp">
@@ -264,6 +264,9 @@
     </ClCompile>
     <ClCompile Include="source\tabs\TabBar.cpp">
       <Filter>Source\Tabs</Filter>
+    </ClCompile>
+    <ClCompile Include="source\tools\PomodoroTimer.cpp">
+      <Filter>Source\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

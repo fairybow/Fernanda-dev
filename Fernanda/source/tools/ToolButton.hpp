@@ -17,6 +17,11 @@ public:
 		setup();
 	}
 
+	void setStateOpacity()
+	{
+		m_effect->setOpacity(isChecked() ? 1.0 : m_idleOpacity);
+	}
+
 public slots:
 	virtual void setVisible(bool visible) override
 	{
@@ -31,7 +36,7 @@ protected:
 		if (event->type() == QEvent::HoverEnter || event->type() == QEvent::HoverLeave) {
 			hoveredOver()
 				? m_effect->setOpacity(1.0)
-				: m_effect->setOpacity(stateOpacity());
+				: setStateOpacity();
 		}
 		return UiButton::eventFilter(object, event);
 	}
@@ -40,7 +45,7 @@ protected:
 	{
 		if (event->button() == Qt::RightButton) {
 			setChecked(!isChecked());
-			m_effect->setOpacity(stateOpacity());
+			setStateOpacity();
 			return;
 		}
 		UiButton::mousePressEvent(event);
@@ -53,13 +58,8 @@ private:
 	void setup()
 	{
 		setCheckable(true);
-		m_effect->setOpacity(m_idleOpacity);
+		setStateOpacity();
 		setGraphicsEffect(m_effect);
 		installEventFilter(this);
-	}
-
-	double stateOpacity()
-	{
-		return isChecked() ? 1.0 : m_idleOpacity;
 	}
 };

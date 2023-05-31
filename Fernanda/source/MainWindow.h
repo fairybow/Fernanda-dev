@@ -10,7 +10,7 @@
 #include "tabs/TabBar.h"
 #include "tools/AlwaysOnTop.hpp"
 #include "tools/StayAwake.hpp"
-#include "tools/PomodoroTimer.hpp"
+#include "tools/PomodoroTimer.h"
 #include "user/User.hpp"
 #include "Indicator.hpp"
 #include "IniKeys.hpp"
