@@ -139,6 +139,11 @@ void MainWindow::menuBarConnections()
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
 		openFileTab(path);
 		});
+	connect(m_menuBar, &MenuBar::askSaveFile, this, [&] {
+		m_document->save()
+			? m_indicator->green()
+			: m_indicator->red();
+		});
 }
 
 void MainWindow::menuBarStyleConfigConnections()

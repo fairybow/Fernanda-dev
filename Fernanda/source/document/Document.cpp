@@ -60,6 +60,12 @@ void Document::startEditCheckTimer()
 	m_editCheckDelay->start();
 }
 
+bool Document::save()
+{
+	//
+	return false;
+}
+
 void Document::setEditCheckDelay(int textLength)
 {
 	(textLength < 10000)

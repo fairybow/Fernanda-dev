@@ -73,8 +73,10 @@ void MenuBar::file()
 {
 	auto new_file = new QAction(tr("&New..."), this);
 	auto open = new QAction(tr("&Open..."), this);
+	auto save = new QAction(tr("&Save"), this);
 	auto quit = new QAction(tr("&Quit"), this);
 
+	save->setShortcut(Qt::CTRL | Qt::Key_S);
 	quit->setShortcut(Qt::CTRL | Qt::Key_Q);
 
 	connect(new_file, &QAction::triggered, this, [&] {
@@ -91,10 +93,14 @@ void MenuBar::file()
 		emit askOpenFile(Path::toStdFs(path));
 		});
 
+	connect(save, &QAction::triggered, this, [&] {
+		emit askSaveFile();
+		});
+
 	connect(quit, &QAction::triggered, this, &QCoreApplication::quit, Qt::QueuedConnection);
 
 	auto menu = addMenu(tr("&File"));
-	for (const auto& action : { new_file, open })
+	for (const auto& action : { new_file, open, save, quit })
 		menu->addAction(action);
 }
 

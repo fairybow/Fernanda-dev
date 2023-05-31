@@ -85,8 +85,8 @@ private:
 	void loadMenuBarToolConfigs();
 	void loadMenuBarMiscConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
-	void openFileTab(StdFsPath path, bool writeNew = false);
 
+	void openFileTab(StdFsPath path, bool writeNew = false);
 	void openNewFileTab(StdFsPath path) { openFileTab(path, true); };
 	void openNewTab() { onAddTabClick(); };
 
