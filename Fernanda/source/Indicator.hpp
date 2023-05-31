@@ -28,6 +28,7 @@ public:
 	void pastel(int delay = 0) { run(StdFsPath(":/indicator/Pastels.qss"), delay); }
 	void green(int delay = 0) { run(StdFsPath(":/indicator/Green.qss"), delay); }
 	void red(int delay = 0) { run(StdFsPath(":/indicator/Red.qss"), delay); }
+	void onResult(bool result, int delay = 0) { result ? green(delay) : red(delay); }
 
 	void setAlignment(const QString& alignment)
 	{

@@ -62,8 +62,12 @@ void Document::startEditCheckTimer()
 
 bool Document::save()
 {
-	//
-	return false;
+	return true;
+}
+
+bool Document::isSaveable()
+{
+	return (!m_currentId.isNull() && isEdited(m_currentId));
 }
 
 void Document::setEditCheckDelay(int textLength)

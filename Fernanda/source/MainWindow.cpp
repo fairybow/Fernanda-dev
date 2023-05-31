@@ -140,9 +140,9 @@ void MainWindow::menuBarConnections()
 		openFileTab(path);
 		});
 	connect(m_menuBar, &MenuBar::askSaveFile, this, [&] {
-		m_document->save()
-			? m_indicator->green()
-			: m_indicator->red();
+		if (!m_document->isSaveable()) return;
+		auto saved = m_document->save();
+		m_indicator->onResult(saved);
 		});
 }
 

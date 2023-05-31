@@ -49,6 +49,13 @@
 - `Document` runs through the same processes as above, returning a `QString` to be sent, by `MainWindow`, to the `Editor` after first serving a (possibly new) tab
 - If a user selects a currently opened tab via `MenuBar`'s dialog, then `MainWindow->TabBar->serve` will just find the extant index and switch to it
 
+#### Clicking save file:
+
+- `Save file` signals
+- `MainWindow->Document` checks that the **current ID** is not `null` and that the corresponding document is edited.
+- If both are true, then `MainWindow->Document->save` is called, showing `Indicator` red/green for success/failure
+- ...
+
 ### By `TabBar` interaction:
 
 #### Clicking on a tab:
@@ -80,3 +87,5 @@
 	- Signals are unblocked and `TrueTabBar`'s current index is switched to the new tab's
 	- This causes everything in the above section ("Clicking on a tab") to happen
 - `MainWindow->Editor` clears itself for the new tab
+
+
