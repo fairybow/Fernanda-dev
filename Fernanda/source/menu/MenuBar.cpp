@@ -125,11 +125,10 @@ void MenuBar::help()
 	auto check_for_updates = new QAction(tr("&Check for updates..."), this);
 
 	connect(about, &QAction::triggered, this, [&] {
-		if (!Popup::about(this)) return;
-		Popup::version(this);
+		Popup::about(this);
 		});
 	connect(check_for_updates, &QAction::triggered, this, [&] {
-		Popup::version(this);
+		Popup::checkVersion(this);
 		});
 
 	auto menu = addMenu(tr("&Help"));
@@ -489,7 +488,7 @@ void MenuBar::appearanceDialog()
 	full_layout->addWidget(toolsGroupBox(), 4, 3, 1, 2);
 	full_layout->addWidget(mixedGroupBox(), 5, 3, 1, 2);
 
-	dialog.setFixedSize(800, 450);
+	dialog.setFixedSize(800, 500);
 	Layout::setUniformSpacing(full_layout);
 	dialog.exec();
 }

@@ -13,6 +13,7 @@
 #include <QCheckBox>
 #include <QCoreApplication>
 #include <QDesktopServices>
+#include <QDialog>
 #include <QFileDialog>
 #include <QGroupBox>
 #include <QMenuBar>
