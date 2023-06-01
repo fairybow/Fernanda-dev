@@ -182,9 +182,6 @@
     <QtMoc Include="source\menu\VersionChecker.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
-    <QtMoc Include="source\menu\Popup.hpp">
-      <Filter>Source\Menu</Filter>
-    </QtMoc>
     <QtMoc Include="source\user\User.hpp">
       <Filter>Source\User</Filter>
     </QtMoc>
@@ -356,6 +353,9 @@
     </ClInclude>
     <ClInclude Include="source\common\Emoji.hpp">
       <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\Popup.hpp">
+      <Filter>Source\Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

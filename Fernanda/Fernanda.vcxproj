@@ -176,7 +176,7 @@
     <ClInclude Include="source\menu\ComboBox.hpp" />
     <ClInclude Include="source\menu\LiveFontDialog.hpp" />
     <QtMoc Include="source\menu\MenuBar.h" />
-    <QtMoc Include="source\menu\Popup.hpp" />
+    <ClInclude Include="source\menu\Popup.hpp" />
     <ClInclude Include="source\menu\PopupText.hpp" />
     <QtMoc Include="source\menu\VersionChecker.hpp" />
     <ClInclude Include="source\menu\ActionGroup.h" />

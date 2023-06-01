@@ -103,10 +103,16 @@ namespace StringTools
 	}
 
 	template<typename... Strings>
-	inline QString pad(int spaces, const Strings&... string)
+	inline QString padAll(int spaces, const Strings&... string)
 	{
 		auto padding = QString(" ").repeated(spaces);
 		QStringList list{ string... };
 		return padding + list.join(padding) + padding;
+	}
+
+	inline QString pad(int spaces, const QString& string)
+	{
+		auto padding = QString(" ").repeated(spaces);
+		return padding + string + padding;
 	}
 }
