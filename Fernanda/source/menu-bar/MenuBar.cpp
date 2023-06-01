@@ -235,8 +235,8 @@ QGroupBox* MenuBar::themesGroupBox()
 		emit askToggleWindowTheme(state);
 		});
 
-	auto labeled_editor_themes = Layout::container(editor_themes, nullptr, "Editor");
-	auto labeled_window_themes = Layout::container(window_themes, nullptr, "Window");
+	auto labeled_editor_themes = Layout::labeledContainer(editor_themes, nullptr, "Editor");
+	auto labeled_window_themes = Layout::labeledContainer(window_themes, nullptr, "Window");
 
 	auto layout = Layout::grid(nullptr, box);
 	layout->addWidget(editor_theme_check, 0, 0, 1, 1);
@@ -463,7 +463,7 @@ QGroupBox* MenuBar::mixedGroupBox()
 		indicator_alignments->itemData(index).value<QAction*>()->trigger();
 		});
 
-	auto alignments_container = Layout::container(indicator_alignments, nullptr, "Indicator alignment");
+	auto alignments_container = Layout::labeledContainer(indicator_alignments, nullptr, "Indicator alignment");
 
 	auto layout = Layout::grid(nullptr, box);
 	auto spacer_1 = new QWidget;

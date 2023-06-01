@@ -110,9 +110,21 @@ namespace StringTools
 		return padding + list.join(padding) + padding;
 	}
 
-	inline QString pad(int spaces, const QString& string)
+	inline QString pad(int spaces, const QString& string, Side side = Side::Both)
 	{
 		auto padding = QString(" ").repeated(spaces);
-		return padding + string + padding;
+		QString padded;
+		switch (side) {
+		case Side::Both:
+			padded = padding + string + padding;
+			break;
+		case Side::Left:
+			padded = padding + string;
+			break;
+		case Side::Right:
+			padded = string + padding;
+			break;
+		}
+		return padded;
 	}
 }

@@ -157,6 +157,7 @@
     <ClInclude Include="source\Logger.hpp" />
     <ClInclude Include="source\menu-bar\ActionGroup.h" />
     <ClInclude Include="source\menu-bar\ComboBox.hpp" />
+    <ClInclude Include="source\menu-bar\LicenseDialog.hpp" />
     <ClInclude Include="source\menu-bar\LiveFontDialog.hpp" />
     <QtMoc Include="source\menu-bar\MenuBar.h" />
     <ClInclude Include="source\menu-bar\Popup.hpp" />

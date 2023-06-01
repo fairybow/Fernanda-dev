@@ -357,6 +357,9 @@
     <ClInclude Include="source\tab-bar\AddTab.hpp">
       <Filter>Source\TabBar</Filter>
     </ClInclude>
+    <ClInclude Include="source\menu-bar\LicenseDialog.hpp">
+      <Filter>Source\MenuBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">
