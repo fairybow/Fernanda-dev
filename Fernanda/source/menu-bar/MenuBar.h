@@ -36,7 +36,7 @@ public:
 
 	void makeSubmenus();
 
-	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; }
+	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Dark.fernanda_editor"; }
 	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; }
 
 	void setCheckBoxEditorTheme(bool state) { m_checkBoxStates[CHECK_BOX_EDITOR_THEME] = state; }
@@ -132,8 +132,8 @@ private:
 	static constexpr char CHECK_BOX_INDICATOR[] = "has_indicator";
 	static constexpr char GROUP_INDICATOR_ALIGN[] = "indicator_alignments";
 	static constexpr char GROUP_PREVIEW[] = "preview_types";
-	static constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
-	static constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
+	static constexpr char QRC_EDITOR[] = ":/menu-bar/themes/editor/";
+	static constexpr char QRC_MAIN_WINDOW[] = ":/menu-bar/themes/window/";
 
 	const bool m_isDev;
 	const StdFsPath m_userData;

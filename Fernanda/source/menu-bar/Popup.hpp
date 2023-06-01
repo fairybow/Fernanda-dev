@@ -24,7 +24,7 @@ namespace Popup
 			box.setWindowTitle(title);
 			box.setText(text);
 			if (hasIcon)
-				box.setIconPixmap(QPixmap(":/menu/Fernanda_64.png"));
+				box.setIconPixmap(QPixmap(":/menu-bar/Fernanda_64.png"));
 			if (hasOk)
 				box.setDefaultButton(box.addButton(QMessageBox::Ok));
 		}

@@ -1,23 +1,23 @@
 <RCC>
     <qresource prefix="/">
-        <file>menu/Fernanda_64.png</file>
-        <file>menu/themes/editor/Amber.fernanda_editor</file>
-        <file>menu/themes/editor/Blue.fernanda_editor</file>
-        <file>menu/themes/editor/Dark.fernanda_editor</file>
-        <file>menu/themes/editor/Green.fernanda_editor</file>
-        <file>menu/themes/editor/Grey.fernanda_editor</file>
-        <file>menu/themes/editor/Light.fernanda_editor</file>
-        <file>menu/themes/editor/Pocket.fernanda_editor</file>
-        <file>menu/themes/editor/Pocket-Alt.fernanda_editor</file>
-        <file>menu/themes/editor/Snooze.fernanda_editor</file>
-        <file>menu/themes/editor/Snooze-Alt.fernanda_editor</file>
-        <file>menu/themes/editor/Solarized Dark.fernanda_editor</file>
-        <file>menu/themes/editor/Solarized Light.fernanda_editor</file>
-        <file>menu/themes/sample/Sample.fernanda_editor</file>
-        <file>menu/themes/sample/Sample.fernanda_window</file>
-        <file>menu/themes/window/Dark.fernanda_window</file>
-        <file>menu/themes/window/Light.fernanda_window</file>
-        <file>menu/themes/window/Solarized Dark (Modified).fernanda_window</file>
-        <file>menu/themes/window/Solarized Light (Modified).fernanda_window</file>
+        <file>menu-bar/Fernanda_64.png</file>
+        <file>menu-bar/themes/editor/Amber.fernanda_editor</file>
+        <file>menu-bar/themes/editor/Blue.fernanda_editor</file>
+        <file>menu-bar/themes/editor/Dark.fernanda_editor</file>
+        <file>menu-bar/themes/editor/Green.fernanda_editor</file>
+        <file>menu-bar/themes/editor/Grey.fernanda_editor</file>
+        <file>menu-bar/themes/editor/Light.fernanda_editor</file>
+        <file>menu-bar/themes/editor/Pocket.fernanda_editor</file>
+        <file>menu-bar/themes/editor/Pocket-Alt.fernanda_editor</file>
+        <file>menu-bar/themes/editor/Snooze.fernanda_editor</file>
+        <file>menu-bar/themes/editor/Snooze-Alt.fernanda_editor</file>
+        <file>menu-bar/themes/editor/Solarized Dark.fernanda_editor</file>
+        <file>menu-bar/themes/editor/Solarized Light.fernanda_editor</file>
+        <file>menu-bar/themes/sample/Sample.fernanda_editor</file>
+        <file>menu-bar/themes/sample/Sample.fernanda_window</file>
+        <file>menu-bar/themes/window/Dark.fernanda_window</file>
+        <file>menu-bar/themes/window/Light.fernanda_window</file>
+        <file>menu-bar/themes/window/Solarized Dark (Modified).fernanda_window</file>
+        <file>menu-bar/themes/window/Solarized Light (Modified).fernanda_window</file>
     </qresource>
 </RCC>

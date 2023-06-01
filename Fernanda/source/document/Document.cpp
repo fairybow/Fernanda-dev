@@ -154,6 +154,8 @@ bool Document::wasEvicted(QUuid id)
 
 void Document::recover(QUuid id, QString& initialText, QString& originalText)
 {
+	qDebug() << __FUNCTION__;
+
 	auto temp_path = tempPath(id);
 	if (StdFs::exists(temp_path))
 		initialText = Io::readFile(temp_path);

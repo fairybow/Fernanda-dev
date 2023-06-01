@@ -5,9 +5,9 @@
 #include "common/Widget.hpp"
 #include "document/Document.h"
 #include "editor/Editor.h"
-#include "menu/MenuBar.h"
+#include "menu-bar/MenuBar.h"
 #include "preview/Preview.hpp"
-#include "tabs/TabBar.h"
+#include "tab-bar/TabBar.h"
 #include "tools/AlwaysOnTop.hpp"
 #include "tools/StayAwake.hpp"
 #include "tools/PomodoroTimer.h"
@@ -54,7 +54,7 @@ private:
 	StatusBar* m_statusBar = new StatusBar("StatusBar");
 	Indicator* m_indicator = new Indicator("Indicator");
 	TabBar* m_tabBar = new TabBar("TabBar", 100, 200);
-	Editor* m_editor = new Editor("Editor", QFont("mononoki", 12));
+	Editor* m_editor = new Editor("Editor", QFont("mononoki", 14));
 	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");
 	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer(this);

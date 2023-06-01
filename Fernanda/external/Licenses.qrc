@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>material-icons/LICENSE</file>
+        <file>mononoki/LICENSE</file>
+        <file>solarized/LICENSE</file>
+    </qresource>
+</RCC>

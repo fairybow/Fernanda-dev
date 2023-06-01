@@ -30,7 +30,7 @@ RequestExecutionLevel admin
 !define F_EXE "${DATA}\Fernanda.exe"
 !define UN_F_EXE "$INSTDIR\Uninstall.exe"
 
-!define F_FONTS "${F_DIR}\Fernanda\resources\fonts"
+!define F_FONTS "${F_DIR}\Fernanda\external"
 
 !define MUI_PAGE_WELCOME
 !define MUI_PAGE_LICENSE

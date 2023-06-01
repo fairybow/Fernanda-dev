@@ -100,7 +100,7 @@ private:
 
 	const QFont uiFont()
 	{
-		static const auto id = QFontDatabase::addApplicationFont(":/ui/MaterialIcons-Regular.ttf");
+		static const auto id = QFontDatabase::addApplicationFont(":/material-icons/MaterialIcons-Regular.ttf");
 		return QFont(QFontDatabase::applicationFontFamilies(id).at(0));
 	}
 
