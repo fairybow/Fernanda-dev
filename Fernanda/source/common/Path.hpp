@@ -72,10 +72,30 @@ namespace Path
 		return name(toStdFs(path), keepExtension);
 	}
 
+	inline StdFsPath parentName(const StdFsPath& path, bool keepExtension = false)
+	{
+		return name(path.parent_path(), keepExtension);
+	}
+
+	inline StdFsPath parentName(const QString& path, bool keepExtension = false)
+	{
+		return name(toStdFs(path).parent_path(), keepExtension);
+	}
+
 	template<typename T>
 	inline typename std::enable_if<IsFsPathOrQString<T>::value, QString>::type
 		qStringName(const T& path, bool keepExtension = false)
 	{
 		return QString::fromStdString(name(path, keepExtension).string());
+	}
+
+	inline QString qStringParentName(const StdFsPath& path, bool keepExtension = false)
+	{
+		return qStringName(path.parent_path(), keepExtension);
+	}
+
+	inline QString qStringParentName(const QString& path, bool keepExtension = false)
+	{
+		return qStringName(toStdFs(path).parent_path(), keepExtension);
 	}
 }

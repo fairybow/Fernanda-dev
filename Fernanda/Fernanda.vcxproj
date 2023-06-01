@@ -200,9 +200,9 @@
     <ResourceCompile Include="resources\Resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <QtRcc Include="..\Licenses.qrc" />
     <QtRcc Include="external\bit7z\Fernanda-bit7z\DLLs.qrc" />
     <QtRcc Include="external\External.qrc" />
-    <QtRcc Include="external\Licenses.qrc" />
     <QtRcc Include="resources\Editor.qrc" />
     <QtRcc Include="resources\Indicator.qrc" />
     <QtRcc Include="resources\MenuBar.qrc" />

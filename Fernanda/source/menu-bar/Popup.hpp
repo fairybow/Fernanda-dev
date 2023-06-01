@@ -1,6 +1,9 @@
 #pragma once
 
+#include "../common/HtmlString.hpp"
+#include "../common/Io.hpp"
 #include "../common/Layout.hpp"
+#include "../common/Path.hpp"
 #include "../common/StringTools.hpp"
 #include "../Version.hpp"
 #include "PopupText.hpp"
@@ -9,14 +12,17 @@
 #include <QApplication>
 #include <QDialog>
 #include <QMessageBox>
-#include <QPushButton>
-//
-#include <QScrollArea>
 #include <QPlainTextEdit>
 #include <QPushButton>
+#include <QScrollArea>
+#include <QVector>
+
+#include <filesystem>
 
 namespace Popup
 {
+	using StdFsPath = std::filesystem::path;
+
 	namespace
 	{
 		inline void standardize(QMessageBox& box, const QString& text, bool hasOk = true, bool hasIcon = false, const QString& title = "Fernanda")
@@ -40,18 +46,33 @@ namespace Popup
 	inline void showLicenses(QWidget* parent)
 	{
 		QDialog dialog(parent);
-		// for each license in qrc: editor and label
-		auto test_editor_1 = new QPlainTextEdit;
-		auto test_editor_2 = new QPlainTextEdit;
-		auto test_editor_3 = new QPlainTextEdit;
 		auto scroll_area = new QScrollArea;
-		auto container = Layout::container({ test_editor_1, test_editor_2, test_editor_3 });
 		scroll_area->setWidgetResizable(true);
+
+		auto licenses = QVector<StdFsPath>{
+			":/LICENSE",
+			":/Fernanda/external/material-icons/LICENSE",
+			":/Fernanda/external/mononoki/LICENSE",
+			":/Fernanda/external/solarized/LICENSE",
+			":/Fernanda/external/qt/LICENSE"
+		};
+
+		auto container = new QWidget;
+		auto container_layout = Layout::box(Layout::Line::Vertically, nullptr, container, { 66, 0, 66, 0 });
 		scroll_area->setWidget(container);
-		QPushButton* ok_button = new QPushButton("OK", &dialog);
-		QObject::connect(ok_button, &QPushButton::clicked, &dialog, &QDialog::accept);
-		auto layout = Layout::box(Layout::Line::Vertically, { scroll_area, ok_button });
-		dialog.setLayout(layout);
+
+		for (auto& license : licenses) {
+			auto text_display = new QPlainTextEdit;
+			text_display->setReadOnly(true);
+			text_display->setMinimumHeight(400);
+			text_display->setPlainText(Io::readFile(license));
+			auto label_text = HtmlString::heading(Path::qStringParentName(license), 3);
+			container_layout->addWidget(Layout::container(text_display, nullptr, label_text));
+			container_layout->addSpacing(66);
+		}
+
+		Layout::box(Layout::Line::Vertically, scroll_area, &dialog);
+		dialog.setMinimumSize(800, 600);
 		dialog.exec();
 	}
 
@@ -62,8 +83,8 @@ namespace Popup
 		auto update_text = StringTools::pad(3, "Check for updates").toLocal8Bit();
 		auto update = box.addButton(QObject::tr(update_text), QMessageBox::AcceptRole);
 		auto licenses = box.addButton(QObject::tr("Licenses"), QMessageBox::AcceptRole);
-		//auto qt = box.addButton(QObject::tr("About Qt"), QMessageBox::AcceptRole);
-		//QObject::connect(qt, &QPushButton::clicked, parent, QApplication::aboutQt);
+		auto qt = box.addButton(QObject::tr("About Qt"), QMessageBox::AcceptRole);
+		QObject::connect(qt, &QPushButton::clicked, parent, QApplication::aboutQt);
 		box.exec();
 		if (box.clickedButton() == update)
 			checkVersion(parent);

@@ -382,8 +382,8 @@
     <QtRcc Include="external\External.qrc">
       <Filter>Resources\External</Filter>
     </QtRcc>
-    <QtRcc Include="external\Licenses.qrc">
-      <Filter>Resources\External</Filter>
+    <QtRcc Include="..\Licenses.qrc">
+      <Filter>Resources</Filter>
     </QtRcc>
   </ItemGroup>
 </Project>
