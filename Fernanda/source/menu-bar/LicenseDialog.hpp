@@ -37,6 +37,7 @@ public:
 		auto container = new QWidget;
 		auto container_layout = Layout::box(Layout::Line::Vertically, nullptr, container, { 66, 0, 66, 0 });
 		scroll_area->setWidget(container);
+		scroll_area->setFrameStyle(QFrame::NoFrame);
 
 		container_layout->addSpacing(50);
 		scroll_area->setWidget(container);
