@@ -28,10 +28,10 @@ public:
 
 		auto licenses = PathLabelList{
 			{ ":/licenses/LICENSE", "Fernanda" },
+			{ ":/licenses/Fernanda/external/qt/LICENSE", "Qt" },
 			{ ":/licenses/Fernanda/external/material-icons/LICENSE", "Material Icons"},
 			{ ":/licenses/Fernanda/external/mononoki/LICENSE", "mononoki" },
-			{ ":/licenses/Fernanda/external/solarized/LICENSE", "Solarized" },
-			{ ":/licenses/Fernanda/external/qt/LICENSE", "Qt" }
+			{ ":/licenses/Fernanda/external/solarized/LICENSE", "Solarized" }
 		};
 
 		auto container = new QWidget;
