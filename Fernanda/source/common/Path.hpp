@@ -46,6 +46,11 @@ namespace Path
 		}
 	}
 
+	inline bool isValid(StdFsPath path)
+	{
+		return (!path.empty() && StdFs::exists(path));
+	}
+
 	inline StdFsPath toStdFs(QString qStringPath)
 	{
 		return StdFsPath(qStringPath.toStdString());
@@ -197,4 +202,21 @@ namespace Path
 	{
 		return gatherFilePaths(StdFsPathList{ path }, QStringList{ extension });
 	}
+
+#if QT_VERSION > QT_VERSION_CHECK(6, 2, 4)
+
+	inline void copy(const StdFsPath& extantPath, const StdFsPath& newPath)
+	{
+		QFile::copy(extantPath, newPath);
+	}
+
+#else
+
+	inline void copy(const StdFsPath& extantPath, const StdFsPath& newPath)
+	{
+		QFile::copy(toQString(extantPath), toQString(newPath));
+	}
+
+#endif
+
 }

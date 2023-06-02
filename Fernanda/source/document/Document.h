@@ -2,6 +2,7 @@
 
 #include "../common/Io.hpp"
 #include "../common/Path.hpp"
+#include "../common/StringTools.hpp"
 #include "DocumentCache.hpp"
 #include "TextDocument.hpp"
 
@@ -65,6 +66,7 @@ signals:
 	void startAutoCacheTimer();
 	void editedStateChanged(QUuid id, bool edited);
 	void askEditCheck();
+	void askSaveToDisk();
 
 private:
 	DocumentCache m_cache;
@@ -83,7 +85,10 @@ private:
 	TextDocument* textDocument(QUuid id, StdFsPath path = StdFsPath());
 	void tempSave(QUuid id, const QString& text);
 	StdFsPath tempPath(QUuid id);
+	void backUp(QUuid id);
+	StdFsPath backUpPath(StdFsPath path);
 	TextDocument* create(QUuid id, StdFsPath path = StdFsPath());
 	bool wasEvicted(QUuid id);
 	void recover(QUuid id, QString& initialText, QString& originalText);
+	StdFsPath extantPath(QUuid id);
 };

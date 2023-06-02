@@ -51,6 +51,7 @@
 
 #### Clicking save file:
 
+- AKA asking to save file represented by current tab (with current text)
 - `Save file` signals
 - `MainWindow->Document` checks that the **current ID** is not `null` and that the corresponding document is edited.
 - If both are true, then `MainWindow->Document->save` is called, showing `Indicator` red/green for success/failure

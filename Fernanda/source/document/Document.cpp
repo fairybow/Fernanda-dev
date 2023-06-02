@@ -62,6 +62,22 @@ void Document::startEditCheckTimer()
 
 bool Document::save()
 {
+	if (m_currentId.isNull()) return false;
+	emit askSetText();
+	auto extant_path = extantPath(m_currentId);
+	if (Path::isValid(extant_path))
+		backUp(m_currentId);
+	else {
+		emit askSaveToDisk();
+		// will ask mw to ask menu, which will trigger save file, which will call this to create blank etc etc
+		// event loop to wait?
+	}
+	// both:
+	// temp overwrites original (or blank, if new tab)
+
+
+	// new temp made? or will be made on its own, i guess
+
 	return true;
 }
 
@@ -131,6 +147,23 @@ Document::StdFsPath Document::tempPath(QUuid id)
 	return m_tempFolder / Path::toStdFs(id.toString() + ".txt~");
 }
 
+void Document::backUp(QUuid id)
+{
+	auto extant_path = extantPath(id);
+	auto back_up_path = backUpPath(extant_path);
+	Path::copy(extant_path, back_up_path);
+
+	qDebug() << Path::toQString(back_up_path);
+}
+
+Document::StdFsPath Document::backUpPath(StdFsPath path)
+{
+	auto name = Path::qStringName(path);
+	name += "--" + StringTools::time();
+	name = StringTools::removeForbidden(name);
+	return m_backupFolder / Path::toStdFs(name + ".bak");
+}
+
 TextDocument* Document::create(QUuid id, StdFsPath path)
 {
 	QString initial_text;
@@ -154,21 +187,23 @@ bool Document::wasEvicted(QUuid id)
 
 void Document::recover(QUuid id, QString& initialText, QString& originalText)
 {
-	qDebug() << __FUNCTION__;
-
 	auto temp_path = tempPath(id);
 	if (StdFs::exists(temp_path))
 		initialText = Io::readFile(temp_path);
+	auto extant_path = extantPath(id);
+	if (Path::isValid(extant_path))
+		originalText = Io::readFile(extant_path);
+	// handle deleted original
+	// file system watcher
+}
 
+Document::StdFsPath Document::extantPath(QUuid id)
+{
+	StdFsPath path;
 	auto it = std::find_if(
 		m_extantPathsToIds.begin(), m_extantPathsToIds.end(),
 		[&id](const auto& pair) { return pair.second == id; });
-
-	if (it != m_extantPathsToIds.end()) {
-		auto& extant_path = it->first;
-		if (StdFs::exists(extant_path))
-			originalText = Io::readFile(extant_path);
-		// handle deleted original
-		// file system watcher
-	}
+	if (it != m_extantPathsToIds.end())
+		path = it->first;
+	return path;
 }

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "RegexPatterns.hpp"
+
+#include <QRegularExpression>
 #include <QString>
 #include <QVector>
 
@@ -38,7 +41,7 @@ namespace StringTools
 	{
 		auto now = std::time(0);
 		auto time = std::ctime(&now);
-		return QString::fromLocal8Bit(time).trimmed();
+		return QString::fromLocal8Bit(time).replace("  ", " ").trimmed();
 	}
 
 	inline QString fixEscapes(const QString& string)
@@ -47,6 +50,12 @@ namespace StringTools
 		for (auto& [from, to] : doubleEscapeReplacements)
 			cleaned_string.replace(from, to);
 		return cleaned_string;
+	}
+
+	inline QString removeForbidden(const QString& string)
+	{
+		QString cleaned_string = string;
+		return cleaned_string.replace(QRegularExpression(Regex::FORBIDDEN), "_");
 	}
 
 	inline QString nonAlphaNumericToSpaces(const QString& string)
