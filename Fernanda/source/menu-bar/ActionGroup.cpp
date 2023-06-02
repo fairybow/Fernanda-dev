@@ -10,7 +10,7 @@ ActionGroup* ActionGroup::fromQrc(const QStringList& qrcPaths, QStringList exten
 {
 	auto group = new ActionGroup(parent);
 	checkExtensions(extensions);
-	auto entries = gather(qrcPaths, extensions);
+	auto entries = Path::gatherQStringFilePaths(qrcPaths, extensions);
 	for (auto& entry : entries) {
 		auto label = Path::qStringName(entry);
 		addActionToGroup(group, label, entry, parent, slot);
@@ -75,17 +75,4 @@ void ActionGroup::alphabetize(ActionGroup* actionGroup)
 		actionGroup->removeAction(action);
 	for (auto& action : sorted_actions)
 		actionGroup->addAction(action);
-}
-
-QStringList ActionGroup::gather(const QStringList& qrcPaths, const QStringList& extensions)
-{
-	QStringList entries;
-	for (auto& qrc_path : qrcPaths) {
-		QDirIterator it(qrc_path, extensions, QDir::Files, QDirIterator::Subdirectories);
-		while (it.hasNext()) {
-			it.next();
-			entries << it.filePath();
-		}
-	}
-	return entries;
 }

@@ -49,6 +49,32 @@ namespace StringTools
 		return cleaned_string;
 	}
 
+	inline QString nonAlphaNumericToSpaces(const QString& string)
+	{
+		QString cleaned_string = string;
+		for (auto i = 0; i < cleaned_string.size(); ++i)
+			if (!cleaned_string[i].isLetterOrNumber())
+				cleaned_string[i] = ' ';
+		return cleaned_string;
+	}
+
+	inline QString capitalize(const QString& string)
+	{
+		QString capitalized_string = string;
+		auto word_start = true;
+
+		for (auto i = 0; i < capitalized_string.size(); ++i) {
+			if (word_start && capitalized_string[i].isLetter()) {
+				capitalized_string[i] = capitalized_string[i].toUpper();
+				word_start = false;
+			}
+			else if (capitalized_string[i].isSpace())
+				word_start = true;
+		}
+
+		return capitalized_string;
+	}
+
 	inline const QString secondsToMinutes(int seconds, const char* separator = ":")
 	{
 		auto time_seconds = seconds % 60;

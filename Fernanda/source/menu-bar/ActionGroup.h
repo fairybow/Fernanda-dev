@@ -43,5 +43,4 @@ private:
 		const QVariant& data, QObject* parent, Slot slot);
 	static void checkExtensions(QStringList& extensions);
 	static void alphabetize(ActionGroup* actionGroup);
-	static QStringList gather(const QStringList& qrcPaths, const QStringList& extensions);
 };

@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/external">
         <file>material-icons/MaterialIcons-Regular.ttf</file>
     </qresource>
 </RCC>

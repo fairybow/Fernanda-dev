@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/licenses">
         <file>LICENSE</file>
         <file>Fernanda/external/material-icons/LICENSE</file>
         <file>Fernanda/external/mononoki/LICENSE</file>

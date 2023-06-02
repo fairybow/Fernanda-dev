@@ -27,16 +27,12 @@ public:
 		scroll_area->setWidgetResizable(true);
 
 		auto licenses = PathLabelList{
-			{ ":/LICENSE", "Fernanda" },
-			{ ":/Fernanda/external/material-icons/LICENSE", "Material Icons"},
-			{ ":/Fernanda/external/mononoki/LICENSE", "mononoki" },
-			{ ":/Fernanda/external/solarized/LICENSE", "Solarized" },
-			{ ":/Fernanda/external/qt/LICENSE", "Qt" }
+			{ ":/licenses/LICENSE", "Fernanda" },
+			{ ":/licenses/Fernanda/external/material-icons/LICENSE", "Material Icons"},
+			{ ":/licenses/Fernanda/external/mononoki/LICENSE", "mononoki" },
+			{ ":/licenses/Fernanda/external/solarized/LICENSE", "Solarized" },
+			{ ":/licenses/Fernanda/external/qt/LICENSE", "Qt" }
 		};
-
-		/*auto container_layout = Layout::box(Layout::Line::Vertically, nullptr, nullptr, { 66, 0, 66, 0 });
-		auto heading_text = HtmlString::heading("Licenses", 1);
-		auto container = Layout::labeledContainer(container_layout, nullptr, heading_text);*/
 
 		auto container = new QWidget;
 		auto container_layout = Layout::box(Layout::Line::Vertically, nullptr, container, { 66, 0, 66, 0 });

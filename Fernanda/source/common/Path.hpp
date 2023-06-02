@@ -1,8 +1,11 @@
 #pragma once
 
+#include <QDirIterator>
 #include <QString>
 #include <QVariant>
+#include <QVector>
 
+#include <algorithm>
 #include <filesystem>
 #include <type_traits>
 
@@ -10,6 +13,7 @@ namespace Path
 {
 	namespace StdFs = std::filesystem;
 	using StdFsPath = StdFs::path;
+	using StdFsPathList = QVector<StdFs::path>;
 
 	namespace
 	{
@@ -19,6 +23,26 @@ namespace Path
 		inline StdFsPath pathOrParent(StdFsPath path, bool hasFileName)
 		{
 			return hasFileName ? path.parent_path() : path;
+		}
+
+		// combine?:
+
+		/*inline QStringList alphabetize(const QStringList& qStringPaths)
+		{
+			QStringList sorted_paths = qStringPaths;
+			std::sort(sorted_paths.begin(), sorted_paths.end(), [](auto& lhs, auto& rhs) {
+				return lhs < rhs;
+				});
+			return sorted_paths;
+		}*/
+
+		inline StdFsPathList alphabetize(const StdFsPathList& paths)
+		{
+			StdFsPathList sorted_paths = paths;
+			std::sort(sorted_paths.begin(), sorted_paths.end(), [](auto& lhs, auto& rhs) {
+				return lhs < rhs;
+				});
+			return sorted_paths;
 		}
 	}
 
@@ -67,9 +91,9 @@ namespace Path
 		return keepExtension ? path.filename() : path.stem();
 	}
 
-	inline StdFsPath name(const QString& path, bool keepExtension = false)
+	inline StdFsPath name(const QString& qStringPath, bool keepExtension = false)
 	{
-		return name(toStdFs(path), keepExtension);
+		return name(toStdFs(qStringPath), keepExtension);
 	}
 
 	inline StdFsPath parentName(const StdFsPath& path, bool keepExtension = false)
@@ -77,9 +101,9 @@ namespace Path
 		return name(path.parent_path(), keepExtension);
 	}
 
-	inline StdFsPath parentName(const QString& path, bool keepExtension = false)
+	inline StdFsPath parentName(const QString& qStringPath, bool keepExtension = false)
 	{
-		return name(toStdFs(path).parent_path(), keepExtension);
+		return name(toStdFs(qStringPath).parent_path(), keepExtension);
 	}
 
 	template<typename T>
@@ -94,8 +118,83 @@ namespace Path
 		return qStringName(path.parent_path(), keepExtension);
 	}
 
-	inline QString qStringParentName(const QString& path, bool keepExtension = false)
+	inline QString qStringParentName(const QString& qStringPath, bool keepExtension = false)
 	{
-		return qStringName(toStdFs(path).parent_path(), keepExtension);
+		return qStringName(toStdFs(qStringPath).parent_path(), keepExtension);
+	}
+
+	inline QStringList gatherQStringFilePaths(const QStringList& qStringPaths, const QStringList& extensions)
+	{
+		QStringList entries;
+		for (auto& path : qStringPaths) {
+			QDirIterator it(path, extensions, QDir::Files, QDirIterator::Subdirectories);
+			while (it.hasNext()) {
+				it.next();
+				entries << it.filePath();
+			}
+		}
+		return entries;
+	}
+
+	inline QStringList gatherQStringFilePaths(const QStringList& qStringPaths, const QString& extension)
+	{
+		return gatherQStringFilePaths(qStringPaths, QStringList{ extension });
+	}
+
+	inline QStringList gatherQStringFilePaths(const QString& qStringPath, const QStringList& extensions)
+	{
+		return gatherQStringFilePaths(QStringList{ qStringPath }, extensions);
+	}
+
+	inline QStringList gatherQStringFilePaths(const QString& qStringPath, const QString& extension)
+	{
+		return gatherQStringFilePaths(QStringList{ qStringPath }, QStringList{ extension });
+	}
+
+	inline QStringList gatherQStringFilePaths(const StdFsPathList& paths, const QStringList& extensions)
+	{
+		QStringList path_list;
+		for (auto& path : paths)
+			path_list << toQString(path);
+		return gatherQStringFilePaths(path_list, extensions);
+	}
+
+	inline QStringList gatherQStringFilePaths(const StdFsPathList& paths, const QString& extension)
+	{
+		return gatherQStringFilePaths(paths, QStringList{ extension });
+	}
+
+	inline QStringList gatherQStringFilePaths(const StdFsPath& path, const QStringList& extensions)
+	{
+		return gatherQStringFilePaths(StdFsPathList{ path }, extensions);
+	}
+
+	inline QStringList gatherQStringFilePaths(const StdFsPath& path, const QString& extension)
+	{
+		return gatherQStringFilePaths(StdFsPathList{ path }, QStringList{ extension });
+	}
+
+	inline StdFsPathList gatherFilePaths(const StdFsPathList& paths, const QStringList& extensions)
+	{
+		auto path_list = gatherQStringFilePaths(paths, extensions);
+		StdFsPathList converted_path_list;
+		for (auto& path : path_list)
+			converted_path_list << toStdFs(path);
+		return alphabetize(converted_path_list);
+	}
+
+	inline StdFsPathList gatherFilePaths(const StdFsPathList& paths, const QString& extension)
+	{
+		return gatherFilePaths(paths, QStringList{ extension });
+	}
+
+	inline StdFsPathList gatherFilePaths(const StdFsPath& path, const QStringList& extensions)
+	{
+		return gatherFilePaths(StdFsPathList{ path }, extensions);
+	}
+
+	inline StdFsPathList gatherFilePaths(const StdFsPath& path, const QString& extension)
+	{
+		return gatherFilePaths(StdFsPathList{ path }, QStringList{ extension });
 	}
 }

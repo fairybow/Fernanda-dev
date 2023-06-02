@@ -34,18 +34,6 @@
     <Filter Include="Installer">
       <UniqueIdentifier>{413766c5-980f-496a-892c-117358b38d56}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources\Themes">
-      <UniqueIdentifier>{2eb54143-8727-42dc-8e4b-9c56e1a76a59}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Themes\Editor">
-      <UniqueIdentifier>{f2b59bd6-f94c-4249-9afc-229dc926eae6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Themes\Sample">
-      <UniqueIdentifier>{faed79c5-94e2-4c40-9734-51e4e3b253fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Themes\Window">
-      <UniqueIdentifier>{99991278-b82e-4a4d-90da-1add4c529a4b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources\Editor">
       <UniqueIdentifier>{f9fcb0a7-8900-457a-b2c4-5b9d6c57862d}</UniqueIdentifier>
     </Filter>
@@ -66,6 +54,21 @@
     </Filter>
     <Filter Include="Source\TabBar">
       <UniqueIdentifier>{3593e33a-7daf-4099-b338-22c663399dc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\MenuBar">
+      <UniqueIdentifier>{798f4803-2761-43a4-9f60-23d3ee80f967}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\MenuBar\Themes">
+      <UniqueIdentifier>{2eb54143-8727-42dc-8e4b-9c56e1a76a59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\MenuBar\Themes\Editor">
+      <UniqueIdentifier>{f2b59bd6-f94c-4249-9afc-229dc926eae6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\MenuBar\Themes\Sample">
+      <UniqueIdentifier>{faed79c5-94e2-4c40-9734-51e4e3b253fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\MenuBar\Themes\Window">
+      <UniqueIdentifier>{99991278-b82e-4a4d-90da-1add4c529a4b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -112,58 +115,58 @@
       <Filter>Notes</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Amber.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Blue.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Dark.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Green.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Grey.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Light.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Pocket.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Pocket-Alt.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Snooze.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Snooze-Alt.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Solarized Dark.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\editor\Solarized Light.fernanda_editor">
-      <Filter>Resources\Themes\Editor</Filter>
+      <Filter>Resources\MenuBar\Themes\Editor</Filter>
     </None>
     <None Include="resources\menu-bar\themes\sample\Sample.fernanda_editor">
-      <Filter>Resources\Themes\Sample</Filter>
+      <Filter>Resources\MenuBar\Themes\Sample</Filter>
     </None>
     <None Include="resources\menu-bar\themes\sample\Sample.fernanda_window">
-      <Filter>Resources\Themes\Sample</Filter>
+      <Filter>Resources\MenuBar\Themes\Sample</Filter>
     </None>
     <None Include="resources\menu-bar\themes\window\Dark.fernanda_window">
-      <Filter>Resources\Themes\Window</Filter>
+      <Filter>Resources\MenuBar\Themes\Window</Filter>
     </None>
     <None Include="resources\menu-bar\themes\window\Light.fernanda_window">
-      <Filter>Resources\Themes\Window</Filter>
+      <Filter>Resources\MenuBar\Themes\Window</Filter>
     </None>
     <None Include="resources\menu-bar\themes\window\Solarized Dark (Modified).fernanda_window">
-      <Filter>Resources\Themes\Window</Filter>
+      <Filter>Resources\MenuBar\Themes\Window</Filter>
     </None>
     <None Include="resources\menu-bar\themes\window\Solarized Light (Modified).fernanda_window">
-      <Filter>Resources\Themes\Window</Filter>
+      <Filter>Resources\MenuBar\Themes\Window</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -367,26 +370,26 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="resources\MenuBar.qrc">
-      <Filter>Resources</Filter>
-    </QtRcc>
-    <QtRcc Include="resources\Stylist.qrc">
-      <Filter>Resources</Filter>
-    </QtRcc>
-    <QtRcc Include="resources\Editor.qrc">
-      <Filter>Resources</Filter>
-    </QtRcc>
     <QtRcc Include="external\bit7z\Fernanda-bit7z\DLLs.qrc">
       <Filter>Resources\External</Filter>
-    </QtRcc>
-    <QtRcc Include="resources\Indicator.qrc">
-      <Filter>Resources</Filter>
     </QtRcc>
     <QtRcc Include="external\External.qrc">
       <Filter>Resources\External</Filter>
     </QtRcc>
     <QtRcc Include="..\Licenses.qrc">
       <Filter>Resources</Filter>
+    </QtRcc>
+    <QtRcc Include="resources\editor\Editor.qrc">
+      <Filter>Resources\Editor</Filter>
+    </QtRcc>
+    <QtRcc Include="resources\indicator\Indicator.qrc">
+      <Filter>Resources\Indicator</Filter>
+    </QtRcc>
+    <QtRcc Include="resources\stylist\Stylist.qrc">
+      <Filter>Resources\Stylist</Filter>
+    </QtRcc>
+    <QtRcc Include="resources\menu-bar\MenuBar.qrc">
+      <Filter>Resources\MenuBar</Filter>
     </QtRcc>
   </ItemGroup>
 </Project>

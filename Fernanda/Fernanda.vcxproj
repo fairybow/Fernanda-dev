@@ -204,10 +204,10 @@
     <QtRcc Include="..\Licenses.qrc" />
     <QtRcc Include="external\bit7z\Fernanda-bit7z\DLLs.qrc" />
     <QtRcc Include="external\External.qrc" />
-    <QtRcc Include="resources\Editor.qrc" />
-    <QtRcc Include="resources\Indicator.qrc" />
-    <QtRcc Include="resources\MenuBar.qrc" />
-    <QtRcc Include="resources\Stylist.qrc" />
+    <QtRcc Include="resources\editor\Editor.qrc" />
+    <QtRcc Include="resources\indicator\Indicator.qrc" />
+    <QtRcc Include="resources\menu-bar\MenuBar.qrc" />
+    <QtRcc Include="resources\stylist\Stylist.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
