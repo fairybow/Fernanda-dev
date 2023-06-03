@@ -601,13 +601,13 @@ void MainWindow::onAddTabClick()
 void MainWindow::onCloseTabClick(QUuid id)
 {
 	if (m_document->isEdited(id)) {
-		m_tabBar->serve(id); // is it bad if id == current id (or index == current index for tab)
+		//m_tabBar->serve(id); // is it bad if id == current id (or index == current index for tab)
 		//... save popup
 		// save (or not)
+
+		return; //tmp
 	}
 
-	// which swaps temp with original
-	// original goes to backup
-	// remove document object and path from extantPaths list?
-	// then run document->setCurrent or open from path?
+	// if not edited:
+
 }

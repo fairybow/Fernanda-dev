@@ -88,8 +88,8 @@ bool Document::save()
 		m_extantPathsToIds[extant_path] = m_currentId;
 		emit pathIdAssociated(extant_path, m_currentId);
 	}
-	overwrite(m_currentId);
-	return true;
+
+	return overwrite(m_currentId);
 }
 
 void Document::setEditCheckDelay(int textLength)
@@ -173,16 +173,19 @@ Document::StdFsPath Document::backUpPath(const StdFsPath& path)
 	return m_backupFolder / Path::toStdFs(name + ".bak");
 }
 
-void Document::overwrite(QUuid id)
+bool Document::overwrite(QUuid id)
 {
 	auto path = extantPath(id);
 	auto temp_path = tempPath(id);
-	if (!Path::areValid(path, temp_path)) return;
+	if (!Path::areValid(path, temp_path) ||
+		!Path::move(temp_path, path, true))
+		return false;
 
-	Path::move(temp_path, path, true);
 	m_cache.remove(m_currentId);
 	auto document = textDocument(m_currentId, path);
 	emit editedStateChanged(m_currentId, document->edited());
+
+	return true;
 }
 
 TextDocument* Document::create(QUuid id, StdFsPath path)

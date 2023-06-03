@@ -91,7 +91,7 @@ private:
 	StdFsPath tempPath(QUuid id);
 	void backUp(QUuid id);
 	StdFsPath backUpPath(const StdFsPath& path);
-	void overwrite(QUuid id);
+	bool overwrite(QUuid id);
 
 	TextDocument* create(QUuid id, StdFsPath path = StdFsPath());
 	bool wasEvicted(QUuid id);
