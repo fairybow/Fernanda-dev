@@ -35,6 +35,8 @@ public:
 	MenuBar(const char* name, StdFsPath userData, StdFsPath userDocuments, bool isDev = false, QWidget* parent = nullptr);
 
 	void makeSubmenus();
+	StdFsPath newFileDialog();
+	StdFsPath openFileDialog();
 
 	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Dark.fernanda_editor"; }
 	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; }
@@ -134,6 +136,7 @@ private:
 	static constexpr char GROUP_PREVIEW[] = "preview_types";
 	static constexpr char QRC_EDITOR[] = ":/menu-bar/themes/editor/";
 	static constexpr char QRC_MAIN_WINDOW[] = ":/menu-bar/themes/window/";
+	static constexpr char DIALOG_FILE_TYPE[] = "Plain text file (*.txt)";
 
 	const bool m_isDev;
 	const StdFsPath m_userData;

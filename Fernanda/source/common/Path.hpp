@@ -51,6 +51,12 @@ namespace Path
 		return (!path.empty() && StdFs::exists(path));
 	}
 
+	template<typename... Paths>
+	inline bool areValid(Paths... path)
+	{
+		return (isValid(path) && ...);
+	}
+
 	inline StdFsPath toStdFs(QString qStringPath)
 	{
 		return StdFsPath(qStringPath.toStdString());

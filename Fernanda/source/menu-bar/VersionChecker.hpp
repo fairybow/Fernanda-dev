@@ -1,12 +1,11 @@
 #pragma once
 
+#include "../common/EventLoop.hpp"
 #include "../common/HtmlString.hpp"
 
-#include <QEventLoop>
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QProgressDialog>
 #include <QVariantMap>
 
 #include <utility>
@@ -61,16 +60,12 @@ private:
 
 	static inline QVariantMap latestVersion(const QUrl& url, QWidget* parent)
 	{
-		QEventLoop loop;
+		EventLoop loop;
 		auto manager = new QNetworkAccessManager(parent);
 		auto request = QNetworkRequest(url);
 		auto reply = manager->get(request);
-		connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-		QProgressDialog progress_dialog("Checking...", nullptr, 0, 0, parent);
-		progress_dialog.setWindowModality(Qt::WindowModal);
-		progress_dialog.show();
+		connect(reply, &QNetworkReply::finished, &loop, &EventLoop::quit);
 		loop.exec();
-		progress_dialog.hide();
 		QVariantMap map;
 		if (reply->error() == QNetworkReply::NoError) {
 			auto json_document = QJsonDocument::fromJson(reply->readAll());

@@ -77,6 +77,10 @@ void MainWindow::documentConnections()
 		auto text = m_editor->toPlainText();
 		m_document->affirmEditedState(text);
 		});
+	connect(m_document, &Document::askSaveToDisk, this, [&] {
+		auto path = m_menuBar->newFileDialog();
+		m_document->newPathChosen(path);
+		});
 }
 
 void MainWindow::tabBarConnections()

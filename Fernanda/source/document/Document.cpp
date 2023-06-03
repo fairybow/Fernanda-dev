@@ -1,6 +1,6 @@
 #include "Document.h"
 
-Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent, int cacheMaxCost)
+Document::Document(const StdFsPath& tempFolder, const StdFsPath& backupFolder, QWidget* parent, int cacheMaxCost)
 	: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(cacheMaxCost)
 {
 	setUpAutoCache();
@@ -10,7 +10,7 @@ Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent
 		});
 }
 
-const QString Document::setCurrent(StdFsPath path)
+const QString Document::setCurrent(const StdFsPath& path)
 {
 	emit askSetText();
 	m_currentId = idByPath(path);
@@ -33,7 +33,7 @@ void Document::setText(const QString& text)
 	tempSave(m_currentId, text);
 }
 
-void Document::writeEmptyFile(StdFsPath path)
+void Document::writeEmptyFile(const StdFsPath& path)
 {
 	Io::writeFile(path);
 }
@@ -68,16 +68,17 @@ bool Document::save()
 	if (Path::isValid(extant_path))
 		backUp(m_currentId);
 	else {
+
 		emit askSaveToDisk();
-		// will ask mw to ask menu, which will trigger save file, which will call this to create blank etc etc
-		// event loop to wait?
+
+		// ???
+
+		//writeEmptyFile(path);
+		//m_extantPathsToIds[path] = m_currentId;
+		
 	}
-	// both:
-	// temp overwrites original (or blank, if new tab)
-
-
-	// new temp made? or will be made on its own, i guess
-
+	overwrite(m_currentId);
+	// new temp made (or will be made on its own, whenever file changed again)
 	return true;
 }
 
@@ -119,7 +120,7 @@ QUuid Document::createId(StdFsPath path)
 	return id;
 }
 
-QUuid Document::idByPath(StdFsPath path)
+QUuid Document::idByPath(const StdFsPath& path)
 {
 	QUuid id;
 	auto it = m_extantPathsToIds.find(path);
@@ -152,16 +153,27 @@ void Document::backUp(QUuid id)
 	auto extant_path = extantPath(id);
 	auto back_up_path = backUpPath(extant_path);
 	Path::copy(extant_path, back_up_path);
-
-	qDebug() << Path::toQString(back_up_path);
 }
 
-Document::StdFsPath Document::backUpPath(StdFsPath path)
+Document::StdFsPath Document::backUpPath(const StdFsPath& path)
 {
 	auto name = Path::qStringName(path);
-	name += "--" + StringTools::time();
+	name += "---" + StringTools::time();
 	name = StringTools::removeForbidden(name);
 	return m_backupFolder / Path::toStdFs(name + ".bak");
+}
+
+void Document::overwrite(QUuid id)
+{
+	qDebug() << __FUNCTION__;
+
+	auto path = extantPath(id);
+	auto temp_path = tempPath(id);
+
+	qDebug() << Path::areValid(path, temp_path);
+
+	if (!Path::areValid(path, temp_path)) return;
+	// overwrite...
 }
 
 TextDocument* Document::create(QUuid id, StdFsPath path)

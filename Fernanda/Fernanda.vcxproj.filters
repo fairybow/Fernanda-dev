@@ -363,6 +363,9 @@
     <ClInclude Include="source\menu-bar\LicenseDialog.hpp">
       <Filter>Source\MenuBar</Filter>
     </ClInclude>
+    <ClInclude Include="source\common\EventLoop.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resource.rc">

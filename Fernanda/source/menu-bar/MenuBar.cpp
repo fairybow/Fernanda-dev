@@ -20,6 +20,22 @@ void MenuBar::makeSubmenus()
 		dev();
 }
 
+MenuBar::StdFsPath MenuBar::newFileDialog()
+{
+	auto path = QFileDialog::getSaveFileName(
+		this, tr("Create a new file..."), Path::toQString(
+			m_userDocuments), tr(DIALOG_FILE_TYPE));
+	return Path::toStdFs(path);
+}
+
+MenuBar::StdFsPath MenuBar::openFileDialog()
+{
+	auto path = QFileDialog::getOpenFileName(
+		this, tr("Open an existing file..."), Path::toQString(
+			m_userDocuments), tr(DIALOG_FILE_TYPE));
+	return Path::toStdFs(path);
+}
+
 void MenuBar::makeActionGroups()
 {
 	m_actionGroups[GROUP_EDITOR_THEMES] = ActionGroup::fromQrc(QRC_EDITOR,
@@ -80,24 +96,21 @@ void MenuBar::file()
 	quit->setShortcut(Qt::CTRL | Qt::Key_Q);
 
 	connect(new_file, &QAction::triggered, this, [&] {
-		auto path = QFileDialog::getSaveFileName(
-			this, tr("Create a new file..."), Path::toQString(
-				m_userDocuments), tr("Plain text file (*.txt)"));
-		emit askOpenNewFile(Path::toStdFs(path));
+		auto path = newFileDialog();
+		emit askOpenNewFile(path);
 		});
 
 	connect(open, &QAction::triggered, this, [&] {
-		auto path = QFileDialog::getOpenFileName(
-			this, tr("Open an existing file..."), Path::toQString(
-				m_userDocuments), tr("Plain text file (*.txt)"));
-		emit askOpenFile(Path::toStdFs(path));
+		auto path = openFileDialog();
+		emit askOpenFile(path);
 		});
 
 	connect(save, &QAction::triggered, this, [&] {
 		emit askSaveFile();
 		});
 
-	connect(quit, &QAction::triggered, this, &QCoreApplication::quit, Qt::QueuedConnection);
+	connect(quit, &QAction::triggered,
+		this, &QCoreApplication::quit, Qt::QueuedConnection);
 
 	auto menu = addMenu(tr("&File"));
 	for (const auto& action : { new_file, open, save, quit })
@@ -138,6 +151,8 @@ void MenuBar::help()
 
 void MenuBar::dev()
 {
+	// Add option to open user folder!
+
 	auto open_logs = new QAction(tr("&Open log"), this);
 	auto document_class = new QAction(tr("&Class info"), this);
 	auto document_current = new QAction(tr("&Current document"), this);
