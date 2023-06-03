@@ -41,6 +41,7 @@ public:
 	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Dark.fernanda_editor"; }
 	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; }
 
+	void setUserFont(const QFont& font) { m_userFont = font; }
 	void setCheckBoxEditorTheme(bool state) { m_checkBoxStates[CHECK_BOX_EDITOR_THEME] = state; }
 	void setCheckBoxWindowTheme(bool state) { m_checkBoxStates[CHECK_BOX_WINDOW_THEME] = state; }
 	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_EDITOR_THEMES], path); }
@@ -69,7 +70,6 @@ public:
 	//void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
 
 signals:
-	QFont getUserFont();
 	void askOpenNewFile(StdFsPath path);
 	void askOpenFile(StdFsPath path);
 	void askSaveFile();
@@ -144,6 +144,7 @@ private:
 	std::map<QString, ActionGroup*> m_actionGroups;
 	std::map<QString, int> m_sliderValues;
 	std::map<QString, bool> m_checkBoxStates;
+	QFont m_userFont = QFont();
 
 	void makeActionGroups();
 	void makeBespokeActionGroups();

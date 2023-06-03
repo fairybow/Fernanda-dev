@@ -142,9 +142,6 @@ void MainWindow::meterConnections()
 
 void MainWindow::menuBarConnections()
 {
-	connect(m_menuBar, &MenuBar::getUserFont, this, [&] {
-		return loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
-		});
 	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&](StdFsPath path) {
 		openNewFileTab(path);
 		});
@@ -201,6 +198,7 @@ void MainWindow::menuBarEditorConfigConnections()
 		saveConfigPassthrough(
 			font, Ini::EDITOR_FONT, m_editor, [&] {
 				m_editor->setFont(font);
+				m_menuBar->setUserFont(font);
 			});
 		});
 
@@ -415,6 +413,7 @@ void MainWindow::loadEditorConfigs()
 {
 	auto font = loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
 	m_editor->setFont(font);
+	m_menuBar->setUserFont(font);
 }
 
 /*void MainWindow::loadPreviewConfigs()

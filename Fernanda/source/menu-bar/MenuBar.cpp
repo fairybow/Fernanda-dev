@@ -211,7 +211,7 @@ void MenuBar::addFontDialog(QMdiArea* multiDocArea)
 
 LiveFontDialog* MenuBar::fontDialog()
 {
-	auto dialog = new LiveFontDialog(emit getUserFont(), this);
+	auto dialog = new LiveFontDialog(m_userFont, this);
 	dialog->setOptions(LiveFontDialog::NoButtons);
 	connect(dialog, &LiveFontDialog::currentFontChanged, this, [&](const QFont& font) {
 		emit askChangeFont(font);
