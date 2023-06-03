@@ -20,6 +20,22 @@ void MenuBar::makeSubmenus()
 		dev();
 }
 
+MenuBar::StdFsPath MenuBar::newFileDialog()
+{
+	auto path = QFileDialog::getSaveFileName(
+		this, tr("Create a new file..."), Path::toQString(
+			m_userDocuments), tr(DIALOG_FILE_TYPE));
+	return Path::toStdFs(path);
+}
+
+MenuBar::StdFsPath MenuBar::openFileDialog()
+{
+	auto path = QFileDialog::getOpenFileName(
+		this, tr("Open an existing file..."), Path::toQString(
+			m_userDocuments), tr(DIALOG_FILE_TYPE));
+	return Path::toStdFs(path);
+}
+
 void MenuBar::makeActionGroups()
 {
 	m_actionGroups[GROUP_EDITOR_THEMES] = ActionGroup::fromQrc(QRC_EDITOR,
@@ -73,28 +89,31 @@ void MenuBar::file()
 {
 	auto new_file = new QAction(tr("&New..."), this);
 	auto open = new QAction(tr("&Open..."), this);
+	auto save = new QAction(tr("&Save"), this);
 	auto quit = new QAction(tr("&Quit"), this);
 
+	save->setShortcut(Qt::CTRL | Qt::Key_S);
 	quit->setShortcut(Qt::CTRL | Qt::Key_Q);
 
 	connect(new_file, &QAction::triggered, this, [&] {
-		auto path = QFileDialog::getSaveFileName(
-			this, tr("Create a new file..."), Path::toQString(
-				m_userDocuments), tr("Plain text file (*.txt)"));
-		emit askOpenNewFile(Path::toStdFs(path));
+		auto path = newFileDialog();
+		emit askOpenNewFile(path);
 		});
 
 	connect(open, &QAction::triggered, this, [&] {
-		auto path = QFileDialog::getOpenFileName(
-			this, tr("Open an existing file..."), Path::toQString(
-				m_userDocuments), tr("Plain text file (*.txt)"));
-		emit askOpenFile(Path::toStdFs(path));
+		auto path = openFileDialog();
+		emit askOpenFile(path);
 		});
 
-	connect(quit, &QAction::triggered, this, &QCoreApplication::quit, Qt::QueuedConnection);
+	connect(save, &QAction::triggered, this, [&] {
+		emit askSaveFile();
+		});
+
+	connect(quit, &QAction::triggered,
+		this, &QCoreApplication::quit, Qt::QueuedConnection);
 
 	auto menu = addMenu(tr("&File"));
-	for (const auto& action : { new_file, open })
+	for (const auto& action : { new_file, open, save, quit })
 		menu->addAction(action);
 }
 
@@ -119,11 +138,10 @@ void MenuBar::help()
 	auto check_for_updates = new QAction(tr("&Check for updates..."), this);
 
 	connect(about, &QAction::triggered, this, [&] {
-		if (!Popup::about(this)) return;
-		Popup::version(this);
+		Popup::about(this);
 		});
 	connect(check_for_updates, &QAction::triggered, this, [&] {
-		Popup::version(this);
+		Popup::checkVersion(this);
 		});
 
 	auto menu = addMenu(tr("&Help"));
@@ -133,6 +151,8 @@ void MenuBar::help()
 
 void MenuBar::dev()
 {
+	// Add option to open user folder!
+
 	auto open_logs = new QAction(tr("&Open log"), this);
 	auto document_class = new QAction(tr("&Class info"), this);
 	auto document_current = new QAction(tr("&Current document"), this);
@@ -191,7 +211,7 @@ void MenuBar::addFontDialog(QMdiArea* multiDocArea)
 
 LiveFontDialog* MenuBar::fontDialog()
 {
-	auto dialog = new LiveFontDialog(emit getUserFont(), this);
+	auto dialog = new LiveFontDialog(m_userFont, this);
 	dialog->setOptions(LiveFontDialog::NoButtons);
 	connect(dialog, &LiveFontDialog::currentFontChanged, this, [&](const QFont& font) {
 		emit askChangeFont(font);
@@ -230,8 +250,8 @@ QGroupBox* MenuBar::themesGroupBox()
 		emit askToggleWindowTheme(state);
 		});
 
-	auto labeled_editor_themes = Layout::container(editor_themes, nullptr, "Editor");
-	auto labeled_window_themes = Layout::container(window_themes, nullptr, "Window");
+	auto labeled_editor_themes = Layout::labeledContainer(editor_themes, nullptr, "Editor");
+	auto labeled_window_themes = Layout::labeledContainer(window_themes, nullptr, "Window");
 
 	auto layout = Layout::grid(nullptr, box);
 	layout->addWidget(editor_theme_check, 0, 0, 1, 1);
@@ -458,7 +478,7 @@ QGroupBox* MenuBar::mixedGroupBox()
 		indicator_alignments->itemData(index).value<QAction*>()->trigger();
 		});
 
-	auto alignments_container = Layout::container(indicator_alignments, nullptr, "Indicator alignment");
+	auto alignments_container = Layout::labeledContainer(indicator_alignments, nullptr, "Indicator alignment");
 
 	auto layout = Layout::grid(nullptr, box);
 	auto spacer_1 = new QWidget;
@@ -483,7 +503,7 @@ void MenuBar::appearanceDialog()
 	full_layout->addWidget(toolsGroupBox(), 4, 3, 1, 2);
 	full_layout->addWidget(mixedGroupBox(), 5, 3, 1, 2);
 
-	dialog.setFixedSize(800, 450);
+	dialog.setFixedSize(800, 500);
 	Layout::setUniformSpacing(full_layout);
 	dialog.exec();
 }

@@ -2,6 +2,7 @@
 
 #include "../common/Io.hpp"
 #include "../common/Path.hpp"
+#include "../common/StringTools.hpp"
 #include "DocumentCache.hpp"
 #include "TextDocument.hpp"
 
@@ -18,20 +19,24 @@ namespace StdFs = std::filesystem;
 
 class Document : public QObject
 {
-	using StdFsPath = StdFs::path;
-
 	Q_OBJECT
 
 public:
-	Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent = nullptr, int cacheMaxCost = 100);
+	using StdFsPath = StdFs::path;
 
-	const QString setCurrent(StdFsPath path);
+	Document(const StdFsPath& tempFolder, const StdFsPath& backupFolder, QWidget* parent = nullptr, int cacheMaxCost = 100);
+
+	const QString setCurrent(const StdFsPath& path);
 	const QString setCurrent(QUuid id);
 	void setText(const QString& text);
-	void writeEmptyFile(StdFsPath path);
+	void writeEmptyFile(const StdFsPath& path);
 	QUuid createEmpty();
 	void affirmEditedState(const QString& text);
 	void startEditCheckTimer();
+	//
+	bool save();
+	bool isSaveable();
+	//
 
 	QUuid currentId() const { return m_currentId; }
 	bool isEdited(QUuid id) { return textDocument(id)->edited(); }
@@ -63,6 +68,10 @@ signals:
 	void startAutoCacheTimer();
 	void editedStateChanged(QUuid id, bool edited);
 	void askEditCheck();
+	void askSaveToDisk();
+
+	//
+	void newPathChosen(const StdFsPath& path);
 
 private:
 	DocumentCache m_cache;
@@ -77,11 +86,17 @@ private:
 	void setUpAutoCache();
 	const QString read(StdFsPath path = StdFsPath());
 	QUuid createId(StdFsPath path = StdFsPath());
-	QUuid idByPath(StdFsPath path);
+	QUuid idByPath(const StdFsPath& path);
 	TextDocument* textDocument(QUuid id, StdFsPath path = StdFsPath());
+	//
 	void tempSave(QUuid id, const QString& text);
 	StdFsPath tempPath(QUuid id);
+	void backUp(QUuid id);
+	StdFsPath backUpPath(const StdFsPath& path);
+	void overwrite(QUuid id);
+	//
 	TextDocument* create(QUuid id, StdFsPath path = StdFsPath());
 	bool wasEvicted(QUuid id);
 	void recover(QUuid id, QString& initialText, QString& originalText);
+	StdFsPath extantPath(QUuid id);
 };

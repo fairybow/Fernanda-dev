@@ -1,5 +1,8 @@
 #pragma once
 
+#include "RegexPatterns.hpp"
+
+#include <QRegularExpression>
 #include <QString>
 #include <QVector>
 
@@ -8,12 +11,12 @@
 
 namespace StringTools
 {
-	using QStringPair = std::pair<QString, QString>;
-
 	enum class Side { Both, Left, Right };
 
 	namespace
 	{
+		using QStringPair = std::pair<QString, QString>;
+
 		const QVector<QStringPair> doubleEscapeReplacements = {
 		{"\\\\", "\\"},
 		{"\\'", "\'"},
@@ -38,7 +41,7 @@ namespace StringTools
 	{
 		auto now = std::time(0);
 		auto time = std::ctime(&now);
-		return QString::fromLocal8Bit(time).trimmed();
+		return QString::fromLocal8Bit(time).replace("  ", " ").trimmed();
 	}
 
 	inline QString fixEscapes(const QString& string)
@@ -47,6 +50,38 @@ namespace StringTools
 		for (auto& [from, to] : doubleEscapeReplacements)
 			cleaned_string.replace(from, to);
 		return cleaned_string;
+	}
+
+	inline QString removeForbidden(const QString& string)
+	{
+		QString cleaned_string = string;
+		return cleaned_string.replace(QRegularExpression(Regex::FORBIDDEN), "_");
+	}
+
+	inline QString nonAlphaNumericToSpaces(const QString& string)
+	{
+		QString cleaned_string = string;
+		for (auto i = 0; i < cleaned_string.size(); ++i)
+			if (!cleaned_string[i].isLetterOrNumber())
+				cleaned_string[i] = ' ';
+		return cleaned_string;
+	}
+
+	inline QString capitalize(const QString& string)
+	{
+		QString capitalized_string = string;
+		auto word_start = true;
+
+		for (auto i = 0; i < capitalized_string.size(); ++i) {
+			if (word_start && capitalized_string[i].isLetter()) {
+				capitalized_string[i] = capitalized_string[i].toUpper();
+				word_start = false;
+			}
+			else if (capitalized_string[i].isSpace())
+				word_start = true;
+		}
+
+		return capitalized_string;
 	}
 
 	inline const QString secondsToMinutes(int seconds, const char* separator = ":")
@@ -103,10 +138,28 @@ namespace StringTools
 	}
 
 	template<typename... Strings>
-	inline QString pad(int spaces, const Strings&... string)
+	inline QString padAll(int spaces, const Strings&... string)
 	{
 		auto padding = QString(" ").repeated(spaces);
 		QStringList list{ string... };
 		return padding + list.join(padding) + padding;
+	}
+
+	inline QString pad(int spaces, const QString& string, Side side = Side::Both)
+	{
+		auto padding = QString(" ").repeated(spaces);
+		QString padded;
+		switch (side) {
+		case Side::Both:
+			padded = padding + string + padding;
+			break;
+		case Side::Left:
+			padded = padding + string;
+			break;
+		case Side::Right:
+			padded = string + padding;
+			break;
+		}
+		return padded;
 	}
 }

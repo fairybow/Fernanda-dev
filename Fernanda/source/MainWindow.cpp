@@ -38,7 +38,7 @@ void MainWindow::setupWidgets()
 	setStatusBar(m_statusBar);
 	m_statusBar->addWidgets({ m_meter }, { m_pomodoroTimer, m_stayAwake, m_alwaysOnTop });
 	m_menuBar->makeSubmenus();
-	auto layout = Layout::box(Layout::Line::Vertically); // nullptr, nullptr, { 4, 0, 4, 0 }
+	auto layout = Layout::box(Layout::Line::Vertically);
 	layout->addWidget(m_tabBar);
 	layout->addLayout(Layout::stack({ m_editor, m_indicator }));
 	auto container = Layout::container(layout);
@@ -77,6 +77,17 @@ void MainWindow::documentConnections()
 		auto text = m_editor->toPlainText();
 		m_document->affirmEditedState(text);
 		});
+
+	//
+
+	connect(m_document, &Document::askSaveToDisk, this, [&] {
+
+		auto path = m_menuBar->newFileDialog();
+		//m_document->newPathChosen(path, this);
+
+		});
+
+	//
 }
 
 void MainWindow::tabBarConnections()
@@ -98,14 +109,16 @@ void MainWindow::editorConnections()
 
 void MainWindow::meterConnections()
 {
-	connect(m_meter, &Meter::getCountsData, this, [&](bool isSelection) {
-		if (isSelection)
-			return Meter::Counts{ m_editor->selectedText(), m_editor->selectedLineCount() };
-		return Meter::Counts{ m_editor->toPlainText(), m_editor->blockCount() };
+	connect(m_meter, &Meter::askGiveCounts, this, [&](bool isSelection) {
+		(isSelection)
+			? m_meter->give(Meter::Counts{ m_editor->selectedText(), m_editor->selectedLineCount() })
+			: m_meter->give(Meter::Counts{ m_editor->toPlainText(), m_editor->blockCount() });
 		});
-	connect(m_meter, &Meter::getPositionsData, this, [&] {
-		return Meter::Positions{ m_editor->cursorBlockNumber(), m_editor->cursorPositionInBlock() };
+	connect(m_meter, &Meter::askGivePositions, this, [&] {
+		auto positions = Meter::Positions{ m_editor->cursorBlockNumber(), m_editor->cursorPositionInBlock() };
+		m_meter->give(positions);
 		});
+
 	connect(m_meter, &Meter::editorFocusReturn, m_editor, [&] {
 		m_editor->setFocus();
 		});
@@ -130,14 +143,22 @@ void MainWindow::meterConnections()
 
 void MainWindow::menuBarConnections()
 {
-	connect(m_menuBar, &MenuBar::getUserFont, this, [&] {
-		return loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
-		});
 	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&](StdFsPath path) {
 		openNewFileTab(path);
 		});
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
 		openFileTab(path);
+		});
+	connect(m_menuBar, &MenuBar::askSaveFile, this, [&] {
+
+		//
+
+		if (!m_document->isSaveable()) return;
+		auto saved = m_document->save();
+		m_indicator->onResult(saved);
+
+		//
+
 		});
 }
 
@@ -177,7 +198,7 @@ void MainWindow::menuBarEditorConfigConnections()
 	connect(m_menuBar, &MenuBar::askChangeFont, this, [&](const QFont& font) {
 		saveConfigPassthrough(
 			font, Ini::EDITOR_FONT, m_editor, [&] {
-				m_editor->setFont(font);
+				setUserFont(font);
 			});
 		});
 
@@ -391,7 +412,7 @@ void MainWindow::loadConfigs()
 void MainWindow::loadEditorConfigs()
 {
 	auto font = loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
-	m_editor->setFont(font);
+	setUserFont(font);
 }
 
 /*void MainWindow::loadPreviewConfigs()
@@ -553,6 +574,12 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
 }
 
+void MainWindow::setUserFont(const QFont& font)
+{
+	m_editor->setFont(font);
+	m_menuBar->setUserFont(font);
+}
+
 void MainWindow::openFileTab(StdFsPath path, bool writeNew)
 {
 	if (path.empty()) {
@@ -566,10 +593,9 @@ void MainWindow::openFileTab(StdFsPath path, bool writeNew)
 	m_editor->setPlainText(text);
 }
 
-void MainWindow::onTabClick(int index)
+void MainWindow::onTabClick(QUuid id)
 {
-	auto extant_id = m_tabBar->idByIndex(index);
-	auto document_text = m_document->setCurrent(extant_id);
+	auto document_text = m_document->setCurrent(id);
 	m_editor->setPlainText(document_text);
 	// m_editor-> restore cursor by id
 }

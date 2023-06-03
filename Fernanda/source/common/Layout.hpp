@@ -122,7 +122,14 @@ namespace Layout
 		setUniformSpacing(QVector<QLayout*>{ layout }, spacing);
 	}
 
-	inline QWidget* container(QWidgetList widgets, QWidget* parent = nullptr, const QString& label = QString(), Line alignment = Line::Vertically)
+	inline QWidget* container(QLayout* layout, QWidget* parent = nullptr)
+	{
+		auto container = new QWidget(parent);
+		container->setLayout(layout);
+		return container;
+	}
+
+	inline QWidget* labeledContainer(QWidgetList widgets, QWidget* parent = nullptr, const QString& label = QString(), Line alignment = Line::Vertically)
 	{
 		auto container = new QWidget(parent);
 		auto layout = box(alignment, widgets, container);
@@ -133,15 +140,13 @@ namespace Layout
 		return container;
 	}
 
-	inline QWidget* container(QWidget* widget, QWidget* parent = nullptr, const QString& label = QString(), Line alignment = Line::Vertically)
+	inline QWidget* labeledContainer(QWidget* widget, QWidget* parent = nullptr, const QString& label = QString(), Line alignment = Line::Vertically)
 	{
-		return container(QWidgetList{ widget }, parent, label, alignment);
+		return labeledContainer(QWidgetList{ widget }, parent, label, alignment);
 	}
 
-	inline QWidget* container(QLayout* layout, QWidget* parent = nullptr)
+	inline QWidget* labeledContainer(QLayout* layout, QWidget* parent = nullptr, const QString& label = QString(), Line alignment = Line::Vertically)
 	{
-		auto container = new QWidget(parent);
-		container->setLayout(layout);
-		return container;
+		return labeledContainer(container(layout, parent), parent, label, alignment);
 	}
 }

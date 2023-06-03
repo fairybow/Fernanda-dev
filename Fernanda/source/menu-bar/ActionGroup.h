@@ -14,11 +14,11 @@
 
 class ActionGroup : public QActionGroup
 {
+public:
 	using Slot = std::function<void()>;
 	using StdFsPath = std::filesystem::path;
 	using StdFsPathList = QVector<StdFsPath>;
 
-public:
 	using QActionGroup::QActionGroup;
 
 	struct Bespoke {
@@ -43,5 +43,4 @@ private:
 		const QVariant& data, QObject* parent, Slot slot);
 	static void checkExtensions(QStringList& extensions);
 	static void alphabetize(ActionGroup* actionGroup);
-	static QStringList gather(const QStringList& qrcPaths, const QStringList& extensions);
 };

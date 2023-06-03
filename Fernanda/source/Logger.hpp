@@ -16,10 +16,10 @@
 
 namespace Logger
 {
-	using StdFsPath = std::filesystem::path;
-
 	namespace
 	{
+		using StdFsPath = std::filesystem::path;
+
 		static bool isInitialized = false;
 		static QFile log;
 		static QTextStream logStream(&log);

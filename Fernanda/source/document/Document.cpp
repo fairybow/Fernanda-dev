@@ -1,6 +1,6 @@
 #include "Document.h"
 
-Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent, int cacheMaxCost)
+Document::Document(const StdFsPath& tempFolder, const StdFsPath& backupFolder, QWidget* parent, int cacheMaxCost)
 	: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(cacheMaxCost)
 {
 	setUpAutoCache();
@@ -8,9 +8,17 @@ Document::Document(StdFsPath tempFolder, StdFsPath backupFolder, QWidget* parent
 	connect(m_editCheckDelay, &QTimer::timeout, this, [&] {
 		emit askEditCheck();
 		});
+
+	//
+
+	/*connect(this, &Document::newPathChosen, this, [&](const StdFsPath& path, QMainWindow* window) {
+		
+		//
+
+		});*/
 }
 
-const QString Document::setCurrent(StdFsPath path)
+const QString Document::setCurrent(const StdFsPath& path)
 {
 	emit askSetText();
 	m_currentId = idByPath(path);
@@ -33,7 +41,7 @@ void Document::setText(const QString& text)
 	tempSave(m_currentId, text);
 }
 
-void Document::writeEmptyFile(StdFsPath path)
+void Document::writeEmptyFile(const StdFsPath& path)
 {
 	Io::writeFile(path);
 }
@@ -59,6 +67,37 @@ void Document::startEditCheckTimer()
 {
 	m_editCheckDelay->start();
 }
+
+//
+
+bool Document::save()
+{
+	if (m_currentId.isNull()) return false;
+	emit askSetText();
+	auto extant_path = extantPath(m_currentId);
+	if (Path::isValid(extant_path))
+		backUp(m_currentId);
+	else {
+
+		emit askSaveToDisk();
+
+		// ???
+
+		//writeEmptyFile(path);
+		//m_extantPathsToIds[path] = m_currentId;
+		
+	}
+	overwrite(m_currentId);
+	// new temp made (or will be made on its own, whenever file changed again)
+	return true;
+}
+
+bool Document::isSaveable()
+{
+	return (!m_currentId.isNull() && isEdited(m_currentId));
+}
+
+//
 
 void Document::setEditCheckDelay(int textLength)
 {
@@ -93,7 +132,7 @@ QUuid Document::createId(StdFsPath path)
 	return id;
 }
 
-QUuid Document::idByPath(StdFsPath path)
+QUuid Document::idByPath(const StdFsPath& path)
 {
 	QUuid id;
 	auto it = m_extantPathsToIds.find(path);
@@ -119,6 +158,34 @@ void Document::tempSave(QUuid id, const QString& text)
 Document::StdFsPath Document::tempPath(QUuid id)
 {
 	return m_tempFolder / Path::toStdFs(id.toString() + ".txt~");
+}
+
+void Document::backUp(QUuid id)
+{
+	auto extant_path = extantPath(id);
+	auto back_up_path = backUpPath(extant_path);
+	Path::copy(extant_path, back_up_path);
+}
+
+Document::StdFsPath Document::backUpPath(const StdFsPath& path)
+{
+	auto name = Path::qStringName(path);
+	name += "---" + StringTools::time();
+	name = StringTools::removeForbidden(name);
+	return m_backupFolder / Path::toStdFs(name + ".bak");
+}
+
+void Document::overwrite(QUuid id)
+{
+	qDebug() << __FUNCTION__;
+
+	auto path = extantPath(id);
+	auto temp_path = tempPath(id);
+
+	qDebug() << Path::areValid(path, temp_path);
+
+	if (!Path::areValid(path, temp_path)) return;
+	// overwrite...
 }
 
 TextDocument* Document::create(QUuid id, StdFsPath path)
@@ -147,16 +214,20 @@ void Document::recover(QUuid id, QString& initialText, QString& originalText)
 	auto temp_path = tempPath(id);
 	if (StdFs::exists(temp_path))
 		initialText = Io::readFile(temp_path);
+	auto extant_path = extantPath(id);
+	if (Path::isValid(extant_path))
+		originalText = Io::readFile(extant_path);
+	// handle deleted original
+	// file system watcher
+}
 
+Document::StdFsPath Document::extantPath(QUuid id)
+{
+	StdFsPath path;
 	auto it = std::find_if(
 		m_extantPathsToIds.begin(), m_extantPathsToIds.end(),
 		[&id](const auto& pair) { return pair.second == id; });
-
-	if (it != m_extantPathsToIds.end()) {
-		auto& extant_path = it->first;
-		if (StdFs::exists(extant_path))
-			originalText = Io::readFile(extant_path);
-		// handle deleted original
-		// file system watcher
-	}
+	if (it != m_extantPathsToIds.end())
+		path = it->first;
+	return path;
 }

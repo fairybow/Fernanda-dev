@@ -66,7 +66,8 @@ private:
 		auto request = QNetworkRequest(url);
 		auto reply = manager->get(request);
 		connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-		QProgressDialog progress_dialog("Checking...", nullptr, 0, 0, parent);
+		QProgressDialog progress_dialog("Checking...", QString(), 0, 0, parent);
+		progress_dialog.setCancelButton(nullptr);
 		progress_dialog.setWindowModality(Qt::WindowModal);
 		progress_dialog.show();
 		loop.exec();

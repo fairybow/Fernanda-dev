@@ -12,6 +12,8 @@
 #include <QString>
 #include <QVector>
 
+#include <type_traits>
+
 class Meter : public Widget<>
 {
 	Q_OBJECT
@@ -33,6 +35,9 @@ public:
 		int cursorPositionInBlock;
 	};
 
+	template <typename T>
+	using CountsOrPositions = std::disjunction<std::is_same<T, Counts>, std::is_same<T, Positions>>;
+
 	Meter(const char* name, QWidget* parent = nullptr);
 
 	void trigger(Type type = Type{}, bool force = false);
@@ -43,6 +48,15 @@ public:
 	void setHasWordCount(bool state) { updateOutput(m_hasWordCount, state); }
 	void setHasCharacterCount(bool state) { updateOutput(m_hasCharCount, state); }
 
+	template<typename T>
+	std::enable_if_t<CountsOrPositions<T>::value, void> give(T data)
+	{
+		if constexpr (std::is_same_v<T, Counts>)
+			displayCounts(data);
+		else if constexpr (std::is_same_v<T, Positions>)
+			displayPositions(data);
+	}
+
 public slots:
 	virtual void setVisible(bool visible);
 
@@ -50,8 +64,8 @@ signals:
 	void separatorVisibilityCheck();
 	void toggleAutoCount(bool checked);
 	void editorFocusReturn();
-	Meter::Counts getCountsData(bool isSelection);
-	Meter::Positions getPositionsData();
+	void askGiveCounts(bool isSelection);
+	void askGivePositions();
 
 private:
 	QLabel* m_positions = new QLabel(this);
@@ -70,6 +84,8 @@ private:
 	void connections();
 	void updateOutput(bool& memberBool, bool state);
 	void updateCounts(bool isSelection = false);
+	void displayCounts(Counts counts);
+	void displayPositions(Positions positions);
 	void updatePositions();
 	bool toggleVisibility(QLabel* label, bool hasAnything);
 

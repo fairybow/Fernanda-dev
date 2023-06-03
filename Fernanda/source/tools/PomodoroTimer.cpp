@@ -72,7 +72,7 @@ bool PomodoroTimer::pauseOrResumeIfRunning()
 void PomodoroTimer::countdownDisplay()
 {
 	auto time = StringTools::secondsToMinutes(m_countdown, ".");
-	auto text = StringTools::pad(2, label(), time);
+	auto text = StringTools::padAll(2, label(), time);
 	setText(text);
 	if (m_countdown < 1) {
 		timeUp(m_window);

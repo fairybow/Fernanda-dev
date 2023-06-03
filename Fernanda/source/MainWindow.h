@@ -5,9 +5,9 @@
 #include "common/Widget.hpp"
 #include "document/Document.h"
 #include "editor/Editor.h"
-#include "menu/MenuBar.h"
+#include "menu-bar/MenuBar.h"
 #include "preview/Preview.hpp"
-#include "tabs/TabBar.h"
+#include "tab-bar/TabBar.h"
 #include "tools/AlwaysOnTop.hpp"
 #include "tools/StayAwake.hpp"
 #include "tools/PomodoroTimer.h"
@@ -30,11 +30,11 @@
 
 class MainWindow : public Widget<QMainWindow>
 {
-	using StdFsPath = std::filesystem::path;
-
 	Q_OBJECT
 
 public:
+	using StdFsPath = std::filesystem::path;
+
 	MainWindow(const char* name, bool isDev = false, StdFsPath file = StdFsPath(), QWidget* parent = nullptr);
 
 	StdFsPath userData() const { return m_user->data(); }
@@ -54,7 +54,7 @@ private:
 	StatusBar* m_statusBar = new StatusBar("StatusBar");
 	Indicator* m_indicator = new Indicator("Indicator");
 	TabBar* m_tabBar = new TabBar("TabBar", 100, 200);
-	Editor* m_editor = new Editor("Editor", QFont("mononoki", 12));
+	Editor* m_editor = new Editor("Editor", QFont("mononoki", 14));
 	//Preview* m_preview = new Preview("Preview");
 	Meter* m_meter = new Meter("Meter");
 	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer(this);
@@ -85,8 +85,9 @@ private:
 	void loadMenuBarToolConfigs();
 	void loadMenuBarMiscConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
-	void openFileTab(StdFsPath path, bool writeNew = false);
+	void setUserFont(const QFont& font);
 
+	void openFileTab(StdFsPath path, bool writeNew = false);
 	void openNewFileTab(StdFsPath path) { openFileTab(path, true); };
 	void openNewTab() { onAddTabClick(); };
 
@@ -112,7 +113,7 @@ private:
 	}
 
 private slots:
-	void onTabClick(int index);
+	void onTabClick(QUuid id);
 	void onAddTabClick();
 	void onCloseTabClick(QUuid id);
 };

@@ -13,6 +13,7 @@
 #include <QCheckBox>
 #include <QCoreApplication>
 #include <QDesktopServices>
+#include <QDialog>
 #include <QFileDialog>
 #include <QGroupBox>
 #include <QMenuBar>
@@ -26,18 +27,21 @@
 
 class MenuBar : public Widget<QMenuBar>
 {
-	using StdFsPath = std::filesystem::path;
-
 	Q_OBJECT
 
 public:
+	using StdFsPath = std::filesystem::path;
+
 	MenuBar(const char* name, StdFsPath userData, StdFsPath userDocuments, bool isDev = false, QWidget* parent = nullptr);
 
 	void makeSubmenus();
+	StdFsPath newFileDialog();
+	StdFsPath openFileDialog();
 
-	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Snooze.fernanda_editor"; }
+	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Dark.fernanda_editor"; }
 	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; }
 
+	void setUserFont(const QFont& font) { m_userFont = font; }
 	void setCheckBoxEditorTheme(bool state) { m_checkBoxStates[CHECK_BOX_EDITOR_THEME] = state; }
 	void setCheckBoxWindowTheme(bool state) { m_checkBoxStates[CHECK_BOX_WINDOW_THEME] = state; }
 	void setSelectedEditorTheme(const StdFsPath& path) { setGroupSelectedAction(m_actionGroups[GROUP_EDITOR_THEMES], path); }
@@ -66,9 +70,9 @@ public:
 	//void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
 
 signals:
-	QFont getUserFont();
 	void askOpenNewFile(StdFsPath path);
 	void askOpenFile(StdFsPath path);
+	void askSaveFile();
 	void askToggleEditorTheme(bool state);
 	void askToggleWindowTheme(bool state);
 	void askStyleEditor(StdFsPath path);
@@ -130,8 +134,9 @@ private:
 	static constexpr char CHECK_BOX_INDICATOR[] = "has_indicator";
 	static constexpr char GROUP_INDICATOR_ALIGN[] = "indicator_alignments";
 	static constexpr char GROUP_PREVIEW[] = "preview_types";
-	static constexpr char QRC_EDITOR[] = ":/menu/themes/editor/";
-	static constexpr char QRC_MAIN_WINDOW[] = ":/menu/themes/window/";
+	static constexpr char QRC_EDITOR[] = ":/menu-bar/themes/editor/";
+	static constexpr char QRC_MAIN_WINDOW[] = ":/menu-bar/themes/window/";
+	static constexpr char DIALOG_FILE_TYPE[] = "Plain text file (*.txt)";
 
 	const bool m_isDev;
 	const StdFsPath m_userData;
@@ -139,6 +144,7 @@ private:
 	std::map<QString, ActionGroup*> m_actionGroups;
 	std::map<QString, int> m_sliderValues;
 	std::map<QString, bool> m_checkBoxStates;
+	QFont m_userFont = QFont();
 
 	void makeActionGroups();
 	void makeBespokeActionGroups();

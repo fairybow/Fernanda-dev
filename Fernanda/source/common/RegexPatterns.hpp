@@ -10,4 +10,7 @@ namespace Regex
 
 	constexpr char FORMAT_XML_ATTRIBUTE_CSSVALUE[] = \
 		"%1:[^;]+";
+
+	constexpr char FORBIDDEN[] = \
+		R"((<|>|:|\/|\\|\||\?|\*|\"))";
 }

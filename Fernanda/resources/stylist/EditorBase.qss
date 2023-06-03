@@ -9,7 +9,7 @@ Cursor
 	background-color: transparent;
 }
 
-#Editor-overlay, #Editor-underlay
+#Editor-overlay
 {
 	background: transparent;
 }
@@ -18,4 +18,9 @@ Cursor
 {
 	background-color: rgba(88, 88, 88, 0.5);
 	color: rgba(255, 255, 255, 1);
+}
+
+#Editor-underlay
+{
+	background: #f0f0f0;
 }

@@ -9,8 +9,11 @@
 
 namespace Io
 {
-	namespace StdFs = std::filesystem;
-	using StdFsPath = StdFs::path;
+	namespace
+	{
+		namespace StdFs = std::filesystem;
+		using StdFsPath = StdFs::path;
+	}
 
 	inline const QString readFile(StdFsPath filePath)
 	{

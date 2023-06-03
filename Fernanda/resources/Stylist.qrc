@@ -1,8 +1,0 @@
-<RCC>
-	<qresource prefix="/">
-		<file>stylist/Editor.qss</file>
-		<file>stylist/EditorBase.qss</file>
-		<file>stylist/MainWindow.qss</file>
-		<file>stylist/MainWindowBase.qss</file>
-	</qresource>
-</RCC>

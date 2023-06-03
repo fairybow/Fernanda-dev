@@ -17,22 +17,19 @@
 
 class TabBar : public Widget<>
 {
-	using StdFsPath = std::filesystem::path;
-
 	Q_OBJECT
 
 public:
+	using StdFsPath = std::filesystem::path;
+
 	TabBar(const char* name, int minTabSize = 25, int maxTabSize = 100, QWidget* parent = nullptr);
 
 	int serve(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
-	QUuid idByIndex(int index);
-	int indexById(QUuid id);
-	const QString title(int index);
 	bool isUntitled();
 	void setUntitledDisplay(const QString& text, int charLimit = 30);
 
 signals:
-	void currentChanged(int index);
+	void currentChanged(QUuid id);
 	void askAdd();
 	void askClose(QUuid id);
 
@@ -50,6 +47,9 @@ private:
 
 	void setupWidgets();
 	void connections();
+	QUuid idByIndex(int index);
+	int indexById(QUuid id);
+	const QString title(int index);
 	bool isFull();
 	void adjustControls();
 	int create(QUuid id, StdFsPath titlePath = StdFsPath());
