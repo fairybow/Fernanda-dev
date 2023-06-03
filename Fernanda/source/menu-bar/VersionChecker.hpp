@@ -2,7 +2,7 @@
 
 #include "../common/HtmlString.hpp"
 
-#include <QeventLoop>
+#include <QEventLoop>
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
