@@ -74,13 +74,13 @@ void Meter::updateOutput(bool& memberBool, bool state)
 void Meter::updateCounts(bool isSelection)
 {
 	if (!hasAnyCount()) return;
-	emit askGiveCountsData(isSelection);
+	emit askGiveCounts(isSelection);
 }
 
 void Meter::updatePositions()
 {
 	if (!hasEitherPosition()) return;
-	emit askGivePositionsData();
+	emit askGivePositions();
 }
 
 void Meter::displayCounts(Counts counts)

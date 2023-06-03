@@ -108,12 +108,12 @@ void MainWindow::editorConnections()
 
 void MainWindow::meterConnections()
 {
-	connect(m_meter, &Meter::askGiveCountsData, this, [&](bool isSelection) {
+	connect(m_meter, &Meter::askGiveCounts, this, [&](bool isSelection) {
 		(isSelection)
 			? m_meter->give(Meter::Counts{ m_editor->selectedText(), m_editor->selectedLineCount() })
 			: m_meter->give(Meter::Counts{ m_editor->toPlainText(), m_editor->blockCount() });
 		});
-	connect(m_meter, &Meter::askGivePositionsData, this, [&] {
+	connect(m_meter, &Meter::askGivePositions, this, [&] {
 		auto positions = Meter::Positions{ m_editor->cursorBlockNumber(), m_editor->cursorPositionInBlock() };
 		m_meter->give(positions);
 		});

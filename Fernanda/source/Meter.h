@@ -64,8 +64,8 @@ signals:
 	void separatorVisibilityCheck();
 	void toggleAutoCount(bool checked);
 	void editorFocusReturn();
-	void askGiveCountsData(bool isSelection);
-	void askGivePositionsData();
+	void askGiveCounts(bool isSelection);
+	void askGivePositions();
 
 private:
 	QLabel* m_positions = new QLabel(this);
