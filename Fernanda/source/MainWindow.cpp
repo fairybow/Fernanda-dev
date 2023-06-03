@@ -149,17 +149,18 @@ void MainWindow::menuBarConnections()
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
 		openFileTab(path);
 		});
-	connect(m_menuBar, &MenuBar::askSaveFile, this, [&] {
 
-		//
+	//
+
+	connect(m_menuBar, &MenuBar::askSaveFile, this, [&] {
 
 		if (!m_document->isSaveable()) return;
 		auto saved = m_document->save();
 		m_indicator->onResult(saved);
 
-		//
-
 		});
+
+	//
 }
 
 void MainWindow::menuBarStyleConfigConnections()
