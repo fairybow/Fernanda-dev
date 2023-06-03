@@ -33,8 +33,10 @@ public:
 	QUuid createEmpty();
 	void affirmEditedState(const QString& text);
 	void startEditCheckTimer();
+	//
 	bool save();
 	bool isSaveable();
+	//
 
 	QUuid currentId() const { return m_currentId; }
 	bool isEdited(QUuid id) { return textDocument(id)->edited(); }
