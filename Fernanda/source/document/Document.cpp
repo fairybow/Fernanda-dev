@@ -59,8 +59,6 @@ void Document::startEditCheckTimer()
 	m_editCheckDelay->start();
 }
 
-//
-
 bool Document::isSaveable()
 {
 	return (!m_currentId.isNull() && isEdited(m_currentId));
@@ -93,8 +91,6 @@ bool Document::save()
 	overwrite(m_currentId);
 	return true;
 }
-
-//
 
 void Document::setEditCheckDelay(int textLength)
 {
@@ -177,8 +173,6 @@ Document::StdFsPath Document::backUpPath(const StdFsPath& path)
 	return m_backupFolder / Path::toStdFs(name + ".bak");
 }
 
-//
-
 void Document::overwrite(QUuid id)
 {
 	auto path = extantPath(id);
@@ -190,8 +184,6 @@ void Document::overwrite(QUuid id)
 	auto document = textDocument(m_currentId, path);
 	emit editedStateChanged(m_currentId, document->edited());
 }
-
-//
 
 TextDocument* Document::create(QUuid id, StdFsPath path)
 {

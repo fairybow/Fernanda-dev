@@ -33,11 +33,8 @@ public:
 	QUuid createEmpty();
 	void affirmEditedState(const QString& text);
 	void startEditCheckTimer();
-
-	//
 	bool isSaveable();
 	bool save();
-	//
 
 	QUuid currentId() const { return m_currentId; }
 	bool isEdited(QUuid id) { return textDocument(id)->edited(); }
@@ -70,13 +67,8 @@ signals:
 	void editedStateChanged(QUuid id, bool edited);
 	void askEditCheck();
 	void askSaveToDisk();
-
-	//
-
 	void newPathChosen(const StdFsPath& path);
 	void pathIdAssociated(const StdFsPath& path, QUuid id);
-
-	//
 
 private:
 	DocumentCache m_cache;
@@ -95,15 +87,11 @@ private:
 	QUuid idByPath(const StdFsPath& path);
 	TextDocument* textDocument(QUuid id, StdFsPath path = StdFsPath());
 
-	//
-
 	void tempSave(QUuid id, const QString& text);
 	StdFsPath tempPath(QUuid id);
 	void backUp(QUuid id);
 	StdFsPath backUpPath(const StdFsPath& path);
 	void overwrite(QUuid id);
-
-	//
 
 	TextDocument* create(QUuid id, StdFsPath path = StdFsPath());
 	bool wasEvicted(QUuid id);
