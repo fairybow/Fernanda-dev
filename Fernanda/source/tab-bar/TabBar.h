@@ -35,6 +35,7 @@ signals:
 
 public slots:
 	void updateEditedState(QUuid id, bool edited);
+	void updateTitle(QUuid id, const QString& title);
 
 private:
 	static constexpr char DATA_ID[] = "tab_id";

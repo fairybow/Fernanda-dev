@@ -81,10 +81,12 @@ void MainWindow::documentConnections()
 	//
 
 	connect(m_document, &Document::askSaveToDisk, this, [&] {
-
 		auto path = m_menuBar->newFileDialog();
-		//m_document->newPathChosen(path, this);
-
+		m_document->newPathChosen(path);
+		});
+	connect(m_document, &Document::pathIdAssociated,
+		this, [&](const StdFsPath& path, QUuid id) {
+		m_tabBar->updateTitle(id, Path::qStringName(path));
 		});
 
 	//
@@ -110,7 +112,7 @@ void MainWindow::editorConnections()
 void MainWindow::meterConnections()
 {
 	connect(m_meter, &Meter::askGiveCounts, this, [&](bool isSelection) {
-		(isSelection)
+		isSelection
 			? m_meter->give(Meter::Counts{ m_editor->selectedText(), m_editor->selectedLineCount() })
 			: m_meter->give(Meter::Counts{ m_editor->toPlainText(), m_editor->blockCount() });
 		});
@@ -587,9 +589,7 @@ void MainWindow::openFileTab(StdFsPath path, bool writeNew)
 		m_indicator->red();
 		return;
 	}
-	if (writeNew)
-		m_document->writeEmptyFile(path);
-	auto text = m_document->setCurrent(path);
+	auto text = m_document->setCurrent(path, writeNew);
 	m_tabBar->serve(m_document->currentId(), path);
 	m_editor->setPlainText(text);
 }

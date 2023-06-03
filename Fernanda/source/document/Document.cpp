@@ -8,18 +8,13 @@ Document::Document(const StdFsPath& tempFolder, const StdFsPath& backupFolder, Q
 	connect(m_editCheckDelay, &QTimer::timeout, this, [&] {
 		emit askEditCheck();
 		});
-
-	//
-
-	/*connect(this, &Document::newPathChosen, this, [&](const StdFsPath& path, QMainWindow* window) {
-		
-		//
-
-		});*/
 }
 
-const QString Document::setCurrent(const StdFsPath& path)
+const QString Document::setCurrent(const StdFsPath& path, bool isNew)
 {
+	if (isNew)
+		writeEmptyFile(path);
+
 	emit askSetText();
 	m_currentId = idByPath(path);
 	return read(path);
@@ -41,11 +36,6 @@ void Document::setText(const QString& text)
 	tempSave(m_currentId, text);
 }
 
-void Document::writeEmptyFile(const StdFsPath& path)
-{
-	Io::writeFile(path);
-}
-
 QUuid Document::createEmpty()
 {
 	auto id = createId();
@@ -59,6 +49,7 @@ void Document::affirmEditedState(const QString& text)
 	auto document = textDocument(m_currentId);
 	auto new_state = (text != document->originalText());
 	if (new_state == document->edited()) return;
+
 	document->setEdited(new_state);
 	emit editedStateChanged(m_currentId, new_state);
 }
@@ -70,31 +61,37 @@ void Document::startEditCheckTimer()
 
 //
 
+bool Document::isSaveable()
+{
+	return (!m_currentId.isNull() && isEdited(m_currentId));
+}
+
 bool Document::save()
 {
 	if (m_currentId.isNull()) return false;
 	emit askSetText();
+
 	auto extant_path = extantPath(m_currentId);
 	if (Path::isValid(extant_path))
 		backUp(m_currentId);
 	else {
-
+		QSemaphore semaphore;
+		connect(this, &Document::newPathChosen,
+			this, [this, &extant_path, &semaphore](const StdFsPath& path) {
+				extant_path = path;
+				!extant_path.empty()
+					? semaphore.release()
+					: emit askSaveToDisk();
+			});
 		emit askSaveToDisk();
+		semaphore.acquire();
 
-		// ???
-
-		//writeEmptyFile(path);
-		//m_extantPathsToIds[path] = m_currentId;
-		
+		writeEmptyFile(extant_path);
+		m_extantPathsToIds[extant_path] = m_currentId;
+		emit pathIdAssociated(extant_path, m_currentId);
 	}
 	overwrite(m_currentId);
-	// new temp made (or will be made on its own, whenever file changed again)
 	return true;
-}
-
-bool Document::isSaveable()
-{
-	return (!m_currentId.isNull() && isEdited(m_currentId));
 }
 
 //
@@ -114,6 +111,11 @@ void Document::setUpAutoCache()
 	connect(m_autoSaveText, &QTimer::timeout, this, [&] {
 		emit askSetText();
 		});
+}
+
+void Document::writeEmptyFile(const StdFsPath& path)
+{
+	Io::writeFile(path);
 }
 
 const QString Document::read(StdFsPath path)
@@ -175,18 +177,21 @@ Document::StdFsPath Document::backUpPath(const StdFsPath& path)
 	return m_backupFolder / Path::toStdFs(name + ".bak");
 }
 
+//
+
 void Document::overwrite(QUuid id)
 {
-	qDebug() << __FUNCTION__;
-
 	auto path = extantPath(id);
 	auto temp_path = tempPath(id);
-
-	qDebug() << Path::areValid(path, temp_path);
-
 	if (!Path::areValid(path, temp_path)) return;
-	// overwrite...
+
+	Path::move(temp_path, path, true);
+	m_cache.remove(m_currentId);
+	auto document = textDocument(m_currentId, path);
+	emit editedStateChanged(m_currentId, document->edited());
 }
+
+//
 
 TextDocument* Document::create(QUuid id, StdFsPath path)
 {

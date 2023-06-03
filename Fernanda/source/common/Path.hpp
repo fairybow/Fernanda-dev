@@ -225,4 +225,10 @@ namespace Path
 
 #endif
 
+	inline bool move(const StdFsPath& extantPath, const StdFsPath& newPath, bool overwrite = false)
+	{
+		if (StdFs::exists(newPath) && overwrite)
+			StdFs::remove(newPath);
+		return QFile::rename(extantPath, newPath);
+	}
 }

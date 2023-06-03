@@ -42,6 +42,15 @@ void TabBar::updateEditedState(QUuid id, bool edited)
 		button->setEdited(edited);
 }
 
+void TabBar::updateTitle(QUuid id, const QString& title)
+{
+	auto index = indexById(id);
+	auto data_map = m_trueTabBar->tabData(index).toMap();
+	data_map[DATA_TITLE] = title;
+	m_trueTabBar->setTabData(index, data_map);
+	m_trueTabBar->setTabText(index, title);
+}
+
 void TabBar::setupWidgets()
 {
 	auto control_box = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight });

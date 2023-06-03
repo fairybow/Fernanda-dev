@@ -6,6 +6,7 @@
 #include "DocumentCache.hpp"
 #include "TextDocument.hpp"
 
+#include <QSemaphore>
 #include <QString>
 #include <QTimer>
 #include <QUuid>
@@ -26,16 +27,16 @@ public:
 
 	Document(const StdFsPath& tempFolder, const StdFsPath& backupFolder, QWidget* parent = nullptr, int cacheMaxCost = 100);
 
-	const QString setCurrent(const StdFsPath& path);
+	const QString setCurrent(const StdFsPath& path, bool isNew = false);
 	const QString setCurrent(QUuid id);
 	void setText(const QString& text);
-	void writeEmptyFile(const StdFsPath& path);
 	QUuid createEmpty();
 	void affirmEditedState(const QString& text);
 	void startEditCheckTimer();
+
 	//
-	bool save();
 	bool isSaveable();
+	bool save();
 	//
 
 	QUuid currentId() const { return m_currentId; }
@@ -71,7 +72,11 @@ signals:
 	void askSaveToDisk();
 
 	//
+
 	void newPathChosen(const StdFsPath& path);
+	void pathIdAssociated(const StdFsPath& path, QUuid id);
+
+	//
 
 private:
 	DocumentCache m_cache;
@@ -84,17 +89,22 @@ private:
 	QTimer* m_editCheckDelay = new QTimer(this);
 
 	void setUpAutoCache();
+	void writeEmptyFile(const StdFsPath& path);
 	const QString read(StdFsPath path = StdFsPath());
 	QUuid createId(StdFsPath path = StdFsPath());
 	QUuid idByPath(const StdFsPath& path);
 	TextDocument* textDocument(QUuid id, StdFsPath path = StdFsPath());
+
 	//
+
 	void tempSave(QUuid id, const QString& text);
 	StdFsPath tempPath(QUuid id);
 	void backUp(QUuid id);
 	StdFsPath backUpPath(const StdFsPath& path);
 	void overwrite(QUuid id);
+
 	//
+
 	TextDocument* create(QUuid id, StdFsPath path = StdFsPath());
 	bool wasEvicted(QUuid id);
 	void recover(QUuid id, QString& initialText, QString& originalText);
