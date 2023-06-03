@@ -14,10 +14,10 @@
 
 class LicenseDialog : public QDialog
 {
+public:
 	using StdFsPath = std::filesystem::path;
 	using PathLabelList = QVector<std::pair<StdFsPath, QString>>;
 
-public:
 	explicit LicenseDialog(QWidget* parent = nullptr)
 		: QDialog(parent)
 	{

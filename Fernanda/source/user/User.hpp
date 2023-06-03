@@ -13,11 +13,11 @@
 
 class User : public QObject
 {
-	using StdFsPath = std::filesystem::path;
-
 	Q_OBJECT
 
 public:
+	using StdFsPath = std::filesystem::path;
+
 	User(const QString& applicationName = QCoreApplication::applicationName(), QObject* parent = nullptr, const QString& configFileName = "Settings.ini")
 		: QObject(parent), m_configFileName(fileName(configFileName))
 	{

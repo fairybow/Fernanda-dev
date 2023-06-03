@@ -27,11 +27,11 @@
 
 class MenuBar : public Widget<QMenuBar>
 {
-	using StdFsPath = std::filesystem::path;
-
 	Q_OBJECT
 
 public:
+	using StdFsPath = std::filesystem::path;
+
 	MenuBar(const char* name, StdFsPath userData, StdFsPath userDocuments, bool isDev = false, QWidget* parent = nullptr);
 
 	void makeSubmenus();

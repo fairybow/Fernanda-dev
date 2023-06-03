@@ -11,12 +11,12 @@
 
 namespace Path
 {
-	namespace StdFs = std::filesystem;
-	using StdFsPath = StdFs::path;
-	using StdFsPathList = QVector<StdFs::path>;
-
 	namespace
 	{
+		namespace StdFs = std::filesystem;
+		using StdFsPath = StdFs::path;
+		using StdFsPathList = QVector<StdFs::path>;
+
 		template <typename T>
 		using IsFsPathOrQString = std::disjunction<std::is_same<T, StdFsPath>, std::is_same<T, QString>>;
 

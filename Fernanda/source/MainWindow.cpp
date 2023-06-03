@@ -82,7 +82,7 @@ void MainWindow::documentConnections()
 		//
 
 		auto path = m_menuBar->newFileDialog();
-		m_document->newPathChosen(path, this);
+		//m_document->newPathChosen(path, this);
 
 		//
 
@@ -108,14 +108,16 @@ void MainWindow::editorConnections()
 
 void MainWindow::meterConnections()
 {
-	connect(m_meter, &Meter::getCountsData, this, [&](bool isSelection) {
-		if (isSelection)
-			return Meter::Counts{ m_editor->selectedText(), m_editor->selectedLineCount() };
-		return Meter::Counts{ m_editor->toPlainText(), m_editor->blockCount() };
+	connect(m_meter, &Meter::askGiveCountsData, this, [&](bool isSelection) {
+		(isSelection)
+			? m_meter->give(Meter::Counts{ m_editor->selectedText(), m_editor->selectedLineCount() })
+			: m_meter->give(Meter::Counts{ m_editor->toPlainText(), m_editor->blockCount() });
 		});
-	connect(m_meter, &Meter::getPositionsData, this, [&] {
-		return Meter::Positions{ m_editor->cursorBlockNumber(), m_editor->cursorPositionInBlock() };
+	connect(m_meter, &Meter::askGivePositionsData, this, [&] {
+		auto positions = Meter::Positions{ m_editor->cursorBlockNumber(), m_editor->cursorPositionInBlock() };
+		m_meter->give(positions);
 		});
+
 	connect(m_meter, &Meter::editorFocusReturn, m_editor, [&] {
 		m_editor->setFocus();
 		});

@@ -19,11 +19,11 @@ namespace StdFs = std::filesystem;
 
 class Document : public QObject
 {
-	using StdFsPath = StdFs::path;
-
 	Q_OBJECT
 
 public:
+	using StdFsPath = StdFs::path;
+
 	Document(const StdFsPath& tempFolder, const StdFsPath& backupFolder, QWidget* parent = nullptr, int cacheMaxCost = 100);
 
 	const QString setCurrent(const StdFsPath& path);

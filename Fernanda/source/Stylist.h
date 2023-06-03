@@ -13,11 +13,11 @@
 
 class Stylist : public QObject
 {
+public:
 	using StdFsPath = std::filesystem::path;
 	using StdPathPair = std::pair<StdFsPath, StdFsPath>;
 	using QStringPair = std::pair<QString, QString>;
 
-public:
 	Stylist(QWidgetList widgets = {}, QObject* parent = nullptr, const QString& baseSuffix = "Base", const QString& extension = ".qss");
 
 	void add(QWidget* widget);

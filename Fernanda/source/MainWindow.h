@@ -30,11 +30,11 @@
 
 class MainWindow : public Widget<QMainWindow>
 {
-	using StdFsPath = std::filesystem::path;
-
 	Q_OBJECT
 
 public:
+	using StdFsPath = std::filesystem::path;
+
 	MainWindow(const char* name, bool isDev = false, StdFsPath file = StdFsPath(), QWidget* parent = nullptr);
 
 	StdFsPath userData() const { return m_user->data(); }

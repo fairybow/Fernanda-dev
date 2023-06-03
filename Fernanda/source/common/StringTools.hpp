@@ -11,12 +11,12 @@
 
 namespace StringTools
 {
-	using QStringPair = std::pair<QString, QString>;
-
 	enum class Side { Both, Left, Right };
 
 	namespace
 	{
+		using QStringPair = std::pair<QString, QString>;
+
 		const QVector<QStringPair> doubleEscapeReplacements = {
 		{"\\\\", "\\"},
 		{"\\'", "\'"},

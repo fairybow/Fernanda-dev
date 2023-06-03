@@ -12,11 +12,11 @@
 
 class Indicator : public Widget<>
 {
-	using StdFsPath = std::filesystem::path;
-
 	Q_OBJECT
 
 public:
+	using StdFsPath = std::filesystem::path;
+
 	Indicator(const char* name, QWidget* parent = nullptr)
 		: Widget(name, parent)
 	{

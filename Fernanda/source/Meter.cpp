@@ -74,33 +74,41 @@ void Meter::updateOutput(bool& memberBool, bool state)
 void Meter::updateCounts(bool isSelection)
 {
 	if (!hasAnyCount()) return;
-	auto counts_info = emit getCountsData(isSelection);
+	emit askGiveCountsData(isSelection);
+}
+
+void Meter::updatePositions()
+{
+	if (!hasEitherPosition()) return;
+	emit askGivePositionsData();
+}
+
+void Meter::displayCounts(Counts counts)
+{
 	QStringList elements;
 	if (m_hasLineCount) {
-		auto block_count = Utility::greaterOrEqual(counts_info.blockCount, 1);
+		auto block_count = Utility::greaterOrEqual(counts.blockCount, 1);
 		elements << QString::number(block_count) + " lines";
 	}
 	if (m_hasWordCount) {
-		auto words = counts_info.text.split(
+		auto words = counts.text.split(
 			QRegularExpression(Regex::LEADING_WHITESPACE), Qt::SkipEmptyParts);
 		elements << QString::number(words.count()) + " words";
 	}
-	auto character_count = counts_info.text.count();
+	auto character_count = counts.text.count();
 	if (m_hasCharCount)
 		elements << QString::number(character_count) + " chars";
 	m_counts->setText(elements.join(", "));
 	emit toggleAutoCount(!(character_count >= 20000));
 }
 
-void Meter::updatePositions()
+void Meter::displayPositions(Positions positions)
 {
-	if (!hasEitherPosition()) return;
-	auto positions_info = emit getPositionsData();
 	QStringList elements;
 	if (m_hasLinePosition)
-		elements << "ln " + QString::number(positions_info.cursorBlockNumber + 1);
+		elements << "ln " + QString::number(positions.cursorBlockNumber + 1);
 	if (m_hasColumnPosition)
-		elements << "col " + QString::number(positions_info.cursorPositionInBlock + 1);
+		elements << "col " + QString::number(positions.cursorPositionInBlock + 1);
 	m_positions->setText(elements.join(", "));
 }
 
