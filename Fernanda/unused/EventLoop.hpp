@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <QEventLoop>
 #include <QProgressDialog>
@@ -35,3 +35,4 @@ public slots:
 private:
 	QProgressDialog m_dialog;
 };
+*/

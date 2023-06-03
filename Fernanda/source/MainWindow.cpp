@@ -78,8 +78,14 @@ void MainWindow::documentConnections()
 		m_document->affirmEditedState(text);
 		});
 	connect(m_document, &Document::askSaveToDisk, this, [&] {
+
+		//
+
 		auto path = m_menuBar->newFileDialog();
-		m_document->newPathChosen(path);
+		m_document->newPathChosen(path, this);
+
+		//
+
 		});
 }
 
@@ -144,9 +150,15 @@ void MainWindow::menuBarConnections()
 		openFileTab(path);
 		});
 	connect(m_menuBar, &MenuBar::askSaveFile, this, [&] {
+
+		//
+
 		if (!m_document->isSaveable()) return;
 		auto saved = m_document->save();
 		m_indicator->onResult(saved);
+
+		//
+
 		});
 }
 

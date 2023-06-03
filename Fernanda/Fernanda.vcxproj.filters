@@ -363,8 +363,8 @@
     <ClInclude Include="source\menu-bar\LicenseDialog.hpp">
       <Filter>Source\MenuBar</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\EventLoop.hpp">
-      <Filter>Source\Common</Filter>
+    <ClInclude Include="source\Dimmer.hpp">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

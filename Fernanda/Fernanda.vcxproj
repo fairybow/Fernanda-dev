@@ -148,11 +148,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Emoji.hpp" />
-    <ClInclude Include="source\common\EventLoop.hpp" />
     <ClInclude Include="source\common\StringTools.hpp" />
     <QtMoc Include="source\common\UiButton.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
     <QtMoc Include="source\document\Document.h" />
+    <ClInclude Include="source\Dimmer.hpp" />
     <ClInclude Include="source\document\DocumentCache.hpp" />
     <ClInclude Include="source\document\TextDocument.hpp" />
     <ClInclude Include="source\Logger.hpp" />

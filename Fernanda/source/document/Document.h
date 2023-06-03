@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../common/EventLoop.hpp"
 #include "../common/Io.hpp"
 #include "../common/Path.hpp"
 #include "../common/StringTools.hpp"
@@ -68,6 +67,8 @@ signals:
 	void editedStateChanged(QUuid id, bool edited);
 	void askEditCheck();
 	void askSaveToDisk();
+
+	//
 	void newPathChosen(const StdFsPath& path);
 
 private:
@@ -85,11 +86,13 @@ private:
 	QUuid createId(StdFsPath path = StdFsPath());
 	QUuid idByPath(const StdFsPath& path);
 	TextDocument* textDocument(QUuid id, StdFsPath path = StdFsPath());
+	//
 	void tempSave(QUuid id, const QString& text);
 	StdFsPath tempPath(QUuid id);
 	void backUp(QUuid id);
 	StdFsPath backUpPath(const StdFsPath& path);
 	void overwrite(QUuid id);
+	//
 	TextDocument* create(QUuid id, StdFsPath path = StdFsPath());
 	bool wasEvicted(QUuid id);
 	void recover(QUuid id, QString& initialText, QString& originalText);

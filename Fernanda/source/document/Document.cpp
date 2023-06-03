@@ -8,6 +8,14 @@ Document::Document(const StdFsPath& tempFolder, const StdFsPath& backupFolder, Q
 	connect(m_editCheckDelay, &QTimer::timeout, this, [&] {
 		emit askEditCheck();
 		});
+
+	//
+
+	/*connect(this, &Document::newPathChosen, this, [&](const StdFsPath& path, QMainWindow* window) {
+		
+		//
+
+		});*/
 }
 
 const QString Document::setCurrent(const StdFsPath& path)
