@@ -197,8 +197,7 @@ void MainWindow::menuBarEditorConfigConnections()
 	connect(m_menuBar, &MenuBar::askChangeFont, this, [&](const QFont& font) {
 		saveConfigPassthrough(
 			font, Ini::EDITOR_FONT, m_editor, [&] {
-				m_editor->setFont(font);
-				m_menuBar->setUserFont(font);
+				setUserFont(font);
 			});
 		});
 
@@ -412,8 +411,7 @@ void MainWindow::loadConfigs()
 void MainWindow::loadEditorConfigs()
 {
 	auto font = loadConfig<QFont>(Ini::EDITOR_FONT, m_editor, m_editor->defaulFont());
-	m_editor->setFont(font);
-	m_menuBar->setUserFont(font);
+	setUserFont(font);
 }
 
 /*void MainWindow::loadPreviewConfigs()
@@ -573,6 +571,12 @@ void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 {
 	saveConfigPassthrough(priorState, Ini::WINDOW_STATE, this);
 	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
+}
+
+void MainWindow::setUserFont(const QFont& font)
+{
+	m_editor->setFont(font);
+	m_menuBar->setUserFont(font);
 }
 
 void MainWindow::openFileTab(StdFsPath path, bool writeNew)

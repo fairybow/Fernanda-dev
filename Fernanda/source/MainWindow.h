@@ -85,6 +85,7 @@ private:
 	void loadMenuBarToolConfigs();
 	void loadMenuBarMiscConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
+	void setUserFont(const QFont& font);
 
 	void openFileTab(StdFsPath path, bool writeNew = false);
 	void openNewFileTab(StdFsPath path) { openFileTab(path, true); };
