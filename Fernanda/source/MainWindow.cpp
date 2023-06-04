@@ -78,7 +78,7 @@ void MainWindow::documentConnections()
 		});
 
 	connect(m_document, &Document::pathIdAssociated,
-		this, [&](const StdFsPath& path, QUuid id) {
+		this, [&](const StdFsPath& path, const QUuid& id) {
 		m_tabBar->updateTitle(id, Path::qStringName(path));
 		});
 }
