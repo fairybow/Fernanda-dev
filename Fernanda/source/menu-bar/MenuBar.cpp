@@ -1,9 +1,8 @@
 #include "MenuBar.h"
 
-MenuBar::MenuBar(const char* name, StdFsPath userData, StdFsPath userDocuments, bool isDev, QWidget* parent)
+MenuBar::MenuBar(const char* name, StdFsPath userData, bool isDev, QWidget* parent)
 	: Widget(name, parent),
 	m_userData(userData),
-	m_userDocuments(userDocuments),
 	m_isDev(isDev)
 {
 	makeActionGroups();
@@ -18,22 +17,6 @@ void MenuBar::makeSubmenus()
 	help();
 	if (m_isDev)
 		dev();
-}
-
-MenuBar::StdFsPath MenuBar::newFileDialog()
-{
-	auto path = QFileDialog::getSaveFileName(
-		this, tr("Create a new file..."), Path::toQString(
-			m_userDocuments), tr(DIALOG_FILE_TYPE));
-	return Path::toStdFs(path);
-}
-
-MenuBar::StdFsPath MenuBar::openFileDialog()
-{
-	auto path = QFileDialog::getOpenFileName(
-		this, tr("Open an existing file..."), Path::toQString(
-			m_userDocuments), tr(DIALOG_FILE_TYPE));
-	return Path::toStdFs(path);
 }
 
 void MenuBar::makeActionGroups()
@@ -95,20 +78,9 @@ void MenuBar::file()
 	save->setShortcut(Qt::CTRL | Qt::Key_S);
 	quit->setShortcut(Qt::CTRL | Qt::Key_Q);
 
-	connect(new_file, &QAction::triggered, this, [&] {
-		auto path = newFileDialog();
-		emit askOpenNewFile(path);
-		});
-
-	connect(open, &QAction::triggered, this, [&] {
-		auto path = openFileDialog();
-		emit askOpenFile(path);
-		});
-
-	connect(save, &QAction::triggered, this, [&] {
-		emit askSaveFile();
-		});
-
+	connect(new_file, &QAction::triggered, this, lambdaEmit(askOpenNewFile));
+	connect(open, &QAction::triggered, this, lambdaEmit(askOpenFile));
+	connect(save, &QAction::triggered, this, lambdaEmit(askSaveFile));
 	connect(quit, &QAction::triggered,
 		this, &QCoreApplication::quit, Qt::QueuedConnection);
 
@@ -151,8 +123,9 @@ void MenuBar::help()
 
 void MenuBar::dev()
 {
-	// Add option to open user folder!
-
+	auto open_documents = new QAction(tr("&Documents..."), this);
+	auto open_user_data = new QAction(tr("&User data..."), this);
+	auto open_installation = new QAction(tr("&Installation..."), this);
 	auto open_logs = new QAction(tr("&Open log"), this);
 	auto document_class = new QAction(tr("&Class info"), this);
 	auto document_current = new QAction(tr("&Current document"), this);
@@ -160,26 +133,26 @@ void MenuBar::dev()
 	auto stylist_stylesheets = new QAction(tr("&Style sheets"), this);
 	auto stylist_unstyle = new QAction(tr("&Remove all styling"), this);
 
-	connect(open_logs, &QAction::triggered, this, [&] {
-		emit devOpenLogs();
-		});
-	connect(document_class, &QAction::triggered, this, [&] {
-		emit devDocument();
-		});
-	connect(document_current, &QAction::triggered, this, [&] {
-		emit devDocumentCurrent();
-		});
-	connect(stylist_class, &QAction::triggered, this, [&] {
-		emit devStylist();
-		});
-	connect(stylist_stylesheets, &QAction::triggered, this, [&] {
-		emit devStylistStyleSheets();
-		});
-	connect(stylist_unstyle, &QAction::triggered, this, [&] {
-		emit devStylistUnstyle();
-		});
+	connect(open_documents, &QAction::triggered, this, lambdaEmit(devOpenDocuments));
+	connect(open_user_data, &QAction::triggered, this, lambdaEmit(devOpenUserData));
+	connect(open_installation, &QAction::triggered, this, lambdaEmit(devOpenInstallation));
+	connect(open_logs, &QAction::triggered, this, lambdaEmit(devOpenLogs));
+	connect(document_class, &QAction::triggered, this, lambdaEmit(devDocument));
+	connect(document_current, &QAction::triggered, this, lambdaEmit(devDocumentCurrent));
+	connect(stylist_class, &QAction::triggered, this, lambdaEmit(devStylist));
+	connect(stylist_stylesheets, &QAction::triggered, this, lambdaEmit(devStylistStyleSheets));
+	connect(stylist_unstyle, &QAction::triggered, this, lambdaEmit(devStylistUnstyle));
 
 	auto menu = addMenu(tr("&Dev"));
+
+	auto open_folder = menu->addMenu("&Open folder");
+	for (const auto& action : { open_documents, open_user_data, open_installation })
+		open_folder->addAction(action);
+
+	//
+	open_installation->setEnabled(false);
+	//
+
 	for (const auto& action : { open_logs })
 		menu->addAction(action);
 

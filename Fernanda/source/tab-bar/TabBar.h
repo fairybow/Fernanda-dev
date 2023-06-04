@@ -8,10 +8,12 @@
 #include "ScrollTabs.hpp"
 #include "TrueTabBar.hpp"
 
+#include <QApplication>
 #include <QString>
 #include <QUuid>
 #include <QVariantMap>
 #include <QVector>
+#include <QWheelEvent>
 
 #include <filesystem>
 
@@ -24,17 +26,24 @@ public:
 
 	TabBar(const char* name, int minTabSize = 25, int maxTabSize = 100, QWidget* parent = nullptr);
 
-	int serve(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
+	int serve(const QUuid& id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
 	bool isUntitled();
 	void setUntitledDisplay(const QString& text, int charLimit = 30);
+	void close(const QUuid& id);
+	bool isFull();
+	bool isEmpty();
 
 signals:
-	void currentChanged(QUuid id);
+	void currentChanged(const QUuid& id);
 	void askAdd();
-	void askClose(QUuid id);
+	void askClearForClose(const QUuid& id);
 
 public slots:
-	void updateEditedState(QUuid id, bool edited);
+	void updateEditedState(const QUuid& id, bool edited);
+	void updateTitle(const QUuid& id, const QString& title);
+
+protected:
+	virtual void wheelEvent(QWheelEvent* event) override;
 
 private:
 	static constexpr char DATA_ID[] = "tab_id";
@@ -48,11 +57,13 @@ private:
 	void setupWidgets();
 	void connections();
 	QUuid idByIndex(int index);
-	int indexById(QUuid id);
+	int indexById(const QUuid& id);
 	const QString title(int index);
-	bool isFull();
+	int create(const QUuid& id, StdFsPath titlePath = StdFsPath());
+	void setButton(int index, const QUuid& id);
+	void setData(int index, const QUuid& id, QString title = QString());
+	CloseTab* closeButton(const QUuid& id);
+
+private slots:
 	void adjustControls();
-	int create(QUuid id, StdFsPath titlePath = StdFsPath());
-	void setButton(int index, QUuid id);
-	void setData(int index, QUuid id, QString title = QString());
 };

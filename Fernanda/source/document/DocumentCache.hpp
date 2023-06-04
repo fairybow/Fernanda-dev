@@ -11,13 +11,13 @@ public:
 	DocumentCache(int maxCost = 100)
 		: QCache(maxCost) {}
 
-	void insertDocument(const QUuid& fileId, TextDocument* document)
+	void insertDocument(const QUuid& id, TextDocument* document)
 	{
-		insert(fileId, document);
+		insert(id, document);
 	}
 
-	TextDocument* document(const QUuid& fileId)
+	TextDocument* document(const QUuid& id)
 	{
-		return object(fileId);
+		return object(id);
 	}
 };

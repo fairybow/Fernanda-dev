@@ -19,10 +19,13 @@
 #include "Stylist.h"
 
 #include <QCloseEvent>
+#include <QDesktopServices>
 #include <QDirIterator>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QShowEvent>
 #include <QString>
+#include <QUrl>
 #include <QUuid>
 
 #include <filesystem>
@@ -34,6 +37,7 @@ class MainWindow : public Widget<QMainWindow>
 
 public:
 	using StdFsPath = std::filesystem::path;
+	using PromptResult = QMessageBox::StandardButton;
 
 	MainWindow(const char* name, bool isDev = false, StdFsPath file = StdFsPath(), QWidget* parent = nullptr);
 
@@ -48,9 +52,12 @@ private:
 	bool m_isInitialized = false;
 
 	User* m_user = new User(QCoreApplication::applicationName(), this);
-	Document* m_document = new Document(m_user->temp(), m_user->backup(), this, 3/* <-- test */);
+	Document* m_document = new Document({
+		m_user->documents(),
+		m_user->temp(),
+		m_user->backup() }, this, this, 3/* <-- test */);
 	//Project* m_project = new Project(this);
-	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_user->documents(), m_isDev);
+	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_isDev);
 	StatusBar* m_statusBar = new StatusBar("StatusBar");
 	Indicator* m_indicator = new Indicator("Indicator");
 	TabBar* m_tabBar = new TabBar("TabBar", 100, 200);
@@ -86,9 +93,11 @@ private:
 	void loadMenuBarMiscConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
 	void setUserFont(const QFont& font);
+	PromptResult singleSavePrompt();
+	void openFolder(const StdFsPath& path);
 
-	void openFileTab(StdFsPath path, bool writeNew = false);
-	void openNewFileTab(StdFsPath path) { openFileTab(path, true); };
+	void openFileTab(const StdFsPath& path, bool writeNew = false);
+	void openNewFileTab(const StdFsPath& path) { openFileTab(path, true); };
 	void openNewTab() { onAddTabClick(); };
 
 	template<typename T>
@@ -113,7 +122,8 @@ private:
 	}
 
 private slots:
-	void onTabClick(QUuid id);
+	void onTabClick(const QUuid& id);
 	void onAddTabClick();
-	void onCloseTabClick(QUuid id);
+	void onCloseTabClick(const QUuid& id);
+	bool onSaveFile();
 };

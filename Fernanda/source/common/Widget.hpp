@@ -4,6 +4,8 @@
 
 #include <utility>
 
+#define lambdaEmit(signalCall) [&]{signalCall();}
+
 template<typename T = QWidget, typename... Args>
 class Widget : public T
 {

@@ -7,7 +7,6 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	connections();
 	loadConfigs();
 	openNewTab();
-	m_editor->setFocus();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -78,23 +77,17 @@ void MainWindow::documentConnections()
 		m_document->affirmEditedState(text);
 		});
 
-	//
-
-	connect(m_document, &Document::askSaveToDisk, this, [&] {
-
-		auto path = m_menuBar->newFileDialog();
-		//m_document->newPathChosen(path, this);
-
+	connect(m_document, &Document::pathIdAssociated,
+		this, [&](const StdFsPath& path, const QUuid& id) {
+		m_tabBar->updateTitle(id, Path::qStringName(path));
 		});
-
-	//
 }
 
 void MainWindow::tabBarConnections()
 {
 	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::onTabClick);
 	connect(m_tabBar, &TabBar::askAdd, this, &MainWindow::onAddTabClick);
-	connect(m_tabBar, &TabBar::askClose, this, &MainWindow::onCloseTabClick);
+	connect(m_tabBar, &TabBar::askClearForClose, this, &MainWindow::onCloseTabClick);
 	connect(m_editor, &Editor::textChanged, this, [&] {
 		if (!m_tabBar->isUntitled()) return;
 		auto block = m_editor->firstBlock();
@@ -110,7 +103,7 @@ void MainWindow::editorConnections()
 void MainWindow::meterConnections()
 {
 	connect(m_meter, &Meter::askGiveCounts, this, [&](bool isSelection) {
-		(isSelection)
+		isSelection
 			? m_meter->give(Meter::Counts{ m_editor->selectedText(), m_editor->selectedLineCount() })
 			: m_meter->give(Meter::Counts{ m_editor->toPlainText(), m_editor->blockCount() });
 		});
@@ -143,23 +136,13 @@ void MainWindow::meterConnections()
 
 void MainWindow::menuBarConnections()
 {
-	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&](StdFsPath path) {
-		openNewFileTab(path);
+	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&] {
+		openNewFileTab(m_document->newFileDialog());
 		});
-	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
-		openFileTab(path);
+	connect(m_menuBar, &MenuBar::askOpenFile, this, [&] {
+		openFileTab(m_document->openFileDialog());
 		});
-	connect(m_menuBar, &MenuBar::askSaveFile, this, [&] {
-
-		//
-
-		if (!m_document->isSaveable()) return;
-		auto saved = m_document->save();
-		m_indicator->onResult(saved);
-
-		//
-
-		});
+	connect(m_menuBar, &MenuBar::askSaveFile, this, &MainWindow::onSaveFile);
 }
 
 void MainWindow::menuBarStyleConfigConnections()
@@ -368,6 +351,15 @@ void MainWindow::menuBarMiscConfigConnections()
 
 void MainWindow::menuBarDevConnections()
 {
+	connect(m_menuBar, &MenuBar::devOpenDocuments, this, [&] {
+		openFolder(m_user->documents());
+		});
+	connect(m_menuBar, &MenuBar::devOpenUserData, this, [&] {
+		openFolder(m_user->data());
+		});
+	connect(m_menuBar, &MenuBar::devOpenInstallation, this, [&] {
+		//openFolder();
+		});
 	connect(m_menuBar, &MenuBar::devOpenLogs, this, [&] {
 		auto user_data = Path::toQString(m_user->data());
 		QDirIterator it(user_data, { "*.log" }, QDir::Files, QDirIterator::Subdirectories);
@@ -580,20 +572,30 @@ void MainWindow::setUserFont(const QFont& font)
 	m_menuBar->setUserFont(font);
 }
 
-void MainWindow::openFileTab(StdFsPath path, bool writeNew)
+MainWindow::PromptResult MainWindow::singleSavePrompt()
+{
+	return QMessageBox::question(
+		this, "Hey!", "You have unsaved changes.",
+		QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+}
+
+void MainWindow::openFolder(const StdFsPath& path)
+{
+	QDesktopServices::openUrl(QUrl::fromLocalFile(Path::toQString(path)));
+}
+
+void MainWindow::openFileTab(const StdFsPath& path, bool writeNew)
 {
 	if (path.empty()) {
 		m_indicator->red();
 		return;
 	}
-	if (writeNew)
-		m_document->writeEmptyFile(path);
-	auto text = m_document->setCurrent(path);
+	auto text = m_document->setCurrent(path, writeNew);
 	m_tabBar->serve(m_document->currentId(), path);
 	m_editor->setPlainText(text);
 }
 
-void MainWindow::onTabClick(QUuid id)
+void MainWindow::onTabClick(const QUuid& id)
 {
 	auto document_text = m_document->setCurrent(id);
 	m_editor->setPlainText(document_text);
@@ -606,18 +608,40 @@ void MainWindow::onAddTabClick()
 	m_document->setCurrent(new_id);
 	m_tabBar->serve(new_id);
 	m_editor->clear();
+	m_editor->setFocus();
 }
 
-void MainWindow::onCloseTabClick(QUuid id)
+void MainWindow::onCloseTabClick(const QUuid& id)
 {
 	if (m_document->isEdited(id)) {
-		m_tabBar->serve(id); // is it bad if id == current id (or index == current index for tab)
-		//... save popup
-		// save (or not)
+		m_tabBar->serve(id);
+
+		auto early_return = false;
+		auto action = singleSavePrompt();
+		switch (action) {
+		case PromptResult::Save:
+			onSaveFile();
+			early_return = true;
+			break;
+		case PromptResult::Cancel:
+			early_return = true;
+			break;
+		}
+		if (early_return) return;
 	}
 
-	// which swaps temp with original
-	// original goes to backup
-	// remove document object and path from extantPaths list?
-	// then run document->setCurrent or open from path?
+	m_tabBar->close(id);
+	m_document->close(id);
+	if (m_tabBar->isEmpty())
+		openNewTab();
+}
+
+bool MainWindow::onSaveFile()
+{
+	if (!m_document->isSaveable()) return false;
+
+	qDebug() << __FUNCTION__;
+
+	auto saved = m_document->save();
+	return m_indicator->onResult(saved);
 }

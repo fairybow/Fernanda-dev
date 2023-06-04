@@ -6,6 +6,8 @@
 #include "DocumentCache.hpp"
 #include "TextDocument.hpp"
 
+#include <QFileDialog>
+#include <QMainWindow>
 #include <QString>
 #include <QTimer>
 #include <QUuid>
@@ -24,22 +26,28 @@ class Document : public QObject
 public:
 	using StdFsPath = StdFs::path;
 
-	Document(const StdFsPath& tempFolder, const StdFsPath& backupFolder, QWidget* parent = nullptr, int cacheMaxCost = 100);
+	struct Folders {
+		StdFsPath user;
+		StdFsPath temp;
+		StdFsPath backup;
+	};
 
-	const QString setCurrent(const StdFsPath& path);
-	const QString setCurrent(QUuid id);
+	Document(const Folders& folders, QMainWindow* mainWindow, QWidget* parent = nullptr, int cacheMaxCost = 100);
+
+	StdFsPath newFileDialog();
+	StdFsPath openFileDialog();
+	const QString setCurrent(const StdFsPath& path, bool isNew = false);
+	const QString setCurrent(const QUuid& id);
 	void setText(const QString& text);
-	void writeEmptyFile(const StdFsPath& path);
 	QUuid createEmpty();
 	void affirmEditedState(const QString& text);
 	void startEditCheckTimer();
-	//
-	bool save();
 	bool isSaveable();
-	//
+	bool save();
+	void close(const QUuid& id);
 
 	QUuid currentId() const { return m_currentId; }
-	bool isEdited(QUuid id) { return textDocument(id)->edited(); }
+	bool isEdited(const QUuid& id) { return textDocument(id)->edited(); }
 
 	void setEditCheckDelay(int textLength);
 
@@ -66,15 +74,16 @@ public:
 signals:
 	void askSetText();
 	void startAutoCacheTimer();
-	void editedStateChanged(QUuid id, bool edited);
+	void editedStateChanged(const QUuid& id, bool edited);
 	void askEditCheck();
-	void askSaveToDisk();
-
-	//
-	void newPathChosen(const StdFsPath& path);
+	void pathIdAssociated(const StdFsPath& path, const QUuid& id);
 
 private:
+	static constexpr char DIALOG_FILE_TYPE[] = "Plain text file (*.txt)";
+
+	QMainWindow* m_mainWindow;
 	DocumentCache m_cache;
+	const StdFsPath m_userFolder;
 	const StdFsPath m_tempFolder;
 	const StdFsPath m_backupFolder;
 	QUuid m_currentId;
@@ -84,19 +93,20 @@ private:
 	QTimer* m_editCheckDelay = new QTimer(this);
 
 	void setUpAutoCache();
+	void writeEmptyFile(const StdFsPath& path);
 	const QString read(StdFsPath path = StdFsPath());
 	QUuid createId(StdFsPath path = StdFsPath());
 	QUuid idByPath(const StdFsPath& path);
-	TextDocument* textDocument(QUuid id, StdFsPath path = StdFsPath());
-	//
-	void tempSave(QUuid id, const QString& text);
-	StdFsPath tempPath(QUuid id);
-	void backUp(QUuid id);
-	StdFsPath backUpPath(const StdFsPath& path);
-	void overwrite(QUuid id);
-	//
-	TextDocument* create(QUuid id, StdFsPath path = StdFsPath());
-	bool wasEvicted(QUuid id);
-	void recover(QUuid id, QString& initialText, QString& originalText);
-	StdFsPath extantPath(QUuid id);
+	TextDocument* textDocument(const QUuid& id, StdFsPath path = StdFsPath());
+
+	void tempSave(const QUuid& id, const QString& text);
+	StdFsPath tempPath(const QUuid& id);
+	void backup(const QUuid& id);
+	StdFsPath backupPath(const StdFsPath& path);
+	bool overwrite(const QUuid& id);
+
+	TextDocument* create(const QUuid& id, StdFsPath path = StdFsPath());
+	bool wasEvicted(const QUuid& id);
+	void recover(const QUuid& id, QString& initialText, QString& originalText);
+	StdFsPath extantPath(const QUuid& id);
 };
