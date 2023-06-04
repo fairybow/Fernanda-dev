@@ -40,7 +40,7 @@ const QString Document::setCurrent(const StdFsPath& path, bool isNew)
 	return read(path);
 }
 
-const QString Document::setCurrent(QUuid id)
+const QString Document::setCurrent(const QUuid& id)
 {
 	emit askSetText();
 	m_currentId = id;
@@ -104,7 +104,7 @@ bool Document::save()
 	return overwrite(m_currentId);
 }
 
-void Document::close(QUuid id)
+void Document::close(const QUuid& id)
 {
 	qDebug() << __FUNCTION__;
 
@@ -174,7 +174,7 @@ QUuid Document::idByPath(const StdFsPath& path)
 	return id;
 }
 
-TextDocument* Document::textDocument(QUuid id, StdFsPath path)
+TextDocument* Document::textDocument(const QUuid& id, StdFsPath path)
 {
 	auto document = m_cache.document(id);
 	if (!document)
@@ -182,17 +182,17 @@ TextDocument* Document::textDocument(QUuid id, StdFsPath path)
 	return document;
 }
 
-void Document::tempSave(QUuid id, const QString& text)
+void Document::tempSave(const QUuid& id, const QString& text)
 {
 	Io::writeFile(tempPath(id), text);
 }
 
-Document::StdFsPath Document::tempPath(QUuid id)
+Document::StdFsPath Document::tempPath(const QUuid& id)
 {
 	return m_tempFolder / Path::toStdFs(id.toString() + ".txt~");
 }
 
-void Document::backup(QUuid id)
+void Document::backup(const QUuid& id)
 {
 	auto extant_path = extantPath(id);
 	auto backup_path = backupPath(extant_path);
@@ -207,7 +207,7 @@ Document::StdFsPath Document::backupPath(const StdFsPath& path)
 	return m_backupFolder / Path::toStdFs(name + ".bak");
 }
 
-bool Document::overwrite(QUuid id)
+bool Document::overwrite(const QUuid& id)
 {
 	auto path = extantPath(id);
 	auto temp_path = tempPath(id);
@@ -222,7 +222,7 @@ bool Document::overwrite(QUuid id)
 	return true;
 }
 
-TextDocument* Document::create(QUuid id, StdFsPath path)
+TextDocument* Document::create(const QUuid& id, StdFsPath path)
 {
 	QString initial_text;
 	QString original_text;
@@ -239,13 +239,13 @@ TextDocument* Document::create(QUuid id, StdFsPath path)
 	return document;
 }
 
-bool Document::wasEvicted(QUuid id)
+bool Document::wasEvicted(const QUuid& id)
 {
 	if (!m_lifetimeIdRegistry.contains(id)) return false;
 	return StdFs::exists(tempPath(id));
 }
 
-void Document::recover(QUuid id, QString& initialText, QString& originalText)
+void Document::recover(const QUuid& id, QString& initialText, QString& originalText)
 {
 	qDebug() << __FUNCTION__;
 
@@ -259,7 +259,7 @@ void Document::recover(QUuid id, QString& initialText, QString& originalText)
 	// file system watcher
 }
 
-Document::StdFsPath Document::extantPath(QUuid id)
+Document::StdFsPath Document::extantPath(const QUuid& id)
 {
 	StdFsPath path;
 	auto it = std::find_if(

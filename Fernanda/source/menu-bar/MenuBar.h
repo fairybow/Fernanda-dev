@@ -24,6 +24,8 @@
 #include <filesystem>
 #include <map>
 
+#define lambdaEmit(signalCall) [&]{signalCall();}
+
 class MenuBar : public Widget<QMenuBar>
 {
 	Q_OBJECT
@@ -97,6 +99,10 @@ signals:
 	void askToggleIndicator(bool state);
 	void askSetIndicatorAlignment(const QString& alignment);
 	void askSetPreviewType(const QString& type);
+
+	void devOpenDocuments();
+	void devOpenUserData();
+	void devOpenInstallation();
 	void devOpenLogs();
 	void devDocument();
 	void devDocumentCurrent();

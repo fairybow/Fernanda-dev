@@ -351,6 +351,15 @@ void MainWindow::menuBarMiscConfigConnections()
 
 void MainWindow::menuBarDevConnections()
 {
+	connect(m_menuBar, &MenuBar::devOpenDocuments, this, [&] {
+		openFolder(m_user->documents());
+		});
+	connect(m_menuBar, &MenuBar::devOpenUserData, this, [&] {
+		openFolder(m_user->data());
+		});
+	connect(m_menuBar, &MenuBar::devOpenInstallation, this, [&] {
+		//openFolder();
+		});
 	connect(m_menuBar, &MenuBar::devOpenLogs, this, [&] {
 		auto user_data = Path::toQString(m_user->data());
 		QDirIterator it(user_data, { "*.log" }, QDir::Files, QDirIterator::Subdirectories);
@@ -570,7 +579,12 @@ MainWindow::PromptResult MainWindow::singleSavePrompt()
 		QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 }
 
-void MainWindow::openFileTab(StdFsPath path, bool writeNew)
+void MainWindow::openFolder(const StdFsPath& path)
+{
+	QDesktopServices::openUrl(QUrl::fromLocalFile(Path::toQString(path)));
+}
+
+void MainWindow::openFileTab(const StdFsPath& path, bool writeNew)
 {
 	if (path.empty()) {
 		m_indicator->red();
@@ -581,7 +595,7 @@ void MainWindow::openFileTab(StdFsPath path, bool writeNew)
 	m_editor->setPlainText(text);
 }
 
-void MainWindow::onTabClick(QUuid id)
+void MainWindow::onTabClick(const QUuid& id)
 {
 	auto document_text = m_document->setCurrent(id);
 	m_editor->setPlainText(document_text);
@@ -597,7 +611,7 @@ void MainWindow::onAddTabClick()
 	m_editor->setFocus();
 }
 
-void MainWindow::onCloseTabClick(QUuid id)
+void MainWindow::onCloseTabClick(const QUuid& id)
 {
 	if (m_document->isEdited(id)) {
 		m_tabBar->serve(id);

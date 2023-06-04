@@ -24,21 +24,21 @@ public:
 
 	TabBar(const char* name, int minTabSize = 25, int maxTabSize = 100, QWidget* parent = nullptr);
 
-	int serve(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
+	int serve(const QUuid& id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
 	bool isUntitled();
 	void setUntitledDisplay(const QString& text, int charLimit = 30);
-	void close(QUuid id);
+	void close(const QUuid& id);
 	bool isFull();
 	bool isEmpty();
 
 signals:
-	void currentChanged(QUuid id);
+	void currentChanged(const QUuid& id);
 	void askAdd();
-	void askClearForClose(QUuid id);
+	void askClearForClose(const QUuid& id);
 
 public slots:
-	void updateEditedState(QUuid id, bool edited);
-	void updateTitle(QUuid id, const QString& title);
+	void updateEditedState(const QUuid& id, bool edited);
+	void updateTitle(const QUuid& id, const QString& title);
 
 private:
 	static constexpr char DATA_ID[] = "tab_id";
@@ -52,11 +52,11 @@ private:
 	void setupWidgets();
 	void connections();
 	QUuid idByIndex(int index);
-	int indexById(QUuid id);
+	int indexById(const QUuid& id);
 	const QString title(int index);
 	void adjustControls();
-	int create(QUuid id, StdFsPath titlePath = StdFsPath());
-	void setButton(int index, QUuid id);
-	void setData(int index, QUuid id, QString title = QString());
-	CloseTab* closeButton(QUuid id);
+	int create(const QUuid& id, StdFsPath titlePath = StdFsPath());
+	void setButton(int index, const QUuid& id);
+	void setData(int index, const QUuid& id, QString title = QString());
+	CloseTab* closeButton(const QUuid& id);
 };

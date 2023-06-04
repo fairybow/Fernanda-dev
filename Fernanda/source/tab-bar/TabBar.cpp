@@ -9,7 +9,7 @@ TabBar::TabBar(const char* name, int minTabSize, int maxTabSize, QWidget* parent
 	connections();
 }
 
-int TabBar::serve(QUuid id, StdFsPath pathForTitle, bool switchTo)
+int TabBar::serve(const QUuid& id, StdFsPath pathForTitle, bool switchTo)
 {
 	auto next_index = indexById(id);
 	if (next_index == -1)
@@ -32,7 +32,7 @@ void TabBar::setUntitledDisplay(const QString& text, int charLimit)
 	m_trueTabBar->setTabText(index, text.left(charLimit));
 }
 
-void TabBar::close(QUuid id)
+void TabBar::close(const QUuid& id)
 {
 	qDebug() << __FUNCTION__;
 	qDebug() << id;
@@ -56,7 +56,7 @@ bool TabBar::isEmpty()
 	return (m_trueTabBar->count() < 1);
 }
 
-void TabBar::updateEditedState(QUuid id, bool edited)
+void TabBar::updateEditedState(const QUuid& id, bool edited)
 {
 	auto changed_index = indexById(id);
 	if (changed_index == -1) return;
@@ -65,7 +65,7 @@ void TabBar::updateEditedState(QUuid id, bool edited)
 		button->setEdited(edited);
 }
 
-void TabBar::updateTitle(QUuid id, const QString& title)
+void TabBar::updateTitle(const QUuid& id, const QString& title)
 {
 	auto index = indexById(id);
 	auto data_map = m_trueTabBar->tabData(index).toMap();
@@ -109,7 +109,7 @@ QUuid TabBar::idByIndex(int index)
 	return m_trueTabBar->tabData(index).toMap()[DATA_ID].toUuid();
 }
 
-int TabBar::indexById(QUuid id)
+int TabBar::indexById(const QUuid& id)
 {
 	auto index = -1;
 	for (auto i = 0; i < m_trueTabBar->count(); ++i)
@@ -133,7 +133,7 @@ void TabBar::adjustControls()
 	layout()->update();
 }
 
-int TabBar::create(QUuid id, StdFsPath titlePath)
+int TabBar::create(const QUuid& id, StdFsPath titlePath)
 {
 	blockSignals(true);
 	auto title = titlePath.empty() ? QString() : Path::qStringName(titlePath);
@@ -144,7 +144,7 @@ int TabBar::create(QUuid id, StdFsPath titlePath)
 	return index;
 }
 
-void TabBar::setButton(int index, QUuid id)
+void TabBar::setButton(int index, const QUuid& id)
 {
 	auto button = new CloseTab(this);
 	connect(button, &CloseTab::clicked, this, [&, id] {
@@ -153,7 +153,7 @@ void TabBar::setButton(int index, QUuid id)
 	m_trueTabBar->setTabButton(index, QTabBar::ButtonPosition::RightSide, button);
 }
 
-void TabBar::setData(int index, QUuid id, QString title)
+void TabBar::setData(int index, const QUuid& id, QString title)
 {
 	QVariantMap data;
 	data[DATA_ID] = id;
@@ -161,7 +161,7 @@ void TabBar::setData(int index, QUuid id, QString title)
 	m_trueTabBar->setTabData(index, data);
 }
 
-CloseTab* TabBar::closeButton(QUuid id)
+CloseTab* TabBar::closeButton(const QUuid& id)
 {
 	return qobject_cast<CloseTab*>(
 		m_trueTabBar->tabButton(indexById(id), QTabBar::RightSide));

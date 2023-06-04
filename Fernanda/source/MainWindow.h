@@ -19,11 +19,13 @@
 #include "Stylist.h"
 
 #include <QCloseEvent>
+#include <QDesktopServices>
 #include <QDirIterator>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QShowEvent>
 #include <QString>
+#include <QUrl>
 #include <QUuid>
 
 #include <filesystem>
@@ -92,9 +94,10 @@ private:
 	void closeEventConfigs(Qt::WindowStates priorState);
 	void setUserFont(const QFont& font);
 	PromptResult singleSavePrompt();
+	void openFolder(const StdFsPath& path);
 
-	void openFileTab(StdFsPath path, bool writeNew = false);
-	void openNewFileTab(StdFsPath path) { openFileTab(path, true); };
+	void openFileTab(const StdFsPath& path, bool writeNew = false);
+	void openNewFileTab(const StdFsPath& path) { openFileTab(path, true); };
 	void openNewTab() { onAddTabClick(); };
 
 	template<typename T>
@@ -119,8 +122,8 @@ private:
 	}
 
 private slots:
-	void onTabClick(QUuid id);
+	void onTabClick(const QUuid& id);
 	void onAddTabClick();
-	void onCloseTabClick(QUuid id);
+	void onCloseTabClick(const QUuid& id);
 	bool onSaveFile();
 };
