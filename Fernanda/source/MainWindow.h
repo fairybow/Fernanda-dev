@@ -21,6 +21,7 @@
 #include <QCloseEvent>
 #include <QDirIterator>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QShowEvent>
 #include <QString>
 #include <QUuid>
@@ -34,6 +35,7 @@ class MainWindow : public Widget<QMainWindow>
 
 public:
 	using StdFsPath = std::filesystem::path;
+	using PromptResult = QMessageBox::StandardButton;
 
 	MainWindow(const char* name, bool isDev = false, StdFsPath file = StdFsPath(), QWidget* parent = nullptr);
 
@@ -86,6 +88,7 @@ private:
 	void loadMenuBarMiscConfigs();
 	void closeEventConfigs(Qt::WindowStates priorState);
 	void setUserFont(const QFont& font);
+	PromptResult singleSavePrompt();
 
 	void openFileTab(StdFsPath path, bool writeNew = false);
 	void openNewFileTab(StdFsPath path) { openFileTab(path, true); };
@@ -116,4 +119,5 @@ private slots:
 	void onTabClick(QUuid id);
 	void onAddTabClick();
 	void onCloseTabClick(QUuid id);
+	bool onSaveFile();
 };

@@ -66,30 +66,58 @@ bool Document::isSaveable()
 
 bool Document::save()
 {
+	qDebug() << __FUNCTION__;
+
 	if (m_currentId.isNull()) return false;
 	emit askSetText();
 
 	auto extant_path = extantPath(m_currentId);
-	if (Path::isValid(extant_path))
-		backUp(m_currentId);
-	else {
-		QSemaphore semaphore;
+	//if (Path::isValid(extant_path))
+		//backUp(m_currentId);
+	//else {
+		/*QSharedPointer<QSemaphore> semaphore(new QSemaphore);
 		connect(this, &Document::newPathChosen,
-			this, [this, &extant_path, &semaphore](const StdFsPath& path) {
+			this, [this, &extant_path, semaphore](const StdFsPath& path) {
+
+				qDebug() << __FUNCTION__;
+
 				extant_path = path;
-				!extant_path.empty()
-					? semaphore.release()
-					: emit askSaveToDisk();
+				semaphore->release();
 			});
 		emit askSaveToDisk();
-		semaphore.acquire();
+		semaphore->acquire();*/
 
-		writeEmptyFile(extant_path);
-		m_extantPathsToIds[extant_path] = m_currentId;
-		emit pathIdAssociated(extant_path, m_currentId);
-	}
+
+		//if (extant_path.empty()) return false;
+
+		//writeEmptyFile(extant_path);
+		//m_extantPathsToIds[extant_path] = m_currentId;
+		//emit pathIdAssociated(extant_path, m_currentId);
+	//}
 
 	return overwrite(m_currentId);
+}
+
+void Document::close(QUuid id)
+{
+	qDebug() << __FUNCTION__;
+
+	m_cache.remove(id);
+	if (m_currentId == id)
+		m_currentId = QUuid();
+
+	for (const auto& [key, value] : m_extantPathsToIds)
+		qDebug() << Path::toQString(key) << value << Qt::endl;
+
+	auto extant_path = extantPath(id);
+	if (m_extantPathsToIds.contains(extant_path))
+		m_extantPathsToIds.erase(extant_path);
+
+	for (const auto& [key, value] : m_extantPathsToIds)
+		qDebug() << Path::toQString(key) << value << Qt::endl;
+	
+	m_lifetimeIdRegistry.removeOne(id);
+	StdFs::remove(tempPath(id));
 }
 
 void Document::setEditCheckDelay(int textLength)
@@ -175,15 +203,15 @@ Document::StdFsPath Document::backUpPath(const StdFsPath& path)
 
 bool Document::overwrite(QUuid id)
 {
-	auto path = extantPath(id);
-	auto temp_path = tempPath(id);
-	if (!Path::areValid(path, temp_path) ||
-		!Path::move(temp_path, path, true))
-		return false;
+	//auto path = extantPath(id);
+	//auto temp_path = tempPath(id);
+	//if (!Path::areValid(path, temp_path) ||
+		//!Path::move(temp_path, path, true))
+		//return false;
 
-	m_cache.remove(m_currentId);
-	auto document = textDocument(m_currentId, path);
-	emit editedStateChanged(m_currentId, document->edited());
+	//m_cache.remove(m_currentId);
+	//auto document = textDocument(m_currentId, path);
+	//emit editedStateChanged(m_currentId, document->edited());
 
 	return true;
 }
@@ -199,6 +227,7 @@ TextDocument* Document::create(QUuid id, StdFsPath path)
 		Io::toStrings(path, initial_text, original_text);
 
 	auto document = new TextDocument(initial_text, original_text);
+	document->setEdited(initial_text != original_text);
 	m_cache.insertDocument(id, document);
 	return document;
 }
@@ -211,6 +240,8 @@ bool Document::wasEvicted(QUuid id)
 
 void Document::recover(QUuid id, QString& initialText, QString& originalText)
 {
+	qDebug() << __FUNCTION__;
+
 	auto temp_path = tempPath(id);
 	if (StdFs::exists(temp_path))
 		initialText = Io::readFile(temp_path);

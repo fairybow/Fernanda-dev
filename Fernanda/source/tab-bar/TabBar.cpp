@@ -32,12 +32,35 @@ void TabBar::setUntitledDisplay(const QString& text, int charLimit)
 	m_trueTabBar->setTabText(index, text.left(charLimit));
 }
 
+void TabBar::close(QUuid id)
+{
+	qDebug() << __FUNCTION__;
+	qDebug() << id;
+
+	m_trueTabBar->removeTab(indexById(id));
+	auto button = closeButton(id);
+	if (button)
+		button->deleteLater();
+}
+
+bool TabBar::isFull()
+{
+	auto tabs_width = 0;
+	for (auto i = 0; i < m_trueTabBar->count(); ++i)
+		tabs_width += m_trueTabBar->tabRect(i).width();
+	return (tabs_width > m_trueTabBar->width());
+}
+
+bool TabBar::isEmpty()
+{
+	return (m_trueTabBar->count() < 1);
+}
+
 void TabBar::updateEditedState(QUuid id, bool edited)
 {
 	auto changed_index = indexById(id);
 	if (changed_index == -1) return;
-	auto button = qobject_cast<CloseTab*>(
-		m_trueTabBar->tabButton(changed_index, QTabBar::RightSide));
+	auto button = closeButton(id);
 	if (button)
 		button->setEdited(edited);
 }
@@ -102,14 +125,6 @@ const QString TabBar::title(int index)
 	return m_trueTabBar->tabData(index).toMap()[DATA_TITLE].toString();
 }
 
-bool TabBar::isFull()
-{
-	auto tabs_width = 0;
-	for (auto i = 0; i < m_trueTabBar->count(); ++i)
-		tabs_width += m_trueTabBar->tabRect(i).width();
-	return (tabs_width > m_trueTabBar->width());
-}
-
 void TabBar::adjustControls()
 {
 	auto visible = isFull();
@@ -133,9 +148,7 @@ void TabBar::setButton(int index, QUuid id)
 {
 	auto button = new CloseTab(this);
 	connect(button, &CloseTab::clicked, this, [&, id] {
-		emit askClose(id);
-		// close tab via id
-		// delete button after closing tab
+		emit askClearForClose(id);
 		});
 	m_trueTabBar->setTabButton(index, QTabBar::ButtonPosition::RightSide, button);
 }
@@ -146,4 +159,10 @@ void TabBar::setData(int index, QUuid id, QString title)
 	data[DATA_ID] = id;
 	data[DATA_TITLE] = title;
 	m_trueTabBar->setTabData(index, data);
+}
+
+CloseTab* TabBar::closeButton(QUuid id)
+{
+	return qobject_cast<CloseTab*>(
+		m_trueTabBar->tabButton(indexById(id), QTabBar::RightSide));
 }

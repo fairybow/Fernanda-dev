@@ -6,7 +6,8 @@
 #include "DocumentCache.hpp"
 #include "TextDocument.hpp"
 
-#include <QSemaphore>
+//#include <QSemaphore>
+//#include <QSharedPointer>
 #include <QString>
 #include <QTimer>
 #include <QUuid>
@@ -35,6 +36,7 @@ public:
 	void startEditCheckTimer();
 	bool isSaveable();
 	bool save();
+	void close(QUuid id);
 
 	QUuid currentId() const { return m_currentId; }
 	bool isEdited(QUuid id) { return textDocument(id)->edited(); }

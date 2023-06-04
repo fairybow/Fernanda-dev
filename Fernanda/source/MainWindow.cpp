@@ -7,7 +7,6 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	connections();
 	loadConfigs();
 	openNewTab();
-	m_editor->setFocus();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -92,7 +91,7 @@ void MainWindow::tabBarConnections()
 {
 	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::onTabClick);
 	connect(m_tabBar, &TabBar::askAdd, this, &MainWindow::onAddTabClick);
-	connect(m_tabBar, &TabBar::askClose, this, &MainWindow::onCloseTabClick);
+	connect(m_tabBar, &TabBar::askClearForClose, this, &MainWindow::onCloseTabClick);
 	connect(m_editor, &Editor::textChanged, this, [&] {
 		if (!m_tabBar->isUntitled()) return;
 		auto block = m_editor->firstBlock();
@@ -147,11 +146,7 @@ void MainWindow::menuBarConnections()
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
 		openFileTab(path);
 		});
-	connect(m_menuBar, &MenuBar::askSaveFile, this, [&] {
-		if (!m_document->isSaveable()) return;
-		auto saved = m_document->save();
-		m_indicator->onResult(saved);
-		});
+	connect(m_menuBar, &MenuBar::askSaveFile, this, &MainWindow::onSaveFile);
 }
 
 void MainWindow::menuBarStyleConfigConnections()
@@ -572,6 +567,13 @@ void MainWindow::setUserFont(const QFont& font)
 	m_menuBar->setUserFont(font);
 }
 
+MainWindow::PromptResult MainWindow::singleSavePrompt()
+{
+	return QMessageBox::question(
+		this, "Hey!", "You have unsaved changes.",
+		QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+}
+
 void MainWindow::openFileTab(StdFsPath path, bool writeNew)
 {
 	if (path.empty()) {
@@ -596,18 +598,40 @@ void MainWindow::onAddTabClick()
 	m_document->setCurrent(new_id);
 	m_tabBar->serve(new_id);
 	m_editor->clear();
+	m_editor->setFocus();
 }
 
 void MainWindow::onCloseTabClick(QUuid id)
 {
 	if (m_document->isEdited(id)) {
-		//m_tabBar->serve(id); // is it bad if id == current id (or index == current index for tab)
-		//... save popup
-		// save (or not)
+		m_tabBar->serve(id);
 
-		return; //tmp
+		auto early_return = false;
+		auto action = singleSavePrompt();
+		switch (action) {
+		case PromptResult::Save:
+			onSaveFile();
+			early_return = true;
+			break;
+		case PromptResult::Cancel:
+			early_return = true;
+			break;
+		}
+		if (early_return) return;
 	}
 
-	// if not edited:
+	m_tabBar->close(id);
+	m_document->close(id);
+	if (m_tabBar->isEmpty())
+		openNewTab();
+}
 
+bool MainWindow::onSaveFile()
+{
+	if (!m_document->isSaveable()) return false;
+
+	qDebug() << __FUNCTION__;
+
+	auto saved = m_document->save();
+	return m_indicator->onResult(saved);
 }

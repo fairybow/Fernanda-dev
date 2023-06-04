@@ -27,11 +27,14 @@ public:
 	int serve(QUuid id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
 	bool isUntitled();
 	void setUntitledDisplay(const QString& text, int charLimit = 30);
+	void close(QUuid id);
+	bool isFull();
+	bool isEmpty();
 
 signals:
 	void currentChanged(QUuid id);
 	void askAdd();
-	void askClose(QUuid id);
+	void askClearForClose(QUuid id);
 
 public slots:
 	void updateEditedState(QUuid id, bool edited);
@@ -51,9 +54,9 @@ private:
 	QUuid idByIndex(int index);
 	int indexById(QUuid id);
 	const QString title(int index);
-	bool isFull();
 	void adjustControls();
 	int create(QUuid id, StdFsPath titlePath = StdFsPath());
 	void setButton(int index, QUuid id);
 	void setData(int index, QUuid id, QString title = QString());
+	CloseTab* closeButton(QUuid id);
 };
