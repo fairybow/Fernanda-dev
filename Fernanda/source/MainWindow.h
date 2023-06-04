@@ -50,9 +50,12 @@ private:
 	bool m_isInitialized = false;
 
 	User* m_user = new User(QCoreApplication::applicationName(), this);
-	Document* m_document = new Document(m_user->temp(), m_user->backup(), this, 3/* <-- test */);
+	Document* m_document = new Document({
+		m_user->documents(),
+		m_user->temp(),
+		m_user->backup() }, this, this, 3/* <-- test */);
 	//Project* m_project = new Project(this);
-	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_user->documents(), m_isDev);
+	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_isDev);
 	StatusBar* m_statusBar = new StatusBar("StatusBar");
 	Indicator* m_indicator = new Indicator("Indicator");
 	TabBar* m_tabBar = new TabBar("TabBar", 100, 200);

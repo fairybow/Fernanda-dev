@@ -14,7 +14,6 @@
 #include <QCoreApplication>
 #include <QDesktopServices>
 #include <QDialog>
-#include <QFileDialog>
 #include <QGroupBox>
 #include <QMenuBar>
 #include <QMdiArea>
@@ -32,11 +31,9 @@ class MenuBar : public Widget<QMenuBar>
 public:
 	using StdFsPath = std::filesystem::path;
 
-	MenuBar(const char* name, StdFsPath userData, StdFsPath userDocuments, bool isDev = false, QWidget* parent = nullptr);
+	MenuBar(const char* name, StdFsPath userData, bool isDev = false, QWidget* parent = nullptr);
 
 	void makeSubmenus();
-	StdFsPath newFileDialog();
-	StdFsPath openFileDialog();
 
 	StdFsPath defaultEditorTheme() const { return Path::toStdFs(QRC_EDITOR) / "Dark.fernanda_editor"; }
 	StdFsPath defaultWindowTheme() const { return Path::toStdFs(QRC_MAIN_WINDOW) / "Light.fernanda_window"; }
@@ -70,8 +67,8 @@ public:
 	//void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
 
 signals:
-	void askOpenNewFile(StdFsPath path);
-	void askOpenFile(StdFsPath path);
+	void askOpenNewFile();
+	void askOpenFile();
 	void askSaveFile();
 	void askToggleEditorTheme(bool state);
 	void askToggleWindowTheme(bool state);
@@ -136,11 +133,9 @@ private:
 	static constexpr char GROUP_PREVIEW[] = "preview_types";
 	static constexpr char QRC_EDITOR[] = ":/menu-bar/themes/editor/";
 	static constexpr char QRC_MAIN_WINDOW[] = ":/menu-bar/themes/window/";
-	static constexpr char DIALOG_FILE_TYPE[] = "Plain text file (*.txt)";
 
 	const bool m_isDev;
 	const StdFsPath m_userData;
-	const StdFsPath m_userDocuments;
 	std::map<QString, ActionGroup*> m_actionGroups;
 	std::map<QString, int> m_sliderValues;
 	std::map<QString, bool> m_checkBoxStates;

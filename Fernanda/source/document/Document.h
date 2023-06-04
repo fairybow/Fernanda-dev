@@ -6,8 +6,8 @@
 #include "DocumentCache.hpp"
 #include "TextDocument.hpp"
 
-//#include <QSemaphore>
-//#include <QSharedPointer>
+#include <QFileDialog>
+#include <QMainWindow>
 #include <QString>
 #include <QTimer>
 #include <QUuid>
@@ -26,8 +26,16 @@ class Document : public QObject
 public:
 	using StdFsPath = StdFs::path;
 
-	Document(const StdFsPath& tempFolder, const StdFsPath& backupFolder, QWidget* parent = nullptr, int cacheMaxCost = 100);
+	struct Folders {
+		StdFsPath user;
+		StdFsPath temp;
+		StdFsPath backup;
+	};
 
+	Document(const Folders& folders, QMainWindow* mainWindow, QWidget* parent = nullptr, int cacheMaxCost = 100);
+
+	StdFsPath newFileDialog();
+	StdFsPath openFileDialog();
 	const QString setCurrent(const StdFsPath& path, bool isNew = false);
 	const QString setCurrent(QUuid id);
 	void setText(const QString& text);
@@ -68,12 +76,14 @@ signals:
 	void startAutoCacheTimer();
 	void editedStateChanged(QUuid id, bool edited);
 	void askEditCheck();
-	void askSaveToDisk();
-	void newPathChosen(const StdFsPath& path);
 	void pathIdAssociated(const StdFsPath& path, QUuid id);
 
 private:
+	static constexpr char DIALOG_FILE_TYPE[] = "Plain text file (*.txt)";
+
+	QMainWindow* m_mainWindow;
 	DocumentCache m_cache;
+	const StdFsPath m_userFolder;
 	const StdFsPath m_tempFolder;
 	const StdFsPath m_backupFolder;
 	QUuid m_currentId;
@@ -91,8 +101,8 @@ private:
 
 	void tempSave(QUuid id, const QString& text);
 	StdFsPath tempPath(QUuid id);
-	void backUp(QUuid id);
-	StdFsPath backUpPath(const StdFsPath& path);
+	void backup(QUuid id);
+	StdFsPath backupPath(const StdFsPath& path);
 	bool overwrite(QUuid id);
 
 	TextDocument* create(QUuid id, StdFsPath path = StdFsPath());

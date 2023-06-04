@@ -1,9 +1,8 @@
 #include "MenuBar.h"
 
-MenuBar::MenuBar(const char* name, StdFsPath userData, StdFsPath userDocuments, bool isDev, QWidget* parent)
+MenuBar::MenuBar(const char* name, StdFsPath userData, bool isDev, QWidget* parent)
 	: Widget(name, parent),
 	m_userData(userData),
-	m_userDocuments(userDocuments),
 	m_isDev(isDev)
 {
 	makeActionGroups();
@@ -18,22 +17,6 @@ void MenuBar::makeSubmenus()
 	help();
 	if (m_isDev)
 		dev();
-}
-
-MenuBar::StdFsPath MenuBar::newFileDialog()
-{
-	auto path = QFileDialog::getSaveFileName(
-		this, tr("Create a new file..."), Path::toQString(
-			m_userDocuments), tr(DIALOG_FILE_TYPE));
-	return Path::toStdFs(path);
-}
-
-MenuBar::StdFsPath MenuBar::openFileDialog()
-{
-	auto path = QFileDialog::getOpenFileName(
-		this, tr("Open an existing file..."), Path::toQString(
-			m_userDocuments), tr(DIALOG_FILE_TYPE));
-	return Path::toStdFs(path);
 }
 
 void MenuBar::makeActionGroups()
@@ -96,19 +79,14 @@ void MenuBar::file()
 	quit->setShortcut(Qt::CTRL | Qt::Key_Q);
 
 	connect(new_file, &QAction::triggered, this, [&] {
-		auto path = newFileDialog();
-		emit askOpenNewFile(path);
+		emit askOpenNewFile();
 		});
-
 	connect(open, &QAction::triggered, this, [&] {
-		auto path = openFileDialog();
-		emit askOpenFile(path);
+		emit askOpenFile();
 		});
-
 	connect(save, &QAction::triggered, this, [&] {
 		emit askSaveFile();
 		});
-
 	connect(quit, &QAction::triggered,
 		this, &QCoreApplication::quit, Qt::QueuedConnection);
 

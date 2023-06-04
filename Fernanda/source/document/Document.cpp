@@ -1,13 +1,33 @@
 #include "Document.h"
 
-Document::Document(const StdFsPath& tempFolder, const StdFsPath& backupFolder, QWidget* parent, int cacheMaxCost)
-	: m_tempFolder(tempFolder), m_backupFolder(backupFolder), m_cache(cacheMaxCost)
+Document::Document(const Folders& folders, QMainWindow* mainWindow, QWidget* parent, int cacheMaxCost)
+	: QObject(parent), m_userFolder(folders.user),
+	m_tempFolder(folders.temp),
+	m_backupFolder(folders.backup),
+	m_mainWindow(mainWindow),
+	m_cache(cacheMaxCost)
 {
 	setUpAutoCache();
 	m_editCheckDelay->setSingleShot(true);
 	connect(m_editCheckDelay, &QTimer::timeout, this, [&] {
 		emit askEditCheck();
 		});
+}
+
+Document::StdFsPath Document::newFileDialog()
+{
+	auto path = QFileDialog::getSaveFileName(
+		m_mainWindow, tr("Create a new file..."), Path::toQString(
+			m_userFolder), tr(DIALOG_FILE_TYPE));
+	return Path::toStdFs(path);
+}
+
+Document::StdFsPath Document::openFileDialog()
+{
+	auto path = QFileDialog::getOpenFileName(
+		m_mainWindow, tr("Open an existing file..."), Path::toQString(
+			m_userFolder), tr(DIALOG_FILE_TYPE));
+	return Path::toStdFs(path);
 }
 
 const QString Document::setCurrent(const StdFsPath& path, bool isNew)
@@ -72,29 +92,15 @@ bool Document::save()
 	emit askSetText();
 
 	auto extant_path = extantPath(m_currentId);
-	//if (Path::isValid(extant_path))
-		//backUp(m_currentId);
-	//else {
-		/*QSharedPointer<QSemaphore> semaphore(new QSemaphore);
-		connect(this, &Document::newPathChosen,
-			this, [this, &extant_path, semaphore](const StdFsPath& path) {
-
-				qDebug() << __FUNCTION__;
-
-				extant_path = path;
-				semaphore->release();
-			});
-		emit askSaveToDisk();
-		semaphore->acquire();*/
-
-
-		//if (extant_path.empty()) return false;
-
-		//writeEmptyFile(extant_path);
-		//m_extantPathsToIds[extant_path] = m_currentId;
-		//emit pathIdAssociated(extant_path, m_currentId);
-	//}
-
+	if (Path::isValid(extant_path))
+		backup(m_currentId);
+	else {
+		extant_path = newFileDialog();
+		if (extant_path.empty()) return false;
+		writeEmptyFile(extant_path);
+		m_extantPathsToIds[extant_path] = m_currentId;
+		emit pathIdAssociated(extant_path, m_currentId);
+	}
 	return overwrite(m_currentId);
 }
 
@@ -186,14 +192,14 @@ Document::StdFsPath Document::tempPath(QUuid id)
 	return m_tempFolder / Path::toStdFs(id.toString() + ".txt~");
 }
 
-void Document::backUp(QUuid id)
+void Document::backup(QUuid id)
 {
 	auto extant_path = extantPath(id);
-	auto back_up_path = backUpPath(extant_path);
-	Path::copy(extant_path, back_up_path);
+	auto backup_path = backupPath(extant_path);
+	Path::copy(extant_path, backup_path);
 }
 
-Document::StdFsPath Document::backUpPath(const StdFsPath& path)
+Document::StdFsPath Document::backupPath(const StdFsPath& path)
 {
 	auto name = Path::qStringName(path);
 	name += "---" + StringTools::time();
@@ -203,15 +209,15 @@ Document::StdFsPath Document::backUpPath(const StdFsPath& path)
 
 bool Document::overwrite(QUuid id)
 {
-	//auto path = extantPath(id);
-	//auto temp_path = tempPath(id);
-	//if (!Path::areValid(path, temp_path) ||
-		//!Path::move(temp_path, path, true))
-		//return false;
+	auto path = extantPath(id);
+	auto temp_path = tempPath(id);
+	if (!Path::areValid(path, temp_path) ||
+		!Path::move(temp_path, path, true))
+		return false;
 
-	//m_cache.remove(m_currentId);
-	//auto document = textDocument(m_currentId, path);
-	//emit editedStateChanged(m_currentId, document->edited());
+	m_cache.remove(m_currentId);
+	auto document = textDocument(m_currentId, path);
+	emit editedStateChanged(m_currentId, document->edited());
 
 	return true;
 }
@@ -229,6 +235,7 @@ TextDocument* Document::create(QUuid id, StdFsPath path)
 	auto document = new TextDocument(initial_text, original_text);
 	document->setEdited(initial_text != original_text);
 	m_cache.insertDocument(id, document);
+
 	return document;
 }
 

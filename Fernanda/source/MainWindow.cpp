@@ -77,10 +77,6 @@ void MainWindow::documentConnections()
 		m_document->affirmEditedState(text);
 		});
 
-	connect(m_document, &Document::askSaveToDisk, this, [&] {
-		auto path = m_menuBar->newFileDialog();
-		m_document->newPathChosen(path);
-		});
 	connect(m_document, &Document::pathIdAssociated,
 		this, [&](const StdFsPath& path, QUuid id) {
 		m_tabBar->updateTitle(id, Path::qStringName(path));
@@ -140,11 +136,11 @@ void MainWindow::meterConnections()
 
 void MainWindow::menuBarConnections()
 {
-	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&](StdFsPath path) {
-		openNewFileTab(path);
+	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&] {
+		openNewFileTab(m_document->newFileDialog());
 		});
-	connect(m_menuBar, &MenuBar::askOpenFile, this, [&](StdFsPath path) {
-		openFileTab(path);
+	connect(m_menuBar, &MenuBar::askOpenFile, this, [&] {
+		openFileTab(m_document->openFileDialog());
 		});
 	connect(m_menuBar, &MenuBar::askSaveFile, this, &MainWindow::onSaveFile);
 }
