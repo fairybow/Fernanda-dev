@@ -74,6 +74,11 @@ void TabBar::updateTitle(const QUuid& id, const QString& title)
 	m_trueTabBar->setTabText(index, title);
 }
 
+void TabBar::wheelEvent(QWheelEvent* event)
+{
+	QApplication::sendEvent(m_trueTabBar, event);
+}
+
 void TabBar::setupWidgets()
 {
 	auto control_box = Layout::box(Layout::Line::Horizontally, { m_add, m_scrollLeft, m_scrollRight });
@@ -86,22 +91,13 @@ void TabBar::setupWidgets()
 
 void TabBar::connections()
 {
-	connect(m_add, &AddTab::clicked, this, [&] {
-		emit askAdd();
-		});
+	connect(m_add, &AddTab::clicked, this, lambdaEmit(askAdd));
 
 	connect(m_trueTabBar, &TrueTabBar::currentChanged, this, [&](int index) {
 		emit currentChanged(idByIndex(index));
 		});
-	connect(m_trueTabBar, &TrueTabBar::resized, this, [&] {
-		adjustControls();
-		});
-	connect(m_trueTabBar, &TrueTabBar::inserted, this, [&] {
-		adjustControls();
-		});
-	connect(m_trueTabBar, &TrueTabBar::removed, this, [&] {
-		adjustControls();
-		});
+	connectMultipleSignals(m_trueTabBar, this, &TabBar::adjustControls,
+		&TrueTabBar::resized, &TrueTabBar::inserted, &TrueTabBar::removed);
 }
 
 QUuid TabBar::idByIndex(int index)
@@ -123,14 +119,6 @@ int TabBar::indexById(const QUuid& id)
 const QString TabBar::title(int index)
 {
 	return m_trueTabBar->tabData(index).toMap()[DATA_TITLE].toString();
-}
-
-void TabBar::adjustControls()
-{
-	auto visible = isFull();
-	m_scrollLeft->setVisible(visible);
-	m_scrollRight->setVisible(visible);
-	layout()->update();
 }
 
 int TabBar::create(const QUuid& id, StdFsPath titlePath)
@@ -165,4 +153,12 @@ CloseTab* TabBar::closeButton(const QUuid& id)
 {
 	return qobject_cast<CloseTab*>(
 		m_trueTabBar->tabButton(indexById(id), QTabBar::RightSide));
+}
+
+void TabBar::adjustControls()
+{
+	auto visible = isFull();
+	m_scrollLeft->setVisible(visible);
+	m_scrollRight->setVisible(visible);
+	layout()->update();
 }

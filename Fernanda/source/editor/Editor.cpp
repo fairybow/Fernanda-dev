@@ -93,15 +93,12 @@ void Editor::trueEditorConnections()
 		return m_hasCursorBlock;
 		});
 
-	connect(m_trueEditor, &TrueEditor::selectionChanged, this, [&] {
-		emit selectionChanged();
-		});
-	connect(m_trueEditor, &TrueEditor::textChanged, this, [&] {
-		emit textChanged();
-		});
-	connect(m_trueEditor, &TrueEditor::cursorPositionChanged, this, [&] {
-		emit cursorPositionChanged();
-		});
+	connect(m_trueEditor, &TrueEditor::selectionChanged,
+		this, lambdaEmit(selectionChanged));
+	connect(m_trueEditor, &TrueEditor::textChanged,
+		this, lambdaEmit(textChanged));
+	connect(m_trueEditor, &TrueEditor::cursorPositionChanged,
+		this, lambdaEmit(cursorPositionChanged));
 }
 
 void Editor::cursorConnections()

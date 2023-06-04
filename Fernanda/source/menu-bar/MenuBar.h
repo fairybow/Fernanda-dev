@@ -24,8 +24,6 @@
 #include <filesystem>
 #include <map>
 
-#define lambdaEmit(signalCall) [&]{signalCall();}
-
 class MenuBar : public Widget<QMenuBar>
 {
 	Q_OBJECT

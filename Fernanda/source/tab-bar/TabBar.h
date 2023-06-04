@@ -8,10 +8,12 @@
 #include "ScrollTabs.hpp"
 #include "TrueTabBar.hpp"
 
+#include <QApplication>
 #include <QString>
 #include <QUuid>
 #include <QVariantMap>
 #include <QVector>
+#include <QWheelEvent>
 
 #include <filesystem>
 
@@ -40,6 +42,9 @@ public slots:
 	void updateEditedState(const QUuid& id, bool edited);
 	void updateTitle(const QUuid& id, const QString& title);
 
+protected:
+	virtual void wheelEvent(QWheelEvent* event) override;
+
 private:
 	static constexpr char DATA_ID[] = "tab_id";
 	static constexpr char DATA_TITLE[] = "tab_title";
@@ -54,9 +59,11 @@ private:
 	QUuid idByIndex(int index);
 	int indexById(const QUuid& id);
 	const QString title(int index);
-	void adjustControls();
 	int create(const QUuid& id, StdFsPath titlePath = StdFsPath());
 	void setButton(int index, const QUuid& id);
 	void setData(int index, const QUuid& id, QString title = QString());
 	CloseTab* closeButton(const QUuid& id);
+
+private slots:
+	void adjustControls();
 };
