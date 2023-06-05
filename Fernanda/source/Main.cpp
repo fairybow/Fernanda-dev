@@ -1,5 +1,6 @@
 #include "common/Path.hpp"
 #include "common/Utility.hpp"
+#include "LaunchCop.hpp"
 #include "Logger.hpp"
 #include "MainWindow.h"
 
@@ -12,6 +13,12 @@ void setFont(QApplication& application);
 
 int main(int argc, char* argv[])
 {
+	auto main_window_name = "MainWindow";
+
+	LaunchCop launch_cop("Fernanda.app", main_window_name);
+	if (launch_cop.isRunning())
+		return 0;
+
 	QApplication::setHighDpiScaleFactorRoundingPolicy(
 		Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 	QApplication::setDesktopSettingsAware(true);
@@ -22,11 +29,15 @@ int main(int argc, char* argv[])
 		if (arg.endsWith(".txt")) // handle projects, too
 			open_file = Path::toStdFs(arg);
 
-	MainWindow main_window("MainWindow", fernanda.arguments().contains("-dev"), open_file);
+	MainWindow main_window(main_window_name, fernanda.arguments().contains("-dev"), open_file);
+	QObject::connect(&launch_cop, &LaunchCop::launchAttempted,
+		&main_window, &MainWindow::onSecondaryLaunch);
 	setFont(fernanda);
 	main_window.show();
+
 	Logger::install(main_window.userData());
 	Utility::ensureAppVisible(fernanda, main_window);
+
 	return fernanda.exec();
 }
 

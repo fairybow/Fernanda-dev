@@ -1,27 +1,4 @@
-/*
-Requires Qt Network
-
-Usage:
-```
-#include "LaunchCop.hpp"
-
-#include <QApplication>
-#include <QMainWindow>
-
-int main(int argc, char* argv[])
-{
-	LaunchCop launch_cop("Program name", "QMainWindow object name");
-	if (launch_cop.exists())
-		return 0;
-	QApplication app(argc, argv);
-	QMainWindow main_window;
-	main_window.show();
-	return app.exec();
-}
-```
-*/
-
-/*#pragma once
+#pragma once
 
 #include <QApplication>
 #include <QLocalServer>
@@ -43,16 +20,24 @@ class LaunchCop : public QObject
 	Q_OBJECT
 
 public:
-	LaunchCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow", bool forceFocus = false)
-		: m_lockString(lockString), m_windowName(mainWindowObjectName), m_forceFocus(forceFocus) {}
+	LaunchCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow",
+		bool forceFocus = false)
+		: m_lockString(lockString),
+		m_windowName(mainWindowObjectName),
+		m_forceFocus(forceFocus) {}
 
-	bool exists() const
+	bool isRunning()
 	{
-		if (serverExists())
+		if (serverExists()) {
+			emit launchAttempted();
 			return true;
+		}
 		startServer();
 		return false;
 	}
+
+signals:
+	void launchAttempted();
 
 private:
 	const QString m_lockString;
@@ -100,4 +85,4 @@ private slots:
 
 		main_window->activateWindow();
 	}
-};*/
+};

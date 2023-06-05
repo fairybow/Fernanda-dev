@@ -9,6 +9,11 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	openNewTab();
 }
 
+void MainWindow::onSecondaryLaunch()
+{
+	qDebug() << __FUNCTION__;
+}
+
 void MainWindow::closeEvent(QCloseEvent* event)
 {
 	QMessageBox::information(this,
