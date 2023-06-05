@@ -44,7 +44,7 @@ public:
 	StdFsPath userData() const { return m_user->data(); }
 
 public slots:
-	void onSecondaryLaunch();
+	void onSecondLaunch();
 
 protected:
 	virtual void closeEvent(QCloseEvent* event) override;

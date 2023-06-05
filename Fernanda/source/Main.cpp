@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 {
 	auto main_window_name = "MainWindow";
 
-	LaunchCop launch_cop("Fernanda.app", main_window_name);
+	LaunchCop launch_cop("Fernanda", main_window_name);
 	if (launch_cop.isRunning())
 		return 0;
 
@@ -30,8 +30,9 @@ int main(int argc, char* argv[])
 			open_file = Path::toStdFs(arg);
 
 	MainWindow main_window(main_window_name, fernanda.arguments().contains("-dev"), open_file);
-	QObject::connect(&launch_cop, &LaunchCop::launchAttempted,
-		&main_window, &MainWindow::onSecondaryLaunch);
+
+	QObject::connect(&launch_cop, &LaunchCop::launchedAgain, &main_window, &MainWindow::onSecondLaunch);
+
 	setFont(fernanda);
 	main_window.show();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QApplication>
+#include <QByteArray>
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QMainWindow>
@@ -22,14 +23,21 @@ class LaunchCop : public QObject
 public:
 	LaunchCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow",
 		bool forceFocus = false)
-		: m_lockString(lockString),
+		: m_serverName(lockString),
 		m_windowName(mainWindowObjectName),
 		m_forceFocus(forceFocus) {}
 
-	bool isRunning() //const
+	bool isRunning() const
 	{
 		if (serverExists()) {
-			emit launchAttempted();
+			auto socket = new QLocalSocket;
+			socket->connectToServer(m_serverName);
+
+			if (socket->waitForConnected()) {
+				socket->write(m_secondLaunchNotice);
+				socket->flush();
+			}
+
 			return true;
 		}
 		startServer();
@@ -37,17 +45,21 @@ public:
 	}
 
 signals:
-	void launchAttempted();
+	void launchedAgain() const;
 
 private:
-	const QString m_lockString;
+	const QString m_serverName;
 	const QString m_windowName;
 	const bool m_forceFocus;
+
+	//
+	const QByteArray m_secondLaunchNotice = "Second launch attempted";
+	//
 
 	bool serverExists() const
 	{
 		QLocalSocket socket;
-		socket.connectToServer(m_lockString);
+		socket.connectToServer(m_serverName);
 		auto exists = socket.isOpen();
 		socket.close();
 		return exists;
@@ -57,8 +69,19 @@ private:
 	{
 		auto server = new QLocalServer;
 		server->setSocketOptions(QLocalServer::WorldAccessOption);
-		server->listen(m_lockString);
+		server->listen(m_serverName);
 		connect(server, &QLocalServer::newConnection, this, &LaunchCop::focusMainWindow);
+
+		connect(server, &QLocalServer::newConnection, this, [&] {
+			auto server = qobject_cast<QLocalServer*>(sender());
+			auto socket = server->nextPendingConnection();
+			connect(socket, &QLocalSocket::readyRead, this, [&] {
+				auto socket = qobject_cast<QLocalSocket*>(sender());
+				auto message = socket->readAll();
+				if (message == m_secondLaunchNotice)
+					emit launchedAgain();
+				});
+			});
 	}
 
 private slots:

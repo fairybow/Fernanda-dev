@@ -9,7 +9,7 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	openNewTab();
 }
 
-void MainWindow::onSecondaryLaunch()
+void MainWindow::onSecondLaunch()
 {
 	qDebug() << __FUNCTION__;
 }
