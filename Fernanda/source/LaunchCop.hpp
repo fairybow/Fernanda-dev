@@ -26,7 +26,7 @@ public:
 		m_windowName(mainWindowObjectName),
 		m_forceFocus(forceFocus) {}
 
-	bool isRunning()
+	bool isRunning() //const
 	{
 		if (serverExists()) {
 			emit launchAttempted();
