@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QApplication>
-#include <QByteArray>
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QMainWindow>
