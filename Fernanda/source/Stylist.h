@@ -18,7 +18,8 @@ public:
 	using StdPathPair = std::pair<StdFsPath, StdFsPath>;
 	using QStringPair = std::pair<QString, QString>;
 
-	Stylist(QWidgetList widgets = {}, QObject* parent = nullptr, const QString& baseSuffix = "Base", const QString& extension = ".qss");
+	Stylist(QWidgetList widgets = {}, QObject* parent = nullptr,
+		const QString& baseSuffix = "Base", const QString& extension = ".qss");
 
 	void add(QWidget* widget);
 	void style(QWidget* styleeWidget, const StdFsPath& themeSheet);
@@ -29,29 +30,35 @@ public:
 	void devClass()
 	{
 		qDebug() << __FUNCTION__;
+
 		for (auto& stylee : m_stylees) {
-			qDebug() << "Widget:" << stylee.widget;
-			qDebug() << "Base sheet path:" << stylee.baseSheet;
-			qDebug() << "Style sheet path:" << stylee.styleSheet;
-			qDebug() << "Current theme sheet path:" << stylee.currentThemeSheet;
-			qDebug() << "Has theme?:" << stylee.hasTheme;
+			qDebug() << "Widget:"
+				<< stylee.widget;
+			qDebug() << "Base sheet path:"
+				<< Path::toQString(stylee.baseSheet);
+			qDebug() << "Style sheet path:"
+				<< Path::toQString(stylee.styleSheet);
+			qDebug() << "Current theme sheet path:"
+				<< Path::toQString(stylee.currentThemeSheet);
+			qDebug() << "Has theme?:" << stylee.hasTheme
+				<< Qt::endl;
 		}
 	}
 
 	void devStyleSheets()
 	{
 		qDebug() << __FUNCTION__;
+
 		for (auto& stylee : m_stylees) {
-			qDebug() << "Widget:" << stylee.widget;
-			qDebug() << stylee.widget->styleSheet();
+			qDebug() << "Widget:"
+				<< stylee.widget;
+			qDebug() << stylee.widget->styleSheet()
+				<< Qt::endl;
 		}
 	}
 
 private:
-	enum class Mode {
-		Style,
-		Unstyle
-	};
+	enum class Mode { Style, Unstyle };
 
 	struct Stylee {
 		QWidget* widget;

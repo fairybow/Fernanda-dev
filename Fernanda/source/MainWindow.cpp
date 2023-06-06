@@ -11,22 +11,11 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 
 void MainWindow::onSecondLaunch()
 {
-	qDebug() << __FUNCTION__;
-
-	auto x = 0;
-	auto y = 0;
+	auto new_main_window = spawn();
+	auto x = new_main_window->x();
+	auto y = new_main_window->y();
 	auto offset = style()->pixelMetric(QStyle::PM_TitleBarHeight);
-	for (auto widget : QApplication::topLevelWidgets())
-		if (auto window = qobject_cast<QMainWindow*>(widget)) {
-			x = window->x();
-			y = window->y();
-			break;
-		}
-
-	auto spawn = new MainWindow(objectName().toLocal8Bit(), m_isDev);
-	spawn->setAttribute(Qt::WA_DeleteOnClose);
-	spawn->show();
-	spawn->move(x + offset, y + offset);
+	new_main_window->move(x + offset, y + offset);
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -43,12 +32,32 @@ void MainWindow::closeEvent(QCloseEvent* event)
 	event->accept();
 }
 
+void MainWindow::moveEvent(QMoveEvent* event)
+{
+	QMainWindow::moveEvent(event);
+	saveGeometry();
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+	QMainWindow::resizeEvent(event);
+	saveGeometry();
+}
+
 void MainWindow::showEvent(QShowEvent* event)
 {
 	QMainWindow::showEvent(event);
 	if (m_isInitialized || event->spontaneous()) return;
 	m_indicator->pastel(1500);
 	m_isInitialized = true;
+}
+
+MainWindow* MainWindow::spawn()
+{
+	auto spawn = new MainWindow(objectName().toLocal8Bit(), m_isDev);
+	spawn->setAttribute(Qt::WA_DeleteOnClose);
+	spawn->show();
+	return spawn;
 }
 
 void MainWindow::setupWidgets()
@@ -580,10 +589,15 @@ void MainWindow::loadMenuBarMiscConfigs()
 	//void askSetPreviewType(const QString& type);
 }
 
+void MainWindow::saveGeometry()
+{
+	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
+}
+
 void MainWindow::closeEventConfigs(Qt::WindowStates priorState)
 {
 	saveConfigPassthrough(priorState, Ini::WINDOW_STATE, this);
-	saveConfigPassthrough(geometry(), Ini::WINDOW_GEOMETRY, this);
+	saveGeometry();
 }
 
 void MainWindow::setUserFont(const QFont& font)
