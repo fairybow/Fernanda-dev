@@ -6,6 +6,7 @@
 #include <QLocalSocket>
 #include <QMainWindow>
 #include <QString>
+#include <QTimer>
 
 #ifdef Q_OS_WINDOWS
 
@@ -25,7 +26,11 @@ public:
 		bool forceFocus = false)
 		: m_serverName(lockString),
 		m_windowName(mainWindowObjectName),
-		m_forceFocus(forceFocus) {}
+		m_forceFocus(forceFocus)
+	{
+		m_timer.setSingleShot(true);
+		connect(&m_timer, &QTimer::timeout, this, [&] { m_signalChoke = false; });
+	}
 
 	bool isRunning() const
 	{
@@ -39,12 +44,14 @@ public:
 	}
 
 signals:
-	void launchedAgain() const;
+	void launchedAgain();
 
 private:
 	const QString m_serverName;
 	const QString m_windowName;
 	const bool m_forceFocus;
+	bool m_signalChoke = false;
+	QTimer m_timer;
 
 	bool serverExists() const
 	{
@@ -58,15 +65,13 @@ private:
 	void startServer() const
 	{
 		qDebug() << __FUNCTION__;
+
 		auto server = new QLocalServer;
 		server->setSocketOptions(QLocalServer::WorldAccessOption);
 		server->listen(m_serverName);
-
-		qDebug() << connect(server, &QLocalServer::newConnection, this, &LaunchCop::focusMainWindow);
-		qDebug() << connect(server, &QLocalServer::newConnection, this, [&] { emit launchedAgain(); });
+		connect(server, &QLocalServer::newConnection, this, &LaunchCop::onNewConnection);
 	}
 
-private slots:
 	void focusMainWindow() const
 	{
 		qDebug() << __FUNCTION__;
@@ -91,5 +96,21 @@ private slots:
 #endif
 
 		main_window->activateWindow();
+	}
+
+	void notify()
+	{
+		if (m_signalChoke) return;
+
+		emit launchedAgain();
+		m_signalChoke = true;
+		m_timer.start(1000);
+	}
+
+private slots:
+	void onNewConnection()
+	{
+		focusMainWindow();
+		notify();
 	}
 };
