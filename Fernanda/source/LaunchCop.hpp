@@ -34,8 +34,6 @@ public:
 
 	bool isRunning() const
 	{
-		qDebug() << __FUNCTION__;
-
 		if (serverExists())
 			return true;
 
@@ -64,8 +62,6 @@ private:
 
 	void startServer() const
 	{
-		qDebug() << __FUNCTION__;
-
 		auto server = new QLocalServer;
 		server->setSocketOptions(QLocalServer::WorldAccessOption);
 		server->listen(m_serverName);
@@ -74,8 +70,6 @@ private:
 
 	void focusMainWindow() const
 	{
-		qDebug() << __FUNCTION__;
-
 		auto top_widgets = QApplication::topLevelWidgets();
 		auto it = std::find_if(top_widgets.begin(), top_widgets.end(),
 			[&](QWidget* widget) { return widget->objectName() == m_windowName; });

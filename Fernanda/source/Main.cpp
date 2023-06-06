@@ -29,10 +29,10 @@ int main(int argc, char* argv[])
 		if (arg.endsWith(".txt")) // handle projects, too
 			open_file = Path::toStdFs(arg);
 
-	MainWindow main_window(main_window_name, fernanda.arguments().contains("-dev"), open_file);
-
-	QObject::connect(&launch_cop, &LaunchCop::launchedAgain, &main_window, &MainWindow::onSecondLaunch);
-
+	MainWindow main_window(main_window_name,
+		fernanda.arguments().contains("-dev"), open_file);
+	QObject::connect(&launch_cop, &LaunchCop::launchedAgain,
+		&main_window, &MainWindow::onSecondLaunch);
 	setFont(fernanda);
 	main_window.show();
 
