@@ -16,6 +16,8 @@ void MainWindow::onSecondLaunch()
 	auto spawn = new MainWindow(objectName().toLocal8Bit(), m_isDev);
 	spawn->setAttribute(Qt::WA_DeleteOnClose);
 	spawn->show();
+	auto offset = style()->pixelMetric(QStyle::PM_TitleBarHeight);
+	spawn->move(x() + offset, y() + offset);
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)

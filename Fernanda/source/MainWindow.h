@@ -25,6 +25,7 @@
 #include <QMessageBox>
 #include <QShowEvent>
 #include <QString>
+#include <QStyle>
 #include <QUrl>
 #include <QUuid>
 
