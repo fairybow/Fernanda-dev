@@ -1,7 +1,8 @@
 #include "Document.h"
 
 Document::Document(const Folders& folders, QMainWindow* mainWindow, QWidget* parent, int cacheMaxCost)
-	: QObject(parent), m_userFolder(folders.user),
+	: QObject(parent),
+	m_userFolder(folders.user),
 	m_tempFolder(folders.temp),
 	m_backupFolder(folders.backup),
 	m_mainWindow(mainWindow),

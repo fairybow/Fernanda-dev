@@ -10,7 +10,7 @@
 RequestExecutionLevel admin
 
 ; ----- Definitions -----
-!define Q_VERSION "6.5.0"
+!define Q_VERSION "6.5.1"
 !define Q_COMPILER "msvc2019_64"
 
 !define APP "Fernanda"

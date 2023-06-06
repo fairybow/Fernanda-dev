@@ -43,6 +43,9 @@ public:
 
 	StdFsPath userData() const { return m_user->data(); }
 
+public slots:
+	void onSecondLaunch();
+
 protected:
 	virtual void closeEvent(QCloseEvent* event) override;
 	virtual void showEvent(QShowEvent* event) override;
@@ -101,7 +104,8 @@ private:
 	void openNewTab() { onAddTabClick(); };
 
 	template<typename T>
-	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject, std::function<void()> configurableAction = nullptr)
+	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject,
+		std::function<void()> configurableAction = nullptr)
 	{
 		if (configurableAction)
 			configurableAction();
@@ -109,7 +113,8 @@ private:
 	}
 
 	template<typename T>
-	void loadConfigPassthrough(const QString& valueKey, QObject* associatedObject, std::function<void(T)> configurableAction, T fallbackValue = T())
+	void loadConfigPassthrough(const QString& valueKey, QObject* associatedObject,
+		std::function<void(T)> configurableAction, T fallbackValue = T())
 	{
 		auto value = m_user->load<T>(valueKey, associatedObject, fallbackValue);
 		configurableAction(value);

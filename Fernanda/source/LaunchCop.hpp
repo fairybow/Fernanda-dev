@@ -1,33 +1,11 @@
-/*
-Requires Qt Network
-
-Usage:
-```
-#include "LaunchCop.hpp"
-
-#include <QApplication>
-#include <QMainWindow>
-
-int main(int argc, char* argv[])
-{
-	LaunchCop launch_cop("Program name", "QMainWindow object name");
-	if (launch_cop.exists())
-		return 0;
-	QApplication app(argc, argv);
-	QMainWindow main_window;
-	main_window.show();
-	return app.exec();
-}
-```
-*/
-
-/*#pragma once
+#pragma once
 
 #include <QApplication>
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QMainWindow>
 #include <QString>
+#include <QTimer>
 
 #ifdef Q_OS_WINDOWS
 
@@ -43,26 +21,40 @@ class LaunchCop : public QObject
 	Q_OBJECT
 
 public:
-	LaunchCop(const QString& lockString, const QString& mainWindowObjectName = "MainWindow", bool forceFocus = false)
-		: m_lockString(lockString), m_windowName(mainWindowObjectName), m_forceFocus(forceFocus) {}
+	LaunchCop(const QString& lockString,
+		const QString& mainWindowObjectName = "MainWindow",
+		bool forceFocus = false)
+		: m_serverName(lockString),
+		m_windowName(mainWindowObjectName),
+		m_forceFocus(forceFocus)
+	{
+		m_timer.setSingleShot(true);
+		connect(&m_timer, &QTimer::timeout, this, [&] { m_signalChoke = false; });
+	}
 
-	bool exists() const
+	bool isRunning() const
 	{
 		if (serverExists())
 			return true;
+
 		startServer();
 		return false;
 	}
 
+signals:
+	void launchedAgain();
+
 private:
-	const QString m_lockString;
+	const QString m_serverName;
 	const QString m_windowName;
 	const bool m_forceFocus;
+	bool m_signalChoke = false;
+	QTimer m_timer;
 
 	bool serverExists() const
 	{
 		QLocalSocket socket;
-		socket.connectToServer(m_lockString);
+		socket.connectToServer(m_serverName);
 		auto exists = socket.isOpen();
 		socket.close();
 		return exists;
@@ -72,11 +64,10 @@ private:
 	{
 		auto server = new QLocalServer;
 		server->setSocketOptions(QLocalServer::WorldAccessOption);
-		server->listen(m_lockString);
-		connect(server, &QLocalServer::newConnection, this, &LaunchCop::focusMainWindow);
+		server->listen(m_serverName);
+		connect(server, &QLocalServer::newConnection, this, &LaunchCop::onNewConnection);
 	}
 
-private slots:
 	void focusMainWindow() const
 	{
 		auto top_widgets = QApplication::topLevelWidgets();
@@ -100,4 +91,20 @@ private slots:
 
 		main_window->activateWindow();
 	}
-};*/
+
+	void notify()
+	{
+		if (m_signalChoke) return;
+
+		emit launchedAgain();
+		m_signalChoke = true;
+		m_timer.start(1000);
+	}
+
+private slots:
+	void onNewConnection()
+	{
+		focusMainWindow();
+		notify();
+	}
+};
