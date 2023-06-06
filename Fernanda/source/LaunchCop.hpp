@@ -29,17 +29,11 @@ public:
 
 	bool isRunning() const
 	{
-		if (serverExists()) {
-			auto socket = new QLocalSocket;
-			socket->connectToServer(m_serverName);
+		qDebug() << __FUNCTION__;
 
-			if (socket->waitForConnected()) {
-				socket->write(m_secondLaunchNotice);
-				socket->flush();
-			}
-
+		if (serverExists())
 			return true;
-		}
+
 		startServer();
 		return false;
 	}
@@ -52,10 +46,6 @@ private:
 	const QString m_windowName;
 	const bool m_forceFocus;
 
-	//
-	const QByteArray m_secondLaunchNotice = "Second launch attempted";
-	//
-
 	bool serverExists() const
 	{
 		QLocalSocket socket;
@@ -67,26 +57,20 @@ private:
 
 	void startServer() const
 	{
+		qDebug() << __FUNCTION__;
 		auto server = new QLocalServer;
 		server->setSocketOptions(QLocalServer::WorldAccessOption);
 		server->listen(m_serverName);
-		connect(server, &QLocalServer::newConnection, this, &LaunchCop::focusMainWindow);
 
-		connect(server, &QLocalServer::newConnection, this, [&] {
-			auto server = qobject_cast<QLocalServer*>(sender());
-			auto socket = server->nextPendingConnection();
-			connect(socket, &QLocalSocket::readyRead, this, [&] {
-				auto socket = qobject_cast<QLocalSocket*>(sender());
-				auto message = socket->readAll();
-				if (message == m_secondLaunchNotice)
-					emit launchedAgain();
-				});
-			});
+		qDebug() << connect(server, &QLocalServer::newConnection, this, &LaunchCop::focusMainWindow);
+		qDebug() << connect(server, &QLocalServer::newConnection, this, [&] { emit launchedAgain(); });
 	}
 
 private slots:
 	void focusMainWindow() const
 	{
+		qDebug() << __FUNCTION__;
+
 		auto top_widgets = QApplication::topLevelWidgets();
 		auto it = std::find_if(top_widgets.begin(), top_widgets.end(),
 			[&](QWidget* widget) { return widget->objectName() == m_windowName; });
