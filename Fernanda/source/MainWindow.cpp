@@ -13,11 +13,20 @@ void MainWindow::onSecondLaunch()
 {
 	qDebug() << __FUNCTION__;
 
+	auto x = 0;
+	auto y = 0;
+	auto offset = style()->pixelMetric(QStyle::PM_TitleBarHeight);
+	for (auto widget : QApplication::topLevelWidgets())
+		if (auto window = qobject_cast<QMainWindow*>(widget)) {
+			x = window->x();
+			y = window->y();
+			break;
+		}
+
 	auto spawn = new MainWindow(objectName().toLocal8Bit(), m_isDev);
 	spawn->setAttribute(Qt::WA_DeleteOnClose);
 	spawn->show();
-	auto offset = style()->pixelMetric(QStyle::PM_TitleBarHeight);
-	spawn->move(x() + offset, y() + offset);
+	spawn->move(x + offset, y + offset);
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
