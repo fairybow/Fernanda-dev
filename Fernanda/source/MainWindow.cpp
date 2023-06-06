@@ -12,6 +12,10 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 void MainWindow::onSecondLaunch()
 {
 	qDebug() << __FUNCTION__;
+
+	auto spawn = new MainWindow(objectName().toLocal8Bit(), m_isDev);
+	spawn->setAttribute(Qt::WA_DeleteOnClose);
+	spawn->show();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
