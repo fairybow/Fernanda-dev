@@ -9,9 +9,10 @@
 
 #include <filesystem>
 
+using StdFsPath = std::filesystem::path;
+
 void appSetup();
-bool devArg(QApplication& application);
-std::filesystem::path pathArg(QApplication& application);
+StdFsPath pathArg(QApplication& application);
 void setFont(QApplication& application);
 
 int main(int argc, char* argv[])
@@ -27,7 +28,7 @@ int main(int argc, char* argv[])
 	setFont(fernanda);
 
 	MainWindow main_window(main_window_name,
-		devArg(fernanda),
+		fernanda.arguments().contains("-dev"),
 		pathArg(fernanda));
 
 	QObject::connect(&launch_cop, &LaunchCop::launchedAgain,
@@ -36,7 +37,7 @@ int main(int argc, char* argv[])
 	main_window.show();
 
 	Logger::install(main_window.userData());
-	Utility::ensureAppVisible(fernanda, main_window);
+	Utility::ensureAppVisible(main_window);
 
 	return fernanda.exec();
 }
@@ -48,14 +49,9 @@ void appSetup()
 	QApplication::setDesktopSettingsAware(true);
 }
 
-bool devArg(QApplication& application)
+StdFsPath pathArg(QApplication& application)
 {
-	return application.arguments().contains("-dev");
-}
-
-std::filesystem::path pathArg(QApplication& application)
-{
-	std::filesystem::path path_arg;
+	StdFsPath path_arg;
 	for (auto& arg : application.arguments())
 		if (arg.endsWith(".txt")) // handle projects, too
 			path_arg = Path::toStdFs(arg);

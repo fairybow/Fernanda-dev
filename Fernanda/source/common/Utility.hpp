@@ -25,7 +25,7 @@ namespace Utility
 		return (value < mustExceed) ? mustExceed : value;
 	}
 
-	inline void ensureAppVisible(QGuiApplication& application, QMainWindow& mainWindow)
+	inline void ensureAppVisible(QMainWindow& mainWindow)
 	{
 		auto screens = QGuiApplication::screens();
 		if (screens.isEmpty()) return;
