@@ -24,6 +24,8 @@
 #include <QDirIterator>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QMoveEvent>
+#include <QResizeEvent>
 #include <QShowEvent>
 #include <QString>
 #include <QStyle>
@@ -50,6 +52,8 @@ public slots:
 
 protected:
 	virtual void closeEvent(QCloseEvent* event) override;
+	virtual void moveEvent(QMoveEvent* event) override;
+	virtual void resizeEvent(QResizeEvent* event) override;
 	virtual void showEvent(QShowEvent* event) override;
 
 private:
@@ -74,6 +78,7 @@ private:
 	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop(this);
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
 
+	MainWindow* spawn();
 	void setupWidgets();
 	void connections();
 	void documentConnections();
@@ -96,6 +101,7 @@ private:
 	void loadMenuBarMeterConfigs();
 	void loadMenuBarToolConfigs();
 	void loadMenuBarMiscConfigs();
+	void saveGeometry();
 	void closeEventConfigs(Qt::WindowStates priorState);
 	void setUserFont(const QFont& font);
 	PromptResult singleSavePrompt();

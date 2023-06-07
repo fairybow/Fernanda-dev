@@ -54,21 +54,26 @@ public:
 	void devClass()
 	{
 		qDebug() << __FUNCTION__;
-		qDebug() << "Current edit-check delay interval:" << m_editCheckDelay->interval();
+
+		qDebug() << "Current edit-check delay interval:"
+			<< m_editCheckDelay->interval();
 		if (!m_extantPathsToIds.empty()) {
 			qDebug() << "Extant paths to IDs map:";
 			for (auto& [path, id] : m_extantPathsToIds)
 				qDebug() << "Path:" << Path::toQString(path) << "\n" << id;
 		}
+		qDebug() << Qt::endl;
 	}
 
 	void devCurrentInfo()
 	{
 		qDebug() << __FUNCTION__;
+
 		qDebug() << "Current ID:" << m_currentId;
 		auto document = m_cache.document(m_currentId);
 		qDebug() << "Is edited?:" << document->edited();
-		qDebug() << "Original text:" << document->originalText();
+		qDebug() << "Original text:" << document->originalText()
+			<< Qt::endl;
 	}
 
 signals:
