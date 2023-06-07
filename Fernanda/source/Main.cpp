@@ -9,6 +9,9 @@
 
 #include <filesystem>
 
+void appSetup();
+bool devArg(QApplication& application);
+std::filesystem::path pathArg(QApplication& application);
 void setFont(QApplication& application);
 
 int main(int argc, char* argv[])
@@ -19,27 +22,44 @@ int main(int argc, char* argv[])
 	if (launch_cop.isRunning())
 		return 0;
 
-	QApplication::setHighDpiScaleFactorRoundingPolicy(
-		Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
-	QApplication::setDesktopSettingsAware(true);
+	appSetup();
 	QApplication fernanda(argc, argv);
-
-	std::filesystem::path open_file;
-	for (auto& arg : fernanda.arguments())
-		if (arg.endsWith(".txt")) // handle projects, too
-			open_file = Path::toStdFs(arg);
+	setFont(fernanda);
 
 	MainWindow main_window(main_window_name,
-		fernanda.arguments().contains("-dev"), open_file);
+		devArg(fernanda),
+		pathArg(fernanda));
+
 	QObject::connect(&launch_cop, &LaunchCop::launchedAgain,
 		&main_window, &MainWindow::onSecondLaunch);
-	setFont(fernanda);
+
 	main_window.show();
 
 	Logger::install(main_window.userData());
 	Utility::ensureAppVisible(fernanda, main_window);
 
 	return fernanda.exec();
+}
+
+void appSetup()
+{
+	QApplication::setHighDpiScaleFactorRoundingPolicy(
+		Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+	QApplication::setDesktopSettingsAware(true);
+}
+
+bool devArg(QApplication& application)
+{
+	return application.arguments().contains("-dev");
+}
+
+std::filesystem::path pathArg(QApplication& application)
+{
+	std::filesystem::path path_arg;
+	for (auto& arg : application.arguments())
+		if (arg.endsWith(".txt")) // handle projects, too
+			path_arg = Path::toStdFs(arg);
+	return path_arg;
 }
 
 void setFont(QApplication& application)
