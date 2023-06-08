@@ -1,5 +1,7 @@
 #include "Document.h"
 
+IdBank Document::s_idBank;
+
 Document::Document(const Folders& folders, QMainWindow* mainWindow, QWidget* parent, int cacheMaxCost)
 	: QObject(parent),
 	m_userFolder(folders.user),
@@ -37,7 +39,7 @@ const QString Document::setCurrent(const StdFsPath& path, bool isNew)
 		writeEmptyFile(path);
 
 	emit askSetText();
-	m_currentId = idByPath(path);
+	m_currentId = s_idBank.fromPath(path);
 	return read(path);
 }
 
@@ -59,7 +61,7 @@ void Document::setText(const QString& text)
 
 QUuid Document::createEmpty()
 {
-	auto id = createId();
+	auto id = s_idBank.create();
 	textDocument(id);
 	return id;
 }
@@ -92,14 +94,14 @@ bool Document::save()
 	if (m_currentId.isNull()) return false;
 	emit askSetText();
 
-	auto extant_path = extantPath(m_currentId);
+	auto extant_path = s_idBank.path(m_currentId);
 	if (Path::isValid(extant_path))
 		backup(m_currentId);
 	else {
 		extant_path = newFileDialog();
 		if (extant_path.empty()) return false;
 		writeEmptyFile(extant_path);
-		m_extantPathsToIds[extant_path] = m_currentId;
+		s_idBank.associate(extant_path, m_currentId);
 		emit pathIdAssociated(extant_path, m_currentId);
 	}
 	return overwrite(m_currentId);
@@ -113,17 +115,10 @@ void Document::close(const QUuid& id)
 	if (m_currentId == id)
 		m_currentId = QUuid();
 
-	for (const auto& [key, value] : m_extantPathsToIds)
+	for (const auto& [key, value] : s_idBank.paths())
 		qDebug() << Path::toQString(key) << value << Qt::endl;
 
-	auto extant_path = extantPath(id);
-	if (m_extantPathsToIds.contains(extant_path))
-		m_extantPathsToIds.erase(extant_path);
-
-	for (const auto& [key, value] : m_extantPathsToIds)
-		qDebug() << Path::toQString(key) << value << Qt::endl;
-	
-	m_lifetimeIdRegistry.removeOne(id);
+	s_idBank.remove(id);
 	StdFs::remove(tempPath(id));
 }
 
@@ -156,25 +151,6 @@ const QString Document::read(StdFsPath path)
 	return document->toPlainText();
 }
 
-QUuid Document::createId(StdFsPath path)
-{
-	auto id = QUuid::createUuid();
-	if (!path.empty())
-		m_extantPathsToIds[path] = id;
-	m_lifetimeIdRegistry << id;
-	return id;
-}
-
-QUuid Document::idByPath(const StdFsPath& path)
-{
-	QUuid id;
-	auto it = m_extantPathsToIds.find(path);
-	(it != m_extantPathsToIds.end())
-		? id = it->second
-		: id = createId(path);
-	return id;
-}
-
 TextDocument* Document::textDocument(const QUuid& id, StdFsPath path)
 {
 	auto document = m_cache.document(id);
@@ -195,7 +171,7 @@ Document::StdFsPath Document::tempPath(const QUuid& id)
 
 void Document::backup(const QUuid& id)
 {
-	auto extant_path = extantPath(id);
+	auto extant_path = s_idBank.path(id);
 	auto backup_path = backupPath(extant_path);
 	Path::copy(extant_path, backup_path);
 }
@@ -210,7 +186,7 @@ Document::StdFsPath Document::backupPath(const StdFsPath& path)
 
 bool Document::overwrite(const QUuid& id)
 {
-	auto path = extantPath(id);
+	auto path = s_idBank.path(id);
 	auto temp_path = tempPath(id);
 	if (!Path::areValid(path, temp_path) ||
 		!Path::move(temp_path, path, true))
@@ -242,7 +218,7 @@ TextDocument* Document::create(const QUuid& id, StdFsPath path)
 
 bool Document::wasEvicted(const QUuid& id)
 {
-	if (!m_lifetimeIdRegistry.contains(id)) return false;
+	if (!s_idBank.contains(id)) return false;
 	return StdFs::exists(tempPath(id));
 }
 
@@ -253,20 +229,11 @@ void Document::recover(const QUuid& id, QString& initialText, QString& originalT
 	auto temp_path = tempPath(id);
 	if (StdFs::exists(temp_path))
 		initialText = Io::readFile(temp_path);
-	auto extant_path = extantPath(id);
+	//auto extant_path = extantPath(id);
+	auto extant_path = s_idBank.path(id);
 	if (Path::isValid(extant_path))
 		originalText = Io::readFile(extant_path);
+
 	// handle deleted original
 	// file system watcher
-}
-
-Document::StdFsPath Document::extantPath(const QUuid& id)
-{
-	StdFsPath path;
-	auto it = std::find_if(
-		m_extantPathsToIds.begin(), m_extantPathsToIds.end(),
-		[&id](const auto& pair) { return pair.second == id; });
-	if (it != m_extantPathsToIds.end())
-		path = it->first;
-	return path;
 }

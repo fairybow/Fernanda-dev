@@ -407,6 +407,9 @@ void MainWindow::menuBarDevConnections()
 	connect(m_menuBar, &MenuBar::devDocumentCurrent, this, [&] {
 		m_document->devCurrentInfo();
 		});
+	connect(m_menuBar, &MenuBar::devDocumentBank, this, [&] {
+		m_document->devIdBank();
+		});
 	connect(m_menuBar, &MenuBar::devStylist, this, [&] {
 		m_stylist->devClass();
 		});

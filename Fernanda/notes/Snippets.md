@@ -194,3 +194,5 @@ connect(this, &MainWindow::testSignal3, this, [&]
 		qDebug() << "testSignal 3 emitted by MainWindow using `emitAndSave`";
 	});
 ```
+
+`const\s+\w+\s+m_\w+`

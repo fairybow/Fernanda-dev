@@ -4,6 +4,7 @@
 #include "../common/Path.hpp"
 #include "../common/StringTools.hpp"
 #include "DocumentCache.hpp"
+#include "IdBank.hpp"
 #include "TextDocument.hpp"
 
 #include <QFileDialog>
@@ -11,11 +12,9 @@
 #include <QString>
 #include <QTimer>
 #include <QUuid>
-#include <QVector>
+//#include <QVector>
 
-#include <algorithm>
 #include <filesystem>
-#include <map>
 
 namespace StdFs = std::filesystem;
 
@@ -56,13 +55,8 @@ public:
 		qDebug() << __FUNCTION__;
 
 		qDebug() << "Current edit-check delay interval:"
-			<< m_editCheckDelay->interval();
-		if (!m_extantPathsToIds.empty()) {
-			qDebug() << "Extant paths to IDs map:";
-			for (auto& [path, id] : m_extantPathsToIds)
-				qDebug() << "Path:" << Path::toQString(path) << "\n" << id;
-		}
-		qDebug() << Qt::endl;
+			<< m_editCheckDelay->interval()
+			<< Qt::endl;
 	}
 
 	void devCurrentInfo()
@@ -76,6 +70,28 @@ public:
 			<< Qt::endl;
 	}
 
+	void devIdBank() const
+	{
+		qDebug() << __FUNCTION__ << Qt::endl;
+
+		if (!s_idBank.isEmpty()) {
+			qDebug() << "Bank:";
+			for (auto& id : s_idBank.bank())
+				qDebug() << id << Qt::endl;
+		}
+		if (s_idBank.hasTrash()) {
+			qDebug() << "Trash:";
+			for (auto& id : s_idBank.trash())
+				qDebug() << id << Qt::endl;
+		}
+		if (s_idBank.hasPaths()) {
+			qDebug() << "Extant paths to IDs map:";
+			for (auto& [path, id] : s_idBank.paths())
+				qDebug() << "Path:" << Path::toQString(path)
+				<< "\n" << id << Qt::endl;
+		}
+	}
+
 signals:
 	void askSetText();
 	void startAutoCacheTimer();
@@ -86,22 +102,19 @@ signals:
 private:
 	static constexpr char DIALOG_FILE_TYPE[] = "Plain text file (*.txt)";
 
+	static IdBank s_idBank;
 	QMainWindow* m_mainWindow;
 	DocumentCache m_cache;
 	const StdFsPath m_userFolder;
 	const StdFsPath m_tempFolder;
 	const StdFsPath m_backupFolder;
 	QUuid m_currentId;
-	std::map<StdFsPath, QUuid> m_extantPathsToIds;
-	QVector<QUuid> m_lifetimeIdRegistry;
 	QTimer* m_autoSaveText = new QTimer(this);
 	QTimer* m_editCheckDelay = new QTimer(this);
 
 	void setUpAutoCache();
 	void writeEmptyFile(const StdFsPath& path);
 	const QString read(StdFsPath path = StdFsPath());
-	QUuid createId(StdFsPath path = StdFsPath());
-	QUuid idByPath(const StdFsPath& path);
 	TextDocument* textDocument(const QUuid& id, StdFsPath path = StdFsPath());
 
 	void tempSave(const QUuid& id, const QString& text);
@@ -113,5 +126,4 @@ private:
 	TextDocument* create(const QUuid& id, StdFsPath path = StdFsPath());
 	bool wasEvicted(const QUuid& id);
 	void recover(const QUuid& id, QString& initialText, QString& originalText);
-	StdFsPath extantPath(const QUuid& id);
 };

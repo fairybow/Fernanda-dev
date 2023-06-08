@@ -65,18 +65,23 @@ private:
 		auto server = new QLocalServer;
 		server->setSocketOptions(QLocalServer::WorldAccessOption);
 		server->listen(m_serverName);
-		connect(server, &QLocalServer::newConnection, this, &LaunchCop::onNewConnection);
+		connect(server, &QLocalServer::newConnection,
+			this, &LaunchCop::onNewConnection);
 	}
 
 	void focusMainWindow() const
 	{
 		auto top_widgets = QApplication::topLevelWidgets();
-		auto it = std::find_if(top_widgets.begin(), top_widgets.end(),
-			[&](QWidget* widget) { return widget->objectName() == m_windowName; });
+		auto it = std::find_if(
+			top_widgets.begin(), top_widgets.end(), [&](QWidget* widget) {
+				return widget->objectName() == m_windowName;
+			});
 		if (it == top_widgets.end()) return;
+
 		auto main_window = *it;
 		if (main_window->windowState() == Qt::WindowMinimized)
-			main_window->setWindowState((main_window->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+			main_window->setWindowState(
+				(main_window->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
 
 #ifdef Q_OS_WINDOWS
 
