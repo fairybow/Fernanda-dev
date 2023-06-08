@@ -11,6 +11,9 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 
 void MainWindow::onSecondLaunch()
 {
+	return;
+
+	// allow in the future, along with moving tabs out into new windows
 	auto new_main_window = spawn();
 	auto x = new_main_window->x();
 	auto y = new_main_window->y();
