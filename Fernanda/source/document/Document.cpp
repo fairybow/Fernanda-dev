@@ -229,7 +229,7 @@ void Document::recover(const QUuid& id, QString& initialText, QString& originalT
 	auto temp_path = tempPath(id);
 	if (StdFs::exists(temp_path))
 		initialText = Io::readFile(temp_path);
-	//auto extant_path = extantPath(id);
+
 	auto extant_path = s_idBank.path(id);
 	if (Path::isValid(extant_path))
 		originalText = Io::readFile(extant_path);
