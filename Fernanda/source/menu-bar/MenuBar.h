@@ -104,6 +104,7 @@ signals:
 	void devOpenLogs();
 	void devDocument();
 	void devDocumentCurrent();
+	void devDocumentBank();
 	void devStylist();
 	void devStylistStyleSheets();
 	void devStylistUnstyle();
