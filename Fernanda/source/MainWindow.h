@@ -6,7 +6,7 @@
 #include "document/Document.h"
 #include "editor/Editor.h"
 #include "menu-bar/MenuBar.h"
-#include "preview/Preview.hpp"
+//#include "Previewer/Previewer.hpp"
 #include "tab-bar/TabBar.h"
 #include "tools/AlwaysOnTop.hpp"
 #include "tools/StayAwake.hpp"
@@ -64,14 +64,15 @@ private:
 	Document* m_document = new Document({
 		m_user->documents(),
 		m_user->temp(),
-		m_user->backup() }, this, this, 3/* <-- test */);
+		m_user->backup() },
+		this, this, 100);
 	//Project* m_project = new Project(this);
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_isDev);
 	StatusBar* m_statusBar = new StatusBar("StatusBar");
 	Indicator* m_indicator = new Indicator("Indicator");
 	TabBar* m_tabBar = new TabBar("TabBar", 100, 200);
 	Editor* m_editor = new Editor("Editor", QFont("mononoki", 14));
-	//Preview* m_preview = new Preview("Preview");
+	//Previewer* m_previewer = new Previewer("Previewer");
 	Meter* m_meter = new Meter("Meter");
 	PomodoroTimer* m_pomodoroTimer = new PomodoroTimer(this);
 	StayAwake* m_stayAwake = new StayAwake;
@@ -85,7 +86,7 @@ private:
 	void tabBarConnections();
 	void editorConnections();
 	void meterConnections();
-	//void previewConnections();
+	//void previewerConnections();
 	void menuBarConnections();
 	void menuBarStyleConfigConnections();
 	void menuBarEditorConfigConnections();
@@ -95,7 +96,7 @@ private:
 	void menuBarDevConnections();
 	void loadConfigs();
 	void loadEditorConfigs();
-	//void loadPreviewConfigs();
+	//void loadPreviewerConfigs();
 	void loadMenuBarStyleConfigs();
 	void loadMenuBarEditorConfigs();
 	void loadMenuBarMeterConfigs();

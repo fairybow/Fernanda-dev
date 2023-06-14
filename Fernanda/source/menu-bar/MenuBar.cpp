@@ -58,13 +58,13 @@ void MenuBar::makeBespokeActionGroups()
 		emit askSetIndicatorAlignment(selection->data().toString());
 		});
 
-	ActionGroup::BespokeList preview_types;
-	preview_types << ActionGroup::bespoke("Fountain");
-	preview_types << ActionGroup::bespoke("Markdown");
-	m_actionGroups[GROUP_PREVIEW] = ActionGroup::fromBespoke(preview_types, this, [&] {
-		auto selection = selectedPreviewType();
+	ActionGroup::BespokeList previewer_types;
+	previewer_types << ActionGroup::bespoke("Fountain");
+	previewer_types << ActionGroup::bespoke("Markdown");
+	m_actionGroups[GROUP_PREVIEWER] = ActionGroup::fromBespoke(previewer_types, this, [&] {
+		auto selection = selectedPreviewerType();
 		if (selection == nullptr) return;
-		emit askSetPreviewType(selection->data().toString());
+		emit askSetPreviewerType(selection->data().toString());
 		});
 }
 
@@ -466,7 +466,7 @@ QGroupBox* MenuBar::mixedGroupBox()
 	return box;
 }
 
-void MenuBar::appearanceDialog()
+void MenuBar::appearanceDialog() // split this dialog up into 2?
 {
 	QDialog dialog(this);
 

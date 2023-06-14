@@ -181,10 +181,10 @@
     <QtMoc Include="source\Indicator.hpp" />
     <ClInclude Include="source\IniKeys.hpp" />
     <QtMoc Include="source\Meter.h" />
-    <ClInclude Include="source\preview\Preview.hpp" />
-    <ClInclude Include="source\preview\WebDocument.hpp" />
-    <ClInclude Include="source\preview\WebEnginePage.hpp" />
-    <ClInclude Include="source\preview\WebEngineView.hpp" />
+    <ClInclude Include="source\previewer\Previewer.hpp" />
+    <ClInclude Include="source\previewer\WebDocument.hpp" />
+    <ClInclude Include="source\previewer\WebEnginePage.hpp" />
+    <ClInclude Include="source\previewer\WebEngineView.hpp" />
     <ClInclude Include="source\StatusBar.hpp" />
     <ClInclude Include="source\Stylist.h" />
     <QtMoc Include="source\tools\AlwaysOnTop.hpp" />

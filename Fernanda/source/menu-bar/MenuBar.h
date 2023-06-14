@@ -64,7 +64,7 @@ public:
 	void setSelectedPomodoroTime(int timeInSeconds) { m_sliderValues[SLIDER_POMODORO] = timeInSeconds; }
 	void setCheckBoxIndicator(bool state) { m_checkBoxStates[CHECK_BOX_INDICATOR] = state; }
 	void setSelectedIndicatorAlignment(const QString& alignment) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_INDICATOR_ALIGN], alignment); }
-	//void setSelectedPreviewType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEW], type); }
+	//void setSelectedPreviewerType(const QString& type) { setBespokeGroupSelectedAction(m_actionGroups[GROUP_PREVIEWER], type); }
 
 signals:
 	void askOpenNewFile();
@@ -96,7 +96,7 @@ signals:
 	void askSetPomodoroTime(int timeInSeconds);
 	void askToggleIndicator(bool state);
 	void askSetIndicatorAlignment(const QString& alignment);
-	void askSetPreviewType(const QString& type);
+	void askSetPreviewerType(const QString& type);
 
 	void devOpenDocuments();
 	void devOpenUserData();
@@ -135,7 +135,7 @@ private:
 	static constexpr char SLIDER_POMODORO[] = "pomodoro_times";
 	static constexpr char CHECK_BOX_INDICATOR[] = "has_indicator";
 	static constexpr char GROUP_INDICATOR_ALIGN[] = "indicator_alignments";
-	static constexpr char GROUP_PREVIEW[] = "preview_types";
+	static constexpr char GROUP_PREVIEWER[] = "previewer_types";
 	static constexpr char QRC_EDITOR[] = ":/menu-bar/themes/editor/";
 	static constexpr char QRC_MAIN_WINDOW[] = ":/menu-bar/themes/window/";
 
@@ -168,7 +168,7 @@ private:
 	QAction* selectedWindowTheme() const { return m_actionGroups.at(GROUP_WINDOW_THEMES)->checkedAction(); }
 	QAction* selectedWrapMode() const { return m_actionGroups.at(GROUP_WRAPS)->checkedAction(); }
 	QAction* selectedIndicatorAlignment() const { return m_actionGroups.at(GROUP_INDICATOR_ALIGN)->checkedAction(); }
-	QAction* selectedPreviewType() const { return m_actionGroups.at(GROUP_PREVIEW)->checkedAction(); }
+	QAction* selectedPreviewerType() const { return m_actionGroups.at(GROUP_PREVIEWER)->checkedAction(); }
 
 	void setGroupSelectedAction(ActionGroup* actionGroup, const StdFsPath& value)
 	{

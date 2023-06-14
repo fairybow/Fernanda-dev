@@ -9,9 +9,6 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
-    <Filter Include="Source\Preview">
-      <UniqueIdentifier>{ebe74914-e259-4ef3-8569-7bdfb34f58d2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Editor">
       <UniqueIdentifier>{e30ec776-d711-4399-afbf-081ee41eaef8}</UniqueIdentifier>
     </Filter>
@@ -69,6 +66,9 @@
     </Filter>
     <Filter Include="Resources\MenuBar\Themes\Window">
       <UniqueIdentifier>{99991278-b82e-4a4d-90da-1add4c529a4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Previewer">
+      <UniqueIdentifier>{ebe74914-e259-4ef3-8569-7bdfb34f58d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -276,18 +276,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\preview\WebDocument.hpp">
-      <Filter>Source\Preview</Filter>
-    </ClInclude>
-    <ClInclude Include="source\preview\WebEnginePage.hpp">
-      <Filter>Source\Preview</Filter>
-    </ClInclude>
-    <ClInclude Include="source\preview\WebEngineView.hpp">
-      <Filter>Source\Preview</Filter>
-    </ClInclude>
-    <ClInclude Include="source\preview\Preview.hpp">
-      <Filter>Source\Preview</Filter>
-    </ClInclude>
     <ClInclude Include="source\Version.hpp">
       <Filter>Source</Filter>
     </ClInclude>
@@ -371,6 +359,18 @@
     </ClInclude>
     <ClInclude Include="source\document\IdBank.hpp">
       <Filter>Source\Document</Filter>
+    </ClInclude>
+    <ClInclude Include="source\previewer\Previewer.hpp">
+      <Filter>Source\Previewer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\previewer\WebDocument.hpp">
+      <Filter>Source\Previewer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\previewer\WebEnginePage.hpp">
+      <Filter>Source\Previewer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\previewer\WebEngineView.hpp">
+      <Filter>Source\Previewer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

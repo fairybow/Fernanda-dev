@@ -82,7 +82,7 @@ void MainWindow::connections()
 	tabBarConnections();
 	editorConnections();
 	meterConnections();
-	//previewConnections();
+	//previewerConnections();
 	menuBarConnections();
 	menuBarStyleConfigConnections();
 	menuBarEditorConfigConnections();
@@ -161,7 +161,7 @@ void MainWindow::meterConnections()
 		});
 }
 
-/*void MainWindow::previewConnections()
+/*void MainWindow::previewerConnections()
 {
 	//
 }*/
@@ -364,7 +364,7 @@ void MainWindow::menuBarToolConfigConnections()
 void MainWindow::menuBarMiscConfigConnections()
 {
 	// to-do:
-	//void askSetPreviewType(const QString& type);
+	//void askSetPreviewerType(const QString& type);
 
 	connect(m_menuBar, &MenuBar::askToggleIndicator, this, [&](bool state) {
 		saveConfigPassthrough(
@@ -428,7 +428,7 @@ void MainWindow::loadConfigs()
 	auto geometry = loadConfig(Ini::WINDOW_GEOMETRY, this, QRect(0, 0, 1000, 600));
 	setGeometry(geometry);
 	loadEditorConfigs();
-	//loadPreviewConfigs();
+	//loadPreviewerConfigs();
 	loadMenuBarStyleConfigs();
 	loadMenuBarEditorConfigs();
 	loadMenuBarMeterConfigs();
@@ -442,7 +442,7 @@ void MainWindow::loadEditorConfigs()
 	setUserFont(font);
 }
 
-/*void MainWindow::loadPreviewConfigs()
+/*void MainWindow::loadPreviewerConfigs()
 {
 	//
 }*/
@@ -592,7 +592,7 @@ void MainWindow::loadMenuBarMiscConfigs()
 		m_menuBar->setSelectedIndicatorAlignment(alignment);
 		}, QString("Top"));
 
-	//void askSetPreviewType(const QString& type);
+	//void askSetPreviewerType(const QString& type);
 }
 
 void MainWindow::saveGeometry()
