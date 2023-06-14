@@ -43,9 +43,11 @@ public:
 	void setUnderColor(const QString& color) { m_underColorHex = color; }
 
 signals:
+	void startBlinkTimer();
+
+	// fix these!
 	bool getHasBlock();
 	bool getHasBlink();
-	void startBlinkTimer();
 
 private:
 	QPlainTextEdit* m_editor;

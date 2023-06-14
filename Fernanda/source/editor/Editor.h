@@ -22,6 +22,8 @@ public:
 	void setWrapMode(const QString& mode); // refactor to use QTextOption enum (`void setWordWrapMode(QTextOption::WrapMode policy)`), move to intermediaries
 	void setHasLineHighlight(bool state);
 	void setHasLineNumberArea(bool state);
+	void setPlainText(const QString& text);
+	void setCursorSpan(int cursor, int anchor = -1);
 
 	QFont defaulFont() const { return m_defaultFont; }
 	int defaulTabStop() const { return 40; }
@@ -43,11 +45,12 @@ public:
 	void setReadOnly(bool readOnly) { m_trueEditor->setReadOnly(readOnly); }
 	bool isReadOnly() const { return m_trueEditor->isReadOnly(); }
 	QString toPlainText() const { return m_trueEditor->toPlainText(); }
-	void setPlainText(const QString& text) { m_trueEditor->setPlainText(text); }
 	int blockCount() const { return m_trueEditor->blockCount(); }
 	QString selectedText() const { return m_trueEditor->textCursor().selectedText(); }
 	int cursorBlockNumber() const { return m_trueEditor->textCursor().blockNumber(); }
 	int cursorPositionInBlock() const { return m_trueEditor->textCursor().positionInBlock(); }
+	int cursorPosition() const { return m_trueEditor->textCursor().position(); }
+	int cursorAnchor() const { return m_trueEditor->textCursor().anchor(); }
 	bool hasSelection() const { return m_trueEditor->textCursor().hasSelection(); }
 	void clear() { m_trueEditor->clear(); }
 
@@ -55,6 +58,7 @@ signals:
 	void selectionChanged();
 	void textChanged();
 	void cursorPositionChanged();
+	void askRestoreCursorSpan();
 
 protected:
 	virtual void changeEvent(QEvent* event) override;

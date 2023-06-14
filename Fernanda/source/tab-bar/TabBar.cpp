@@ -16,6 +16,7 @@ int TabBar::serve(const QUuid& id, StdFsPath pathForTitle, bool switchTo)
 		next_index = create(id, pathForTitle);
 	if (switchTo)
 		m_trueTabBar->setCurrentIndex(next_index);
+
 	return next_index;
 }
 
@@ -48,6 +49,7 @@ bool TabBar::isFull()
 	auto tabs_width = 0;
 	for (auto i = 0; i < m_trueTabBar->count(); ++i)
 		tabs_width += m_trueTabBar->tabRect(i).width();
+
 	return (tabs_width > m_trueTabBar->width());
 }
 

@@ -17,19 +17,22 @@ Document::Document(const Folders& folders, QMainWindow* mainWindow, QWidget* par
 		});
 }
 
-Document::StdFsPath Document::newFileDialog()
+Document::StdFsPath Document::newFileDialog(const QString& name)
 {
+	auto file_name = Path::toStdFs(name.left(30));
 	auto path = QFileDialog::getSaveFileName(
-		m_mainWindow, tr("Create a new file..."), Path::toQString(
-			m_userFolder), tr(DIALOG_FILE_TYPE));
+		m_mainWindow, tr("Create a new file..."),
+		Path::toQString(m_userFolder / file_name), tr(DIALOG_FILE_TYPE));
+
 	return Path::toStdFs(path);
 }
 
 Document::StdFsPath Document::openFileDialog()
 {
 	auto path = QFileDialog::getOpenFileName(
-		m_mainWindow, tr("Open an existing file..."), Path::toQString(
-			m_userFolder), tr(DIALOG_FILE_TYPE));
+		m_mainWindow, tr("Open an existing file..."),
+		Path::toQString(m_userFolder), tr(DIALOG_FILE_TYPE));
+
 	return Path::toStdFs(path);
 }
 
@@ -37,17 +40,31 @@ const QString Document::setCurrent(const StdFsPath& path, bool isNew)
 {
 	if (isNew)
 		writeEmptyFile(path);
-
 	emit askSetText();
+	emit askSetCursorSpan();
 	m_currentId = s_idBank.fromPath(path);
+
 	return read(path);
 }
 
 const QString Document::setCurrent(const QUuid& id)
 {
 	emit askSetText();
+	emit askSetCursorSpan();
 	m_currentId = id;
+
 	return read();
+}
+
+const Document::CursorSpan Document::cursorSpan()
+{
+	auto span = CursorSpan{};
+	if (!m_currentId.isNull()) {
+		auto document = textDocument(m_currentId);
+		span = document->cursorSpan();
+	}
+
+	return span;
 }
 
 void Document::setText(const QString& text)
@@ -57,6 +74,13 @@ void Document::setText(const QString& text)
 	document->setPlainText(text);
 
 	tempSave(m_currentId, text);
+}
+
+void Document::setCursorSpan(int cursor, int anchor)
+{
+	if (m_currentId.isNull()) return;
+	auto document = textDocument(m_currentId);
+	document->setCursorSpan(cursor, anchor);
 }
 
 QUuid Document::createEmpty()
@@ -98,12 +122,15 @@ bool Document::save()
 	if (Path::isValid(extant_path))
 		backup(m_currentId);
 	else {
-		extant_path = newFileDialog();
+		auto unsaved_file_name = textDocument(m_currentId)->firstBlock().text();
+		extant_path = newFileDialog(unsaved_file_name);
 		if (extant_path.empty()) return false;
+
 		writeEmptyFile(extant_path);
 		s_idBank.associate(extant_path, m_currentId);
 		emit pathAndIdAssociated(extant_path, m_currentId);
 	}
+
 	return overwrite(m_currentId);
 }
 
@@ -156,6 +183,7 @@ TextDocument* Document::textDocument(const QUuid& id, StdFsPath path)
 	auto document = m_cache.document(id);
 	if (!document)
 		document = create(id, path);
+
 	return document;
 }
 
@@ -181,6 +209,7 @@ Document::StdFsPath Document::backupPath(const StdFsPath& path)
 	auto name = Path::qStringName(path);
 	name += "---" + StringTools::time();
 	name = StringTools::removeForbidden(name);
+
 	return m_backupFolder / Path::toStdFs(name + ".bak");
 }
 
