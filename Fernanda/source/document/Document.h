@@ -96,7 +96,7 @@ signals:
 	void startAutoCacheTimer();
 	void editedStateChanged(const QUuid& id, bool edited);
 	void askEditCheck();
-	void pathIdAssociated(const StdFsPath& path, const QUuid& id);
+	void pathAndIdAssociated(const StdFsPath& path, const QUuid& id);
 
 private:
 	static constexpr char DIALOG_FILE_TYPE[] = "Plain text file (*.txt)";

@@ -109,7 +109,7 @@ void MainWindow::documentConnections()
 		m_document->affirmEditedState(text);
 		});
 
-	connect(m_document, &Document::pathIdAssociated,
+	connect(m_document, &Document::pathAndIdAssociated,
 		this, [&](const StdFsPath& path, const QUuid& id) {
 		m_tabBar->updateTitle(id, Path::qStringName(path));
 		});

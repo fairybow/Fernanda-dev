@@ -16,6 +16,7 @@ public:
 	TrueTabBar(int minTabSize, int maxTabSize, QWidget* parent = nullptr)
 		: QTabBar(parent), m_tabSizeRange(minTabSize, maxTabSize)
 	{
+		setElideMode(Qt::ElideRight);
 		setAutoHide(false);
 		setMovable(true);
 		setExpanding(false);
