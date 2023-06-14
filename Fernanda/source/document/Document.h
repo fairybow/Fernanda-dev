@@ -10,6 +10,7 @@
 #include <QFileDialog>
 #include <QMainWindow>
 #include <QString>
+#include <QTextBlock>
 #include <QTimer>
 #include <QUuid>
 
@@ -23,6 +24,7 @@ class Document : public QObject
 
 public:
 	using StdFsPath = StdFs::path;
+	using CursorSpan = TextDocument::CursorSpan;
 
 	struct Folders {
 		StdFsPath user;
@@ -32,11 +34,13 @@ public:
 
 	Document(const Folders& folders, QMainWindow* mainWindow, QWidget* parent = nullptr, int cacheMaxCost = 100);
 
-	StdFsPath newFileDialog();
+	StdFsPath newFileDialog(const QString& name = QString());
 	StdFsPath openFileDialog();
 	const QString setCurrent(const StdFsPath& path, bool isNew = false);
 	const QString setCurrent(const QUuid& id);
+	const CursorSpan cursorSpan();
 	void setText(const QString& text);
+	void setCursorSpan(int cursor, int anchor);
 	QUuid createEmpty();
 	void affirmEditedState(const QString& text);
 	void startEditCheckTimer();
@@ -65,6 +69,9 @@ public:
 		qDebug() << "Current ID:" << m_currentId;
 		auto document = m_cache.document(m_currentId);
 		qDebug() << "Is edited?:" << document->edited();
+		auto span = document->cursorSpan();
+		qDebug() << "Cursor position:" << span.cursor;
+		qDebug() << "Anchor position:" << span.anchor;
 		qDebug() << "Original text:" << document->originalText()
 			<< Qt::endl;
 	}
@@ -93,6 +100,7 @@ public:
 
 signals:
 	void askSetText();
+	void askSetCursorSpan();
 	void startAutoCacheTimer();
 	void editedStateChanged(const QUuid& id, bool edited);
 	void askEditCheck();

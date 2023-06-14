@@ -97,6 +97,9 @@ void MainWindow::documentConnections()
 	connect(m_document, &Document::askSetText, this, [&] {
 		m_document->setText(m_editor->toPlainText());
 		});
+	connect(m_document, &Document::askSetCursorSpan, this, [&] {
+		m_document->setCursorSpan(m_editor->cursorPosition(), m_editor->cursorAnchor());
+		});
 	connect(m_document, &Document::editedStateChanged, m_tabBar, &TabBar::updateEditedState);
 
 	connect(m_editor, &Editor::textChanged, this, [&] {
@@ -129,7 +132,10 @@ void MainWindow::tabBarConnections()
 
 void MainWindow::editorConnections()
 {
-	//
+	connect(m_editor, &Editor::askRestoreCursorSpan, this, [&] {
+		auto span = m_document->cursorSpan();
+		m_editor->setCursorSpan(span.cursor, span.anchor);
+		});
 }
 
 void MainWindow::meterConnections()
@@ -639,7 +645,6 @@ void MainWindow::onTabClick(const QUuid& id)
 {
 	auto document_text = m_document->setCurrent(id);
 	m_editor->setPlainText(document_text);
-	// m_editor-> restore cursor by id
 }
 
 void MainWindow::onAddTabClick()

@@ -42,10 +42,30 @@ void Editor::setHasLineNumberArea(bool state)
 	m_trueEditor->updateLineNumberAreaWidth();
 }
 
+void Editor::setPlainText(const QString& text)
+{
+	m_trueEditor->setPlainText(text);
+	emit askRestoreCursorSpan();
+}
+
+void Editor::setCursorSpan(int cursor, int anchor)
+{
+	auto text_cursor = m_trueEditor->textCursor();
+	if (anchor < 0 || anchor == cursor)
+		text_cursor.setPosition(cursor);
+	else {
+		text_cursor.setPosition(anchor, QTextCursor::MoveAnchor);
+		text_cursor.setPosition(cursor, QTextCursor::KeepAnchor);
+	}
+
+	m_trueEditor->setTextCursor(text_cursor);
+}
+
 void Editor::changeEvent(QEvent* event)
 {
 	if (event->type() == QEvent::StyleChange)
 		m_trueEditor->setCursorStyle(styleSheet());
+
 	QWidget::changeEvent(event);
 }
 
