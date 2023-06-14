@@ -4,10 +4,10 @@
 #include "../common/Widget.hpp"
 #include "WebEngineView.hpp"
 
-class Preview : public Widget<>
+class Previewer : public Widget<>
 {
 public:
-	Preview(const char* name, QWidget* parent = nullptr)
+	Previewer(const char* name, QWidget* parent = nullptr)
 		: Widget(name, parent)
 	{
 		Layout::box(Layout::Line::Vertically, m_view, this);

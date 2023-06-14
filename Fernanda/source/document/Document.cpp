@@ -102,7 +102,7 @@ bool Document::save()
 		if (extant_path.empty()) return false;
 		writeEmptyFile(extant_path);
 		s_idBank.associate(extant_path, m_currentId);
-		emit pathIdAssociated(extant_path, m_currentId);
+		emit pathAndIdAssociated(extant_path, m_currentId);
 	}
 	return overwrite(m_currentId);
 }

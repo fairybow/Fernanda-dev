@@ -82,7 +82,7 @@ void MainWindow::connections()
 	tabBarConnections();
 	editorConnections();
 	meterConnections();
-	//previewConnections();
+	//previewerConnections();
 	menuBarConnections();
 	menuBarStyleConfigConnections();
 	menuBarEditorConfigConnections();
@@ -109,7 +109,7 @@ void MainWindow::documentConnections()
 		m_document->affirmEditedState(text);
 		});
 
-	connect(m_document, &Document::pathIdAssociated,
+	connect(m_document, &Document::pathAndIdAssociated,
 		this, [&](const StdFsPath& path, const QUuid& id) {
 		m_tabBar->updateTitle(id, Path::qStringName(path));
 		});
@@ -161,7 +161,7 @@ void MainWindow::meterConnections()
 		});
 }
 
-/*void MainWindow::previewConnections()
+/*void MainWindow::previewerConnections()
 {
 	//
 }*/
@@ -364,7 +364,7 @@ void MainWindow::menuBarToolConfigConnections()
 void MainWindow::menuBarMiscConfigConnections()
 {
 	// to-do:
-	//void askSetPreviewType(const QString& type);
+	//void askSetPreviewerType(const QString& type);
 
 	connect(m_menuBar, &MenuBar::askToggleIndicator, this, [&](bool state) {
 		saveConfigPassthrough(
@@ -383,14 +383,14 @@ void MainWindow::menuBarMiscConfigConnections()
 
 void MainWindow::menuBarDevConnections()
 {
-	connect(m_menuBar, &MenuBar::devOpenDocuments, this, [&] {
+	connect(m_menuBar, &MenuBar::askOpenDocuments, this, [&] {
 		openFolder(m_user->documents());
 		});
-	connect(m_menuBar, &MenuBar::devOpenUserData, this, [&] {
+	connect(m_menuBar, &MenuBar::askOpenUserData, this, [&] {
 		openFolder(m_user->data());
 		});
-	connect(m_menuBar, &MenuBar::devOpenInstallation, this, [&] {
-		//openFolder();
+	connect(m_menuBar, &MenuBar::askOpenInstallation, this, [&] {
+		openFolder(Path::toStdFs(QCoreApplication::applicationDirPath()).parent_path());
 		});
 	connect(m_menuBar, &MenuBar::devOpenLogs, this, [&] {
 		auto user_data = Path::toQString(m_user->data());
@@ -428,7 +428,7 @@ void MainWindow::loadConfigs()
 	auto geometry = loadConfig(Ini::WINDOW_GEOMETRY, this, QRect(0, 0, 1000, 600));
 	setGeometry(geometry);
 	loadEditorConfigs();
-	//loadPreviewConfigs();
+	//loadPreviewerConfigs();
 	loadMenuBarStyleConfigs();
 	loadMenuBarEditorConfigs();
 	loadMenuBarMeterConfigs();
@@ -442,7 +442,7 @@ void MainWindow::loadEditorConfigs()
 	setUserFont(font);
 }
 
-/*void MainWindow::loadPreviewConfigs()
+/*void MainWindow::loadPreviewerConfigs()
 {
 	//
 }*/
@@ -592,7 +592,7 @@ void MainWindow::loadMenuBarMiscConfigs()
 		m_menuBar->setSelectedIndicatorAlignment(alignment);
 		}, QString("Top"));
 
-	//void askSetPreviewType(const QString& type);
+	//void askSetPreviewerType(const QString& type);
 }
 
 void MainWindow::saveGeometry()

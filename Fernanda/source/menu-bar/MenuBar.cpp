@@ -58,13 +58,13 @@ void MenuBar::makeBespokeActionGroups()
 		emit askSetIndicatorAlignment(selection->data().toString());
 		});
 
-	ActionGroup::BespokeList preview_types;
-	preview_types << ActionGroup::bespoke("Fountain");
-	preview_types << ActionGroup::bespoke("Markdown");
-	m_actionGroups[GROUP_PREVIEW] = ActionGroup::fromBespoke(preview_types, this, [&] {
-		auto selection = selectedPreviewType();
+	ActionGroup::BespokeList previewer_types;
+	previewer_types << ActionGroup::bespoke("Fountain");
+	previewer_types << ActionGroup::bespoke("Markdown");
+	m_actionGroups[GROUP_PREVIEWER] = ActionGroup::fromBespoke(previewer_types, this, [&] {
+		auto selection = selectedPreviewerType();
 		if (selection == nullptr) return;
-		emit askSetPreviewType(selection->data().toString());
+		emit askSetPreviewerType(selection->data().toString());
 		});
 }
 
@@ -119,13 +119,11 @@ void MenuBar::help()
 	auto menu = addMenu(tr("&Help"));
 	for (const auto& action : { about, check_for_updates })
 		menu->addAction(action);
+	menu->addMenu(openLocalFolders());
 }
 
 void MenuBar::dev()
 {
-	auto open_documents = new QAction(tr("&Documents..."), this);
-	auto open_user_data = new QAction(tr("&User data..."), this);
-	auto open_installation = new QAction(tr("&Installation..."), this);
 	auto open_logs = new QAction(tr("&Open log"), this);
 	auto document_class = new QAction(tr("&Class info"), this);
 	auto document_current = new QAction(tr("&Current document"), this);
@@ -134,9 +132,6 @@ void MenuBar::dev()
 	auto stylist_stylesheets = new QAction(tr("&Style sheets"), this);
 	auto stylist_unstyle = new QAction(tr("&Remove all styling"), this);
 
-	connect(open_documents, &QAction::triggered, this, lambdaEmit(devOpenDocuments));
-	connect(open_user_data, &QAction::triggered, this, lambdaEmit(devOpenUserData));
-	connect(open_installation, &QAction::triggered, this, lambdaEmit(devOpenInstallation));
 	connect(open_logs, &QAction::triggered, this, lambdaEmit(devOpenLogs));
 	connect(document_class, &QAction::triggered, this, lambdaEmit(devDocument));
 	connect(document_current, &QAction::triggered, this, lambdaEmit(devDocumentCurrent));
@@ -146,14 +141,7 @@ void MenuBar::dev()
 	connect(stylist_unstyle, &QAction::triggered, this, lambdaEmit(devStylistUnstyle));
 
 	auto menu = addMenu(tr("&Dev"));
-
-	auto open_folder = menu->addMenu("&Open folder");
-	for (const auto& action : { open_documents, open_user_data, open_installation })
-		open_folder->addAction(action);
-
-	//
-	open_installation->setEnabled(false);
-	//
+	menu->addMenu(openLocalFolders());
 
 	for (const auto& action : { open_logs })
 		menu->addAction(action);
@@ -466,7 +454,24 @@ QGroupBox* MenuBar::mixedGroupBox()
 	return box;
 }
 
-void MenuBar::appearanceDialog()
+QMenu* MenuBar::openLocalFolders()
+{
+	auto open_documents = new QAction(tr("&Documents..."), this);
+	auto open_user_data = new QAction(tr("&User data..."), this);
+	auto open_installation = new QAction(tr("&Installation..."), this);
+
+	connect(open_documents, &QAction::triggered, this, lambdaEmit(askOpenDocuments));
+	connect(open_user_data, &QAction::triggered, this, lambdaEmit(askOpenUserData));
+	connect(open_installation, &QAction::triggered, this, lambdaEmit(askOpenInstallation));
+
+	auto menu = new QMenu("&Open folder", this);
+	for (const auto& action : { open_documents, open_user_data, open_installation })
+		menu->addAction(action);
+
+	return menu;
+}
+
+void MenuBar::appearanceDialog() // split this dialog up into 2?
 {
 	QDialog dialog(this);
 
