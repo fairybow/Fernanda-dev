@@ -97,10 +97,10 @@ signals:
 	void askToggleIndicator(bool state);
 	void askSetIndicatorAlignment(const QString& alignment);
 	void askSetPreviewerType(const QString& type);
+	void askOpenDocuments();
+	void askOpenUserData();
+	void askOpenInstallation();
 
-	void devOpenDocuments();
-	void devOpenUserData();
-	void devOpenInstallation();
 	void devOpenLogs();
 	void devDocument();
 	void devDocumentCurrent();
@@ -163,6 +163,7 @@ private:
 	QGroupBox* meterGroupBox();
 	QGroupBox* toolsGroupBox();
 	QGroupBox* mixedGroupBox();
+	QMenu* openLocalFolders();
 
 	QAction* selectedEditorTheme() const { return m_actionGroups.at(GROUP_EDITOR_THEMES)->checkedAction(); }
 	QAction* selectedWindowTheme() const { return m_actionGroups.at(GROUP_WINDOW_THEMES)->checkedAction(); }

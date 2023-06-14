@@ -18,8 +18,8 @@
 #include "StatusBar.hpp"
 #include "Stylist.h"
 
-#include <QApplication>
 #include <QCloseEvent>
+#include <QCoreApplication>
 #include <QDesktopServices>
 #include <QDirIterator>
 #include <QMainWindow>

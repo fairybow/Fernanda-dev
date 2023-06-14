@@ -383,14 +383,14 @@ void MainWindow::menuBarMiscConfigConnections()
 
 void MainWindow::menuBarDevConnections()
 {
-	connect(m_menuBar, &MenuBar::devOpenDocuments, this, [&] {
+	connect(m_menuBar, &MenuBar::askOpenDocuments, this, [&] {
 		openFolder(m_user->documents());
 		});
-	connect(m_menuBar, &MenuBar::devOpenUserData, this, [&] {
+	connect(m_menuBar, &MenuBar::askOpenUserData, this, [&] {
 		openFolder(m_user->data());
 		});
-	connect(m_menuBar, &MenuBar::devOpenInstallation, this, [&] {
-		//openFolder();
+	connect(m_menuBar, &MenuBar::askOpenInstallation, this, [&] {
+		openFolder(Path::toStdFs(QCoreApplication::applicationDirPath()).parent_path());
 		});
 	connect(m_menuBar, &MenuBar::devOpenLogs, this, [&] {
 		auto user_data = Path::toQString(m_user->data());
