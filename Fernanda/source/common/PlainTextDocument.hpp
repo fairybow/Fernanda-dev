@@ -11,9 +11,10 @@ public:
 		int anchor = 0;
 	};
 
-	PlainTextDocument(const QString& text, const QString& originalText, QObject* parent = nullptr)
+	PlainTextDocument(const QString& text, const QString& originalText, const QString& title = QString(), QObject* parent = nullptr)
 		: QTextDocument(text, parent),
-		m_originalText(originalText) {}
+		m_originalText(originalText),
+		m_title(title) {}
 
 	// title field
 
@@ -27,5 +28,6 @@ public:
 
 private:
 	const QString m_originalText;
+	QString m_title;
 	CursorSpan m_cursorSpan{};
 };
