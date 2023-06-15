@@ -67,7 +67,7 @@
     <Filter Include="Source\Previewer">
       <UniqueIdentifier>{ebe74914-e259-4ef3-8569-7bdfb34f58d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\DocumentsManager">
+    <Filter Include="Source\Documents">
       <UniqueIdentifier>{4148ff82-b621-4d53-97fd-fc587ea06125}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -268,8 +268,8 @@
     <ClCompile Include="source\tab-bar\TabBar.cpp">
       <Filter>Source\TabBar</Filter>
     </ClCompile>
-    <ClCompile Include="source\documents-manager\DocumentsManager.cpp">
-      <Filter>Source\DocumentsManager</Filter>
+    <ClCompile Include="source\documents\DocumentsManager.cpp">
+      <Filter>Source\Documents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -363,14 +363,14 @@
     <ClInclude Include="source\common\PlainTextDocument.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
-    <ClInclude Include="source\documents-manager\DocumentCache.hpp">
-      <Filter>Source\DocumentsManager</Filter>
+    <ClInclude Include="source\documents\DocumentCache.hpp">
+      <Filter>Source\Documents</Filter>
     </ClInclude>
-    <ClInclude Include="source\documents-manager\IdBank.hpp">
-      <Filter>Source\DocumentsManager</Filter>
+    <ClInclude Include="source\documents\DocumentsManager.h">
+      <Filter>Source\Documents</Filter>
     </ClInclude>
-    <ClInclude Include="source\documents-manager\DocumentsManager.h">
-      <Filter>Source\DocumentsManager</Filter>
+    <ClInclude Include="source\documents\IdBank.hpp">
+      <Filter>Source\Documents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

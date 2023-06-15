@@ -133,7 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\common\Fx.hpp" />
-    <ClCompile Include="source\documents-manager\DocumentsManager.cpp" />
+    <ClCompile Include="source\documents\DocumentsManager.cpp" />
     <ClCompile Include="source\editor\Editor.cpp" />
     <ClCompile Include="source\editor\LineNumberArea.cpp" />
     <ClCompile Include="source\editor\TrueEditor.cpp" />
@@ -154,9 +154,9 @@
     <ClInclude Include="source\common\Utility.hpp" />
     <ClInclude Include="source\Dimmer.hpp" />
     <QtMoc Include="source\LaunchCop.hpp" />
-    <ClInclude Include="source\documents-manager\DocumentCache.hpp" />
-    <ClInclude Include="source\documents-manager\DocumentsManager.h" />
-    <ClInclude Include="source\documents-manager\IdBank.hpp" />
+    <ClInclude Include="source\documents\DocumentCache.hpp" />
+    <ClInclude Include="source\documents\DocumentsManager.h" />
+    <ClInclude Include="source\documents\IdBank.hpp" />
     <ClInclude Include="source\Logger.hpp" />
     <ClInclude Include="source\menu-bar\ActionGroup.h" />
     <ClInclude Include="source\menu-bar\ComboBox.hpp" />

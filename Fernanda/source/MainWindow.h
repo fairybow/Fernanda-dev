@@ -3,7 +3,7 @@
 #include "common/Layout.hpp"
 #include "common/Path.hpp"
 #include "common/Widget.hpp"
-#include "documents-manager/DocumentsManager.h" // rename
+#include "documents/DocumentsManager.h" // rename
 #include "editor/Editor.h"
 #include "menu-bar/MenuBar.h"
 //#include "Previewer/Previewer.hpp"

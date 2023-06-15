@@ -16,6 +16,9 @@ public:
 		m_originalText(originalText) {}
 
 	// title field
+
+	// save current document, retrieve next document and send to editor and tabbar to get needed info
+
 	QString originalText() const { return m_originalText; }
 	bool edited() const { return toPlainText() == m_originalText; }
 	CursorSpan cursorSpan() const { return m_cursorSpan; }
