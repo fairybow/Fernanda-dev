@@ -3,7 +3,7 @@
 #include "common/Layout.hpp"
 #include "common/Path.hpp"
 #include "common/Widget.hpp"
-#include "document/Document.h"
+#include "documents-manager/DocumentsManager.h" // rename
 #include "editor/Editor.h"
 #include "menu-bar/MenuBar.h"
 //#include "Previewer/Previewer.hpp"
@@ -61,11 +61,11 @@ private:
 	bool m_isInitialized = false;
 
 	User* m_user = new User(QCoreApplication::applicationName(), this);
-	Document* m_document = new Document({
+	/*Document* m_document = new Document({
 		m_user->documents(),
 		m_user->temp(),
 		m_user->backup() },
-		this, this, 100);
+		this, this, 100);*/
 	//Project* m_project = new Project(this);
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_isDev);
 	StatusBar* m_statusBar = new StatusBar("StatusBar");
