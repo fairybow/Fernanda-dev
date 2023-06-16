@@ -11,7 +11,6 @@
 class DocumentsCache : public QCache<QUuid, Document>
 {
 public:
-
 	static void setMaxCost(int maxCost);
 	static DocumentsCache& instance();
 	void add(Document* document);
