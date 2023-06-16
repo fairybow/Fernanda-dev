@@ -656,6 +656,9 @@ void MainWindow::onTabServe(const QUuid& id)
 	qDebug() << __FUNCTION__ << id;
 
 	if (m_docsManager->hasActive()) { // active id is not being set correctly for initial new tab?
+
+		//active Id is set, I think? yet no saving...
+
 		qDebug() << "has active";
 		auto outgoing = m_docsManager->active();
 		outgoing->setText(m_editor->toPlainText());

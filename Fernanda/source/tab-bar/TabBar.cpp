@@ -13,14 +13,14 @@ int TabBar::serve(const QUuid& id, const QString& title, bool switchTo)
 {
 	qDebug() << __FUNCTION__ << id;
 
-	auto next_index = indexById(id);
-
-	qDebug() << next_index;
+	auto next_index = indexFor(id);
 
 	if (next_index == -1)
 		next_index = create(id, title);
-	if (switchTo)
+	if (switchTo) {
 		m_trueTabBar->setCurrentIndex(next_index);
+		emit currentChanged(id);
+	}
 
 	return next_index;
 }
@@ -43,7 +43,7 @@ void TabBar::close(const QUuid& id)
 	qDebug() << __FUNCTION__;
 	qDebug() << id << Qt::endl;
 
-	m_trueTabBar->removeTab(indexById(id));
+	m_trueTabBar->removeTab(indexFor(id));
 	auto button = closeButton(id);
 	if (button)
 		button->deleteLater();
@@ -65,7 +65,7 @@ bool TabBar::isEmpty()
 
 void TabBar::updateEditedState(const QUuid& id, bool edited)
 {
-	auto changed_index = indexById(id);
+	auto changed_index = indexFor(id);
 	if (changed_index == -1) return;
 	auto button = closeButton(id);
 	if (button)
@@ -74,7 +74,7 @@ void TabBar::updateEditedState(const QUuid& id, bool edited)
 
 void TabBar::updateTitle(const QUuid& id, const QString& title)
 {
-	auto index = indexById(id);
+	auto index = indexFor(id);
 	auto data_map = m_trueTabBar->tabData(index).toMap();
 	data_map[DATA_TITLE] = title;
 	m_trueTabBar->setTabData(index, data_map);
@@ -100,30 +100,24 @@ void TabBar::connections()
 {
 	connect(m_add, &AddTab::clicked, this, lambdaEmit(askAdd));
 
-	connect(m_trueTabBar, &TrueTabBar::currentChanged, this, [&](int index) {
-
-		qDebug() << "TrueTabBar::currentChanged emitted" << index << idByIndex(index);
-		emit currentChanged(idByIndex(index));
-
-		// idByIndex is returning the null ID
-
-		});
 	connectMultipleSignals(m_trueTabBar, this, &TabBar::adjustControls,
 		&TrueTabBar::resized, &TrueTabBar::inserted, &TrueTabBar::removed);
 }
 
-QUuid TabBar::idByIndex(int index)
+QUuid TabBar::idAt(int index)
 {
-	auto& data = m_trueTabBar->tabData(index).toMap()[DATA_ID];
-	qDebug() << __FUNCTION__ << index << data.toUuid();
-	return data.toUuid();
+	qDebug() << __FUNCTION__ << index;
+
+	return m_trueTabBar->tabData(index).toMap()[DATA_ID].toUuid();
 }
 
-int TabBar::indexById(const QUuid& id)
+int TabBar::indexFor(const QUuid& id)
 {
+	qDebug() << __FUNCTION__ << id;
+
 	auto index = -1;
 	for (auto i = 0; i < m_trueTabBar->count(); ++i)
-		if (idByIndex(i) == id) {
+		if (idAt(i) == id) {
 			index = i;
 			break;
 		}
@@ -139,16 +133,18 @@ int TabBar::create(const QUuid& id, const QString& title)
 {
 	qDebug() << __FUNCTION__ << id << "Index was -1, so creating";
 
-	blockSignals(true);
+	m_trueTabBar->blockSignals(true);
 	auto index = m_trueTabBar->addTab(title);
 	setButton(index, id);
 	setData(index, id, title);
-	blockSignals(false);
+	m_trueTabBar->blockSignals(false);
 	return index;
 }
 
 void TabBar::setButton(int index, const QUuid& id)
 {
+	qDebug() << __FUNCTION__ << id;
+
 	auto button = new CloseTab(this);
 	connect(button, &CloseTab::clicked, this, [&, id] {
 		emit askClearForClose(id);
@@ -169,7 +165,7 @@ void TabBar::setData(int index, const QUuid& id, const QString& title)
 CloseTab* TabBar::closeButton(const QUuid& id)
 {
 	return qobject_cast<CloseTab*>(
-		m_trueTabBar->tabButton(indexById(id), QTabBar::RightSide));
+		m_trueTabBar->tabButton(indexFor(id), QTabBar::RightSide));
 }
 
 void TabBar::adjustControls()

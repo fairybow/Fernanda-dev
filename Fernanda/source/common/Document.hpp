@@ -25,7 +25,7 @@ public:
 
 	CursorSpan cursorSpan() const { return m_cursorSpan; }
 	QVariant data() const { return m_data; }
-	bool isEdited() const { return toPlainText() == m_originalText; }
+	bool isEdited() const { return toPlainText() != m_originalText; }
 	bool isUntitled() const { return m_title == QString(); }
 	QString originalText() const { return m_originalText; }
 	QString text() const { return toPlainText(); }

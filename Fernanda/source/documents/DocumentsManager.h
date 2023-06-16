@@ -50,6 +50,8 @@ public:
 	{
 		qDebug() << __FUNCTION__;
 
+		qDebug() << "Has active ID?:" << hasActive();
+
 		//qDebug() << "Current edit-check delay interval:"
 			//<< m_editCheckDelay->interval()
 			//<< Qt::endl;

@@ -68,8 +68,8 @@ private:
 
 	void setupWidgets();
 	void connections();
-	QUuid idByIndex(int index);
-	int indexById(const QUuid& id);
+	QUuid idAt(int index);
+	int indexFor(const QUuid& id);
 	const QString title(int index);
 	int create(const QUuid& id, const QString& title = QString());
 	void setButton(int index, const QUuid& id);
