@@ -655,7 +655,7 @@ void MainWindow::onTabServe(const QUuid& id)
 {
 	qDebug() << __FUNCTION__ << id;
 
-	if (m_docsManager->hasActive()) { // not working on initial new tab
+	if (m_docsManager->hasActive()) { // active id is not being set correctly for initial new tab?
 		qDebug() << "has active";
 		auto outgoing = m_docsManager->active();
 		outgoing->setText(m_editor->toPlainText());
@@ -672,7 +672,7 @@ void MainWindow::onAddTabClick() // <------------------ START HERE
 	
 	qDebug() << __FUNCTION__ << id;
 
-	m_tabBar->serve(id); // triggers onTabServe
+	m_tabBar->serve(id); // triggers onTabServe (or should)
 }
 
 void MainWindow::onCloseTabClick(const QUuid& id)

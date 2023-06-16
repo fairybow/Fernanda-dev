@@ -98,7 +98,10 @@ void TabBar::connections()
 	connect(m_add, &AddTab::clicked, this, lambdaEmit(askAdd));
 
 	connect(m_trueTabBar, &TrueTabBar::currentChanged, this, [&](int index) {
+
+		qDebug() << "TrueTabBar::currentChanged emitted" << index;
 		emit currentChanged(idByIndex(index));
+
 		});
 	connectMultipleSignals(m_trueTabBar, this, &TabBar::adjustControls,
 		&TrueTabBar::resized, &TrueTabBar::inserted, &TrueTabBar::removed);
