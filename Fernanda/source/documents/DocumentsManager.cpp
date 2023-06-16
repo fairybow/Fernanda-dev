@@ -35,8 +35,6 @@ DocumentsManager::StdFsPath DocumentsManager::openFileDialog(QWidget* parent)
 
 Document* DocumentsManager::setActive(const QUuid& id)
 {
-	qDebug() << __FUNCTION__ << id;
-
 	m_activeId = id;
 	return active();
 }

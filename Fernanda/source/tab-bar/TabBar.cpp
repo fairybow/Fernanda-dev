@@ -9,7 +9,7 @@ TabBar::TabBar(const char* name, int minTabSize, int maxTabSize, QWidget* parent
 	connections();
 }
 
-int TabBar::serve(const QUuid& id, const QString& title, bool switchTo)
+int TabBar::serve(const QUuid& id, const QString& title, bool switchTo) /*without clicking it*/
 {
 	qDebug() << __FUNCTION__ << id;
 
@@ -18,8 +18,11 @@ int TabBar::serve(const QUuid& id, const QString& title, bool switchTo)
 	if (next_index == -1)
 		next_index = create(id, title);
 	if (switchTo) {
+		// notifier for tabChanged that can account for same indexes?
+		auto index = m_trueTabBar->currentIndex();
 		m_trueTabBar->setCurrentIndex(next_index);
-		emit currentChanged(id);
+		if (index == next_index)
+			emit currentChanged(id);
 	}
 
 	return next_index;
@@ -99,22 +102,20 @@ void TabBar::setupWidgets()
 void TabBar::connections()
 {
 	connect(m_add, &AddTab::clicked, this, lambdaEmit(askAdd));
-
+	connect(m_trueTabBar, &TrueTabBar::currentChanged, this, [&](int index) {
+		emit currentChanged(idAt(index));
+		});
 	connectMultipleSignals(m_trueTabBar, this, &TabBar::adjustControls,
 		&TrueTabBar::resized, &TrueTabBar::inserted, &TrueTabBar::removed);
 }
 
 QUuid TabBar::idAt(int index)
 {
-	qDebug() << __FUNCTION__ << index;
-
 	return m_trueTabBar->tabData(index).toMap()[DATA_ID].toUuid();
 }
 
 int TabBar::indexFor(const QUuid& id)
 {
-	qDebug() << __FUNCTION__ << id;
-
 	auto index = -1;
 	for (auto i = 0; i < m_trueTabBar->count(); ++i)
 		if (idAt(i) == id) {
@@ -131,20 +132,17 @@ const QString TabBar::title(int index)
 
 int TabBar::create(const QUuid& id, const QString& title)
 {
-	qDebug() << __FUNCTION__ << id << "Index was -1, so creating";
-
 	m_trueTabBar->blockSignals(true);
 	auto index = m_trueTabBar->addTab(title);
 	setButton(index, id);
 	setData(index, id, title);
 	m_trueTabBar->blockSignals(false);
+
 	return index;
 }
 
 void TabBar::setButton(int index, const QUuid& id)
 {
-	qDebug() << __FUNCTION__ << id;
-
 	auto button = new CloseTab(this);
 	connect(button, &CloseTab::clicked, this, [&, id] {
 		emit askClearForClose(id);
@@ -154,8 +152,6 @@ void TabBar::setButton(int index, const QUuid& id)
 
 void TabBar::setData(int index, const QUuid& id, const QString& title)
 {
-	qDebug() << __FUNCTION__ << id;
-
 	QVariantMap data;
 	data[DATA_ID] = id;
 	data[DATA_TITLE] = title;

@@ -108,7 +108,7 @@ private:
 	void openSystemFolder(const StdFsPath& path);
 
 	void openFileTab(const StdFsPath& path, DocsManager::PathType pathType = DocsManager::PathType::Extant);
-	void openNewTab() { qDebug() << __FUNCTION__; onAddTabClick(); };
+	void openNewTab() { onAddTabClick(); };
 
 	template<typename T>
 	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject,

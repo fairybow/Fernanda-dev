@@ -50,7 +50,9 @@ public:
 	{
 		qDebug() << __FUNCTION__;
 
-		qDebug() << "Has active ID?:" << hasActive();
+		if (hasActive())
+			qDebug() << "Active ID:" << m_activeId
+			<< Qt::endl;
 
 		//qDebug() << "Current edit-check delay interval:"
 			//<< m_editCheckDelay->interval()
@@ -61,7 +63,7 @@ public:
 	{
 		qDebug() << __FUNCTION__;
 
-		qDebug() << "Active ID:" << m_activeId;
+		qDebug() << "ID:" << m_activeId;
 		auto document = active();
 		qDebug() << "Is edited?:" << document->isEdited();
 		// title
