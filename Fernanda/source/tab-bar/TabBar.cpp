@@ -11,6 +11,8 @@ TabBar::TabBar(const char* name, int minTabSize, int maxTabSize, QWidget* parent
 
 int TabBar::serve(const QUuid& id, const QString& title, bool switchTo)
 {
+	qDebug() << __FUNCTION__ << id;
+
 	auto next_index = indexById(id);
 	if (next_index == -1)
 		next_index = create(id, title);

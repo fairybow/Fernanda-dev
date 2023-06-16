@@ -6,6 +6,7 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	setupWidgets();
 	connections();
 	loadConfigs();
+
 	openNewTab();
 }
 
@@ -120,7 +121,11 @@ void MainWindow::docsManagerConnections()
 
 void MainWindow::tabBarConnections()
 {
-	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::onTabServe);
+	//connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::onTabServe);
+	connect(m_tabBar, &TabBar::currentChanged, this, [&](const QUuid& id) {
+		qDebug() << "TabBar::currentChanged emitted" << id;
+		onTabServe(id);
+		});
 	connect(m_tabBar, &TabBar::askAdd, this, &MainWindow::onAddTabClick);
 	connect(m_tabBar, &TabBar::askClearForClose, this, &MainWindow::onCloseTabClick);
 	connect(m_editor, &Editor::textChanged, this, [&] {
