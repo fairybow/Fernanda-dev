@@ -9,11 +9,11 @@ TabBar::TabBar(const char* name, int minTabSize, int maxTabSize, QWidget* parent
 	connections();
 }
 
-int TabBar::serve(const QUuid& id, StdFsPath pathForTitle, bool switchTo)
+int TabBar::serve(const QUuid& id, const QString& title, bool switchTo)
 {
 	auto next_index = indexById(id);
 	if (next_index == -1)
-		next_index = create(id, pathForTitle);
+		next_index = create(id, title);
 	if (switchTo)
 		m_trueTabBar->setCurrentIndex(next_index);
 
@@ -123,10 +123,9 @@ const QString TabBar::title(int index)
 	return m_trueTabBar->tabData(index).toMap()[DATA_TITLE].toString();
 }
 
-int TabBar::create(const QUuid& id, StdFsPath titlePath)
+int TabBar::create(const QUuid& id, const QString& title)
 {
 	blockSignals(true);
-	auto title = titlePath.empty() ? QString() : Path::qStringName(titlePath);
 	auto index = m_trueTabBar->addTab(title);
 	setButton(index, id);
 	setData(index, id, title);
@@ -143,7 +142,7 @@ void TabBar::setButton(int index, const QUuid& id)
 	m_trueTabBar->setTabButton(index, QTabBar::ButtonPosition::RightSide, button);
 }
 
-void TabBar::setData(int index, const QUuid& id, QString title)
+void TabBar::setData(int index, const QUuid& id, const QString& title)
 {
 	QVariantMap data;
 	data[DATA_ID] = id;

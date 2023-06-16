@@ -81,7 +81,7 @@ private:
 	MainWindow* spawn();
 	void setupWidgets();
 	void connections();
-	void documentConnections();
+	void docsManagerConnections();
 	void tabBarConnections();
 	void editorConnections();
 	void meterConnections();
@@ -105,11 +105,10 @@ private:
 	void closeEventConfigs(Qt::WindowStates priorState);
 	void setUserFont(const QFont& font);
 	PromptResult singleSavePrompt();
-	void openFolder(const StdFsPath& path);
+	void openSystemFolder(const StdFsPath& path);
 
-	void openFileTab(const StdFsPath& path, bool writeNew = false);
-	void openNewFileTab(const StdFsPath& path) { openFileTab(path, true); };
-	void openNewTab() { onAddTabClick(); };
+	void openFileTab(const StdFsPath& path, DocsManager::PathType pathType = DocsManager::PathType::Extant);
+	void openNewTab() { qDebug() << __FUNCTION__; onAddTabClick(); };
 
 	template<typename T>
 	void saveConfigPassthrough(T value, const QString& valueKey, QObject* associatedObject,
@@ -135,7 +134,7 @@ private:
 	}
 
 private slots:
-	void onTabClick(const QUuid& id);
+	void onTabServe(const QUuid& id);
 	void onAddTabClick();
 	void onCloseTabClick(const QUuid& id);
 	bool onSaveFile();

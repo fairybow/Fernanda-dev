@@ -26,12 +26,24 @@ public:
 
 	TabBar(const char* name, int minTabSize = 25, int maxTabSize = 100, QWidget* parent = nullptr);
 
-	int serve(const QUuid& id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true); // don't take Document, but change path to QString title
+	int serve(const QUuid& id, const QString& title = QString(), bool switchTo = true);
 	bool isUntitled();
 	void setUntitledDisplay(const QString& text, int charLimit = 30);
 	void close(const QUuid& id);
 	bool isFull();
 	bool isEmpty();
+
+	void devCurrentInfo()
+	{
+		qDebug() << __FUNCTION__;
+
+		auto index = m_trueTabBar->currentIndex();
+		qDebug() << "Index:" << index;
+		auto data_map = m_trueTabBar->tabData(index).toMap();
+		qDebug() << "ID:" << data_map[DATA_ID].toUuid();
+		qDebug() << "Title:" << data_map[DATA_TITLE].toString()
+			<< Qt::endl;
+	}
 
 signals:
 	void currentChanged(const QUuid& id);
@@ -59,9 +71,9 @@ private:
 	QUuid idByIndex(int index);
 	int indexById(const QUuid& id);
 	const QString title(int index);
-	int create(const QUuid& id, StdFsPath titlePath = StdFsPath());
+	int create(const QUuid& id, const QString& title = QString());
 	void setButton(int index, const QUuid& id);
-	void setData(int index, const QUuid& id, QString title = QString());
+	void setData(int index, const QUuid& id, const QString& title = QString());
 	CloseTab* closeButton(const QUuid& id);
 
 private slots:

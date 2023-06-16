@@ -78,7 +78,7 @@ void MainWindow::setupWidgets()
 
 void MainWindow::connections()
 {
-	documentConnections();
+	docsManagerConnections();
 	tabBarConnections();
 	editorConnections();
 	meterConnections();
@@ -92,7 +92,7 @@ void MainWindow::connections()
 	menuBarDevConnections();
 }
 
-void MainWindow::documentConnections()
+void MainWindow::docsManagerConnections()
 {
 	/*OLD: connect(m_document, &Document::askSetText, this, [&] {
 		m_document->setText(m_editor->toPlainText());
@@ -120,7 +120,7 @@ void MainWindow::documentConnections()
 
 void MainWindow::tabBarConnections()
 {
-	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::onTabClick);
+	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::onTabServe);
 	connect(m_tabBar, &TabBar::askAdd, this, &MainWindow::onAddTabClick);
 	connect(m_tabBar, &TabBar::askClearForClose, this, &MainWindow::onCloseTabClick);
 	connect(m_editor, &Editor::textChanged, this, [&] {
@@ -174,12 +174,14 @@ void MainWindow::meterConnections()
 
 void MainWindow::menuBarConnections()
 {
-	/*OLD: connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&] {
-		openNewFileTab(m_document->newFileDialog());
+	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&] {
+		auto path = m_docsManager->newFileDialog(this);
+		openFileTab(path, DocsManager::PathType::New);
 		});
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&] {
-		openFileTab(m_document->openFileDialog());
-		});*/
+		auto path = m_docsManager->openFileDialog(this);
+		openFileTab(path);
+		});
 	connect(m_menuBar, &MenuBar::askSaveFile, this, &MainWindow::onSaveFile);
 }
 
@@ -390,13 +392,13 @@ void MainWindow::menuBarMiscConfigConnections()
 void MainWindow::menuBarDevConnections()
 {
 	connect(m_menuBar, &MenuBar::askOpenDocuments, this, [&] {
-		openFolder(m_user->documents());
+		openSystemFolder(m_user->documents());
 		});
 	connect(m_menuBar, &MenuBar::askOpenUserData, this, [&] {
-		openFolder(m_user->data());
+		openSystemFolder(m_user->data());
 		});
 	connect(m_menuBar, &MenuBar::askOpenInstallation, this, [&] {
-		openFolder(Path::toStdFs(QCoreApplication::applicationDirPath()).parent_path());
+		openSystemFolder(Path::toStdFs(QCoreApplication::applicationDirPath()).parent_path());
 		});
 	connect(m_menuBar, &MenuBar::devOpenLogs, this, [&] {
 		auto user_data = Path::toQString(m_user->data());
@@ -407,15 +409,15 @@ void MainWindow::menuBarDevConnections()
 			openFileTab(path);
 		}
 		});
-	/*OLD: connect(m_menuBar, &MenuBar::devDocument, this, [&] {
-		m_document->devClass();
+	connect(m_menuBar, &MenuBar::devDocsManager, this, [&] {
+		m_docsManager->devClass();
 		});
-	connect(m_menuBar, &MenuBar::devDocumentCurrent, this, [&] {
-		m_document->devCurrentInfo();
+	connect(m_menuBar, &MenuBar::devDocsManagerCurrent, this, [&] {
+		m_docsManager->devCurrentInfo();
 		});
-	connect(m_menuBar, &MenuBar::devDocumentBank, this, [&] {
-		m_document->devIdBank();
-		});*/
+	connect(m_menuBar, &MenuBar::devDocsManagerBank, this, [&] {
+		m_docsManager->devIdBank();
+		});
 	connect(m_menuBar, &MenuBar::devStylist, this, [&] {
 		m_stylist->devClass();
 		});
@@ -424,6 +426,9 @@ void MainWindow::menuBarDevConnections()
 		});
 	connect(m_menuBar, &MenuBar::devStylistUnstyle, this, [&] {
 		m_stylist->unStyle();
+		});
+	connect(m_menuBar, &MenuBar::devTabBarCurrent, this, [&] {
+		m_tabBar->devCurrentInfo();
 		});
 }
 
@@ -625,39 +630,44 @@ MainWindow::PromptResult MainWindow::singleSavePrompt()
 		QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 }
 
-void MainWindow::openFolder(const StdFsPath& path)
+void MainWindow::openSystemFolder(const StdFsPath& path)
 {
 	QDesktopServices::openUrl(QUrl::fromLocalFile(Path::toQString(path)));
 }
 
-void MainWindow::openFileTab(const StdFsPath& path, bool writeNew)
+void MainWindow::openFileTab(const StdFsPath& path, DocsManager::PathType pathType)
 {
 	if (path.empty()) {
 		m_indicator->red();
 		return;
 	}
-	/*OLD: auto text = m_document->setCurrent(path, writeNew);
-	m_tabBar->serve(m_document->currentId(), path);
-	m_editor->setPlainText(text);*/
+
+	auto id = m_docsManager->fromDisk(pathType, path);
+	m_tabBar->serve(id);
 }
 
-void MainWindow::onTabClick(const QUuid& id)
+void MainWindow::onTabServe(const QUuid& id)
 {
-	/*OLD: auto document_text = m_document->setCurrent(id);
-	m_editor->setPlainText(document_text);*/
+	qDebug() << __FUNCTION__ << id;
 
-	if (m_docsManager->hasActive()) {
-		// save state
+	if (m_docsManager->hasActive()) { // not working on initial new tab
+		qDebug() << "has active";
+		auto outgoing = m_docsManager->active();
+		outgoing->setText(m_editor->toPlainText());
+		outgoing->setCursorSpan(m_editor->cursorPosition(), m_editor->cursorAnchor());
 	}
 
-	auto new_document = m_docsManager->setActive(id);
-	m_editor->setDocument(new_document);
+	auto incoming = m_docsManager->setActive(id);
+	m_editor->setDocument(incoming);
 }
 
 void MainWindow::onAddTabClick() // <------------------ START HERE
 {
-	auto id = m_docsManager->newId();
-	m_tabBar->serve(id); // triggers onTabClick
+	auto id = m_docsManager->newUnsaved();
+	
+	qDebug() << __FUNCTION__ << id;
+
+	m_tabBar->serve(id); // triggers onTabServe
 }
 
 void MainWindow::onCloseTabClick(const QUuid& id)

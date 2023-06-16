@@ -14,18 +14,48 @@ DocumentsManager::DocumentsManager(
 	DocumentsCache::setMaxCost(cacheMaxCost);
 }
 
+DocumentsManager::StdFsPath DocumentsManager::newFileDialog(QWidget* parent, const QString& name/*<-- unused atm*/)
+{
+	auto file_name = Path::toStdFs(name.left(30));
+	auto path = QFileDialog::getSaveFileName(
+		parent, tr("Create a new file..."),
+		Path::toQString(m_userFolder / file_name), tr(DIALOG_FILE_TYPE));
+
+	return Path::toStdFs(path);
+}
+
+DocumentsManager::StdFsPath DocumentsManager::openFileDialog(QWidget* parent)
+{
+	auto path = QFileDialog::getOpenFileName(
+		parent, tr("Open an existing file..."),
+		Path::toQString(m_userFolder), tr(DIALOG_FILE_TYPE));
+
+	return Path::toStdFs(path);
+}
+
 Document* DocumentsManager::setActive(const QUuid& id)
 {
+	qDebug() << __FUNCTION__ << id;
+
 	m_activeId = id;
 	return active();
 }
 
-QUuid DocumentsManager::newId()
+QUuid DocumentsManager::newUnsaved()
 {
 	return s_idBank.recordNew();
 }
 
-Document* DocumentsManager::retrieve(const QUuid& id, StdFsPath path)
+QUuid DocumentsManager::fromDisk(PathType type, const StdFsPath& path)
+{
+	QUuid id = s_idBank.fromPath(path);
+	if (type == PathType::New)
+		writeEmptyFile(path);
+
+	return id;
+}
+
+Document* DocumentsManager::retrieve(const QUuid& id, const StdFsPath& path)
 {
 	auto& cache = DocsCache::instance();
 	auto document = cache.document(id);
@@ -35,7 +65,7 @@ Document* DocumentsManager::retrieve(const QUuid& id, StdFsPath path)
 	return document;
 }
 
-Document* DocumentsManager::newDocument(const QUuid& id, StdFsPath path)
+Document* DocumentsManager::newDocument(const QUuid& id, const StdFsPath& path)
 {
 	QString initial_text;
 	QString original_text;
@@ -83,4 +113,9 @@ void DocumentsManager::recover(const QUuid& id, QString& initialText, QString& o
 
 	// handle deleted original
 	// file system watcher
+}
+
+bool DocumentsManager::writeEmptyFile(const StdFsPath& path)
+{
+	return Io::writeFile(path);
 }
