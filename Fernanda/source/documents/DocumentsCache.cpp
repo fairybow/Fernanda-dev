@@ -18,7 +18,7 @@ DocumentsCache& DocumentsCache::instance()
 	return self;
 }
 
-void DocumentsCache::insertDocument(Document* document)
+void DocumentsCache::add(Document* document)
 {
 	StdLockMutex lock(m_mutex);
 	if (!document) return;

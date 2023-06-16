@@ -16,12 +16,12 @@ public:
 		const QString& text,
 		const QString& originalText,
 		const QString& title = QString(),
+		const QVariant& data = QVariant(),
 		QObject* parent = nullptr)
 		: QTextDocument(text, parent),
 		m_originalText(originalText),
-		m_title(title) {}
-
-	// save current document, retrieve next document and send to editor and tabbar to get needed info
+		m_title(title),
+		m_data(data) {}
 
 	CursorSpan cursorSpan() const { return m_cursorSpan; }
 	QVariant data() const { return m_data; }

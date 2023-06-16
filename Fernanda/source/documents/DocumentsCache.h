@@ -14,7 +14,7 @@ public:
 
 	static void setMaxCost(int maxCost);
 	static DocumentsCache& instance();
-	void insertDocument(Document* document);
+	void add(Document* document);
 	Document* document(const QUuid& id);
 
 	DocumentsCache(const DocumentsCache&) = delete;
@@ -32,4 +32,4 @@ private:
 	std::mutex m_mutex;
 };
 
-using DoxCache = DocumentsCache;
+using DocsCache = DocumentsCache;

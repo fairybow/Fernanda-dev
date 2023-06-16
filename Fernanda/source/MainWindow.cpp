@@ -647,13 +647,18 @@ void MainWindow::onTabClick(const QUuid& id)
 	m_editor->setPlainText(document_text);*/
 }
 
-void MainWindow::onAddTabClick()
+void MainWindow::onAddTabClick() // <------------------ START HERE
 {
 	/*auto new_id = m_document->createEmpty();
 	m_document->setCurrent(new_id);
 	m_tabBar->serve(new_id);
 	m_editor->clear();
 	m_editor->setFocus();*/
+
+
+
+
+	// save current document, retrieve next document and send to editor and tabbar to get needed info
 }
 
 void MainWindow::onCloseTabClick(const QUuid& id)

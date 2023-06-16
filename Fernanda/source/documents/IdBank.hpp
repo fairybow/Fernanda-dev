@@ -20,6 +20,7 @@ public:
 		(it != m_pathsToIds.end())
 			? id = it->second
 			: id = create(path);
+
 		return id;
 	}
 
@@ -48,6 +49,7 @@ public:
 			});
 		if (it != m_pathsToIds.end())
 			path = it->first;
+
 		return path;
 	}
 

@@ -61,11 +61,11 @@ private:
 	bool m_isInitialized = false;
 
 	User* m_user = new User(QCoreApplication::applicationName(), this);
-	DoxManager* m_doxManager = new DoxManager({
+	DocsManager* m_docsManager = new DocsManager({
 		m_user->documents(),
 		m_user->temp(),
 		m_user->backup() },
-		this, this, 100);
+		this, 99);
 	//Project* m_project = new Project(this);
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_isDev);
 	StatusBar* m_statusBar = new StatusBar("StatusBar");
