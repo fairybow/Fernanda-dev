@@ -19,12 +19,12 @@ public:
 		auto it = m_pathsToIds.find(path);
 		(it != m_pathsToIds.end())
 			? id = it->second
-			: id = create(path);
+			: id = recordNew(path);
 
 		return id;
 	}
 
-	QUuid create(StdFsPath path = StdFsPath())
+	QUuid recordNew(StdFsPath path = StdFsPath())
 	{
 		auto id = QUuid::createUuid();
 		if (!path.empty())

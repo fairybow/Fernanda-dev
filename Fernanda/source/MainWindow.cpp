@@ -94,7 +94,7 @@ void MainWindow::connections()
 
 void MainWindow::documentConnections()
 {
-	/*connect(m_document, &Document::askSetText, this, [&] {
+	/*OLD: connect(m_document, &Document::askSetText, this, [&] {
 		m_document->setText(m_editor->toPlainText());
 		});
 	connect(m_document, &Document::askSetCursorSpan, this, [&] {
@@ -132,7 +132,7 @@ void MainWindow::tabBarConnections()
 
 void MainWindow::editorConnections()
 {
-	/*connect(m_editor, &Editor::askRestoreCursorSpan, this, [&] {
+	/*OLD: connect(m_editor, &Editor::askRestoreCursorSpan, this, [&] {
 		auto span = m_document->cursorSpan();
 		m_editor->setCursorSpan(span.cursor, span.anchor);
 		});*/
@@ -174,7 +174,7 @@ void MainWindow::meterConnections()
 
 void MainWindow::menuBarConnections()
 {
-	/*connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&] {
+	/*OLD: connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&] {
 		openNewFileTab(m_document->newFileDialog());
 		});
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&] {
@@ -407,7 +407,7 @@ void MainWindow::menuBarDevConnections()
 			openFileTab(path);
 		}
 		});
-	/*connect(m_menuBar, &MenuBar::devDocument, this, [&] {
+	/*OLD: connect(m_menuBar, &MenuBar::devDocument, this, [&] {
 		m_document->devClass();
 		});
 	connect(m_menuBar, &MenuBar::devDocumentCurrent, this, [&] {
@@ -636,34 +636,33 @@ void MainWindow::openFileTab(const StdFsPath& path, bool writeNew)
 		m_indicator->red();
 		return;
 	}
-	/*auto text = m_document->setCurrent(path, writeNew);
+	/*OLD: auto text = m_document->setCurrent(path, writeNew);
 	m_tabBar->serve(m_document->currentId(), path);
 	m_editor->setPlainText(text);*/
 }
 
 void MainWindow::onTabClick(const QUuid& id)
 {
-	/*auto document_text = m_document->setCurrent(id);
+	/*OLD: auto document_text = m_document->setCurrent(id);
 	m_editor->setPlainText(document_text);*/
+
+	if (m_docsManager->hasActive()) {
+		// save state
+	}
+
+	auto new_document = m_docsManager->setActive(id);
+	m_editor->setDocument(new_document);
 }
 
 void MainWindow::onAddTabClick() // <------------------ START HERE
 {
-	/*auto new_id = m_document->createEmpty();
-	m_document->setCurrent(new_id);
-	m_tabBar->serve(new_id);
-	m_editor->clear();
-	m_editor->setFocus();*/
-
-
-
-
-	// save current document, retrieve next document and send to editor and tabbar to get needed info
+	auto id = m_docsManager->newId();
+	m_tabBar->serve(id); // triggers onTabClick
 }
 
 void MainWindow::onCloseTabClick(const QUuid& id)
 {
-	/*if (m_document->isEdited(id)) {
+	/*OLD: if (m_document->isEdited(id)) {
 		m_tabBar->serve(id);
 
 		auto early_return = false;
@@ -690,7 +689,7 @@ bool MainWindow::onSaveFile()
 {
 	return false;
 
-	/*if (!m_document->isSaveable()) return false;
+	/*OLD: if (!m_document->isSaveable()) return false;
 
 	qDebug() << __FUNCTION__;
 

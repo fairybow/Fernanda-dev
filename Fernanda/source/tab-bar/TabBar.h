@@ -26,7 +26,7 @@ public:
 
 	TabBar(const char* name, int minTabSize = 25, int maxTabSize = 100, QWidget* parent = nullptr);
 
-	int serve(const QUuid& id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true);
+	int serve(const QUuid& id, StdFsPath pathForTitle = StdFsPath(), bool switchTo = true); // don't take Document, but change path to QString title
 	bool isUntitled();
 	void setUntitledDisplay(const QString& text, int charLimit = 30);
 	void close(const QUuid& id);

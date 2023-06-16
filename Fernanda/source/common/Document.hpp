@@ -28,10 +28,12 @@ public:
 	bool isEdited() const { return toPlainText() == m_originalText; }
 	bool isUntitled() const { return m_title == QString(); }
 	QString originalText() const { return m_originalText; }
+	QString text() const { return toPlainText(); }
 	QString title() const { return m_title; }
 
 	void setCursorSpan(int cursor, int anchor) { m_cursorSpan = CursorSpan(cursor, anchor); }
 	void setData(const QVariant& data) { m_data = data; }
+	void setText(const QString& text) { setPlainText(text); }
 	void setTitle(const QString& title) { m_title = title; }
 
 private:

@@ -36,7 +36,7 @@ void TabBar::setUntitledDisplay(const QString& text, int charLimit)
 void TabBar::close(const QUuid& id)
 {
 	qDebug() << __FUNCTION__;
-	qDebug() << id;
+	qDebug() << id << Qt::endl;
 
 	m_trueTabBar->removeTab(indexById(id));
 	auto button = closeButton(id);
