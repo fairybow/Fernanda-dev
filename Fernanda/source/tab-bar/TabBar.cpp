@@ -11,8 +11,6 @@ TabBar::TabBar(const char* name, int minTabSize, int maxTabSize, QWidget* parent
 
 int TabBar::serve(const QUuid& id, const QString& title, bool switchTo) /*without clicking it*/
 {
-	qDebug() << __FUNCTION__ << id;
-
 	auto next_index = indexFor(id);
 
 	if (next_index == -1)
@@ -43,9 +41,6 @@ void TabBar::setUntitledDisplay(const QString& text, int charLimit)
 
 void TabBar::close(const QUuid& id)
 {
-	qDebug() << __FUNCTION__;
-	qDebug() << id << Qt::endl;
-
 	m_trueTabBar->removeTab(indexFor(id));
 	auto button = closeButton(id);
 	if (button)
@@ -132,11 +127,12 @@ const QString TabBar::title(int index)
 
 int TabBar::create(const QUuid& id, const QString& title)
 {
-	m_trueTabBar->blockSignals(true);
+	blockAllSignals(true);
 	auto index = m_trueTabBar->addTab(title);
 	setButton(index, id);
 	setData(index, id, title);
-	m_trueTabBar->blockSignals(false);
+	blockAllSignals(false);
+	adjustControls();
 
 	return index;
 }
@@ -162,6 +158,12 @@ CloseTab* TabBar::closeButton(const QUuid& id)
 {
 	return qobject_cast<CloseTab*>(
 		m_trueTabBar->tabButton(indexFor(id), QTabBar::RightSide));
+}
+
+void TabBar::blockAllSignals(bool block)
+{
+	for (auto& widget : QWidgetList{ this, m_trueTabBar })
+		widget->blockSignals(block);
 }
 
 void TabBar::adjustControls()

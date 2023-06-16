@@ -41,15 +41,25 @@ Document* DocumentsManager::setActive(const QUuid& id)
 
 QUuid DocumentsManager::newUnsaved()
 {
-	return s_idBank.recordNew();
+	auto id = s_idBank.recordNew();
+	create(id);
+	return id;
 }
 
 QUuid DocumentsManager::fromDisk(PathType type, const StdFsPath& path)
 {
-	QUuid id = s_idBank.fromPath(path);
-	if (type == PathType::New)
-		writeEmptyFile(path);
+	qDebug() << __FUNCTION__;
 
+	QUuid id = s_idBank.fromPath(path);
+	qDebug() << id << path;
+
+	if (type == PathType::New) {
+		qDebug() << "is new";
+		writeEmptyFile(path);
+	}
+
+	create(id, path);
+		
 	return id;
 }
 

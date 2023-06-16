@@ -39,6 +39,7 @@ public:
 
 	bool hasActive() const { return !m_activeId.isNull(); }
 	Document* active() { return retrieve(m_activeId); }
+	Document* at(const QUuid& id) { return retrieve(id); }
 
 	StdFsPath newFileDialog(QWidget* parent = nullptr, const QString& name = QString());
 	StdFsPath openFileDialog(QWidget* parent = nullptr);
@@ -53,10 +54,6 @@ public:
 		if (hasActive())
 			qDebug() << "Active ID:" << m_activeId
 			<< Qt::endl;
-
-		//qDebug() << "Current edit-check delay interval:"
-			//<< m_editCheckDelay->interval()
-			//<< Qt::endl;
 	}
 
 	void devCurrentInfo()
@@ -109,6 +106,8 @@ private:
 	const StdFsPath m_backupFolder;
 
 	QUuid m_activeId;
+
+	void create(const QUuid& id, const StdFsPath& path = StdFsPath()) { retrieve(id, path); }
 
 	Document* retrieve(const QUuid& id, const StdFsPath& path = StdFsPath());
 	Document* newDocument(const QUuid& id, const StdFsPath& path = StdFsPath());

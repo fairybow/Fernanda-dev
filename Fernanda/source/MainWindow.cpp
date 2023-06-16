@@ -95,14 +95,9 @@ void MainWindow::connections()
 
 void MainWindow::docsManagerConnections()
 {
-	/*OLD: connect(m_document, &Document::askSetText, this, [&] {
-		m_document->setText(m_editor->toPlainText());
-		});
-	connect(m_document, &Document::askSetCursorSpan, this, [&] {
-		m_document->setCursorSpan(m_editor->cursorPosition(), m_editor->cursorAnchor());
-		});
-	connect(m_document, &Document::editedStateChanged, m_tabBar, &TabBar::updateEditedState);
+	//connect(m_document, &Document::editedStateChanged, m_tabBar, &TabBar::updateEditedState);
 
+	/*
 	connect(m_editor, &Editor::textChanged, this, [&] {
 		auto text_length = m_editor->toPlainText().length();
 		m_document->setEditCheckDelay(text_length);
@@ -123,9 +118,12 @@ void MainWindow::tabBarConnections()
 {
 	//connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::onTabServe);
 	connect(m_tabBar, &TabBar::currentChanged, this, [&](const QUuid& id) {
+		//
 		qDebug() << "TabBar::currentChanged emitted" << id;
 		onTabServe(id);
+		//
 		});
+
 	connect(m_tabBar, &TabBar::askAdd, this, &MainWindow::onAddTabClick);
 	connect(m_tabBar, &TabBar::askClearForClose, this, &MainWindow::onCloseTabClick);
 	connect(m_editor, &Editor::textChanged, this, [&] {
@@ -642,24 +640,22 @@ void MainWindow::openSystemFolder(const StdFsPath& path)
 
 void MainWindow::openFileTab(const StdFsPath& path, DocsManager::PathType pathType)
 {
+	qDebug() << __FUNCTION__;
+
 	if (path.empty()) {
 		m_indicator->red();
 		return;
 	}
 
 	auto id = m_docsManager->fromDisk(pathType, path);
-	m_tabBar->serve(id);
+	auto title = m_docsManager->at(id)->title();
+	qDebug() << title;
+	m_tabBar->serve(id, title);
 }
 
 void MainWindow::onTabServe(const QUuid& id)
 {
-	qDebug() << __FUNCTION__ << id;
-
-	if (m_docsManager->hasActive()) { // active id is not being set correctly for initial new tab?
-
-		//active Id is set, I think? yet no saving...
-
-		qDebug() << "has active";
+	if (m_docsManager->hasActive()) {
 		auto outgoing = m_docsManager->active();
 		outgoing->setText(m_editor->toPlainText());
 		outgoing->setCursorSpan(m_editor->cursorPosition(), m_editor->cursorAnchor());
@@ -672,9 +668,6 @@ void MainWindow::onTabServe(const QUuid& id)
 void MainWindow::onAddTabClick() // <------------------ START HERE
 {
 	auto id = m_docsManager->newUnsaved();
-	
-	qDebug() << __FUNCTION__ << id;
-
 	m_tabBar->serve(id); // triggers onTabServe (or should)
 }
 

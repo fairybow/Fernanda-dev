@@ -75,6 +75,7 @@ private:
 	void setButton(int index, const QUuid& id);
 	void setData(int index, const QUuid& id, const QString& title = QString());
 	CloseTab* closeButton(const QUuid& id);
+	void blockAllSignals(bool block);
 
 private slots:
 	void adjustControls();
