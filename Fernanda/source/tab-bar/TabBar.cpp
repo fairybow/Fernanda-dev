@@ -14,6 +14,9 @@ int TabBar::serve(const QUuid& id, const QString& title, bool switchTo)
 	qDebug() << __FUNCTION__ << id;
 
 	auto next_index = indexById(id);
+
+	qDebug() << next_index;
+
 	if (next_index == -1)
 		next_index = create(id, title);
 	if (switchTo)
@@ -99,8 +102,10 @@ void TabBar::connections()
 
 	connect(m_trueTabBar, &TrueTabBar::currentChanged, this, [&](int index) {
 
-		qDebug() << "TrueTabBar::currentChanged emitted" << index;
+		qDebug() << "TrueTabBar::currentChanged emitted" << index << idByIndex(index);
 		emit currentChanged(idByIndex(index));
+
+		// idByIndex is returning the null ID
 
 		});
 	connectMultipleSignals(m_trueTabBar, this, &TabBar::adjustControls,
@@ -109,7 +114,9 @@ void TabBar::connections()
 
 QUuid TabBar::idByIndex(int index)
 {
-	return m_trueTabBar->tabData(index).toMap()[DATA_ID].toUuid();
+	auto& data = m_trueTabBar->tabData(index).toMap()[DATA_ID];
+	qDebug() << __FUNCTION__ << index << data.toUuid();
+	return data.toUuid();
 }
 
 int TabBar::indexById(const QUuid& id)
@@ -130,6 +137,8 @@ const QString TabBar::title(int index)
 
 int TabBar::create(const QUuid& id, const QString& title)
 {
+	qDebug() << __FUNCTION__ << id << "Index was -1, so creating";
+
 	blockSignals(true);
 	auto index = m_trueTabBar->addTab(title);
 	setButton(index, id);
@@ -149,6 +158,8 @@ void TabBar::setButton(int index, const QUuid& id)
 
 void TabBar::setData(int index, const QUuid& id, const QString& title)
 {
+	qDebug() << __FUNCTION__ << id;
+
 	QVariantMap data;
 	data[DATA_ID] = id;
 	data[DATA_TITLE] = title;
