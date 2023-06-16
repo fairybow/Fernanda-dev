@@ -28,14 +28,20 @@ public:
 		Refresh
 	};
 
-	UiButton(const char* name, const QString& label, QWidget* parent = nullptr,
+	UiButton(
+		const char* name,
+		const QString& label,
+		QWidget* parent = nullptr,
 		const QString& flag = QString())
 		: Widget(name, parent), m_label(label), m_flag(flag)
 	{
 		updateIcon();
 	}
 
-	UiButton(const char* name, Ui icon, QWidget* parent = nullptr,
+	UiButton(
+		const char* name,
+		Ui icon,
+		QWidget* parent = nullptr,
 		Ui flag = Ui{})
 		: UiButton(name, fontIcon(icon), parent, fontIcon(flag))
 	{

@@ -230,6 +230,9 @@
     <QtMoc Include="source\LaunchCop.hpp">
       <Filter>Source</Filter>
     </QtMoc>
+    <QtMoc Include="source\documents\DocumentsManager.h">
+      <Filter>Source\Documents</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -269,6 +272,9 @@
       <Filter>Source\TabBar</Filter>
     </ClCompile>
     <ClCompile Include="source\documents\DocumentsManager.cpp">
+      <Filter>Source\Documents</Filter>
+    </ClCompile>
+    <ClCompile Include="source\documents\DocumentsCache.cpp">
       <Filter>Source\Documents</Filter>
     </ClCompile>
   </ItemGroup>
@@ -360,13 +366,10 @@
     <ClInclude Include="source\previewer\WebEngineView.hpp">
       <Filter>Source\Previewer</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\PlainTextDocument.hpp">
+    <ClInclude Include="source\common\Document.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
-    <ClInclude Include="source\documents\DocumentCache.hpp">
-      <Filter>Source\Documents</Filter>
-    </ClInclude>
-    <ClInclude Include="source\documents\DocumentsManager.h">
+    <ClInclude Include="source\documents\DocumentsCache.h">
       <Filter>Source\Documents</Filter>
     </ClInclude>
     <ClInclude Include="source\documents\IdBank.hpp">
