@@ -115,6 +115,7 @@ private:
 	StdFsPath tempPath(const QUuid& id);
 	void recover(const QUuid& id, QString& initialText, QString& originalText, QString& title);
 	bool writeEmptyFile(const StdFsPath& path);
+	void outgoingTempSave();
 };
 
 using DocsManager = DocumentsManager;

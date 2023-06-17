@@ -35,6 +35,7 @@ DocumentsManager::StdFsPath DocumentsManager::openFileDialog(QWidget* parent)
 
 Document* DocumentsManager::setActive(const QUuid& id)
 {
+	outgoingTempSave();
 	m_activeId = id;
 	return active();
 }
@@ -48,16 +49,9 @@ QUuid DocumentsManager::newUnsaved()
 
 QUuid DocumentsManager::fromDisk(PathType type, const StdFsPath& path)
 {
-	qDebug() << __FUNCTION__;
-
 	QUuid id = s_idBank.fromPath(path);
-	qDebug() << id << path;
-
-	if (type == PathType::New) {
-		qDebug() << "is new";
+	if (type == PathType::New)
 		writeEmptyFile(path);
-	}
-
 	create(id, path);
 		
 	return id;
@@ -126,4 +120,10 @@ void DocumentsManager::recover(const QUuid& id, QString& initialText, QString& o
 bool DocumentsManager::writeEmptyFile(const StdFsPath& path)
 {
 	return Io::writeFile(path);
+}
+
+void DocumentsManager::outgoingTempSave()
+{
+	if (!hasActive()) return;
+	Io::writeFile(tempPath(m_activeId), active()->text());
 }
