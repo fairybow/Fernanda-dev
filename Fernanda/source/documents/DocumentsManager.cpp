@@ -4,7 +4,7 @@ IdBank DocumentsManager::s_idBank;
 
 DocumentsManager::DocumentsManager(
 	const Folders& folders,
-	QObject* parent,
+	QWidget* parent,
 	int cacheMaxCost)
 	: QObject(parent),
 	m_userFolder(folders.user),
@@ -14,26 +14,26 @@ DocumentsManager::DocumentsManager(
 	DocumentsCache::setMaxCost(cacheMaxCost);
 }
 
-DocumentsManager::StdFsPath DocumentsManager::newFileDialog(QWidget* parent, const QString& name/*<-- unused atm*/)
+DocumentsManager::StdFsPath DocumentsManager::newFileDialog(const QString& name)
 {
 	auto file_name = Path::toStdFs(name.left(30));
 	auto path = QFileDialog::getSaveFileName(
-		parent, tr("Create a new file..."),
+		parent(), tr("Create a new file..."),
 		Path::toQString(m_userFolder / file_name), tr(DIALOG_FILE_TYPE));
 
 	return Path::toStdFs(path);
 }
 
-DocumentsManager::StdFsPath DocumentsManager::openFileDialog(QWidget* parent)
+DocumentsManager::StdFsPath DocumentsManager::openFileDialog()
 {
 	auto path = QFileDialog::getOpenFileName(
-		parent, tr("Open an existing file..."),
+		parent(), tr("Open an existing file..."),
 		Path::toQString(m_userFolder), tr(DIALOG_FILE_TYPE));
 
 	return Path::toStdFs(path);
 }
 
-Document* DocumentsManager::setActive(const QUuid& id)
+TextRecord* DocumentsManager::setActive(const QUuid& id)
 {
 	outgoingTempSave();
 	m_activeId = id;
@@ -57,7 +57,40 @@ QUuid DocumentsManager::fromDisk(PathType type, const StdFsPath& path)
 	return id;
 }
 
-Document* DocumentsManager::retrieve(const QUuid& id, const StdFsPath& path)
+bool DocumentsManager::toDisk()
+{
+	if (!hasActive()) return false;
+	auto extant_path = s_idBank.path(m_activeId);
+	if (Path::isValid(extant_path))
+		backup(m_activeId);
+	else {
+		auto unsaved_file_name = active()->firstBlockText();
+		auto new_path = newFileDialog(unsaved_file_name);
+
+		/*auto unsaved_file_name = textDocument(m_currentId)->firstBlock().text();
+		extant_path = newFileDialog(unsaved_file_name);
+		if (extant_path.empty()) return false;
+
+		writeEmptyFile(extant_path);
+		s_idBank.associate(extant_path, m_currentId);
+		emit pathAndIdAssociated(extant_path, m_currentId);*/
+	}
+
+	return overwrite(m_activeId);
+}
+
+void DocumentsManager::close(const QUuid& id)
+{
+	if (m_activeId == id)
+		m_activeId = QUuid();
+
+	auto& cache = DocsCache::instance();
+	cache.remove(id);
+	s_idBank.remove(id);
+	StdFs::remove(tempPath(id));
+}
+
+TextRecord* DocumentsManager::retrieve(const QUuid& id, const StdFsPath& path)
 {
 	auto& cache = DocsCache::instance();
 	auto document = cache.document(id);
@@ -67,7 +100,7 @@ Document* DocumentsManager::retrieve(const QUuid& id, const StdFsPath& path)
 	return document;
 }
 
-Document* DocumentsManager::newDocument(const QUuid& id, const StdFsPath& path)
+TextRecord* DocumentsManager::newDocument(const QUuid& id, const StdFsPath& path)
 {
 	QString initial_text;
 	QString original_text;
@@ -80,7 +113,7 @@ Document* DocumentsManager::newDocument(const QUuid& id, const StdFsPath& path)
 		Io::toStrings(path, initial_text, original_text);
 	}
 
-	auto document = new Document(
+	auto document = new TextRecord(
 		initial_text, original_text, title, id);
 	auto& cache = DocsCache::instance();
 	cache.add(document);
@@ -126,4 +159,37 @@ void DocumentsManager::outgoingTempSave()
 {
 	if (!hasActive()) return;
 	Io::writeFile(tempPath(m_activeId), active()->text());
+}
+
+void DocumentsManager::backup(const QUuid& id)
+{
+	auto extant_path = s_idBank.path(id);
+	auto backup_path = backupPath(extant_path);
+	Path::copy(extant_path, backup_path);
+}
+
+DocumentsManager::StdFsPath DocumentsManager::backupPath(const StdFsPath& path)
+{
+	auto name = Path::qStringName(path);
+	name += "---" + StringTools::time();
+	name = StringTools::removeForbidden(name);
+
+	return m_backupFolder / Path::toStdFs(name + ".bak");
+}
+
+bool DocumentsManager::overwrite(const QUuid& id)
+{
+	auto path = s_idBank.path(id);
+	auto temp_path = tempPath(id);
+	if (!Path::areValid(path, temp_path) ||
+		!Path::move(temp_path, path, true))
+		return false;
+
+	auto& cache = DocsCache::instance();
+	cache.remove(m_activeId);
+	create(m_activeId, path);
+
+	//emit editedStateChanged(m_currentId, document->edited());
+
+	return true;
 }

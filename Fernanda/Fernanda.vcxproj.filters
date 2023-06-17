@@ -366,7 +366,7 @@
     <ClInclude Include="source\previewer\WebEngineView.hpp">
       <Filter>Source\Previewer</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\Document.hpp">
+    <ClInclude Include="source\common\TextRecord.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="source\documents\DocumentsCache.h">

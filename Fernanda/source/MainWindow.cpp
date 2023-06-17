@@ -178,11 +178,11 @@ void MainWindow::meterConnections()
 void MainWindow::menuBarConnections()
 {
 	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&] {
-		auto path = m_docsManager->newFileDialog(this);
+		auto path = m_docsManager->newFileDialog();
 		openFileTab(path, DocsManager::PathType::New);
 		});
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&] {
-		auto path = m_docsManager->openFileDialog(this);
+		auto path = m_docsManager->openFileDialog();
 		openFileTab(path);
 		});
 	connect(m_menuBar, &MenuBar::askSaveFile, this, &MainWindow::onSaveFile);
@@ -653,14 +653,18 @@ void MainWindow::openFileTab(const StdFsPath& path, DocsManager::PathType pathTy
 	m_tabBar->serve(id, title);
 }
 
+bool MainWindow::updateActiveDocRecord()
+{
+	if (!m_docsManager->hasActive()) return false;
+	auto outgoing = m_docsManager->active();
+	outgoing->setText(m_editor->toPlainText());
+	outgoing->setCursorSpan(m_editor->cursorPosition(), m_editor->cursorAnchor());
+	return true;
+}
+
 void MainWindow::onTabServe(const QUuid& id)
 {
-	if (m_docsManager->hasActive()) {
-		auto outgoing = m_docsManager->active();
-		outgoing->setText(m_editor->toPlainText());
-		outgoing->setCursorSpan(m_editor->cursorPosition(), m_editor->cursorAnchor());
-	}
-
+	updateActiveDocRecord();
 	auto incoming = m_docsManager->setActive(id);
 	m_editor->setDocument(incoming);
 }
@@ -673,8 +677,12 @@ void MainWindow::onAddTabClick() // <------------------ START HERE
 
 void MainWindow::onCloseTabClick(const QUuid& id)
 {
-	/*OLD: if (m_document->isEdited(id)) {
-		m_tabBar->serve(id);
+	if (m_docsManager->isActive(id))
+		updateActiveDocRecord();
+
+	if (m_docsManager->at(id)->isEdited()) {
+		if (!m_docsManager->isActive(id))
+			m_tabBar->serve(id);
 
 		auto early_return = false;
 		auto action = singleSavePrompt();
@@ -688,16 +696,23 @@ void MainWindow::onCloseTabClick(const QUuid& id)
 			break;
 		}
 		if (early_return) return;
-	}*/
+	}
 
 	m_tabBar->close(id);
-	//m_document->close(id);
+	m_docsManager->close(id);
 	if (m_tabBar->isEmpty())
 		openNewTab();
 }
 
 bool MainWindow::onSaveFile()
 {
+	if (!updateActiveDocRecord()
+		|| !m_docsManager->active()->isEdited())
+		return false;
+	//if (!m_docsManager->active()->isEdited()) return false;
+
+	auto save_result = m_docsManager->toDisk();
+
 	return false;
 
 	/*OLD: if (!m_document->isSaveable()) return false;

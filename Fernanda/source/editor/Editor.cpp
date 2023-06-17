@@ -42,7 +42,7 @@ void Editor::setHasLineNumberArea(bool state)
 	m_trueEditor->updateLineNumberAreaWidth();
 }
 
-void Editor::setDocument(Document* document)
+void Editor::setDocument(TextRecord* document)
 {
 	m_trueEditor->setPlainText(document->text());
 	auto span = document->cursorSpan();

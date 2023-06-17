@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/Document.hpp"
+#include "../common/TextRecord.hpp"
 
 #include <QCache>
 #include <QUuid>
@@ -8,13 +8,13 @@
 
 #include <mutex>
 
-class DocumentsCache : public QCache<QUuid, Document>
+class DocumentsCache : public QCache<QUuid, TextRecord>
 {
 public:
 	static void setMaxCost(int maxCost);
 	static DocumentsCache& instance();
-	void add(Document* document);
-	Document* document(const QUuid& id);
+	void add(TextRecord* document);
+	TextRecord* document(const QUuid& id);
 
 	DocumentsCache(const DocumentsCache&) = delete;
 	DocumentsCache(DocumentsCache&&) = delete;

@@ -64,7 +64,7 @@ private:
 	User* m_user = new User(QCoreApplication::applicationName(), this);
 	DocsManager* m_docsManager = new DocsManager(
 		{ m_user->documents(), m_user->temp(), m_user->backup() },
-		this, 2/*99*/);
+		this, 1/*99*/);
 	//Project* m_project = new Project(this);
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_isDev);
 	StatusBar* m_statusBar = new StatusBar("StatusBar");
@@ -106,8 +106,9 @@ private:
 	void setUserFont(const QFont& font);
 	PromptResult singleSavePrompt();
 	void openSystemFolder(const StdFsPath& path);
-
 	void openFileTab(const StdFsPath& path, DocsManager::PathType pathType = DocsManager::PathType::Extant);
+	bool updateActiveDocRecord();
+
 	void openNewTab() { onAddTabClick(); };
 
 	template<typename T>

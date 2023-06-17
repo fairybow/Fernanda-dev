@@ -2,7 +2,8 @@
 
 #include "../common/Io.hpp"
 #include "../common/Path.hpp"
-#include "../common/Document.hpp"
+#include "../common/StringTools.hpp"
+#include "../common/TextRecord.hpp"
 #include "DocumentsCache.h"
 #include "IdBank.hpp"
 
@@ -32,20 +33,20 @@ public:
 		StdFsPath backup;
 	};
 
-	DocumentsManager(const Folders& folders, QObject* parent = nullptr, int cacheMaxCost = 100);
-
-	// setting activeId
-	// focus on active document; public methods work on activeId
+	DocumentsManager(const Folders& folders, QWidget* parent = nullptr, int cacheMaxCost = 100);
 
 	bool hasActive() const { return !m_activeId.isNull(); }
-	Document* active() { return retrieve(m_activeId); }
-	Document* at(const QUuid& id) { return retrieve(id); }
+	TextRecord* active() { return retrieve(m_activeId); }
+	bool isActive(const QUuid& id) { return m_activeId == id; }
+	TextRecord* at(const QUuid& id) { return retrieve(id); }
 
-	StdFsPath newFileDialog(QWidget* parent = nullptr, const QString& name = QString());
-	StdFsPath openFileDialog(QWidget* parent = nullptr);
-	Document* setActive(const QUuid& id);
+	StdFsPath newFileDialog(const QString& name = QString());
+	StdFsPath openFileDialog();
+	TextRecord* setActive(const QUuid& id);
 	QUuid newUnsaved();
 	QUuid fromDisk(PathType type, const StdFsPath& path);
+	bool toDisk();
+	void close(const QUuid& id);
 
 	void devClass()
 	{
@@ -108,14 +109,18 @@ private:
 	QUuid m_activeId;
 
 	void create(const QUuid& id, const StdFsPath& path = StdFsPath()) { retrieve(id, path); }
+	QWidget* parent() const { return qobject_cast<QWidget*>(QObject::parent()); }
 
-	Document* retrieve(const QUuid& id, const StdFsPath& path = StdFsPath());
-	Document* newDocument(const QUuid& id, const StdFsPath& path = StdFsPath());
+	TextRecord* retrieve(const QUuid& id, const StdFsPath& path = StdFsPath());
+	TextRecord* newDocument(const QUuid& id, const StdFsPath& path = StdFsPath());
 	bool wasEvicted(const QUuid& id);
 	StdFsPath tempPath(const QUuid& id);
 	void recover(const QUuid& id, QString& initialText, QString& originalText, QString& title);
 	bool writeEmptyFile(const StdFsPath& path);
 	void outgoingTempSave();
+	void backup(const QUuid& id);
+	StdFsPath backupPath(const StdFsPath& path);
+	bool overwrite(const QUuid& id);
 };
 
 using DocsManager = DocumentsManager;

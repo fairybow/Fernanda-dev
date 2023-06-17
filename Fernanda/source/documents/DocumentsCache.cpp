@@ -18,7 +18,7 @@ DocumentsCache& DocumentsCache::instance()
 	return self;
 }
 
-void DocumentsCache::add(Document* document)
+void DocumentsCache::add(TextRecord* document)
 {
 	StdLockMutex lock(m_mutex);
 	if (!document) return;
@@ -28,7 +28,7 @@ void DocumentsCache::add(Document* document)
 		insert(key, document);
 }
 
-Document* DocumentsCache::document(const QUuid& id)
+TextRecord* DocumentsCache::document(const QUuid& id)
 {
 	StdLockMutex lock(m_mutex);
 	return object(id);

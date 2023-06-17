@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../common/Document.hpp"
 #include "../common/Fx.hpp"
 #include "../common/Io.hpp"
 #include "../common/Layout.hpp"
+#include "../common/TextRecord.hpp"
 #include "../common/Widget.hpp"
 #include "TrueEditor.h"
 // potentially move block cursor and lna here and manage
@@ -23,7 +23,7 @@ public:
 	void setWrapMode(const QString& mode); // refactor to use QTextOption enum (`void setWordWrapMode(QTextOption::WrapMode policy)`), move to intermediaries
 	void setHasLineHighlight(bool state);
 	void setHasLineNumberArea(bool state);
-	void setDocument(Document* document);
+	void setDocument(TextRecord* document);
 
 	QFont defaulFont() const { return m_defaultFont; }
 	int defaulTabStop() const { return 40; }
