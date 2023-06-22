@@ -116,14 +116,10 @@ void MainWindow::docsManagerConnections()
 
 void MainWindow::tabBarConnections()
 {
-	//connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::onTabServe);
 	connect(m_tabBar, &TabBar::currentChanged, this, [&](const QUuid& id) {
-		//
-		qDebug() << "TabBar::currentChanged emitted" << id;
+		qDebug() << "TabBar::currentChanged emitted" << id << Qt::endl;
 		onTabServe(id);
-		//
 		});
-
 	connect(m_tabBar, &TabBar::askAdd, this, &MainWindow::onAddTabClick);
 	connect(m_tabBar, &TabBar::askClearForClose, this, &MainWindow::onCloseTabClick);
 	connect(m_editor, &Editor::textChanged, this, [&] {
@@ -649,7 +645,6 @@ void MainWindow::openFileTab(const StdFsPath& path, DocsManager::PathType pathTy
 
 	auto id = m_docsManager->fromDisk(pathType, path);
 	auto title = m_docsManager->at(id)->title();
-	qDebug() << title;
 	m_tabBar->serve(id, title);
 }
 

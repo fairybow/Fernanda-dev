@@ -64,7 +64,7 @@ public:
 		qDebug() << "ID:" << m_activeId;
 		auto document = active();
 		qDebug() << "Is edited?:" << document->isEdited();
-		// title
+		qDebug() << "Title:" << document->title();
 		auto span = document->cursorSpan();
 		qDebug() << "Cursor position:" << span.cursor;
 		qDebug() << "Anchor position:" << span.anchor;
