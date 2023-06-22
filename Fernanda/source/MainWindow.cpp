@@ -95,12 +95,10 @@ void MainWindow::connections()
 
 void MainWindow::docsManagerConnections()
 {
-	//connect(m_document, &Document::editedStateChanged, m_tabBar, &TabBar::updateEditedState);
-
 	/*
 	connect(m_editor, &Editor::textChanged, this, [&] {
 		auto text_length = m_editor->toPlainText().length();
-		m_document->setEditCheckDelay(text_length);
+		m_document->setEditCheckDelay(text_length); // separate object (not method/s from DocManager) that checks the current TextRecord on behalf of TabBar
 		m_document->startEditCheckTimer();
 		});
 	connect(m_document, &Document::askEditCheck, this, [&] {

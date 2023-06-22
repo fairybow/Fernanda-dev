@@ -12,6 +12,9 @@ DocumentsManager::DocumentsManager(
 	m_backupFolder(folders.backup)
 {
 	DocumentsCache::setMaxCost(cacheMaxCost);
+
+	// finish saving
+	// add back auto cache / timer
 }
 
 DocumentsManager::StdFsPath DocumentsManager::newFileDialog(const QString& name)
@@ -188,8 +191,6 @@ bool DocumentsManager::overwrite(const QUuid& id)
 	auto& cache = DocsCache::instance();
 	cache.remove(m_activeId);
 	create(m_activeId, path);
-
-	//emit editedStateChanged(m_currentId, document->edited());
 
 	return true;
 }
