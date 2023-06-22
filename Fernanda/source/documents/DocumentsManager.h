@@ -9,6 +9,7 @@
 
 #include <QFileDialog>
 #include <QString>
+#include <QTimer>
 #include <QUuid>
 
 #include <filesystem>
@@ -107,6 +108,7 @@ private:
 	const StdFsPath m_backupFolder;
 
 	QUuid m_activeId;
+	QTimer* m_autoSaveText = new QTimer(this);
 
 	void create(const QUuid& id, const StdFsPath& path = StdFsPath()) { retrieve(id, path); }
 	QWidget* parent() const { return qobject_cast<QWidget*>(QObject::parent()); }

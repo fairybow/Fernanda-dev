@@ -51,7 +51,7 @@ signals:
 	void askClearForClose(const QUuid& id);
 
 public slots:
-	void updateEditedState(const QUuid& id, bool edited);
+	void updateEditedState(const QUuid& id, bool edited); // update this to generalized "flagged" language throughout
 	void updateTitle(const QUuid& id, const QString& title);
 
 protected:

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "common/DelaySignaller.hpp"
 #include "common/Layout.hpp"
 #include "common/Path.hpp"
 #include "common/Widget.hpp"
@@ -77,6 +78,7 @@ private:
 	StayAwake* m_stayAwake = new StayAwake;
 	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop(this);
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
+	DelaySignaller* m_tabFlagEditedCheck = new DelaySignaller(this);
 
 	MainWindow* spawn();
 	void setupWidgets();

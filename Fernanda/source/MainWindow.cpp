@@ -95,18 +95,7 @@ void MainWindow::connections()
 
 void MainWindow::docsManagerConnections()
 {
-	/*
-	connect(m_editor, &Editor::textChanged, this, [&] {
-		auto text_length = m_editor->toPlainText().length();
-		m_document->setEditCheckDelay(text_length); // separate object (not method/s from DocManager) that checks the current TextRecord on behalf of TabBar
-		m_document->startEditCheckTimer();
-		});
-	connect(m_document, &Document::askEditCheck, this, [&] {
-		auto text = m_editor->toPlainText();
-		m_document->affirmEditedState(text);
-		});
-
-	connect(m_document, &Document::pathAndIdAssociated,
+	/*connect(m_document, &Document::pathAndIdAssociated,
 		this, [&](const StdFsPath& path, const QUuid& id) {
 		m_tabBar->updateTitle(id, Path::qStringName(path));
 		});*/
@@ -120,19 +109,28 @@ void MainWindow::tabBarConnections()
 		});
 	connect(m_tabBar, &TabBar::askAdd, this, &MainWindow::onAddTabClick);
 	connect(m_tabBar, &TabBar::askClearForClose, this, &MainWindow::onCloseTabClick);
+
 	connect(m_editor, &Editor::textChanged, this, [&] {
 		if (!m_tabBar->isUntitled()) return;
 		auto block = m_editor->firstBlock();
 		m_tabBar->setUntitledDisplay(block);
 		});
+
+	connect(m_editor, &Editor::textChanged, this, [&] {
+		auto text_length = m_editor->toPlainText().length();
+		m_tabFlagEditedCheck->delayedEmit(text_length);
+		});
+	connect(m_tabFlagEditedCheck, &DelaySignaller::signal, this, [&] {
+		if (updateActiveDocRecord()) {
+			auto document = m_docsManager->active();
+			m_tabBar->updateEditedState(document->data().toUuid(), document->isEdited());
+		}
+		});
 }
 
 void MainWindow::editorConnections()
 {
-	/*OLD: connect(m_editor, &Editor::askRestoreCursorSpan, this, [&] {
-		auto span = m_document->cursorSpan();
-		m_editor->setCursorSpan(span.cursor, span.anchor);
-		});*/
+	//
 }
 
 void MainWindow::meterConnections()
@@ -649,9 +647,9 @@ void MainWindow::openFileTab(const StdFsPath& path, DocsManager::PathType pathTy
 bool MainWindow::updateActiveDocRecord()
 {
 	if (!m_docsManager->hasActive()) return false;
-	auto outgoing = m_docsManager->active();
-	outgoing->setText(m_editor->toPlainText());
-	outgoing->setCursorSpan(m_editor->cursorPosition(), m_editor->cursorAnchor());
+	auto document = m_docsManager->active();
+	document->setText(m_editor->toPlainText());
+	document->setCursorSpan(m_editor->cursorPosition(), m_editor->cursorAnchor());
 	return true;
 }
 
