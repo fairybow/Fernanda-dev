@@ -32,6 +32,8 @@ public:
 	void close(const QUuid& id);
 	bool isFull();
 	bool isEmpty();
+	void updateEditedState(const QUuid& id, bool edited); // update this to generalized "flagged" language throughout
+	void updateTitle(const QUuid& id, const QString& title);
 
 	void devCurrentInfo()
 	{
@@ -49,10 +51,6 @@ signals:
 	void currentChanged(const QUuid& id);
 	void askAdd();
 	void askClearForClose(const QUuid& id);
-
-public slots:
-	void updateEditedState(const QUuid& id, bool edited); // update this to generalized "flagged" language throughout
-	void updateTitle(const QUuid& id, const QString& title);
 
 protected:
 	virtual void wheelEvent(QWheelEvent* event) override;

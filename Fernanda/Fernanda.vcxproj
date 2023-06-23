@@ -157,7 +157,7 @@
     <ClInclude Include="source\Dimmer.hpp" />
     <QtMoc Include="source\LaunchCop.hpp" />
     <ClInclude Include="source\documents\DocumentsCache.h" />
-    <QtMoc Include="source\documents\DocumentsManager.h" />
+    <ClInclude Include="source\documents\DocumentsManager.h" />
     <ClInclude Include="source\documents\IdBank.hpp" />
     <ClInclude Include="source\Logger.hpp" />
     <ClInclude Include="source\menu-bar\ActionGroup.h" />

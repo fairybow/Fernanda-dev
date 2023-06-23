@@ -123,11 +123,6 @@ void MainWindow::tabBarConnections()
 			m_tabBar->updateEditedState(document->data().toUuid(), document->isEdited());
 		}
 		});
-
-	connect(m_docsManager, &DocsManager::pathAssociated,
-		this, [&](const StdFsPath& path, const QUuid& id) {
-			m_tabBar->updateTitle(id, Path::qStringName(path));
-		});
 }
 
 void MainWindow::editorConnections()
@@ -702,7 +697,15 @@ bool MainWindow::onSaveFile()
 	if (!updateActiveDocRecord()
 		|| !m_docsManager->active()->isEdited())
 		return false;
+
 	auto save_result = m_docsManager->toDisk();
-	//qDebug() << save_result;
+	if (save_result) {
+		auto document = m_docsManager->active();
+		auto id = document->data().toUuid();
+		auto path = m_docsManager->pathAt(id);
+		m_tabBar->updateEditedState(id, document->isEdited());
+		m_tabBar->updateTitle(id, Path::qStringName(path));
+	}
+
 	return m_indicator->onResult(save_result);
 }

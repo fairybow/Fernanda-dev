@@ -230,9 +230,6 @@
     <QtMoc Include="source\LaunchCop.hpp">
       <Filter>Source</Filter>
     </QtMoc>
-    <QtMoc Include="source\documents\DocumentsManager.h">
-      <Filter>Source\Documents</Filter>
-    </QtMoc>
     <QtMoc Include="source\common\Delayer.hpp">
       <Filter>Source\Common</Filter>
     </QtMoc>
@@ -376,6 +373,9 @@
       <Filter>Source\Documents</Filter>
     </ClInclude>
     <ClInclude Include="source\documents\IdBank.hpp">
+      <Filter>Source\Documents</Filter>
+    </ClInclude>
+    <ClInclude Include="source\documents\DocumentsManager.h">
       <Filter>Source\Documents</Filter>
     </ClInclude>
   </ItemGroup>

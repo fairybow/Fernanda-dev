@@ -12,9 +12,9 @@ DocumentsManager::DocumentsManager(
 	m_backupFolder(folders.backup)
 {
 	DocumentsCache::setMaxCost(cacheMaxCost);
-
-	// finish saving
-	// add back auto cache / timer
+	connect(m_autoCache, &QTimer::timeout, this, [&] {
+		tempSave();
+		});
 }
 
 DocumentsManager::StdFsPath DocumentsManager::newFileDialog(const QString& name)
@@ -38,8 +38,9 @@ DocumentsManager::StdFsPath DocumentsManager::openFileDialog()
 
 TextRecord* DocumentsManager::setActive(const QUuid& id)
 {
-	outgoingTempSave();
+	tempSave();
 	m_activeId = id;
+	m_autoCache->start(25000);
 	return active();
 }
 
@@ -63,7 +64,7 @@ QUuid DocumentsManager::fromDisk(PathType type, const StdFsPath& path)
 bool DocumentsManager::toDisk()
 {
 	if (!hasActive()) return false;
-	outgoingTempSave();
+	tempSave();
 
 	auto extant_path = s_idBank.path(m_activeId);
 	if (Path::isValid(extant_path))
@@ -75,7 +76,6 @@ bool DocumentsManager::toDisk()
 
 		writeEmptyFile(new_path);
 		s_idBank.associate(new_path, m_activeId);
-		emit pathAssociated(new_path, m_activeId);
 	}
 
 	return overwrite(m_activeId);
@@ -157,7 +157,7 @@ bool DocumentsManager::writeEmptyFile(const StdFsPath& path)
 	return Io::writeFile(path);
 }
 
-void DocumentsManager::outgoingTempSave()
+void DocumentsManager::tempSave()
 {
 	if (!hasActive()) return;
 	Io::writeFile(tempPath(m_activeId), active()->text());

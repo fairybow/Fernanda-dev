@@ -18,8 +18,6 @@ namespace StdFs = std::filesystem;
 
 class DocumentsManager : public QObject
 {
-	Q_OBJECT
-
 public:
 	using StdFsPath = StdFs::path;
 
@@ -40,6 +38,7 @@ public:
 	TextRecord* active() { return retrieve(m_activeId); }
 	bool isActive(const QUuid& id) { return m_activeId == id; }
 	TextRecord* at(const QUuid& id) { return retrieve(id); }
+	StdFsPath pathAt(const QUuid& id) { return s_idBank.path(id); };
 
 	StdFsPath newFileDialog(const QString& name = QString());
 	StdFsPath openFileDialog();
@@ -69,6 +68,7 @@ public:
 		auto span = document->cursorSpan();
 		qDebug() << "Cursor position:" << span.cursor;
 		qDebug() << "Anchor position:" << span.anchor;
+		qDebug() << "Recorded text:" << document->text();
 		qDebug() << "Original text:" << document->originalText()
 			<< Qt::endl;
 	}
@@ -95,11 +95,8 @@ public:
 		}
 	}
 
-signals:
-	void pathAssociated(const StdFsPath& path, const QUuid& id);
-
 private:
-	static constexpr char FILE_TYPE[] = ".txt"; // later save to / pull from document?, for using multiple PT type, .md, .txt, etc.
+	static constexpr char FILE_TYPE[] = ".txt";
 	static constexpr char DIALOG_FILE_TYPE[] = "Plain text file (*.txt)";
 
 	static IdBank s_idBank;
@@ -108,7 +105,7 @@ private:
 	const StdFsPath m_backupFolder;
 
 	QUuid m_activeId;
-	QTimer* m_autoSaveText = new QTimer(this);
+	QTimer* m_autoCache = new QTimer(this);
 
 	void create(const QUuid& id, const StdFsPath& path = StdFsPath()) { retrieve(id, path); }
 	QWidget* parent() const { return qobject_cast<QWidget*>(QObject::parent()); }
@@ -119,7 +116,7 @@ private:
 	StdFsPath tempPath(const QUuid& id);
 	void recover(const QUuid& id, QString& initialText, QString& originalText, QString& title);
 	bool writeEmptyFile(const StdFsPath& path);
-	void outgoingTempSave();
+	void tempSave();
 	void backup(const QUuid& id);
 	StdFsPath backupPath(const StdFsPath& path);
 	bool overwrite(const QUuid& id);
