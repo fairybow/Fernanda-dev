@@ -19,7 +19,7 @@ DocumentsManager::DocumentsManager(
 
 DocumentsManager::StdFsPath DocumentsManager::newFileDialog(const QString& name)
 {
-	auto file_name = Path::toStdFs(name.left(30));
+	auto file_name = Path::toStdFs(name);
 	auto path = QFileDialog::getSaveFileName(
 		parent(), tr("Create a new file..."),
 		Path::toQString(m_userFolder / file_name), tr(DIALOG_FILE_TYPE));
@@ -63,20 +63,19 @@ QUuid DocumentsManager::fromDisk(PathType type, const StdFsPath& path)
 bool DocumentsManager::toDisk()
 {
 	if (!hasActive()) return false;
+	outgoingTempSave();
+
 	auto extant_path = s_idBank.path(m_activeId);
 	if (Path::isValid(extant_path))
 		backup(m_activeId);
 	else {
-		auto unsaved_file_name = active()->firstBlockText();
+		auto unsaved_file_name = active()->firstBlockText().left(30);
 		auto new_path = newFileDialog(unsaved_file_name);
+		if (new_path.empty()) return false;
 
-		/*auto unsaved_file_name = textDocument(m_currentId)->firstBlock().text();
-		extant_path = newFileDialog(unsaved_file_name);
-		if (extant_path.empty()) return false;
-
-		writeEmptyFile(extant_path);
-		s_idBank.associate(extant_path, m_currentId);
-		emit pathAndIdAssociated(extant_path, m_currentId);*/
+		writeEmptyFile(new_path);
+		s_idBank.associate(new_path, m_activeId);
+		emit pathAssociated(new_path, m_activeId);
 	}
 
 	return overwrite(m_activeId);
@@ -184,6 +183,7 @@ bool DocumentsManager::overwrite(const QUuid& id)
 {
 	auto path = s_idBank.path(id);
 	auto temp_path = tempPath(id);
+
 	if (!Path::areValid(path, temp_path) ||
 		!Path::move(temp_path, path, true))
 		return false;

@@ -96,7 +96,7 @@ public:
 	}
 
 signals:
-	//
+	void pathAssociated(const StdFsPath& path, const QUuid& id);
 
 private:
 	static constexpr char FILE_TYPE[] = ".txt"; // later save to / pull from document?, for using multiple PT type, .md, .txt, etc.
