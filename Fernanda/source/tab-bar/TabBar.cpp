@@ -9,14 +9,13 @@ TabBar::TabBar(const char* name, int minTabSize, int maxTabSize, QWidget* parent
 	connections();
 }
 
-int TabBar::serve(const QUuid& id, const QString& title, bool switchTo) /*without clicking it*/
+int TabBar::serve(const QUuid& id, const QString& title, bool switchTo)
 {
 	auto next_index = indexFor(id);
 
 	if (next_index == -1)
 		next_index = create(id, title);
 	if (switchTo) {
-		// notifier for tabChanged that can account for same indexes?
 		auto index = m_trueTabBar->currentIndex();
 		m_trueTabBar->setCurrentIndex(next_index);
 		if (index == next_index)
