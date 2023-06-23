@@ -105,7 +105,7 @@ private:
 	const StdFsPath m_backupFolder;
 
 	QUuid m_activeId;
-	QTimer* m_autoCache = new QTimer(this);
+	QTimer* m_continuousTempSave = new QTimer(this);
 
 	void create(const QUuid& id, const StdFsPath& path = StdFsPath()) { retrieve(id, path); }
 	QWidget* parent() const { return qobject_cast<QWidget*>(QObject::parent()); }

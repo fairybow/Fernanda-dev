@@ -12,7 +12,7 @@ DocumentsManager::DocumentsManager(
 	m_backupFolder(folders.backup)
 {
 	DocumentsCache::setMaxCost(cacheMaxCost);
-	connect(m_autoCache, &QTimer::timeout, this, [&] {
+	connect(m_continuousTempSave, &QTimer::timeout, this, [&] {
 		tempSave();
 		});
 }
@@ -40,7 +40,7 @@ TextRecord* DocumentsManager::setActive(const QUuid& id)
 {
 	tempSave();
 	m_activeId = id;
-	m_autoCache->start(25000);
+	m_continuousTempSave->start(25000);
 	return active();
 }
 
