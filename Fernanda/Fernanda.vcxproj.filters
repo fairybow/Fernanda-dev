@@ -233,7 +233,7 @@
     <QtMoc Include="source\documents\DocumentsManager.h">
       <Filter>Source\Documents</Filter>
     </QtMoc>
-    <QtMoc Include="source\common\DelaySignaller.hpp">
+    <QtMoc Include="source\common\Delayer.hpp">
       <Filter>Source\Common</Filter>
     </QtMoc>
   </ItemGroup>

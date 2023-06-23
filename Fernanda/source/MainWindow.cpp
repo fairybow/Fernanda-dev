@@ -118,9 +118,9 @@ void MainWindow::tabBarConnections()
 
 	connect(m_editor, &Editor::textChanged, this, [&] {
 		auto text_length = m_editor->toPlainText().length();
-		m_tabFlagEditedCheck->delayedEmit(text_length);
+		m_tabFlagCheckDelayer->delayedEmit(text_length);
 		});
-	connect(m_tabFlagEditedCheck, &DelaySignaller::signal, this, [&] {
+	connect(m_tabFlagCheckDelayer, &Delayer::signal, this, [&] {
 		if (updateActiveDocRecord()) {
 			auto document = m_docsManager->active();
 			m_tabBar->updateEditedState(document->data().toUuid(), document->isEdited());

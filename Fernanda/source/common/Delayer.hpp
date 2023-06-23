@@ -2,13 +2,13 @@
 
 #include <QTimer>
 
-class DelaySignaller : public QObject
+class Delayer : public QObject
 {
 	Q_OBJECT
 
 public:
-	DelaySignaller(QObject* parent, int millisecondThreshhold = 10000)
-		: QObject(parent), m_threshhold(millisecondThreshhold)
+	Delayer(QObject* parent, int linearDelay, int threshhold = 10000)
+		: QObject(parent), m_linearDelay(linearDelay), m_threshhold(threshhold)
 	{
 		m_delay->setSingleShot(true);
 		connect(m_delay, &QTimer::timeout, this, [&] {
@@ -16,11 +16,11 @@ public:
 			});
 	}
 
-	void delayedEmit(int length)
+	void delayedEmit(int input)
 	{
-		(length < m_threshhold)
+		(input < m_threshhold)
 			? m_delay->setInterval(0)
-			: m_delay->setInterval((length / m_threshhold) * 1000);
+			: m_delay->setInterval((input / m_threshhold) * m_linearDelay);
 		m_delay->start();
 	}
 
@@ -28,6 +28,7 @@ signals:
 	void signal();
 
 private:
+	const int m_linearDelay;
 	const int m_threshhold;
 	QTimer* m_delay = new QTimer(this);
 };

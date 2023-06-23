@@ -148,7 +148,7 @@
     <ClCompile Include="source\tools\PomodoroTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="source\common\DelaySignaller.hpp" />
+    <QtMoc Include="source\common\Delayer.hpp" />
     <ClInclude Include="source\common\Emoji.hpp" />
     <ClInclude Include="source\common\TextRecord.hpp" />
     <ClInclude Include="source\common\StringTools.hpp" />
