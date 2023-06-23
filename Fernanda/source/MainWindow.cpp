@@ -629,8 +629,6 @@ void MainWindow::openSystemFolder(const StdFsPath& path)
 
 void MainWindow::openFileTab(const StdFsPath& path, DocsManager::PathType pathType)
 {
-	qDebug() << __FUNCTION__;
-
 	if (path.empty()) {
 		m_indicator->red();
 		return;
@@ -657,10 +655,10 @@ void MainWindow::onTabServe(const QUuid& id)
 	m_editor->setDocument(incoming);
 }
 
-void MainWindow::onAddTabClick() // <------------------ START HERE
+void MainWindow::onAddTabClick()
 {
 	auto id = m_docsManager->newUnsaved();
-	m_tabBar->serve(id); // triggers onTabServe (or should)
+	m_tabBar->serve(id);
 }
 
 void MainWindow::onCloseTabClick(const QUuid& id)
