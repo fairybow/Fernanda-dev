@@ -42,23 +42,12 @@ void Editor::setHasLineNumberArea(bool state)
 	m_trueEditor->updateLineNumberAreaWidth();
 }
 
-void Editor::setPlainText(const QString& text)
+void Editor::setDocument(TextRecord* document)
 {
-	m_trueEditor->setPlainText(text);
-	emit askRestoreCursorSpan();
-}
-
-void Editor::setCursorSpan(int cursor, int anchor)
-{
-	auto text_cursor = m_trueEditor->textCursor();
-	if (anchor < 0 || anchor == cursor)
-		text_cursor.setPosition(cursor);
-	else {
-		text_cursor.setPosition(anchor, QTextCursor::MoveAnchor);
-		text_cursor.setPosition(cursor, QTextCursor::KeepAnchor);
-	}
-
-	m_trueEditor->setTextCursor(text_cursor);
+	m_trueEditor->setPlainText(document->text());
+	auto span = document->cursorSpan();
+	setCursorSpan(span.cursor, span.anchor);
+	setFocus();
 }
 
 void Editor::changeEvent(QEvent* event)
@@ -139,3 +128,16 @@ void Editor::lineNumberAreaConnections()
 {
 	//
 }*/
+
+void Editor::setCursorSpan(int cursor, int anchor)
+{
+	auto text_cursor = m_trueEditor->textCursor();
+	if (anchor == cursor)
+		text_cursor.setPosition(cursor);
+	else {
+		text_cursor.setPosition(anchor, QTextCursor::MoveAnchor);
+		text_cursor.setPosition(cursor, QTextCursor::KeepAnchor);
+	}
+
+	m_trueEditor->setTextCursor(text_cursor);
+}

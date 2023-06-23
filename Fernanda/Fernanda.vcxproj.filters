@@ -40,9 +40,6 @@
     <Filter Include="Source\Tools">
       <UniqueIdentifier>{754514d6-3538-451d-897e-36ad4a7af95e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Document">
-      <UniqueIdentifier>{4148ff82-b621-4d53-97fd-fc587ea06125}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources\Indicator">
       <UniqueIdentifier>{42fcc18a-eacc-44e8-a26a-87fcae06bdf4}</UniqueIdentifier>
     </Filter>
@@ -69,6 +66,9 @@
     </Filter>
     <Filter Include="Source\Previewer">
       <UniqueIdentifier>{ebe74914-e259-4ef3-8569-7bdfb34f58d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Documents">
+      <UniqueIdentifier>{4148ff82-b621-4d53-97fd-fc587ea06125}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -200,9 +200,6 @@
     <QtMoc Include="source\tools\PomodoroTimer.h">
       <Filter>Source\Tools</Filter>
     </QtMoc>
-    <QtMoc Include="source\document\Document.h">
-      <Filter>Source\Document</Filter>
-    </QtMoc>
     <QtMoc Include="source\common\UiButton.hpp">
       <Filter>Source\Common</Filter>
     </QtMoc>
@@ -233,6 +230,9 @@
     <QtMoc Include="source\LaunchCop.hpp">
       <Filter>Source</Filter>
     </QtMoc>
+    <QtMoc Include="source\common\Delayer.hpp">
+      <Filter>Source\Common</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -259,9 +259,6 @@
     <ClCompile Include="source\Meter.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="source\document\Document.cpp">
-      <Filter>Source\Document</Filter>
-    </ClCompile>
     <ClCompile Include="source\tools\PomodoroTimer.cpp">
       <Filter>Source\Tools</Filter>
     </ClCompile>
@@ -273,6 +270,12 @@
     </ClCompile>
     <ClCompile Include="source\tab-bar\TabBar.cpp">
       <Filter>Source\TabBar</Filter>
+    </ClCompile>
+    <ClCompile Include="source\documents\DocumentsManager.cpp">
+      <Filter>Source\Documents</Filter>
+    </ClCompile>
+    <ClCompile Include="source\documents\DocumentsCache.cpp">
+      <Filter>Source\Documents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -315,14 +318,8 @@
     <ClInclude Include="source\IniKeys.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="source\document\DocumentCache.hpp">
-      <Filter>Source\Document</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\Utility.hpp">
       <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\document\TextDocument.hpp">
-      <Filter>Source\Document</Filter>
     </ClInclude>
     <ClInclude Include="source\Logger.hpp">
       <Filter>Source</Filter>
@@ -357,9 +354,6 @@
     <ClInclude Include="source\Dimmer.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="source\document\IdBank.hpp">
-      <Filter>Source\Document</Filter>
-    </ClInclude>
     <ClInclude Include="source\previewer\Previewer.hpp">
       <Filter>Source\Previewer</Filter>
     </ClInclude>
@@ -371,6 +365,18 @@
     </ClInclude>
     <ClInclude Include="source\previewer\WebEngineView.hpp">
       <Filter>Source\Previewer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\TextRecord.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\documents\DocumentsCache.h">
+      <Filter>Source\Documents</Filter>
+    </ClInclude>
+    <ClInclude Include="source\documents\IdBank.hpp">
+      <Filter>Source\Documents</Filter>
+    </ClInclude>
+    <ClInclude Include="source\documents\DocumentsManager.h">
+      <Filter>Source\Documents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

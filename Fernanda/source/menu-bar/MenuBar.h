@@ -102,12 +102,13 @@ signals:
 	void askOpenInstallation();
 
 	void devOpenLogs();
-	void devDocument();
-	void devDocumentCurrent();
-	void devDocumentBank();
+	void devDocsManager();
+	void devDocsManagerCurrent();
+	void devDocsManagerBank();
 	void devStylist();
 	void devStylistStyleSheets();
 	void devStylistUnstyle();
+	void devTabBarCurrent();
 
 private:
 	static constexpr char CHECK_BOX_EDITOR_THEME[] = "has_editor_theme";

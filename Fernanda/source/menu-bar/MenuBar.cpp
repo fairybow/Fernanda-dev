@@ -131,14 +131,16 @@ void MenuBar::dev()
 	auto stylist_class = new QAction(tr("&Class info"), this);
 	auto stylist_stylesheets = new QAction(tr("&Style sheets"), this);
 	auto stylist_unstyle = new QAction(tr("&Remove all styling"), this);
+	auto tab_bar_current = new QAction(tr("&Current tab info"), this);
 
 	connect(open_logs, &QAction::triggered, this, lambdaEmit(devOpenLogs));
-	connect(document_class, &QAction::triggered, this, lambdaEmit(devDocument));
-	connect(document_current, &QAction::triggered, this, lambdaEmit(devDocumentCurrent));
-	connect(document_bank, &QAction::triggered, this, lambdaEmit(devDocumentBank));
+	connect(document_class, &QAction::triggered, this, lambdaEmit(devDocsManager));
+	connect(document_current, &QAction::triggered, this, lambdaEmit(devDocsManagerCurrent));
+	connect(document_bank, &QAction::triggered, this, lambdaEmit(devDocsManagerBank));
 	connect(stylist_class, &QAction::triggered, this, lambdaEmit(devStylist));
 	connect(stylist_stylesheets, &QAction::triggered, this, lambdaEmit(devStylistStyleSheets));
 	connect(stylist_unstyle, &QAction::triggered, this, lambdaEmit(devStylistUnstyle));
+	connect(tab_bar_current, &QAction::triggered, this, lambdaEmit(devTabBarCurrent));
 
 	auto menu = addMenu(tr("&Dev"));
 	menu->addMenu(openLocalFolders());
@@ -153,6 +155,10 @@ void MenuBar::dev()
 	auto stylist = menu->addMenu("&Stylist");	
 	for (const auto& action : { stylist_class, stylist_stylesheets, stylist_unstyle })
 		stylist->addAction(action);
+
+	auto tab_bar = menu->addMenu("&Tab bar");
+	for (const auto& action : { tab_bar_current })
+		tab_bar->addAction(action);
 }
 
 void MenuBar::addActionsToBoxes(QComboBox* comboBox, ActionGroup* actionGroup)

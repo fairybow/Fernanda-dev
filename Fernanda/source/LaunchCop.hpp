@@ -21,7 +21,8 @@ class LaunchCop : public QObject
 	Q_OBJECT
 
 public:
-	LaunchCop(const QString& lockString,
+	LaunchCop(
+		const QString& lockString,
 		const QString& mainWindowObjectName = "MainWindow",
 		bool forceFocus = false)
 		: m_serverName(lockString),

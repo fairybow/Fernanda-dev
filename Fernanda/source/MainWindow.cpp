@@ -6,6 +6,7 @@ MainWindow::MainWindow(const char* name, bool isDev, StdFsPath file, QWidget* pa
 	setupWidgets();
 	connections();
 	loadConfigs();
+
 	openNewTab();
 }
 
@@ -78,7 +79,7 @@ void MainWindow::setupWidgets()
 
 void MainWindow::connections()
 {
-	documentConnections();
+	docsManagerConnections();
 	tabBarConnections();
 	editorConnections();
 	meterConnections();
@@ -92,50 +93,41 @@ void MainWindow::connections()
 	menuBarDevConnections();
 }
 
-void MainWindow::documentConnections()
+void MainWindow::docsManagerConnections()
 {
-	connect(m_document, &Document::askSetText, this, [&] {
-		m_document->setText(m_editor->toPlainText());
-		});
-	connect(m_document, &Document::askSetCursorSpan, this, [&] {
-		m_document->setCursorSpan(m_editor->cursorPosition(), m_editor->cursorAnchor());
-		});
-	connect(m_document, &Document::editedStateChanged, m_tabBar, &TabBar::updateEditedState);
-
-	connect(m_editor, &Editor::textChanged, this, [&] {
-		auto text_length = m_editor->toPlainText().length();
-		m_document->setEditCheckDelay(text_length);
-		m_document->startEditCheckTimer();
-		});
-	connect(m_document, &Document::askEditCheck, this, [&] {
-		auto text = m_editor->toPlainText();
-		m_document->affirmEditedState(text);
-		});
-
-	connect(m_document, &Document::pathAndIdAssociated,
-		this, [&](const StdFsPath& path, const QUuid& id) {
-		m_tabBar->updateTitle(id, Path::qStringName(path));
-		});
+	//
 }
 
 void MainWindow::tabBarConnections()
 {
-	connect(m_tabBar, &TabBar::currentChanged, this, &MainWindow::onTabClick);
+	connect(m_tabBar, &TabBar::currentChanged, this, [&](const QUuid& id) {
+		qDebug() << "TabBar::currentChanged emitted" << id << Qt::endl;
+		onTabServe(id);
+		});
 	connect(m_tabBar, &TabBar::askAdd, this, &MainWindow::onAddTabClick);
 	connect(m_tabBar, &TabBar::askClearForClose, this, &MainWindow::onCloseTabClick);
+
 	connect(m_editor, &Editor::textChanged, this, [&] {
 		if (!m_tabBar->isUntitled()) return;
 		auto block = m_editor->firstBlock();
 		m_tabBar->setUntitledDisplay(block);
 		});
+
+	connect(m_editor, &Editor::textChanged, this, [&] {
+		auto text_length = m_editor->toPlainText().length();
+		m_tabFlagCheckDelayer->delayedEmit(text_length);
+		});
+	connect(m_tabFlagCheckDelayer, &Delayer::signal, this, [&] {
+		if (updateActiveDocRecord()) {
+			auto document = m_docsManager->active();
+			m_tabBar->updateEditedState(document->data().toUuid(), document->isEdited());
+		}
+		});
 }
 
 void MainWindow::editorConnections()
 {
-	connect(m_editor, &Editor::askRestoreCursorSpan, this, [&] {
-		auto span = m_document->cursorSpan();
-		m_editor->setCursorSpan(span.cursor, span.anchor);
-		});
+	//
 }
 
 void MainWindow::meterConnections()
@@ -175,10 +167,12 @@ void MainWindow::meterConnections()
 void MainWindow::menuBarConnections()
 {
 	connect(m_menuBar, &MenuBar::askOpenNewFile, this, [&] {
-		openNewFileTab(m_document->newFileDialog());
+		auto path = m_docsManager->newFileDialog();
+		openFileTab(path, DocsManager::PathType::New);
 		});
 	connect(m_menuBar, &MenuBar::askOpenFile, this, [&] {
-		openFileTab(m_document->openFileDialog());
+		auto path = m_docsManager->openFileDialog();
+		openFileTab(path);
 		});
 	connect(m_menuBar, &MenuBar::askSaveFile, this, &MainWindow::onSaveFile);
 }
@@ -390,13 +384,13 @@ void MainWindow::menuBarMiscConfigConnections()
 void MainWindow::menuBarDevConnections()
 {
 	connect(m_menuBar, &MenuBar::askOpenDocuments, this, [&] {
-		openFolder(m_user->documents());
+		openSystemFolder(m_user->documents());
 		});
 	connect(m_menuBar, &MenuBar::askOpenUserData, this, [&] {
-		openFolder(m_user->data());
+		openSystemFolder(m_user->data());
 		});
 	connect(m_menuBar, &MenuBar::askOpenInstallation, this, [&] {
-		openFolder(Path::toStdFs(QCoreApplication::applicationDirPath()).parent_path());
+		openSystemFolder(Path::toStdFs(QCoreApplication::applicationDirPath()).parent_path());
 		});
 	connect(m_menuBar, &MenuBar::devOpenLogs, this, [&] {
 		auto user_data = Path::toQString(m_user->data());
@@ -407,14 +401,14 @@ void MainWindow::menuBarDevConnections()
 			openFileTab(path);
 		}
 		});
-	connect(m_menuBar, &MenuBar::devDocument, this, [&] {
-		m_document->devClass();
+	connect(m_menuBar, &MenuBar::devDocsManager, this, [&] {
+		m_docsManager->devClass();
 		});
-	connect(m_menuBar, &MenuBar::devDocumentCurrent, this, [&] {
-		m_document->devCurrentInfo();
+	connect(m_menuBar, &MenuBar::devDocsManagerCurrent, this, [&] {
+		m_docsManager->devCurrentInfo();
 		});
-	connect(m_menuBar, &MenuBar::devDocumentBank, this, [&] {
-		m_document->devIdBank();
+	connect(m_menuBar, &MenuBar::devDocsManagerBank, this, [&] {
+		m_docsManager->devIdBank();
 		});
 	connect(m_menuBar, &MenuBar::devStylist, this, [&] {
 		m_stylist->devClass();
@@ -424,6 +418,9 @@ void MainWindow::menuBarDevConnections()
 		});
 	connect(m_menuBar, &MenuBar::devStylistUnstyle, this, [&] {
 		m_stylist->unStyle();
+		});
+	connect(m_menuBar, &MenuBar::devTabBarCurrent, this, [&] {
+		m_tabBar->devCurrentInfo();
 		});
 }
 
@@ -625,41 +622,53 @@ MainWindow::PromptResult MainWindow::singleSavePrompt()
 		QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 }
 
-void MainWindow::openFolder(const StdFsPath& path)
+void MainWindow::openSystemFolder(const StdFsPath& path)
 {
 	QDesktopServices::openUrl(QUrl::fromLocalFile(Path::toQString(path)));
 }
 
-void MainWindow::openFileTab(const StdFsPath& path, bool writeNew)
+void MainWindow::openFileTab(const StdFsPath& path, DocsManager::PathType pathType)
 {
 	if (path.empty()) {
 		m_indicator->red();
 		return;
 	}
-	auto text = m_document->setCurrent(path, writeNew);
-	m_tabBar->serve(m_document->currentId(), path);
-	m_editor->setPlainText(text);
+
+	auto id = m_docsManager->fromDisk(pathType, path);
+	auto title = m_docsManager->at(id)->title();
+	m_tabBar->serve(id, title);
 }
 
-void MainWindow::onTabClick(const QUuid& id)
+bool MainWindow::updateActiveDocRecord()
 {
-	auto document_text = m_document->setCurrent(id);
-	m_editor->setPlainText(document_text);
+	if (!m_docsManager->hasActive()) return false;
+	auto document = m_docsManager->active();
+	document->setText(m_editor->toPlainText());
+	document->setCursorSpan(m_editor->cursorPosition(), m_editor->cursorAnchor());
+	return true;
+}
+
+void MainWindow::onTabServe(const QUuid& id)
+{
+	updateActiveDocRecord();
+	auto incoming = m_docsManager->setActive(id);
+	m_editor->setDocument(incoming);
 }
 
 void MainWindow::onAddTabClick()
 {
-	auto new_id = m_document->createEmpty();
-	m_document->setCurrent(new_id);
-	m_tabBar->serve(new_id);
-	m_editor->clear();
-	m_editor->setFocus();
+	auto id = m_docsManager->newUnsaved();
+	m_tabBar->serve(id);
 }
 
 void MainWindow::onCloseTabClick(const QUuid& id)
 {
-	if (m_document->isEdited(id)) {
-		m_tabBar->serve(id);
+	if (m_docsManager->isActive(id))
+		updateActiveDocRecord();
+
+	if (m_docsManager->at(id)->isEdited()) {
+		if (!m_docsManager->isActive(id))
+			m_tabBar->serve(id);
 
 		auto early_return = false;
 		auto action = singleSavePrompt();
@@ -676,17 +685,25 @@ void MainWindow::onCloseTabClick(const QUuid& id)
 	}
 
 	m_tabBar->close(id);
-	m_document->close(id);
+	m_docsManager->close(id);
 	if (m_tabBar->isEmpty())
 		openNewTab();
 }
 
 bool MainWindow::onSaveFile()
 {
-	if (!m_document->isSaveable()) return false;
+	if (!updateActiveDocRecord()
+		|| !m_docsManager->active()->isEdited())
+		return false;
 
-	qDebug() << __FUNCTION__;
+	auto save_result = m_docsManager->toDisk();
+	if (save_result) {
+		auto document = m_docsManager->active();
+		auto id = document->data().toUuid();
+		auto path = m_docsManager->pathAt(id);
+		m_tabBar->updateEditedState(id, document->isEdited());
+		m_tabBar->updateTitle(id, Path::qStringName(path));
+	}
 
-	auto saved = m_document->save();
-	return m_indicator->onResult(saved);
+	return m_indicator->onResult(save_result);
 }

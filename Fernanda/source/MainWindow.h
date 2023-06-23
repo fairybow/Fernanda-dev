@@ -1,9 +1,10 @@
 #pragma once
 
+#include "common/Delayer.hpp"
 #include "common/Layout.hpp"
 #include "common/Path.hpp"
 #include "common/Widget.hpp"
-#include "document/Document.h"
+#include "documents/DocumentsManager.h"
 #include "editor/Editor.h"
 #include "menu-bar/MenuBar.h"
 //#include "Previewer/Previewer.hpp"
@@ -31,6 +32,7 @@
 #include <QStyle>
 #include <QUrl>
 #include <QUuid>
+#include <QVariant>
 
 #include <filesystem>
 #include <functional>
@@ -61,11 +63,9 @@ private:
 	bool m_isInitialized = false;
 
 	User* m_user = new User(QCoreApplication::applicationName(), this);
-	Document* m_document = new Document({
-		m_user->documents(),
-		m_user->temp(),
-		m_user->backup() },
-		this, this, 100);
+	DocsManager* m_docsManager = new DocsManager(
+		{ m_user->documents(), m_user->temp(), m_user->backup() },
+		this, 99);
 	//Project* m_project = new Project(this);
 	MenuBar* m_menuBar = new MenuBar("MenuBar", m_user->data(), m_isDev);
 	StatusBar* m_statusBar = new StatusBar("StatusBar");
@@ -78,11 +78,12 @@ private:
 	StayAwake* m_stayAwake = new StayAwake;
 	AlwaysOnTop* m_alwaysOnTop = new AlwaysOnTop(this);
 	Stylist* m_stylist = new Stylist({ this, m_editor }, this);
+	Delayer* m_tabFlagCheckDelayer = new Delayer(this, 1000);
 
 	MainWindow* spawn();
 	void setupWidgets();
 	void connections();
-	void documentConnections();
+	void docsManagerConnections();
 	void tabBarConnections();
 	void editorConnections();
 	void meterConnections();
@@ -106,10 +107,10 @@ private:
 	void closeEventConfigs(Qt::WindowStates priorState);
 	void setUserFont(const QFont& font);
 	PromptResult singleSavePrompt();
-	void openFolder(const StdFsPath& path);
+	void openSystemFolder(const StdFsPath& path);
+	void openFileTab(const StdFsPath& path, DocsManager::PathType pathType = DocsManager::PathType::Extant);
+	bool updateActiveDocRecord();
 
-	void openFileTab(const StdFsPath& path, bool writeNew = false);
-	void openNewFileTab(const StdFsPath& path) { openFileTab(path, true); };
 	void openNewTab() { onAddTabClick(); };
 
 	template<typename T>
@@ -136,7 +137,7 @@ private:
 	}
 
 private slots:
-	void onTabClick(const QUuid& id);
+	void onTabServe(const QUuid& id);
 	void onAddTabClick();
 	void onCloseTabClick(const QUuid& id);
 	bool onSaveFile();

@@ -133,7 +133,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\common\Fx.hpp" />
-    <ClCompile Include="source\document\Document.cpp" />
+    <ClCompile Include="source\documents\DocumentsCache.cpp" />
+    <ClCompile Include="source\documents\DocumentsManager.cpp" />
     <ClCompile Include="source\editor\Editor.cpp" />
     <ClCompile Include="source\editor\LineNumberArea.cpp" />
     <ClCompile Include="source\editor\TrueEditor.cpp" />
@@ -147,16 +148,17 @@
     <ClCompile Include="source\tools\PomodoroTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="source\common\Delayer.hpp" />
     <ClInclude Include="source\common\Emoji.hpp" />
+    <ClInclude Include="source\common\TextRecord.hpp" />
     <ClInclude Include="source\common\StringTools.hpp" />
     <QtMoc Include="source\common\UiButton.hpp" />
     <ClInclude Include="source\common\Utility.hpp" />
-    <QtMoc Include="source\document\Document.h" />
     <ClInclude Include="source\Dimmer.hpp" />
-    <ClInclude Include="source\document\DocumentCache.hpp" />
-    <ClInclude Include="source\document\IdBank.hpp" />
-    <ClInclude Include="source\document\TextDocument.hpp" />
     <QtMoc Include="source\LaunchCop.hpp" />
+    <ClInclude Include="source\documents\DocumentsCache.h" />
+    <ClInclude Include="source\documents\DocumentsManager.h" />
+    <ClInclude Include="source\documents\IdBank.hpp" />
     <ClInclude Include="source\Logger.hpp" />
     <ClInclude Include="source\menu-bar\ActionGroup.h" />
     <ClInclude Include="source\menu-bar\ComboBox.hpp" />
