@@ -1,0 +1,41 @@
+# Clean-up checklist
+
+(This is not definitive or finished.)
+
+- Members should be prefixed with `m_`
+- Static members should be prefixed with `s_`
+- Casing:
+	- Functions, members, args: `camelCase` (or `m_camelCase`)
+	- Classes, structs, enums: `PascalCase`
+	- Local variables: `snake_case`
+	- `constexpr`s: `SCREAMING_SNAKE`
+	- Macros: can vary depending on usage, but would generally also be `SCREAMING_SNAKE`
+- Check that `#include`s are kept to the `.cpp` file where possible.
+- Includes should be grouped into 3 A-Z groups: **Me**, **You**, and **Them**. **Me** means files like `Fernanda.h`; **You** means from outside libraries, as in `<QWidget>` or `<Windows.h>`; and **Them** means from the C/C++ standard library.
+- Use `Q_OBJECT` for, obviously, signals/slots, but also if you want a function like `QWidget::parent()`, where the `parent` is a custom subclass, to output the subclass's name (instead of the inherited class's name) in console.
+- Order of access specifiers:
+	- `public`
+	- `public slots`
+	- `protected`
+	- `private`
+	- `private slots`
+	- `signals`
+	- `private` (developer/test functions, if needed)
+- Order of header items
+	- public:
+		- any enums used as constructor arg
+		- constructor/destructor
+		- enums/structs/members
+		- functions
+			- operator overloads
+			- values/info (e.g. `bool isEmpty()` or `QList<QWidget*> widgets()`)
+			- getter/setter pairs
+			- anything else that isn't a slot (grouped by action/idea/object/whatever)
+	- private
+		- enums/structs/members
+		- functions
+			- setup functions
+			- same as above
+- Slots should use the naming scheme `on[ChildObject]Signalled`, such as `onCurrentChanged` for a `QTabBar` self-connection to the `currentChanged` signal, or `onQTabBarCurrentChanged` for a `PageArea`'s slot for its `QTabBar`'s signal.
+- Public slots may vary, like `setCurrentIndex(int index)`.
+- Prefer using readable enums over bools for arguments where logical. That is, reading `updateCounts(true)` provides no context outside of an IDE, whereas `updateCounts(Force::Yes)` is pretty clear; however, things like `setVisible(true)` are plenty good.

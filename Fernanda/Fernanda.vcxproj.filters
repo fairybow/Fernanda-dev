@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{de594d42-17e5-4334-9336-e18f206ba8df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Notes">
+      <UniqueIdentifier>{7ecb5f03-6ed4-4a03-926c-a0d954b716e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{fb585d74-dbe7-4e91-a400-a8098bb4e5cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Common">
+      <UniqueIdentifier>{5b616321-8ef4-43e4-91fa-80a3b56d1b7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Tree View">
+      <UniqueIdentifier>{3161e746-e6b1-47a8-a5f4-642457092d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Documents">
+      <UniqueIdentifier>{4f279bbf-d142-4a5b-8697-8f4b2fe40635}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor">
+      <UniqueIdentifier>{5454e5a1-6df9-4ca1-be5b-3a119702297d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Menus">
+      <UniqueIdentifier>{a359e6a4-134b-4bb7-8e8b-7c43b6bc5423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Page Area">
+      <UniqueIdentifier>{7137a039-73b2-4bdb-99b6-6dbe9053c3e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Meter">
+      <UniqueIdentifier>{d7dc149d-36e1-4306-b7ce-9756d8ba66b9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="notes\Visual Studio settings.md">
+      <Filter>Notes</Filter>
+    </None>
+    <None Include="cpp.hint" />
+    <None Include="..\README.md" />
+    <None Include="..\Doxyfile" />
+    <None Include="..\.gitignore" />
+    <None Include="notes\Clean-up checklist.md">
+      <Filter>Notes</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="external\External.qrc">
+      <Filter>Resources</Filter>
+    </QtRcc>
+    <QtRcc Include="resources\test\Test.qrc">
+      <Filter>Resources</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\Resources.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\Fernanda.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Window.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\documents\Document.cpp">
+      <Filter>Source\Documents</Filter>
+    </ClCompile>
+    <ClCompile Include="source\tree-view\TreeView.cpp">
+      <Filter>Source\Tree View</Filter>
+    </ClCompile>
+    <ClCompile Include="source\editor\Editor.cpp">
+      <Filter>Source\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menus\Menus.cpp">
+      <Filter>Source\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\page-area\PageArea.cpp">
+      <Filter>Source\Page Area</Filter>
+    </ClCompile>
+    <ClCompile Include="source\page-area\TabBar.cpp">
+      <Filter>Source\Page Area</Filter>
+    </ClCompile>
+    <ClCompile Include="source\page-area\TabControlBox.cpp">
+      <Filter>Source\Page Area</Filter>
+    </ClCompile>
+    <ClCompile Include="source\meter\Meter.cpp">
+      <Filter>Source\Meter</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="source\Fernanda.h">
+      <Filter>Source</Filter>
+    </QtMoc>
+    <QtMoc Include="source\Window.h">
+      <Filter>Source</Filter>
+    </QtMoc>
+    <QtMoc Include="source\common\StartCop.hpp">
+      <Filter>Source\Common</Filter>
+    </QtMoc>
+    <QtMoc Include="source\documents\Document.h">
+      <Filter>Source\Documents</Filter>
+    </QtMoc>
+    <QtMoc Include="source\tree-view\TreeView.h">
+      <Filter>Source\Tree View</Filter>
+    </QtMoc>
+    <QtMoc Include="source\menus\Menus.h">
+      <Filter>Source\Menus</Filter>
+    </QtMoc>
+    <QtMoc Include="source\editor\Editor.h">
+      <Filter>Source\Editor</Filter>
+    </QtMoc>
+    <QtMoc Include="source\page-area\PageArea.h">
+      <Filter>Source\Page Area</Filter>
+    </QtMoc>
+    <QtMoc Include="source\page-area\TabBar.h">
+      <Filter>Source\Page Area</Filter>
+    </QtMoc>
+    <QtMoc Include="source\page-area\TabCloseButton.hpp">
+      <Filter>Source\Page Area</Filter>
+    </QtMoc>
+    <QtMoc Include="source\page-area\TabControlBox.h">
+      <Filter>Source\Page Area</Filter>
+    </QtMoc>
+    <QtMoc Include="source\page-area\PageAreaStack.hpp">
+      <Filter>Source\Page Area</Filter>
+    </QtMoc>
+    <QtMoc Include="source\meter\Meter.h">
+      <Filter>Source\Meter</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\common\Connect.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\Image.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\Layout.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\Path.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\UiButton.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\Io.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\Fx.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="notes\Test copy.cpp">
+      <Filter>Notes</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+***************************************************************************************************
+ Copyright (C) 2023 The Qt Company Ltd.
+ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+***************************************************************************************************
+-->
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.gitignore" />
+    <None Include="..\Doxyfile" />
+    <None Include="..\README.md" />
+    <None Include="cpp.hint" />
+    <None Include="notes\Clean-up checklist.md" />
+    <None Include="notes\Visual Studio settings.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="external\External.qrc" />
+    <QtRcc Include="resources\test\Test.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\Resources.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\documents\Document.cpp" />
+    <ClCompile Include="source\editor\Editor.cpp" />
+    <ClCompile Include="source\Fernanda.cpp" />
+    <ClCompile Include="source\Main.cpp" />
+    <ClCompile Include="source\menus\Menus.cpp" />
+    <ClCompile Include="source\meter\Meter.cpp" />
+    <ClCompile Include="source\page-area\PageArea.cpp" />
+    <ClCompile Include="source\page-area\TabBar.cpp" />
+    <ClCompile Include="source\page-area\TabControlBox.cpp" />
+    <ClCompile Include="source\tree-view\TreeView.cpp" />
+    <ClCompile Include="source\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="source\Fernanda.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="source\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\common\Connect.hpp" />
+    <ClInclude Include="source\common\Fx.hpp" />
+    <ClInclude Include="source\common\Image.hpp" />
+    <ClInclude Include="source\common\Io.hpp" />
+    <ClInclude Include="source\common\Layout.hpp" />
+    <ClInclude Include="source\common\Path.hpp" />
+    <ClInclude Include="source\common\UiButton.hpp" />
+    <QtMoc Include="source\meter\Meter.h" />
+    <QtMoc Include="source\page-area\PageAreaStack.hpp" />
+    <QtMoc Include="source\page-area\TabControlBox.h" />
+    <QtMoc Include="source\page-area\TabCloseButton.hpp" />
+    <QtMoc Include="source\page-area\TabBar.h" />
+    <QtMoc Include="source\page-area\PageArea.h" />
+    <QtMoc Include="source\editor\Editor.h" />
+    <QtMoc Include="source\menus\Menus.h" />
+    <QtMoc Include="source\tree-view\TreeView.h" />
+    <QtMoc Include="source\documents\Document.h" />
+    <QtMoc Include="source\common\StartCop.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="notes\Test copy.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{AB908CAF-33D2-41B4-8815-3FFAA14B6DAA}</ProjectGuid>
+    <Keyword>QtVS_v304</Keyword>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0.22621.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0.22621.0</WindowsTargetPlatformVersion>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
+    <Import Project="$(QtMsBuild)\qt_defaults.props" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
+    <QtInstall>6.6.1_msvc2019_64</QtInstall>
+    <QtModules>core;gui;network;widgets</QtModules>
+    <QtBuildConfig>debug</QtBuildConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
+    <QtInstall>6.6.1_msvc2019_64</QtInstall>
+    <QtModules>core;gui;network;widgets</QtModules>
+    <QtBuildConfig>release</QtBuildConfig>
+  </PropertyGroup>
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ClCompile>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ClCompile>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <Optimization>MaxSpeed</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
