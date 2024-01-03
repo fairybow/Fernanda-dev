@@ -1,4 +1,4 @@
-#include "common/StartCop.hpp"
+#include "StartCop.hpp"
 #include "Fernanda.h"
 
 #include <QApplication>

@@ -1,9 +1,15 @@
 #include "common/Connect.hpp"
+#include "settings/IniKeys.hpp"
 #include "Fernanda.h"
+
+#include <QDir>
+#include <QStandardPaths>
 
 Fernanda::Fernanda(bool isDev)
 	: m_isDev(isDev)
-{}
+{
+	setup();
+}
 
 void Fernanda::newWindow()
 {
@@ -13,6 +19,14 @@ void Fernanda::newWindow()
 	setupWindow(window);
 
 	window->show();
+}
+
+void Fernanda::setup()
+{
+	//path = QStandardPaths::locate(QStandardPaths::DocumentsLocation, nullptr, QStandardPaths::LocateDirectory);
+
+	auto ini_path = Path(QDir::homePath()) / SETTINGS_INI;
+	m_iniWriter = new IniWriter(ini_path, this);
 }
 
 void Fernanda::setupWindow(Window* window)

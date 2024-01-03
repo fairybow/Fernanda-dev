@@ -31,6 +31,9 @@
     <Filter Include="Source\Meter">
       <UniqueIdentifier>{d7dc149d-36e1-4306-b7ce-9756d8ba66b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Settings">
+      <UniqueIdentifier>{7ea85827-e0dd-4524-b63d-61555d667791}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="notes\Visual Studio settings.md">
@@ -99,9 +102,6 @@
     <QtMoc Include="source\Window.h">
       <Filter>Source</Filter>
     </QtMoc>
-    <QtMoc Include="source\common\StartCop.hpp">
-      <Filter>Source\Common</Filter>
-    </QtMoc>
     <QtMoc Include="source\documents\Document.h">
       <Filter>Source\Documents</Filter>
     </QtMoc>
@@ -132,6 +132,12 @@
     <QtMoc Include="source\meter\Meter.h">
       <Filter>Source\Meter</Filter>
     </QtMoc>
+    <QtMoc Include="source\settings\IniWriter.hpp">
+      <Filter>Source\Settings</Filter>
+    </QtMoc>
+    <QtMoc Include="source\StartCop.hpp">
+      <Filter>Source</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Connect.hpp">
@@ -154,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="source\common\Fx.hpp">
       <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\settings\IniKeys.hpp">
+      <Filter>Source\Settings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

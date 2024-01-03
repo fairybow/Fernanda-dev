@@ -58,6 +58,9 @@
     <ClInclude Include="source\common\Layout.hpp" />
     <ClInclude Include="source\common\Path.hpp" />
     <ClInclude Include="source\common\UiButton.hpp" />
+    <ClInclude Include="source\settings\IniKeys.hpp" />
+    <QtMoc Include="source\StartCop.hpp" />
+    <QtMoc Include="source\settings\IniWriter.hpp" />
     <QtMoc Include="source\meter\Meter.h" />
     <QtMoc Include="source\page-area\PageAreaStack.hpp" />
     <QtMoc Include="source\page-area\TabControlBox.h" />
@@ -68,7 +71,6 @@
     <QtMoc Include="source\menus\Menus.h" />
     <QtMoc Include="source\tree-view\TreeView.h" />
     <QtMoc Include="source\documents\Document.h" />
-    <QtMoc Include="source\common\StartCop.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes\Test copy.cpp" />

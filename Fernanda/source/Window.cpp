@@ -1,13 +1,12 @@
 #include "common/Connect.hpp"
 #include "common/Image.hpp"
 #include "common/Io.hpp"
-#include "editor/Editor.h"
 #include "Window.h"
 
 #include <QDockWidget>
 #include <QStatusBar>
 #include <QTextBlock>
-#include <QVariant>
+//#include <QVariant>
 
 constexpr char LOGO_QRC_PATH[] = ":/test/Fernanda_64.png";
 
@@ -34,24 +33,25 @@ bool Window::find(const Path& path, SwitchIfFound switchIfFound) const
 	return true;
 }
 
-void Window::open(const Path& path)
+void Window::open(Document* document)
 {
-	auto document = newDocument(path);
-	connect(document, &Document::modificationChanged, this, &Window::onDocumentModificationChanged);
-	// ^ Use `Editor::modificationChanged` instead?
-
-	auto editor = new Editor;
-	editor->setDocument(document);
-	connect(editor, &Editor::textChanged, this, &Window::onEditorTextChanged);
+	auto editor = newEditor(document);
 
 	auto title = document->title();
 	auto index = m_currentPageArea->add(editor, title);
 
-	auto data = QVariant::fromValue(document);
-	m_currentPageArea->setData(index, data);
+	//auto data = QVariant::fromValue(document);
+	//m_currentPageArea->setData(index, data);
 
 	m_currentPageArea->setCurrentIndex(index);
-	m_currentPageArea->currentWidget()->setFocus();
+	m_currentPageArea->currentWidget()->setFocus(); // Any reason not to just use `editor`?
+}
+
+void Window::open(const Path& path)
+{
+	auto document = newDocument(path);
+
+	open(document);
 }
 
 void Window::closeEvent(QCloseEvent* event)
@@ -66,15 +66,15 @@ QList<PageArea*> Window::pageAreas() const
 	return m_splitter->findChildren<PageArea*>();
 }
 
-Window::PageIndex Window::pageIndexOf(Document* document) const
+Window::PageIndex Window::pageIndexOf(Editor* editor) const
 {
 	for (auto& page_area : pageAreas())
 		for (auto i = 0; i < page_area->count(); ++i) {
-			auto data = page_area->data(i);
+			auto page_index = PageIndex(page_area, i);
 
-			if (document != data.value<Document*>()) continue;
+			if (editor != editorAt(page_index)) continue;
 
-			return PageIndex(page_area, i);
+			return page_index;
 		}
 
 	return PageIndex();
@@ -93,6 +93,16 @@ Window::PageIndex Window::pageIndexOf(const Path& path) const
 		}
 
 	return PageIndex();
+}
+
+Editor* Window::editorAt(PageIndex pageIndex) const
+{
+	return qobject_cast<Editor*>(pageIndex.area->widgetAt(pageIndex.i));
+}
+
+Document* Window::documentOf(Editor* editor) const
+{
+	return qobject_cast<Document*>(editor->document());
 }
 
 void Window::setup()
@@ -175,6 +185,24 @@ Document* Window::newDocument(const Path& path)
 	return document;
 }
 
+Editor* Window::newEditor(Document* document)
+{
+	auto editor = new Editor;
+	editor->setDocument(document);
+
+	connect(editor, &Editor::textChanged, this, &Window::onEditorTextChanged);
+	connect(editor, &Editor::modificationChanged, this, &Window::onEditorModificationChanged);
+
+	return editor;
+}
+
+Editor* Window::removeCurrentPageAreaEditor(int index)
+{
+	auto editor = m_currentPageArea->remove(index);
+
+	return qobject_cast<Editor*>(editor);
+}
+
 void Window::onPageAreaAddRequested()
 {
 	auto page_area = sender_cast(PageArea);
@@ -192,12 +220,18 @@ void Window::onPageAreaCloseRequested(int index)
 
 	m_currentPageArea = page_area;
 
-	auto editor = m_currentPageArea->remove(index);
-
-	// What to do with Document?
+	auto editor = removeCurrentPageAreaEditor(index);
+	auto document = documentOf(editor);
 
 	if (editor)
 		delete editor;
+
+	// What to do with Document?
+
+	auto current_editor = m_currentPageArea->currentWidget();
+
+	if (current_editor)
+		current_editor->setFocus();
 }
 
 void Window::onPageAreaCurrentChanged(int index)
@@ -212,18 +246,18 @@ void Window::onPageAreaCurrentChanged(int index)
 		return;
 	}
 
-	auto editor = qobject_cast<Editor*>(m_currentPageArea->widgetAt(index));
+	auto editor = editorAt(PageIndex(m_currentPageArea, index));
 	if (!editor) return;
 	
 	m_meter->setCurrentEditor(editor);
 }
 
-void Window::onDocumentModificationChanged(bool changed)
+void Window::onEditorModificationChanged(bool changed)
 {
-	auto document = sender_cast(Document);
-	if (!document) return;
+	auto editor = sender_cast(Editor);
+	if (!editor) return;
 
-	auto page_index = pageIndexOf(document);
+	auto page_index = pageIndexOf(editor);
 	if (!page_index.isValid()) return;
 
 	page_index.area->setTabFlagged(page_index.i, changed);
@@ -234,12 +268,10 @@ void Window::onEditorTextChanged()
 	auto editor = sender_cast(Editor);
 	if (!editor) return;
 
-	// Eventually, call separate functions when multiple actions are needed for one slot
-
-	auto document = qobject_cast<Document*>(editor->document());
+	auto document = documentOf(editor);
 	if (document->hasTitle()) return;
 
-	auto page_index = pageIndexOf(document);
+	auto page_index = pageIndexOf(editor);
 	if (!page_index.isValid()) return;
 
 	auto block = document->firstBlock().text();

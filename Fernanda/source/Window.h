@@ -2,12 +2,14 @@
 
 #include "common/Path.hpp"
 #include "documents/Document.h"
+#include "editor/Editor.h"
 #include "meter/Meter.h"
 #include "page-area/PageArea.h"
 #include "tree-view/TreeView.h"
 
 #include <QCloseEvent>
 #include <QDebug>
+#include <QList>
 #include <QMainWindow>
 #include <QSplitter>
 
@@ -16,15 +18,16 @@ class Window : public QMainWindow
 	Q_OBJECT
 
 public:
+	Window();
+	~Window() { qDebug() << __FUNCTION__; }
+
 	enum class SwitchIfFound {
 		No,
 		Yes
 	};
 
-	Window();
-	~Window() { qDebug() << __FUNCTION__; }
-
 	bool find(const Path& path, SwitchIfFound switchIfFound = SwitchIfFound::Yes) const;
+	void open(Document* document);
 	void open(const Path& path = Path());
 
 protected:
@@ -50,8 +53,10 @@ private:
 	Meter* m_meter = new Meter;
 
 	QList<PageArea*> pageAreas() const;
-	PageIndex pageIndexOf(Document* document) const;
+	PageIndex pageIndexOf(Editor* editor) const;
 	PageIndex pageIndexOf(const Path& path) const;
+	Editor* editorAt(PageIndex pageIndex) const;
+	Document* documentOf(Editor* editor) const;
 
 	void setup();
 	void addTreeView();
@@ -59,12 +64,15 @@ private:
 	void addPageArea();
 	void setupPageArea(PageArea* pageArea);
 	Document* newDocument(const Path& path = Path());
+	Editor* newEditor(Document* document);
+
+	Editor* removeCurrentPageAreaEditor(int index);
 
 private slots:
 	void onPageAreaAddRequested();
 	void onPageAreaCloseRequested(int index);
 	void onPageAreaCurrentChanged(int index);
-	void onDocumentModificationChanged(bool changed);
+	void onEditorModificationChanged(bool changed);
 	void onEditorTextChanged();
 
 signals:

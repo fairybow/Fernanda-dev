@@ -32,7 +32,7 @@
 			- getter/setter pairs
 			- anything else that isn't a slot (grouped by action/idea/object/whatever)
 	- private
-		- enums/structs/members
+		- static constexprs, enums, structs, and members
 		- functions
 			- setup functions
 			- same as above

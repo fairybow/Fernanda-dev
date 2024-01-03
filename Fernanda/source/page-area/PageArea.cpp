@@ -142,9 +142,6 @@ int PageArea::add(QWidget* widget, const QString& tabText)
 {
 	auto index = addNewPage(widget, tabText);
 
-	if (count() == 1)
-		onTabBarCurrentChanged(0); // See `addNewPage`.
-
 	return index;
 }
 
@@ -210,13 +207,15 @@ int PageArea::addNewPage(QWidget* widget, const QString& tabText, int insertInde
 	auto index = m_tabBar->insertTab(insertIndex, tabText);
 	m_tabBar->setTabData(index, QVariant::fromValue(widget));
 
+	addTabCloseButton(index);
+
 	// Note:
 	// `m_tabBar` is automatically switched in the case of adding the first tab,
 	// which causes `onTabBarCurrentChanged` to be called before `setTabData` has
 	// been called, which means the slot returns early. So, in the case of
 	// adding the first tab, the slot must be manually called with `index` 0.
-
-	addTabCloseButton(index);
+	if (count() == 1)
+		onTabBarCurrentChanged(0);
 
 	return index;
 }
@@ -240,7 +239,7 @@ void PageArea::addTabCloseButton(int index)
 	auto close_button = new TabCloseButton(m_tabBar);
 	m_tabBar->setTabButton(index, TabBar::RightSide, close_button);
 
-	auto slot = [&](int index) { emit closeRequested(index); };
+	auto slot = [&](int close_button_index) { emit closeRequested(close_button_index); };
 	connect(close_button, &TabCloseButton::clickedAt, this, slot);
 }
 

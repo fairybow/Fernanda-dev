@@ -9,17 +9,8 @@
 #include <QTextCursor>
 #include <QTextDocumentFragment>
 
-constexpr char LINE_POS_LABEL[] = "ln ";
-constexpr char COL_POS_LABEL[] = "col ";
-constexpr char LINES_LABEL[] = " lines";
-constexpr char WORDS_LABEL[] = " words";
-constexpr char CHARS_LABEL[] = " chars";
-constexpr char SEPARATOR[] = " / ";
-constexpr char JOINER[] = ", ";
-constexpr char CAPTURE_LEADING_WHITESPACE[] = "(\\s|\\n|\\r|\U00002029|^)+";
-
-Meter::Meter(QWidget* parent)
-	: QWidget(parent)
+Meter::Meter(QWidget* parent, int autoCountCharLimit)
+	: QWidget(parent), m_autoCountCharLimit(autoCountCharLimit)
 {
 	setup();
 }
@@ -39,6 +30,66 @@ void Meter::setCurrentEditor(QPlainTextEdit* editor)
 	connectEditor();
 
 	run();
+}
+
+int Meter::autoCountCharLimit() const
+{
+	return m_autoCountCharLimit;
+}
+
+void Meter::setAutoCountCharLimit(int limit)
+{
+	m_autoCountCharLimit = limit;
+}
+
+bool Meter::hasLinePosition() const
+{
+	return m_hasLinePosition;
+}
+
+void Meter::setHasLinePosition(bool has)
+{
+	m_hasLinePosition = has;
+}
+
+bool Meter::hasColumnPosition() const
+{
+	return m_hasColumnPosition;
+}
+
+void Meter::setHasColumnPosition(bool has)
+{
+	m_hasColumnPosition = has;
+}
+
+bool Meter::hasLineCount() const
+{
+	return m_hasLineCount;
+}
+
+void Meter::setHasLineCount(bool has)
+{
+	m_hasLineCount = has;
+}
+
+bool Meter::hasWordCount() const
+{
+	return m_hasWordCount;
+}
+
+void Meter::setHasWordCount(bool has)
+{
+	m_hasWordCount = has;
+}
+
+bool Meter::hasCharCount() const
+{
+	return m_hasCharCount;
+}
+
+void Meter::setHasCharCount(bool has)
+{
+	m_hasCharCount = has;
 }
 
 void Meter::run()
@@ -69,7 +120,7 @@ bool Meter::hasAnyCount() const
 
 void Meter::setup()
 {
-	QWidgetList widgets{ m_positions, m_separator, m_counts, m_refresh };
+	QWidgetList widgets{ m_positions, m_separator, m_counts, m_refreshCounts };
 	Layout::box(Box::Horizontal, this, widgets);
 
 	m_separator->setText(SEPARATOR);
@@ -79,7 +130,7 @@ void Meter::setup()
 	Fx::opacify(m_separator, 0.3);
 	Fx::opacify(m_counts, 0.8);
 
-	connect(m_refresh, &UiButton::clicked, this, &Meter::onRefreshClicked);
+	connect(m_refreshCounts, &UiButton::clicked, this, &Meter::onRefreshCountsClicked);
 }
 
 void Meter::connectEditor()
@@ -96,14 +147,32 @@ void Meter::disconnectEditor()
 
 void Meter::updatePositions()
 {
+	if (!m_currentEditor) return;
+
 	auto is_needed = hasAnyPosition();
 	maybeShowLabel(m_positions, is_needed);
 
 	if (!is_needed) return;
 
-	auto cursor = m_currentEditor->textCursor();
+	m_positions->setText(buildPositions());
+}
 
+void Meter::updateCounts(Force force)
+{
+	if (!m_currentEditor || (!m_autoCount && force == Force::No)) return;
+
+	auto is_needed = hasAnyCount();
+	maybeShowLabel(m_counts, is_needed);
+
+	if (!is_needed) return;
+
+	m_counts->setText(buildCounts());
+}
+
+QString Meter::buildPositions()
+{
 	QStringList elements;
+	auto cursor = m_currentEditor->textCursor();
 
 	if (m_hasLinePosition)
 		elements << LINE_POS_LABEL + QString::number(cursor.blockNumber() + 1);
@@ -111,21 +180,13 @@ void Meter::updatePositions()
 	if (m_hasColumnPosition)
 		elements << COL_POS_LABEL + QString::number(cursor.positionInBlock() + 1);
 
-	m_positions->setText(elements.join(JOINER));
+	return elements.join(JOINER);
 }
 
-void Meter::updateCounts(Force force)
+QString Meter::buildCounts()
 {
-	if (!m_autoCount && force == Force::No) return;
-
-	auto is_needed = hasAnyCount();
-	maybeShowLabel(m_counts, is_needed);
-
-	if (!is_needed) return;
-
-	auto cursor = m_currentEditor->textCursor();
-
 	QStringList elements;
+	auto cursor = m_currentEditor->textCursor();
 
 	auto is_selection = cursor.hasSelection();
 	auto text = is_selection
@@ -136,41 +197,39 @@ void Meter::updateCounts(Force force)
 		auto block_count = is_selection
 			? selectedLineCount()
 			: m_currentEditor->blockCount();
+
 		elements << QString::number(block_count) + LINES_LABEL;
 	}
 
 	if (m_hasWordCount) {
 		auto regex = QRegularExpression(CAPTURE_LEADING_WHITESPACE);
 		auto words = text.split(regex, Qt::SkipEmptyParts);
+
 		elements << QString::number(words.count()) + WORDS_LABEL;
 	}
 
 	auto char_count = text.count();
 
 	if (m_hasCharCount)
-		elements << QString::number(text.count()) + CHARS_LABEL;
+		elements << QString::number(char_count) + CHARS_LABEL;
 
-	m_counts->setText(elements.join(JOINER));
+	maybeToggleAutoCount(char_count);
 
-	m_autoCount = (char_count <= 15000);
-	maybeShowRefresh();
+	return elements.join(JOINER);
 }
 
 void Meter::maybeShowLabel(QLabel* label, bool show)
 {
 	label->setVisible(show);
 
-	maybeShowSeparator();
-}
-
-void Meter::maybeShowSeparator()
-{
 	m_separator->setVisible(m_positions->isVisible() && m_counts->isVisible());
 }
 
-void Meter::maybeShowRefresh()
+void Meter::maybeToggleAutoCount(int characters)
 {
-	m_refresh->setVisible(!m_autoCount && hasAnyCount());
+	m_autoCount = (characters <= m_autoCountCharLimit);
+
+	m_refreshCounts->setVisible(!m_autoCount && hasAnyCount());
 }
 
 int Meter::selectedLineCount() const
@@ -185,13 +244,13 @@ int Meter::selectedLineCount() const
 
 void Meter::hideAll()
 {
-	auto widgets = QWidgetList{ m_positions, m_counts, m_separator, m_refresh };
+	auto widgets = QWidgetList{ m_positions, m_counts, m_separator, m_refreshCounts };
 
 	for (auto& widget : widgets)
 		widget->hide();
 }
 
-void Meter::onRefreshClicked()
+void Meter::onRefreshCountsClicked()
 {
 	updateCounts(Force::Yes);
 
