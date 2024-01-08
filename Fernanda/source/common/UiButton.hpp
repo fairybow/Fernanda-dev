@@ -28,8 +28,8 @@ public:
 		Refresh
 	};
 
-	UiButton(const QString& label, QWidget* parent = nullptr, const QString& flag = QString())
-		: QToolButton(parent), m_label(label), m_flag(flag)
+	UiButton(const QString& text, QWidget* parent = nullptr, const QString& flaggedText = QString())
+		: QToolButton(parent), m_label(text), m_flag(flaggedText)
 	{
 		updateIcon();
 	}
@@ -43,6 +43,41 @@ public:
 	virtual ~UiButton() noexcept
 	{
 		qDebug() << __FUNCTION__;
+	}
+
+	bool hoveredOver() const
+	{
+		return m_hoveredOver;
+	}
+
+	QString label() const
+	{
+		return m_label;
+	}
+
+	void setLabel(const QString& text)
+	{
+		m_label = text;
+	}
+
+	void setLabel(Ui icon)
+	{
+		m_label = iconLabel(icon);
+	}
+
+	QString flag() const
+	{
+		return m_flag;
+	}
+
+	void setFlag(const QString& text)
+	{
+		m_flag = text;
+	}
+
+	void setFlag(Ui icon)
+	{
+		m_flag = iconLabel(icon);
 	}
 
 	bool flagged() const
@@ -75,8 +110,8 @@ protected:
 	}
 
 private:
-	const QString m_label;
-	const QString m_flag;
+	QString m_label;
+	QString m_flag;
 	bool m_flagged = false;
 	bool m_hoveredOver = false;
 

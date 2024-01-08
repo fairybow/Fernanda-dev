@@ -1,5 +1,5 @@
-#include "../common/Fx.hpp"
-#include "../common/Layout.hpp"
+#include "../../common/Fx.hpp"
+#include "../../common/Layout.hpp"
 #include "Meter.h"
 
 #include <QChar>
@@ -40,6 +40,8 @@ int Meter::autoCountCharLimit() const
 void Meter::setAutoCountCharLimit(int limit)
 {
 	m_autoCountCharLimit = limit;
+
+	run();
 }
 
 bool Meter::hasLinePosition() const
@@ -50,6 +52,8 @@ bool Meter::hasLinePosition() const
 void Meter::setHasLinePosition(bool has)
 {
 	m_hasLinePosition = has;
+
+	run();
 }
 
 bool Meter::hasColumnPosition() const
@@ -60,6 +64,8 @@ bool Meter::hasColumnPosition() const
 void Meter::setHasColumnPosition(bool has)
 {
 	m_hasColumnPosition = has;
+
+	run();
 }
 
 bool Meter::hasLineCount() const
@@ -70,6 +76,8 @@ bool Meter::hasLineCount() const
 void Meter::setHasLineCount(bool has)
 {
 	m_hasLineCount = has;
+
+	run();
 }
 
 bool Meter::hasWordCount() const
@@ -80,6 +88,8 @@ bool Meter::hasWordCount() const
 void Meter::setHasWordCount(bool has)
 {
 	m_hasWordCount = has;
+
+	run();
 }
 
 bool Meter::hasCharCount() const
@@ -90,6 +100,8 @@ bool Meter::hasCharCount() const
 void Meter::setHasCharCount(bool has)
 {
 	m_hasCharCount = has;
+
+	run();
 }
 
 void Meter::run()
@@ -98,7 +110,7 @@ void Meter::run()
 	updateCounts(Force::Yes);
 }
 
-void Meter::clear()
+void Meter::reset()
 {
 	if (m_currentEditor)
 		disconnectEditor();
@@ -152,9 +164,8 @@ void Meter::updatePositions()
 	auto is_needed = hasAnyPosition();
 	maybeShowLabel(m_positions, is_needed);
 
-	if (!is_needed) return;
-
-	m_positions->setText(buildPositions());
+	if (is_needed)
+		m_positions->setText(positions());
 }
 
 void Meter::updateCounts(Force force)
@@ -164,12 +175,13 @@ void Meter::updateCounts(Force force)
 	auto is_needed = hasAnyCount();
 	maybeShowLabel(m_counts, is_needed);
 
-	if (!is_needed) return;
+	if (is_needed)
+		m_counts->setText(counts());
 
-	m_counts->setText(buildCounts());
+	maybeToggleRefreshCounts();
 }
 
-QString Meter::buildPositions()
+QString Meter::positions()
 {
 	QStringList elements;
 	auto cursor = m_currentEditor->textCursor();
@@ -183,7 +195,7 @@ QString Meter::buildPositions()
 	return elements.join(JOINER);
 }
 
-QString Meter::buildCounts()
+QString Meter::counts()
 {
 	QStringList elements;
 	auto cursor = m_currentEditor->textCursor();
@@ -228,7 +240,10 @@ void Meter::maybeShowLabel(QLabel* label, bool show)
 void Meter::maybeToggleAutoCount(int characters)
 {
 	m_autoCount = (characters <= m_autoCountCharLimit);
+}
 
+void Meter::maybeToggleRefreshCounts()
+{
 	m_refreshCounts->setVisible(!m_autoCount && hasAnyCount());
 }
 

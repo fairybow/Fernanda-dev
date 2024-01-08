@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/Path.hpp"
+#include "../../common/Path.hpp"
 
 #include <QDebug>
 #include <QFileSystemModel>

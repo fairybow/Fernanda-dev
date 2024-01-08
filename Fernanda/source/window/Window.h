@@ -1,7 +1,7 @@
 #pragma once
 
-#include "common/Path.hpp"
-#include "documents/Document.h"
+#include "../common/Path.hpp"
+#include "../documents/Document.h" // Removed from structure (above)--so maybe a sign we should do without it
 #include "editor/Editor.h"
 #include "meter/Meter.h"
 #include "page-area/PageArea.h"
@@ -13,8 +13,12 @@
 #include <QMainWindow>
 #include <QSplitter>
 
+class WindowSettings;
+
 class Window : public QMainWindow
 {
+	friend class WindowSettings;
+
 	Q_OBJECT
 
 public:
@@ -27,7 +31,8 @@ public:
 	};
 
 	bool find(const Path& path, SwitchIfFound switchIfFound = SwitchIfFound::Yes) const;
-	void open(Document* document);
+	// ^ May move to Fernanda eventually, if this can operate without Document->path()
+	void open(Document* document); // Can possibly switch to QTextDocument
 	void open(const Path& path = Path());
 
 protected:
@@ -65,7 +70,6 @@ private:
 	void setupPageArea(PageArea* pageArea);
 	Document* newDocument(const Path& path = Path());
 	Editor* newEditor(Document* document);
-
 	Editor* removeCurrentPageAreaEditor(int index);
 
 private slots:

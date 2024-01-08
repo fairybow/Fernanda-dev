@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/UiButton.hpp"
+#include "../../common/UiButton.hpp"
 
 #include <QDebug>
 #include <QLabel>
@@ -30,7 +30,7 @@ public:
 	void setHasCharCount(bool has);
 
 	void run();
-	void clear();
+	void reset();
 
 private:
 	static constexpr char LINE_POS_LABEL[] = "ln ";
@@ -70,10 +70,11 @@ private:
 
 	void updatePositions();
 	void updateCounts(Force force = Force::No);
-	QString buildPositions();
-	QString buildCounts();
+	QString positions();
+	QString counts();
 	void maybeShowLabel(QLabel* label, bool show);
 	void maybeToggleAutoCount(int characters);
+	void maybeToggleRefreshCounts();
 	int selectedLineCount() const;
 	void hideAll();
 

@@ -1,4 +1,4 @@
-#include "../common/Layout.hpp"
+#include "../../common/Layout.hpp"
 #include "PageArea.h"
 
 #include <QList>

@@ -1,5 +1,22 @@
 /*
 
+// Fernanda
+
+m_iniWriter->save<QByteArray>(Ini::PREFIX_WINDOW, Ini::WINDOW_GEOMETRY, window->saveGeometry());
+
+auto geometry = m_iniWriter->load<QByteArray>(Ini::PREFIX_WINDOW, Ini::WINDOW_GEOMETRY);
+window->restoreGeometry(geometry);
+// Run a "move windows to screen" function here for each window, in case settings are off-screen
+
+path = QStandardPaths::locate(QStandardPaths::DocumentsLocation, nullptr, QStandardPaths::LocateDirectory);
+
+auto ini_path = Path(QDir::homePath()) / SETTINGS_INI;
+m_windowSettings = new WindowSettings(ini_path, this);
+
+connect(m_windowMenu, &WindowMenu::newWindowRequested, this, [&] {
+	newWindow();
+	});
+
 // Window
 
 // Testing

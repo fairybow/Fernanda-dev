@@ -1,17 +1,12 @@
 #pragma once
 
 #include "common/Path.hpp"
-#include "menus/Menus.h"
-#include "settings/IniWriter.hpp"
-#include "Window.h"
+#include "window/Window.h"
+#include "window/WindowSettings.h"
 
 #include <QDebug>
+#include <QDir>
 #include <QList>
-#include <QMenuBar>
-
-// Window can emit a signal to save its size
-// Fernanda can directly save Window count
-// On start, run the move windows to screen function here for each window
 
 class Fernanda : public QObject
 {
@@ -21,23 +16,21 @@ public:
 	Fernanda(bool isDev);
 	~Fernanda() { qDebug() << __FUNCTION__; }
 
-	void newWindow();
+	Window* newWindow();
 
 private:
 	static constexpr char SETTINGS_INI[] = ".fernanda/Settings.ini";
-
-	Menus* m_menus = new Menus(this); // Move to Window probably
-	IniWriter* m_iniWriter = nullptr; // Could pass this to a newly made Window to correctly set MenuBar
-	IniWriter* m_sessionWriter = nullptr;
+	const Path& m_iniPath = Path(QDir::homePath()) / SETTINGS_INI;
 
 	bool m_isDev;
+	WindowSettings* m_windowSettings = new WindowSettings(m_iniPath, this);
 	QList<Window*> m_windows;
 
 	void setup();
 	void setupWindow(Window* window);
-	QMenuBar* menuBar(Window* window);
 
 private slots:
 	void onWindowFileDoubleClicked(const Path& path);
 	void onWindowClosing();
+	void onWindowSettingChecked(bool checked, WindowSettings::Type type);
 };

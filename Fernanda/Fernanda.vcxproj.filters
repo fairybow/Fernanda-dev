@@ -11,28 +11,28 @@
       <UniqueIdentifier>{fb585d74-dbe7-4e91-a400-a8098bb4e5cc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Common">
-      <UniqueIdentifier>{5b616321-8ef4-43e4-91fa-80a3b56d1b7d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Tree View">
-      <UniqueIdentifier>{3161e746-e6b1-47a8-a5f4-642457092d40}</UniqueIdentifier>
+      <UniqueIdentifier>{df7b1a73-8c98-4ba0-92d2-ae6d23ef3919}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Documents">
-      <UniqueIdentifier>{4f279bbf-d142-4a5b-8697-8f4b2fe40635}</UniqueIdentifier>
+      <UniqueIdentifier>{8dd96f4f-213c-4b40-8001-a084da4e840d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Editor">
-      <UniqueIdentifier>{5454e5a1-6df9-4ca1-be5b-3a119702297d}</UniqueIdentifier>
+    <Filter Include="Source\Menu">
+      <UniqueIdentifier>{744f55ac-db11-4efe-b3a4-ef6548a47110}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Menus">
-      <UniqueIdentifier>{a359e6a4-134b-4bb7-8e8b-7c43b6bc5423}</UniqueIdentifier>
+    <Filter Include="Source\Window">
+      <UniqueIdentifier>{5c6e0083-9acf-412f-b28e-db8c8f35ef4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Page Area">
-      <UniqueIdentifier>{7137a039-73b2-4bdb-99b6-6dbe9053c3e9}</UniqueIdentifier>
+    <Filter Include="Source\Window\Editor">
+      <UniqueIdentifier>{a1cd0fb5-41ce-42b5-9969-52cf2293ea14}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Meter">
-      <UniqueIdentifier>{d7dc149d-36e1-4306-b7ce-9756d8ba66b9}</UniqueIdentifier>
+    <Filter Include="Source\Window\Meter">
+      <UniqueIdentifier>{7433d8b9-06c5-46fe-9c14-4b55ea14cbb5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Settings">
-      <UniqueIdentifier>{7ea85827-e0dd-4524-b63d-61555d667791}</UniqueIdentifier>
+    <Filter Include="Source\Window\Page Area">
+      <UniqueIdentifier>{2eebd235-46e5-4680-982e-8d0009d92643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Window\Tree View">
+      <UniqueIdentifier>{66d1c092-09c1-4e81-993a-062235861e1a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -61,89 +61,106 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="notes\Test copy.cpp">
+      <Filter>Notes</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\documents\Document.cpp">
+      <Filter>Source\Documents</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window\Window.cpp">
+      <Filter>Source\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window\tree-view\TreeView.cpp">
+      <Filter>Source\Window\Tree View</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window\page-area\PageArea.cpp">
+      <Filter>Source\Window\Page Area</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window\page-area\TabBar.cpp">
+      <Filter>Source\Window\Page Area</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window\page-area\TabControlBox.cpp">
+      <Filter>Source\Window\Page Area</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window\meter\Meter.cpp">
+      <Filter>Source\Window\Meter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window\editor\Editor.cpp">
+      <Filter>Source\Window\Editor</Filter>
+    </ClCompile>
     <ClCompile Include="source\Fernanda.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="source\Window.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\documents\Document.cpp">
-      <Filter>Source\Documents</Filter>
-    </ClCompile>
-    <ClCompile Include="source\tree-view\TreeView.cpp">
-      <Filter>Source\Tree View</Filter>
-    </ClCompile>
-    <ClCompile Include="source\editor\Editor.cpp">
-      <Filter>Source\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="source\menus\Menus.cpp">
-      <Filter>Source\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="source\page-area\PageArea.cpp">
-      <Filter>Source\Page Area</Filter>
-    </ClCompile>
-    <ClCompile Include="source\page-area\TabBar.cpp">
-      <Filter>Source\Page Area</Filter>
-    </ClCompile>
-    <ClCompile Include="source\page-area\TabControlBox.cpp">
-      <Filter>Source\Page Area</Filter>
-    </ClCompile>
-    <ClCompile Include="source\meter\Meter.cpp">
-      <Filter>Source\Meter</Filter>
+    <ClCompile Include="source\window\WindowSettings.cpp">
+      <Filter>Source\Window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="source\Fernanda.h">
-      <Filter>Source</Filter>
-    </QtMoc>
-    <QtMoc Include="source\Window.h">
-      <Filter>Source</Filter>
+    <QtMoc Include="source\common\IniWriter.hpp">
+      <Filter>Source\Common</Filter>
     </QtMoc>
     <QtMoc Include="source\documents\Document.h">
       <Filter>Source\Documents</Filter>
     </QtMoc>
-    <QtMoc Include="source\tree-view\TreeView.h">
-      <Filter>Source\Tree View</Filter>
+    <QtMoc Include="source\window\Window.h">
+      <Filter>Source\Window</Filter>
     </QtMoc>
-    <QtMoc Include="source\menus\Menus.h">
-      <Filter>Source\Menus</Filter>
+    <QtMoc Include="source\window\tree-view\TreeView.h">
+      <Filter>Source\Window\Tree View</Filter>
     </QtMoc>
-    <QtMoc Include="source\editor\Editor.h">
-      <Filter>Source\Editor</Filter>
+    <QtMoc Include="source\window\page-area\PageArea.h">
+      <Filter>Source\Window\Page Area</Filter>
     </QtMoc>
-    <QtMoc Include="source\page-area\PageArea.h">
-      <Filter>Source\Page Area</Filter>
+    <QtMoc Include="source\window\page-area\PageAreaStack.hpp">
+      <Filter>Source\Window\Page Area</Filter>
     </QtMoc>
-    <QtMoc Include="source\page-area\TabBar.h">
-      <Filter>Source\Page Area</Filter>
+    <QtMoc Include="source\window\page-area\TabBar.h">
+      <Filter>Source\Window\Page Area</Filter>
     </QtMoc>
-    <QtMoc Include="source\page-area\TabCloseButton.hpp">
-      <Filter>Source\Page Area</Filter>
+    <QtMoc Include="source\window\page-area\TabCloseButton.hpp">
+      <Filter>Source\Window\Page Area</Filter>
     </QtMoc>
-    <QtMoc Include="source\page-area\TabControlBox.h">
-      <Filter>Source\Page Area</Filter>
+    <QtMoc Include="source\window\page-area\TabControlBox.h">
+      <Filter>Source\Window\Page Area</Filter>
     </QtMoc>
-    <QtMoc Include="source\page-area\PageAreaStack.hpp">
-      <Filter>Source\Page Area</Filter>
+    <QtMoc Include="source\window\meter\Meter.h">
+      <Filter>Source\Window\Meter</Filter>
     </QtMoc>
-    <QtMoc Include="source\meter\Meter.h">
-      <Filter>Source\Meter</Filter>
+    <QtMoc Include="source\window\editor\Editor.h">
+      <Filter>Source\Window\Editor</Filter>
     </QtMoc>
-    <QtMoc Include="source\settings\IniWriter.hpp">
-      <Filter>Source\Settings</Filter>
+    <QtMoc Include="source\Fernanda.h">
+      <Filter>Source</Filter>
     </QtMoc>
     <QtMoc Include="source\StartCop.hpp">
       <Filter>Source</Filter>
+    </QtMoc>
+    <QtMoc Include="source\menu\FontBox.hpp">
+      <Filter>Source\Menu</Filter>
+    </QtMoc>
+    <QtMoc Include="source\menu\LiveFontDialog.hpp">
+      <Filter>Source\Menu</Filter>
+    </QtMoc>
+    <QtMoc Include="source\window\WindowSettings.h">
+      <Filter>Source\Window</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Connect.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
+    <ClInclude Include="source\common\Fx.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
     <ClInclude Include="source\common\Image.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\Io.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="source\common\Layout.hpp">
@@ -155,19 +172,5 @@
     <ClInclude Include="source\common\UiButton.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\Io.hpp">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\Fx.hpp">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\settings\IniKeys.hpp">
-      <Filter>Source\Settings</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="notes\Test copy.cpp">
-      <Filter>Notes</Filter>
-    </Text>
   </ItemGroup>
 </Project>

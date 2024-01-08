@@ -14,7 +14,8 @@ int main(int argc, char* argv[])
 
 	Fernanda fernanda(is_dev);
 	fernanda.newWindow();
-	//fernanda.newWindow();
+	auto test_win = fernanda.newWindow();
+	test_win->setGeometry(test_win->x() + 50, test_win->y() + 50, test_win->width(), test_win->height());
 
 	return application.exec();
 }

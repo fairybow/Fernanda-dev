@@ -1,12 +1,11 @@
-#include "common/Connect.hpp"
-#include "common/Image.hpp"
-#include "common/Io.hpp"
+#include "../common/Connect.hpp"
+#include "../common/Image.hpp"
+#include "../common/Io.hpp"
 #include "Window.h"
 
 #include <QDockWidget>
 #include <QStatusBar>
 #include <QTextBlock>
-//#include <QVariant>
 
 constexpr char LOGO_QRC_PATH[] = ":/test/Fernanda_64.png";
 
@@ -14,9 +13,6 @@ Window::Window()
 	: QMainWindow()
 {
 	setup();
-
-	// Temporary
-	setGeometry(0, 0, 600, 400); // Given from settings
 }
 
 bool Window::find(const Path& path, SwitchIfFound switchIfFound) const
@@ -39,9 +35,6 @@ void Window::open(Document* document)
 
 	auto title = document->title();
 	auto index = m_currentPageArea->add(editor, title);
-
-	//auto data = QVariant::fromValue(document);
-	//m_currentPageArea->setData(index, data);
 
 	m_currentPageArea->setCurrentIndex(index);
 	m_currentPageArea->currentWidget()->setFocus(); // Any reason not to just use `editor`?
@@ -84,12 +77,14 @@ Window::PageIndex Window::pageIndexOf(const Path& path) const
 {
 	for (auto& page_area : pageAreas())
 		for (auto i = 0; i < page_area->count(); ++i) {
-			auto data = page_area->data(i);
-			auto document = data.value<Document*>();
+			auto page_index = PageIndex(page_area, i);
+
+			auto editor = editorAt(page_index);
+			auto document = documentOf(editor);
 
 			if (!document || document->path() != path) continue;
 
-			return PageIndex(page_area, i);
+			return page_index;
 		}
 
 	return PageIndex();
@@ -242,11 +237,11 @@ void Window::onPageAreaCurrentChanged(int index)
 	m_currentPageArea = page_area;
 
 	if (index < 0) {
-		m_meter->clear();
+		m_meter->reset();
 		return;
 	}
 
-	auto editor = editorAt(PageIndex(m_currentPageArea, index));
+	auto editor = editorAt({ m_currentPageArea, index });
 	if (!editor) return;
 	
 	m_meter->setCurrentEditor(editor);

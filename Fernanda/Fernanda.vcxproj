@@ -32,23 +32,20 @@
     <ResourceCompile Include="resources\Resources.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="notes\Test copy.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="source\documents\Document.cpp" />
-    <ClCompile Include="source\editor\Editor.cpp" />
     <ClCompile Include="source\Fernanda.cpp" />
     <ClCompile Include="source\Main.cpp" />
-    <ClCompile Include="source\menus\Menus.cpp" />
-    <ClCompile Include="source\meter\Meter.cpp" />
-    <ClCompile Include="source\page-area\PageArea.cpp" />
-    <ClCompile Include="source\page-area\TabBar.cpp" />
-    <ClCompile Include="source\page-area\TabControlBox.cpp" />
-    <ClCompile Include="source\tree-view\TreeView.cpp" />
-    <ClCompile Include="source\Window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="source\Fernanda.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="source\Window.h" />
+    <ClCompile Include="source\window\editor\Editor.cpp" />
+    <ClCompile Include="source\window\meter\Meter.cpp" />
+    <ClCompile Include="source\window\page-area\PageArea.cpp" />
+    <ClCompile Include="source\window\page-area\TabBar.cpp" />
+    <ClCompile Include="source\window\page-area\TabControlBox.cpp" />
+    <ClCompile Include="source\window\tree-view\TreeView.cpp" />
+    <ClCompile Include="source\window\Window.cpp" />
+    <ClCompile Include="source\window\WindowSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Connect.hpp" />
@@ -58,22 +55,22 @@
     <ClInclude Include="source\common\Layout.hpp" />
     <ClInclude Include="source\common\Path.hpp" />
     <ClInclude Include="source\common\UiButton.hpp" />
-    <ClInclude Include="source\settings\IniKeys.hpp" />
+    <QtMoc Include="source\window\WindowSettings.h" />
+    <QtMoc Include="source\menu\LiveFontDialog.hpp" />
+    <QtMoc Include="source\menu\FontBox.hpp" />
     <QtMoc Include="source\StartCop.hpp" />
-    <QtMoc Include="source\settings\IniWriter.hpp" />
-    <QtMoc Include="source\meter\Meter.h" />
-    <QtMoc Include="source\page-area\PageAreaStack.hpp" />
-    <QtMoc Include="source\page-area\TabControlBox.h" />
-    <QtMoc Include="source\page-area\TabCloseButton.hpp" />
-    <QtMoc Include="source\page-area\TabBar.h" />
-    <QtMoc Include="source\page-area\PageArea.h" />
-    <QtMoc Include="source\editor\Editor.h" />
-    <QtMoc Include="source\menus\Menus.h" />
-    <QtMoc Include="source\tree-view\TreeView.h" />
+    <QtMoc Include="source\Fernanda.h" />
+    <QtMoc Include="source\window\editor\Editor.h" />
+    <QtMoc Include="source\window\meter\Meter.h" />
+    <QtMoc Include="source\window\page-area\TabControlBox.h" />
+    <QtMoc Include="source\window\page-area\TabCloseButton.hpp" />
+    <QtMoc Include="source\window\page-area\TabBar.h" />
+    <QtMoc Include="source\window\page-area\PageAreaStack.hpp" />
+    <QtMoc Include="source\window\page-area\PageArea.h" />
+    <QtMoc Include="source\window\tree-view\TreeView.h" />
+    <QtMoc Include="source\window\Window.h" />
     <QtMoc Include="source\documents\Document.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="notes\Test copy.cpp" />
+    <QtMoc Include="source\common\IniWriter.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{AB908CAF-33D2-41B4-8815-3FFAA14B6DAA}</ProjectGuid>

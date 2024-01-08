@@ -1,4 +1,4 @@
-/*#pragma once
+#pragma once
 
 #include <QDebug>
 #include <QString>
@@ -173,4 +173,3 @@ private:
 	TreeNode* m_parent;
 	QList<TreeNode*> m_children;
 };
-*/
