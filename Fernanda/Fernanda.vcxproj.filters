@@ -140,14 +140,14 @@
     <QtMoc Include="source\StartCop.hpp">
       <Filter>Source</Filter>
     </QtMoc>
-    <QtMoc Include="source\menu\FontBox.hpp">
-      <Filter>Source\Menu</Filter>
-    </QtMoc>
-    <QtMoc Include="source\menu\LiveFontDialog.hpp">
-      <Filter>Source\Menu</Filter>
-    </QtMoc>
     <QtMoc Include="source\window\WindowSettings.h">
       <Filter>Source\Window</Filter>
+    </QtMoc>
+    <QtMoc Include="source\menu\ActionGroup.hpp">
+      <Filter>Source\Menu</Filter>
+    </QtMoc>
+    <QtMoc Include="source\menu\CheckBoxGroup.hpp">
+      <Filter>Source\Menu</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

@@ -2,16 +2,15 @@
 
 #include "../common/IniWriter.hpp"
 #include "../common/Path.hpp"
+#include "../menu/ActionGroup.hpp"
 #include "Window.h"
 
 #include <QAction>
-#include <QCheckBox>
 #include <QDebug>
 #include <QDialog>
-#include <QGroupBox>
+//#include <QFont>
 #include <QList>
-#include <QMap>
-#include <QString>
+#include <QVariant>
 
 class WindowSettings : public QObject
 {
@@ -30,35 +29,53 @@ public:
 	};
 
 	void openDialog();
-	void applySetting(Window* window, bool checked, Type type);
-	void applySetting(QList<Window*> windows, bool checked, Type type);
+	void applyAll(Window* window);
+	void applyAll(QList<Window*>& windows);
+	void applySetting(Window* window, Type type); // Clean this up somehow
+	void applySetting(QList<Window*>& windows, Type type); // Clean this up somehow
 
 private:
-	static constexpr char PREFIX_METER[] = "Meter";
+	struct ActionData {
+		Type type = Type();
+		QVariant fallback;
+	};
 
 	IniWriter* m_iniWriter;
 	QDialog* m_dialog = nullptr;
-	QMap<QString, QAction*> m_namesToActions;
+	ActionGroup* m_meterGroup = new ActionGroup(this, "Meter");
 
-	enum class Prefix {
-		No,
-		Yes
-	};
+	void applySettingByAction(Window* window, QAction* action); // Clean this up somehow
+	void applyCheckedSettingByType(Window* window, Type type); // Clean this up somehow
 
-	void setup();
-	void setupMeterActions();
-	QAction* makeAction(Type type);
-	void setupDialog();
-	QGroupBox* meterBox();
-	QCheckBox* makeCheckBox(Type type);
-	constexpr const char* name(Type type, Prefix prefix = Prefix::No);
-	QString iniName(Type type, Prefix prefix = Prefix::No);
+	Type typeOf(QAction* action);
+	ActionData dataOf(QAction* action);
+	QAction* actionWith(Type type);
+
+	void setupDialog(QDialog* dialog);
+	void setupMeterGroup();
+	QList<ActionGroup*> actionGroups() const;
+	ActionData dataOf(QAction* action) const;
+	QString iniKeyName(QAction* action) const;
+	void loadGroupValues(ActionGroup* group);
+	//void saveGroupValues(ActionGroup* group);
+
+	template<typename T>
+	QAction* newAction(ActionGroup* group, const QString& name, Type type, T fallback)
+	{
+		auto action = new QAction(name, group);
+		auto action_data = ActionData(type, QVariant::fromValue(fallback));
+		action->setData(QVariant::fromValue(action_data));
+		connect(action, &QAction::toggled, this, &WindowSettings::onQActionToggled);
+		// ^ Will this work if not all are checkable?
+
+		return action;
+	}
 
 private slots:
 	void onQActionToggled(bool checked);
 	void onQDialogFinished();
 
 signals:
-	void currentFontChanged(const QFont& font);
-	void settingChecked(bool checked, Type type);
+	void settingChanged(Type type);
+	//void currentFontChanged(const QFont& font);
 };

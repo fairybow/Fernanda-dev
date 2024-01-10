@@ -54,14 +54,20 @@ public:
 	}
 
 	template<typename T>
-	T load(QAnyStringView key, T fallback = T())
+	T load(QAnyStringView key, QVariant fallback = QVariant())
 	{
-		auto variant = m_settings->value(key, QVariant::fromValue<T>(fallback));
+		auto key_value = m_settings->value(key, fallback);
 
-		if (!variant.isValid())
-			return fallback;
+		if (!key_value.isValid())
+			return fallback.value<T>();
 
-		return variant.value<T>();
+		return key_value.value<T>();
+	}
+
+	template<typename T>
+	T load(QAnyStringView key, T fallback)
+	{
+		return load<T>(key, QVariant::fromValue<T>(fallback));
 	}
 
 	template<typename T>

@@ -26,7 +26,7 @@ Window* Fernanda::newWindow()
 
 void Fernanda::setup()
 {
-	connect(m_windowSettings, &WindowSettings::settingChecked, this, &Fernanda::onWindowSettingChecked);
+	connect(m_windowSettings, &WindowSettings::settingChanged, this, &Fernanda::onWindowSettingsSettingChanged);
 
 	// TESTING
 	QTimer::singleShot(0, [&] {
@@ -38,6 +38,8 @@ void Fernanda::setup()
 
 void Fernanda::setupWindow(Window* window)
 {
+	m_windowSettings->applyAll(window);
+
 	window->setAttribute(Qt::WA_DeleteOnClose);
 
 	connect(window, &Window::treeViewFileDoubleClicked, this, &Fernanda::onWindowFileDoubleClicked);
@@ -68,7 +70,7 @@ void Fernanda::onWindowClosing()
 	m_windows.removeAll(window);
 }
 
-void Fernanda::onWindowSettingChecked(bool checked, WindowSettings::Type type)
+void Fernanda::onWindowSettingsSettingChanged(WindowSettings::Type type)
 {
-	m_windowSettings->applySetting(m_windows, checked, type);
+	m_windowSettings->applySetting(m_windows, type);
 }

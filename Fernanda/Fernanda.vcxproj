@@ -55,9 +55,9 @@
     <ClInclude Include="source\common\Layout.hpp" />
     <ClInclude Include="source\common\Path.hpp" />
     <ClInclude Include="source\common\UiButton.hpp" />
+    <QtMoc Include="source\menu\ActionGroup.hpp" />
     <QtMoc Include="source\window\WindowSettings.h" />
-    <QtMoc Include="source\menu\LiveFontDialog.hpp" />
-    <QtMoc Include="source\menu\FontBox.hpp" />
+    <QtMoc Include="source\menu\CheckBoxGroup.hpp" />
     <QtMoc Include="source\StartCop.hpp" />
     <QtMoc Include="source\Fernanda.h" />
     <QtMoc Include="source\window\editor\Editor.h" />

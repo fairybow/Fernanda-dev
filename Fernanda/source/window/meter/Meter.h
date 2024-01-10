@@ -33,15 +33,6 @@ public:
 	void reset();
 
 private:
-	static constexpr char LINE_POS_LABEL[] = "ln ";
-	static constexpr char COL_POS_LABEL[] = "col ";
-	static constexpr char LINES_LABEL[] = " lines";
-	static constexpr char WORDS_LABEL[] = " words";
-	static constexpr char CHARS_LABEL[] = " chars";
-	static constexpr char SEPARATOR[] = " / ";
-	static constexpr char JOINER[] = ", ";
-	static constexpr char CAPTURE_LEADING_WHITESPACE[] = "(\\s|\\n|\\r|\U00002029|^)+";
-
 	enum class Force {
 		No,
 		Yes

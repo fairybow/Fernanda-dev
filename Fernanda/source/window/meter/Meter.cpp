@@ -9,6 +9,15 @@
 #include <QTextCursor>
 #include <QTextDocumentFragment>
 
+constexpr char LINE_POS_LABEL[] = "ln ";
+constexpr char COL_POS_LABEL[] = "col ";
+constexpr char LINES_LABEL[] = " lines";
+constexpr char WORDS_LABEL[] = " words";
+constexpr char CHARS_LABEL[] = " chars";
+constexpr char SEPARATOR[] = " / ";
+constexpr char JOINER[] = ", ";
+constexpr char CAPTURE_LEADING_WHITESPACE[] = "(\\s|\\n|\\r|\U00002029|^)+";
+
 Meter::Meter(QWidget* parent, int autoCountCharLimit)
 	: QWidget(parent), m_autoCountCharLimit(autoCountCharLimit)
 {

@@ -32,5 +32,5 @@ private:
 private slots:
 	void onWindowFileDoubleClicked(const Path& path);
 	void onWindowClosing();
-	void onWindowSettingChecked(bool checked, WindowSettings::Type type);
+	void onWindowSettingsSettingChanged(WindowSettings::Type type);
 };
