@@ -1,5 +1,5 @@
 #include "../common/Connect.hpp"
-#include "../menu/CheckBoxGroup.hpp"
+#include "../menu/ActionCheckBoxes.hpp"
 #include "WindowSettings.h"
 
 #include <QGridLayout>
@@ -10,11 +10,23 @@ constexpr char METER_COL_POS[] = "Column position";
 constexpr char METER_LINES[] = "Line count";
 constexpr char METER_WORDS[] = "Word count";
 constexpr char METER_CHARS[] = "Character count";
+constexpr char INI_FILLER[] = "_";
 
 WindowSettings::WindowSettings(const Path& config, QObject* parent)
 	: QObject(parent), m_iniWriter(new IniWriter(config, this))
 {
-	setupMeterGroup();
+	setupMeterActionSet();
+}
+
+WindowSettings::~WindowSettings()
+{
+	qDebug() << __FUNCTION__;
+
+	for (auto& action_set : actionSets())
+		saveActionSetValues(action_set);
+
+	for (auto& group_set : groupSets())
+		saveGroupSetValues(group_set);
 }
 
 void WindowSettings::openDialog()
@@ -32,22 +44,30 @@ void WindowSettings::openDialog()
 	m_dialog->open();
 }
 
-void WindowSettings::applyAll(Window* window)
-{
-	for (auto& group : actionGroups())
-		for (auto& action : group->actions())
-			applySettingByAction(window, action);
-}
-
-void WindowSettings::applyAll(QList<Window*>& windows)
-{
-	for (auto& window : windows)
-		applyAll(window);
-}
-
 void WindowSettings::applySetting(Window* window, Type type)
 {
-	applyCheckedSettingByType(window, type);
+	auto value = currentValue(type);
+	if (!value.isValid()) return;
+
+	// Will this work for font?
+
+	switch (type) {
+	case WindowSettings::Type::MeterLinePos:
+		window->m_meter->setHasLinePosition(value.toBool());
+		break;
+	case WindowSettings::Type::MeterColPos:
+		window->m_meter->setHasColumnPosition(value.toBool());
+		break;
+	case WindowSettings::Type::MeterLineCount:
+		window->m_meter->setHasLineCount(value.toBool());
+		break;
+	case WindowSettings::Type::MeterWordCount:
+		window->m_meter->setHasWordCount(value.toBool());
+		break;
+	case WindowSettings::Type::MeterCharCount:
+		window->m_meter->setHasCharCount(value.toBool());
+		break;
+	}
 }
 
 void WindowSettings::applySetting(QList<Window*>& windows, Type type)
@@ -56,55 +76,92 @@ void WindowSettings::applySetting(QList<Window*>& windows, Type type)
 		applySetting(window, type);
 }
 
-void WindowSettings::applySettingByAction(Window* window, QAction* action)
+void WindowSettings::applyAll(Window* window)
 {
-	auto type = typeOf(action);
-
-	applyCheckedSettingByType(window, type);
+	for (auto i = 0; i < static_cast<int>(Type::End); ++i)
+		applySetting(window, static_cast<Type>(i));
 }
 
-void WindowSettings::applyCheckedSettingByType(Window* window, Type type)
+void WindowSettings::applyAll(QList<Window*>& windows)
 {
-	auto action = actionWith(type);
-	auto checked = action->isChecked();
+	for (auto& window : windows)
+		applyAll(window);
+}
 
-	switch (type) {
-	case WindowSettings::Type::MeterLinePos:
-		window->m_meter->setHasLinePosition(checked);
-		break;
-	case WindowSettings::Type::MeterColPos:
-		window->m_meter->setHasColumnPosition(checked);
-		break;
-	case WindowSettings::Type::MeterLineCount:
-		window->m_meter->setHasLineCount(checked);
-		break;
-	case WindowSettings::Type::MeterWordCount:
-		window->m_meter->setHasWordCount(checked);
-		break;
-	case WindowSettings::Type::MeterCharCount:
-		window->m_meter->setHasCharCount(checked);
-		break;
+QList<ActionSet*> WindowSettings::actionSets() const
+{
+	return findChildren<ActionSet*>();
+}
+
+QList<ActionGroupSet*> WindowSettings::groupSets() const
+{
+	return findChildren<ActionGroupSet*>();
+}
+
+void WindowSettings::setupMeterActionSet()
+{
+	m_meterActionSet->add(METER_LINE_POS, toVariant(Type::MeterLinePos), true);
+	m_meterActionSet->add(METER_COL_POS, toVariant(Type::MeterColPos), true);
+	m_meterActionSet->add(METER_LINES, toVariant(Type::MeterLineCount), false);
+	m_meterActionSet->add(METER_WORDS, toVariant(Type::MeterWordCount), false);
+	m_meterActionSet->add(METER_CHARS, toVariant(Type::MeterCharCount), false);
+
+	m_meterActionSet->setAllCheckable(true);
+	loadActionSetValues(m_meterActionSet);
+
+	for (auto& action : m_meterActionSet->actions())
+		connect(action, &QAction::toggled,
+			this, &WindowSettings::onQActionToggled);
+}
+
+void WindowSettings::loadActionSetValues(ActionSet* actionSet)
+{
+	m_iniWriter->begin(actionSet->name());
+
+	for (auto& action : actionSet->actions()) {
+		auto name = actionSet->actionName(action);
+		auto key = iniKeyName(name);
+		auto fallback = actionSet->fallback(action);
+		auto state = m_iniWriter->load<bool>(key, fallback);
+
+		action->setChecked(state);
 	}
+
+	m_iniWriter->end();
 }
 
-WindowSettings::Type WindowSettings::typeOf(QAction* action)
+void WindowSettings::saveActionSetValues(ActionSet* actionSet)
 {
-	return dataOf(action).type;
+	m_iniWriter->begin(actionSet->name());
+
+	for (auto& action : actionSet->actions()) {
+		auto name = actionSet->actionName(action);
+		auto key = iniKeyName(name);
+
+		m_iniWriter->save(key, action->isChecked());
+	}
+
+	m_iniWriter->end();
 }
 
-WindowSettings::ActionData WindowSettings::dataOf(QAction* action)
+void WindowSettings::loadGroupSetValues(ActionGroupSet* groupSet)
 {
-	return action->data().value<ActionData>();
+	//
 }
 
-QAction* WindowSettings::actionWith(Type type)
+void WindowSettings::saveGroupSetValues(ActionGroupSet* groupSet)
 {
-	for (auto& group : actionGroups())
-		for (auto& action : group->actions())
-			if (typeOf(action) == type)
-				return action;
+	//
+}
 
-	return nullptr;
+QString WindowSettings::iniKeyName(QString text)
+{
+	return text.replace(" ", INI_FILLER);
+}
+
+QVariant WindowSettings::toVariant(Type type)
+{
+	return QVariant::fromValue<Type>(type);
 }
 
 void WindowSettings::setupDialog(QDialog* dialog)
@@ -116,72 +173,51 @@ void WindowSettings::setupDialog(QDialog* dialog)
 	dialog->setLayout(grid);
 	dialog->setFixedSize(800, 500);
 
-	auto meter_box = new CheckBoxGroup(m_meterGroup, CheckBoxGroup::Align::Horizontal, dialog);
+	auto meter_actions = m_meterActionSet->actions();
+	auto meter_box = new CheckBoxGroup(meter_actions, CheckBoxGroup::Align::Horizontal, dialog);
 	grid->addWidget(meter_box);
 
 	connect(m_dialog, &QDialog::finished, this, &WindowSettings::onQDialogFinished);
 }
 
-void WindowSettings::setupMeterGroup()
+WindowSettings::Type WindowSettings::typeData(QAction* action)
 {
-	newAction(m_meterGroup, METER_LINE_POS, Type::MeterLinePos, true);
-	newAction(m_meterGroup, METER_COL_POS, Type::MeterColPos, true);
-	newAction(m_meterGroup, METER_LINES, Type::MeterLineCount, false);
-	newAction(m_meterGroup, METER_WORDS, Type::MeterWordCount, false);
-	newAction(m_meterGroup, METER_CHARS, Type::MeterCharCount, false);
+	for (auto& action_set : actionSets())
+		if (action_set->contains(action))
+			return action_set->actionData(action).value<Type>();
 
-	m_meterGroup->setAllCheckable(true);
-	m_meterGroup->setExclusive(false);
-
-	loadGroupValues(m_meterGroup);
+	return Type();
 }
 
-QList<ActionGroup*> WindowSettings::actionGroups() const
+QVariant WindowSettings::currentValue(Type type)
 {
-	return findChildren<ActionGroup*>();
-}
+	auto type_variant = toVariant(type);
 
-WindowSettings::ActionData WindowSettings::dataOf(QAction* action) const
-{
-	auto data = action->data();
+	for (auto& action_set : actionSets()) {
+		auto action = action_set->itemWith(type_variant);
 
-	return data.value<ActionData>();
-}
-
-QString WindowSettings::iniKeyName(QAction* action) const
-{
-	return action->text().replace(" ", "_");
-}
-
-void WindowSettings::loadGroupValues(ActionGroup* group)
-{
-	m_iniWriter->begin(group->name());
-
-	for (auto& action : group->actions()) {
-		auto key = iniKeyName(action);
-		auto action_data = dataOf(action);
-
-		auto& default_value = action_data.fallback;
-		auto state = m_iniWriter->load<bool>(key, default_value);
-		
-		action->setChecked(state);
+		if (action)
+			return action->isChecked();
 	}
 
-	m_iniWriter->end();
+	for (auto& group_set : groupSets()) {
+		auto group = group_set->itemWith(type_variant);
+
+		if (group)
+			return group->checkedAction()->data();
+	}
+
+	return QVariant();
 }
 
-void WindowSettings::onQActionToggled(bool checked)
+void WindowSettings::onQActionToggled(bool)
 {
 	auto action = sender_cast(QAction);
 	if (!action) return;
 
-	qDebug() << __FUNCTION__;
+	// Notify Fernanda and then have Fernanda send list of current Windows to have the setting applied
 
-	// Notify Fernanda and then have Fernanda send list of current Windows to have the setting applied?
-	// Where to save value? No need to write all until close, is there?
-	// The current needed value is stored in each group's actions.
-
-	auto type = typeOf(action);
+	auto type = typeData(action);
 
 	emit settingChanged(type);
 }

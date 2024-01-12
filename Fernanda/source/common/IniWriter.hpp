@@ -53,7 +53,7 @@ public:
 		m_settings->setValue(key, value);
 	}
 
-	template<typename T>
+	template <typename T>
 	T load(QAnyStringView key, QVariant fallback = QVariant())
 	{
 		auto key_value = m_settings->value(key, fallback);
@@ -64,13 +64,13 @@ public:
 		return key_value.value<T>();
 	}
 
-	template<typename T>
+	template <typename T>
 	T load(QAnyStringView key, T fallback)
 	{
 		return load<T>(key, QVariant::fromValue<T>(fallback));
 	}
 
-	template<typename T>
+	template <typename T>
 	T load(QAnyStringView key, std::function<void(T)> setter, T fallback = T())
 	{
 		auto value = load<T>(key, fallback);

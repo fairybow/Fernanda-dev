@@ -6,7 +6,7 @@
 
 namespace Connect
 {
-	template<typename Sender, typename Receiver, typename Slot, typename... Signals>
+	template <typename Sender, typename Receiver, typename Slot, typename... Signals>
 	void multi(Sender sender, Receiver receiver, Slot slot, Signals... signal)
 	{
 		(QObject::connect(sender, signal, receiver, slot), ...);

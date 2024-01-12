@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../common/Layout.hpp"
-#include "ActionGroup.hpp"
 
 #include <QAction>
 #include <QCheckBox>
@@ -19,10 +18,10 @@ public:
 		Vertical
 	};
 
-	CheckBoxGroup(ActionGroup* group, Align alignment = Align::Horizontal, QWidget* parent = nullptr)
+	CheckBoxGroup(QList<QAction*>& actions, Align alignment = Align::Horizontal, QWidget* parent = nullptr)
 		: QGroupBox(parent)
 	{
-		setup(group, alignment);
+		setup(actions, alignment);
 	}
 
 	~CheckBoxGroup()
@@ -31,13 +30,11 @@ public:
 	}
 
 private:
-	void setup(ActionGroup* group, Align alignment)
+	void setup(QList<QAction*>& actions, Align alignment)
 	{
-		setTitle(group->name());
-
 		QWidgetList check_boxes;
 
-		for (auto& action : group->actions())
+		for (auto& action : actions)
 			check_boxes << makeCheckBox(action);
 
 		Layout::box(boxAlignment(alignment), this, check_boxes);

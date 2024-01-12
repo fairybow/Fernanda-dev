@@ -143,10 +143,10 @@
     <QtMoc Include="source\window\WindowSettings.h">
       <Filter>Source\Window</Filter>
     </QtMoc>
-    <QtMoc Include="source\menu\ActionGroup.hpp">
+    <QtMoc Include="source\menu\SettingsMaps.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
-    <QtMoc Include="source\menu\CheckBoxGroup.hpp">
+    <QtMoc Include="source\menu\ActionCheckBoxes.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
   </ItemGroup>
@@ -170,6 +170,9 @@
       <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="source\common\UiButton.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\WeirdMap.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
   </ItemGroup>
