@@ -15,18 +15,18 @@ constexpr char INI_FILLER[] = "_";
 WindowSettings::WindowSettings(const Path& config, QObject* parent)
 	: QObject(parent), m_iniWriter(new IniWriter(config, this))
 {
-	setupMeterActionSet();
+	setupMeterActionsMap();
 }
 
 WindowSettings::~WindowSettings()
 {
 	qDebug() << __FUNCTION__;
 
-	for (auto& action_set : actionSets())
-		saveActionSetValues(action_set);
+	for (auto& actions_map : actionsMaps())
+		saveActionsMapValues(actions_map);
 
-	for (auto& group_set : groupSets())
-		saveGroupSetValues(group_set);
+	for (auto& groups_map : groupsMaps())
+		saveGroupsMapValues(groups_map);
 }
 
 void WindowSettings::openDialog()
@@ -88,90 +88,90 @@ void WindowSettings::applyAll(QList<Window*>& windows)
 		applyAll(window);
 }
 
-QList<ActionSet*> WindowSettings::actionSets() const
+QList<ActionsMap*> WindowSettings::actionsMaps() const
 {
-	return findChildren<ActionSet*>();
+	return findChildren<ActionsMap*>();
 }
 
-QList<ActionGroupSet*> WindowSettings::groupSets() const
+QList<ActionGroupsMap*> WindowSettings::groupsMaps() const
 {
-	return findChildren<ActionGroupSet*>();
+	return findChildren<ActionGroupsMap*>();
 }
 
-void WindowSettings::setupMeterActionSet()
+void WindowSettings::setupMeterActionsMap()
 {
-	m_meterActionSet->add(METER_LINE_POS, toVariant(Type::MeterLinePos), true);
-	m_meterActionSet->add(METER_COL_POS, toVariant(Type::MeterColPos), true);
-	m_meterActionSet->add(METER_LINES, toVariant(Type::MeterLineCount), false);
-	m_meterActionSet->add(METER_WORDS, toVariant(Type::MeterWordCount), false);
-	m_meterActionSet->add(METER_CHARS, toVariant(Type::MeterCharCount), false);
+	m_meterActionsMap->add(METER_LINE_POS, toVariant(Type::MeterLinePos), true);
+	m_meterActionsMap->add(METER_COL_POS, toVariant(Type::MeterColPos), true);
+	m_meterActionsMap->add(METER_LINES, toVariant(Type::MeterLineCount), false);
+	m_meterActionsMap->add(METER_WORDS, toVariant(Type::MeterWordCount), false);
+	m_meterActionsMap->add(METER_CHARS, toVariant(Type::MeterCharCount), false);
 
-	m_meterActionSet->setAllCheckable(true);
-	loadActionSetValues(m_meterActionSet);
+	m_meterActionsMap->setAllCheckable(true);
+	loadActionsMapValues(m_meterActionsMap);
 
-	for (auto& action : m_meterActionSet->actions())
+	for (auto& action : m_meterActionsMap->actions())
 		connect(action, &QAction::toggled,
 			this, &WindowSettings::onQActionToggled);
 }
 
-void WindowSettings::loadActionSetValues(ActionSet* actionSet)
+void WindowSettings::loadActionsMapValues(ActionsMap* actionsMap)
 {
-	m_iniWriter->begin(actionSet->name());
+	m_iniWriter->begin(actionsMap->name());
 
-	for (auto& action : actionSet->actions()) {
-		auto name = actionSet->actionName(action);
+	for (auto& action : actionsMap->actions()) {
+		auto name = actionsMap->actionName(action);
 		auto key = iniKeyName(name);
-		auto fallback = actionSet->fallback(action);
+		auto fallback = actionsMap->fallback(action);
 
 		auto state = m_iniWriter->load(key, fallback);
-		actionSet->setState(action, state);
+		actionsMap->setState(action, state);
 	}
 
 	m_iniWriter->end();
 }
 
-void WindowSettings::saveActionSetValues(ActionSet* actionSet)
+void WindowSettings::saveActionsMapValues(ActionsMap* actionsMap)
 {
-	m_iniWriter->begin(actionSet->name());
+	m_iniWriter->begin(actionsMap->name());
 
-	for (auto& action : actionSet->actions()) {
-		auto name = actionSet->actionName(action);
+	for (auto& action : actionsMap->actions()) {
+		auto name = actionsMap->actionName(action);
 		auto key = iniKeyName(name);
 
-		auto state = actionSet->state(action);
+		auto state = actionsMap->state(action);
 		m_iniWriter->save(key, state);
 	}
 
 	m_iniWriter->end();
 }
 
-void WindowSettings::loadGroupSetValues(ActionGroupSet* groupSet)
+void WindowSettings::loadGroupsMapValues(ActionGroupsMap* groupsMap)
 {
 	// Test with new ActionGroupDropDown
 
-	m_iniWriter->begin(groupSet->name());
+	m_iniWriter->begin(groupsMap->name());
 
-	for (auto& group : groupSet->groups()) {
-		auto name = groupSet->groupName(group);
+	for (auto& group : groupsMap->groups()) {
+		auto name = groupsMap->groupName(group);
 		auto key = iniKeyName(name);
-		auto fallback = groupSet->fallback(group);
+		auto fallback = groupsMap->fallback(group);
 
 		auto state = m_iniWriter->load(key, fallback);
-		groupSet->setState(group, state);
+		groupsMap->setState(group, state);
 	}
 
 	m_iniWriter->end();
 }
 
-void WindowSettings::saveGroupSetValues(ActionGroupSet* groupSet)
+void WindowSettings::saveGroupsMapValues(ActionGroupsMap* groupsMap)
 {
-	m_iniWriter->begin(groupSet->name());
+	m_iniWriter->begin(groupsMap->name());
 
-	for (auto& group : groupSet->groups()) {
-		auto name = groupSet->groupName(group);
+	for (auto& group : groupsMap->groups()) {
+		auto name = groupsMap->groupName(group);
 		auto key = iniKeyName(name);
 
-		auto state = groupSet->state(group);
+		auto state = groupsMap->state(group);
 		m_iniWriter->save(key, state);
 	}
 
@@ -197,9 +197,9 @@ void WindowSettings::setupDialog(QDialog* dialog)
 	dialog->setLayout(grid);
 	dialog->setFixedSize(800, 500);
 
-	auto meter_actions = m_meterActionSet->actions();
+	auto meter_actions = m_meterActionsMap->actions();
 	auto meter_box = new ActionsChecksBox(meter_actions, ActionsChecksBox::Align::Horizontal, dialog);
-	meter_box->setTitle(m_meterActionSet->name());
+	meter_box->setTitle(m_meterActionsMap->name());
 	grid->addWidget(meter_box);
 
 	connect(m_dialog, &QDialog::finished, this, &WindowSettings::onQDialogFinished);
@@ -207,9 +207,11 @@ void WindowSettings::setupDialog(QDialog* dialog)
 
 WindowSettings::Type WindowSettings::typeData(QAction* action)
 {
-	for (auto& action_set : actionSets())
-		if (action_set->contains(action))
-			return action_set->actionData(action).value<Type>();
+	// Overload for groups type data?
+
+	for (auto& actions_map : actionsMaps())
+		if (actions_map->contains(action))
+			return actions_map->actionData(action).value<Type>();
 
 	return Type();
 }
@@ -220,18 +222,18 @@ QVariant WindowSettings::currentValue(Type type)
 
 	auto type_variant = toVariant(type);
 
-	for (auto& action_set : actionSets()) {
-		auto action = action_set->itemWith(type_variant);
+	for (auto& actions_map : actionsMaps()) {
+		auto action = actions_map->itemWith(type_variant);
 
 		if (action)
-			return action_set->state(action);
+			return actions_map->state(action);
 	}
 
-	for (auto& group_set : groupSets()) {
-		auto group = group_set->itemWith(type_variant);
+	for (auto& groups_map : groupsMaps()) {
+		auto group = groups_map->itemWith(type_variant);
 
 		if (group)
-			return group_set->state(group);
+			return groups_map->state(group);
 	}
 
 	return QVariant();

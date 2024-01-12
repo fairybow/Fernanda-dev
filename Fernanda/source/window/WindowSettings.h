@@ -41,16 +41,16 @@ private:
 	IniWriter* m_iniWriter;
 	QDialog* m_dialog = nullptr;
 	QFont m_font = QFont();
-	ActionGroupSet* m_themesGroupSet = new ActionGroupSet(this, "Themes");
-	ActionSet* m_meterActionSet = new ActionSet(this, "Meter");
+	ActionGroupsMap* m_themesGroupsMap = new ActionGroupsMap(this, "Themes");
+	ActionsMap* m_meterActionsMap = new ActionsMap(this, "Meter");
 
-	QList<ActionSet*> actionSets() const;
-	QList<ActionGroupSet*> groupSets() const;
-	void setupMeterActionSet();
-	void loadActionSetValues(ActionSet* actionSet);
-	void saveActionSetValues(ActionSet* actionSet);
-	void loadGroupSetValues(ActionGroupSet* groupSet);
-	void saveGroupSetValues(ActionGroupSet* groupSet);
+	QList<ActionsMap*> actionsMaps() const;
+	QList<ActionGroupsMap*> groupsMaps() const;
+	void setupMeterActionsMap();
+	void loadActionsMapValues(ActionsMap* actionsMap);
+	void saveActionsMapValues(ActionsMap* actionsMap);
+	void loadGroupsMapValues(ActionGroupsMap* groupsMap);
+	void saveGroupsMapValues(ActionGroupsMap* groupsMap);
 	QString iniKeyName(QString text);
 	QVariant toVariant(Type type);
 	void setupDialog(QDialog* dialog);

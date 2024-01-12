@@ -52,7 +52,7 @@ public:
 	}
 };
 
-class ActionSet : public SettingsMap<QAction>
+class ActionsMap : public SettingsMap<QAction>
 {
 	Q_OBJECT
 
@@ -110,7 +110,7 @@ public:
 	}
 };
 
-class ActionGroupSet : public SettingsMap<QActionGroup>
+class ActionGroupsMap : public SettingsMap<QActionGroup>
 {
 	Q_OBJECT
 

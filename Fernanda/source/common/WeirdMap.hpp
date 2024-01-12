@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QList>
 #include <QMap>
+#include <QObject>
 #include <QSet>
 #include <QString>
 
