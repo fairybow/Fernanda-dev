@@ -5,7 +5,6 @@
 #include <QMap>
 #include <QSet>
 #include <QString>
-#include <QVariant>
 
 #include <type_traits>
 
@@ -100,7 +99,7 @@ public:
 			m_itemNames[item] = name;
 	}
 
-	QVariant itemData(T* item, int itemDataSlot = 0) const
+	U itemData(T* item, int itemDataSlot = 0) const
 	{
 		if (contains(item)) {
 			auto index = bound(itemDataSlot);
