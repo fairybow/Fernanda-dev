@@ -41,7 +41,7 @@ private:
 	IniWriter* m_iniWriter;
 	QDialog* m_dialog = nullptr;
 	QFont m_font = QFont();
-	ActionGroupSet* m_themes = new ActionGroupSet(this, "Themes");
+	ActionGroupSet* m_themesGroupSet = new ActionGroupSet(this, "Themes");
 	ActionSet* m_meterActionSet = new ActionSet(this, "Meter");
 
 	QList<ActionSet*> actionSets() const;

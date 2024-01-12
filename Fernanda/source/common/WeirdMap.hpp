@@ -9,7 +9,7 @@
 
 #include <type_traits>
 
-template <typename T>
+template <typename T, typename U>
 class WeirdMap : public QObject
 {
 	static_assert(std::is_base_of<QObject, T>::value, "T must derive from QObject");
@@ -18,7 +18,7 @@ public:
 	WeirdMap(QObject* parent, const QString& name, int itemDataSlots = 1)
 		: QObject(parent), m_name(name)
 	{
-		m_itemData.resize(qBound(1, itemDataSlots, 5));
+		setup(itemDataSlots);
 	}
 
 	WeirdMap(QObject* parent = nullptr, int itemDataSlots = 1)
@@ -32,7 +32,7 @@ public:
 
 	QList<T*> items() const
 	{
-		return m_itemsOrder;
+		return m_itemsOrdered;
 	}
 
 	bool contains(T* item) const
@@ -40,7 +40,7 @@ public:
 		return m_items.contains(item);
 	}
 
-	T* itemWith(const QVariant& data) const
+	T* itemWith(const U& data) const
 	{
 		for (auto& map : m_itemData)
 			for (auto it = map.begin(); it != map.end(); ++it)
@@ -50,7 +50,7 @@ public:
 		return nullptr;
 	}
 
-	QList<T*> itemsWith(const QVariant& data) const
+	QList<T*> itemsWith(const U& data) const
 	{
 		QList<T*> items;
 
@@ -76,12 +76,12 @@ public:
 		m_name = name;
 	}
 
-	QVariant data() const
+	U data() const
 	{
 		return m_data;
 	}
 
-	void setData(const QVariant& data)
+	void setData(const U& data)
 	{
 		m_data = data;
 	}
@@ -103,27 +103,30 @@ public:
 	QVariant itemData(T* item, int itemDataSlot = 0) const
 	{
 		if (contains(item)) {
-			auto index = qBound(0, itemDataSlot, maxItemDataIndex());
+			auto index = bound(itemDataSlot);
 
 			return m_itemData[index][item];
 		}
 
-		return QVariant();
+		return U();
 	}
 
-	void setItemData(T* item, const QVariant& data, int itemDataSlot = 0)
+	void setItemData(T* item, const U& data, int itemDataSlot = 0)
 	{
 		if (!contains(item)) return;
 
-		auto index = qBound(0, itemDataSlot, maxItemDataIndex());
+		auto index = bound(itemDataSlot);
 		m_itemData[index][item] = data;
 	}
 
 	T* add(T* item)
 	{
+		if (contains(item))
+			return item;
+
 		item->setParent(this);
 		m_items << item;
-		m_itemsOrder << item;
+		m_itemsOrdered << item;
 
 		return item;
 	}
@@ -141,7 +144,7 @@ public:
 		return item;
 	}
 
-	T* add(const QString& name, const QVariant& data, int itemDataSlot = 0)
+	T* add(const QString& name, const U& data, int itemDataSlot = 0)
 	{
 		auto item = add(name);
 		setItemData(item, data, itemDataSlot);
@@ -151,14 +154,23 @@ public:
 
 private:
 	QString m_name;
-	QVariant m_data;
+	U m_data;
 	QSet<T*> m_items;
-	QList<T*> m_itemsOrder;
+	QList<T*> m_itemsOrdered;
 	QMap<T*, QString> m_itemNames;
-	QList<QMap<T*, QVariant>> m_itemData; // Switch to QMap<T*, QList<QVariant>>?
+	QList<QMap<T*, U>> m_itemData; // Switch to QMap<T*, QList<U>>?
 
-	int maxItemDataIndex() const
+	void setup(int itemDataSlots)
 	{
-		return m_itemData.size() - 1;
+		auto max_slots = qBound(1, itemDataSlots, 5);
+
+		m_itemData.resize(max_slots);
+	}
+
+	constexpr const int bound(int itemDataSlot) const
+	{
+		int max_item_data_index = m_itemData.size() - 1;
+
+		return qBound(0, itemDataSlot, max_item_data_index);
 	}
 };

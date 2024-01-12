@@ -1,5 +1,5 @@
 #include "../common/Connect.hpp"
-#include "../menu/ActionCheckBoxes.hpp"
+#include "../menu/ActionsUIBoxes.hpp"
 #include "WindowSettings.h"
 
 #include <QGridLayout>
@@ -122,9 +122,9 @@ void WindowSettings::loadActionSetValues(ActionSet* actionSet)
 		auto name = actionSet->actionName(action);
 		auto key = iniKeyName(name);
 		auto fallback = actionSet->fallback(action);
-		auto state = m_iniWriter->load<bool>(key, fallback);
 
-		action->setChecked(state);
+		auto state = m_iniWriter->load(key, fallback);
+		actionSet->setState(action, state);
 	}
 
 	m_iniWriter->end();
@@ -138,7 +138,8 @@ void WindowSettings::saveActionSetValues(ActionSet* actionSet)
 		auto name = actionSet->actionName(action);
 		auto key = iniKeyName(name);
 
-		m_iniWriter->save(key, action->isChecked());
+		auto state = actionSet->state(action);
+		m_iniWriter->save(key, state);
 	}
 
 	m_iniWriter->end();
@@ -146,12 +147,35 @@ void WindowSettings::saveActionSetValues(ActionSet* actionSet)
 
 void WindowSettings::loadGroupSetValues(ActionGroupSet* groupSet)
 {
-	//
+	// Test with new ActionGroupDropDown
+
+	m_iniWriter->begin(groupSet->name());
+
+	for (auto& group : groupSet->groups()) {
+		auto name = groupSet->groupName(group);
+		auto key = iniKeyName(name);
+		auto fallback = groupSet->fallback(group);
+
+		auto state = m_iniWriter->load(key, fallback);
+		groupSet->setState(group, state);
+	}
+
+	m_iniWriter->end();
 }
 
 void WindowSettings::saveGroupSetValues(ActionGroupSet* groupSet)
 {
-	//
+	m_iniWriter->begin(groupSet->name());
+
+	for (auto& group : groupSet->groups()) {
+		auto name = groupSet->groupName(group);
+		auto key = iniKeyName(name);
+
+		auto state = groupSet->state(group);
+		m_iniWriter->save(key, state);
+	}
+
+	m_iniWriter->end();
 }
 
 QString WindowSettings::iniKeyName(QString text)
@@ -174,7 +198,8 @@ void WindowSettings::setupDialog(QDialog* dialog)
 	dialog->setFixedSize(800, 500);
 
 	auto meter_actions = m_meterActionSet->actions();
-	auto meter_box = new CheckBoxGroup(meter_actions, CheckBoxGroup::Align::Horizontal, dialog);
+	auto meter_box = new ActionsChecksBox(meter_actions, ActionsChecksBox::Align::Horizontal, dialog);
+	meter_box->setTitle(m_meterActionSet->name());
 	grid->addWidget(meter_box);
 
 	connect(m_dialog, &QDialog::finished, this, &WindowSettings::onQDialogFinished);
@@ -191,20 +216,22 @@ WindowSettings::Type WindowSettings::typeData(QAction* action)
 
 QVariant WindowSettings::currentValue(Type type)
 {
+	// The shared base and pure virtual `state` probably means these loops can be combined
+
 	auto type_variant = toVariant(type);
 
 	for (auto& action_set : actionSets()) {
 		auto action = action_set->itemWith(type_variant);
 
 		if (action)
-			return action->isChecked();
+			return action_set->state(action);
 	}
 
 	for (auto& group_set : groupSets()) {
 		auto group = group_set->itemWith(type_variant);
 
 		if (group)
-			return group->checkedAction()->data();
+			return group_set->state(group);
 	}
 
 	return QVariant();
@@ -225,5 +252,6 @@ void WindowSettings::onQActionToggled(bool)
 void WindowSettings::onQDialogFinished()
 {
 	delete m_dialog;
+
 	m_dialog = nullptr;
 }
