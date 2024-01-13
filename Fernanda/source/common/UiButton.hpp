@@ -40,7 +40,7 @@ public:
 		setFont(uiFont());
 	}
 
-	virtual ~UiButton() noexcept
+	virtual ~UiButton()
 	{
 		qDebug() << __FUNCTION__;
 	}

@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <QDir>
 #include <QList>
+#include <QMenu>
+#include <QMenuBar>
 
 class Fernanda : public QObject
 {
@@ -28,6 +30,12 @@ private:
 
 	void setup();
 	void setupWindow(Window* window);
+
+	void addMenuBar(Window* window);
+	QMenu* file(QMenuBar* menuBar, Window* window);
+	QMenu* view(QMenuBar* menuBar, Window* window);
+	QMenu* help(QMenuBar* menuBar, Window* window);
+	QMenu* dev(QMenuBar* menuBar, Window* window);
 
 private slots:
 	void onWindowFileDoubleClicked(const Path& path);

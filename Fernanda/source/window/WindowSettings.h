@@ -49,8 +49,8 @@ private:
 	void setupMeterActionsMap();
 	void loadActionsMapValues(ActionsMap* actionsMap);
 	void saveActionsMapValues(ActionsMap* actionsMap);
-	void loadGroupsMapValues(ActionGroupsMap* groupsMap);
-	void saveGroupsMapValues(ActionGroupsMap* groupsMap);
+	//void loadGroupsMapValues(ActionGroupsMap* groupsMap);
+	//void saveGroupsMapValues(ActionGroupsMap* groupsMap);
 	QString iniKeyName(QString text);
 	QVariant toVariant(Type type);
 	void setupDialog(QDialog* dialog);

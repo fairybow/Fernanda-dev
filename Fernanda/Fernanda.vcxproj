@@ -56,7 +56,7 @@
     <ClInclude Include="source\common\WeirdMap.hpp" />
     <ClInclude Include="source\common\Path.hpp" />
     <ClInclude Include="source\common\UiButton.hpp" />
-    <QtMoc Include="source\menu\ActionsUIBoxes.hpp" />
+    <QtMoc Include="source\menu\ActionsUiBoxes.hpp" />
     <QtMoc Include="source\menu\SettingsMaps.hpp" />
     <QtMoc Include="source\window\WindowSettings.h" />
     <QtMoc Include="source\StartCop.hpp" />

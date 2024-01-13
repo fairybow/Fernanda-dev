@@ -11,7 +11,7 @@
 #include <QList>
 #include <QString>
 
-class ActionsUIBox : public QGroupBox
+class ActionsUiBox : public QGroupBox
 {
 	Q_OBJECT
 
@@ -21,14 +21,12 @@ public:
 		Vertical
 	};
 
-	ActionsUIBox(Align alignment = Align::Horizontal, QWidget* parent = nullptr)
+	ActionsUiBox(Align alignment = Align::Horizontal, QWidget* parent = nullptr)
 		: QGroupBox(parent), m_alignment(alignment)
 	{}
 
-	virtual ~ActionsUIBox() noexcept
-	{
-		qDebug() << __FUNCTION__;
-	}
+	virtual ~ActionsUiBox()
+	{}
 
 protected:
 	Box boxAlignment() const
@@ -40,15 +38,20 @@ private:
 	Align m_alignment;
 };
 
-class ActionsChecksBox : public ActionsUIBox
+class ActionsChecksBox : public ActionsUiBox
 {
 	Q_OBJECT
 
 public:
 	ActionsChecksBox(QList<QAction*>& actions, Align alignment = Align::Horizontal, QWidget* parent = nullptr)
-		: ActionsUIBox(alignment, parent)
+		: ActionsUiBox(alignment, parent)
 	{
 		setup(actions);
+	}
+
+	~ActionsChecksBox()
+	{
+		qDebug() << __FUNCTION__;
 	}
 
 private:
@@ -76,15 +79,20 @@ private:
 	}
 };
 
-class ActionGroupsDropdownsBox : public ActionsUIBox
+class ActionGroupsDropdownsBox : public ActionsUiBox
 {
 	Q_OBJECT
 
 public:
 	ActionGroupsDropdownsBox(QList<QActionGroup*>& groups, Align alignment = Align::Horizontal, QWidget* parent = nullptr)
-		: ActionsUIBox(alignment, parent)
+		: ActionsUiBox(alignment, parent)
 	{
 		setup(groups);
+	}
+
+	~ActionGroupsDropdownsBox()
+	{
+		qDebug() << __FUNCTION__;
 	}
 
 private:
@@ -103,6 +111,8 @@ private:
 		auto combo_box = new QComboBox(this);
 
 		// Add items from group and set checkedAction to currentIndex
+
+		// Change the connection. Set pointer to action as data and if data equals action on `currentIndexChanged`, set action checked.
 
 		connect(combo_box, &QComboBox::currentTextChanged, this, [=](const QString& text) {
 			for (auto& action : group->actions())

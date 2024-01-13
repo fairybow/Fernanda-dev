@@ -6,64 +6,63 @@
 #include <QObject>
 #include <QSet>
 #include <QString>
+#include <QVariant>
 
 #include <type_traits>
 
-template <typename T, typename U>
+template <typename TKey, typename TValue, typename TMapData = QVariant>
 class WeirdMap : public QObject
 {
-	static_assert(std::is_base_of<QObject, T>::value, "T must derive from QObject");
+	static_assert(std::is_base_of<QObject, TKey>::value, "TKey must derive from QObject");
 
 public:
-	WeirdMap(QObject* parent, const QString& name, int itemDataSlots = 1)
+	WeirdMap(QObject* parent, const QString& name, int keyValueSlots = 1)
 		: QObject(parent), m_name(name)
 	{
-		setup(itemDataSlots);
+		setup(keyValueSlots);
 	}
 
-	WeirdMap(QObject* parent = nullptr, int itemDataSlots = 1)
-		: WeirdMap(parent, QString(), itemDataSlots)
+	WeirdMap(QObject* parent = nullptr, int keyValueSlots = 1)
+		: WeirdMap(parent, QString(), keyValueSlots)
 	{}
 
-	virtual ~WeirdMap() noexcept
+	virtual ~WeirdMap()
+	{}
+
+	QList<TKey*> keys() const
 	{
-		qDebug() << __FUNCTION__;
+		return m_keysOrdered;
 	}
 
-	QList<T*> items() const
+	bool contains(TKey* key) const
 	{
-		return m_itemsOrdered;
+		return m_keys.contains(key);
 	}
 
-	bool contains(T* item) const
+	TKey* keyWith(const TValue& value) const
 	{
-		return m_items.contains(item);
-	}
-
-	T* itemWith(const U& data) const
-	{
-		for (auto& map : m_itemData)
+		for (auto& map : m_keyValues)
 			for (auto it = map.begin(); it != map.end(); ++it)
-				if (it.value() == data)
+				if (it.value() == value)
 					return it.key();
 
 		return nullptr;
 	}
 
-	QList<T*> itemsWith(const U& data) const
+	QList<TKey*> keysWith(const TValue& value) const
 	{
-		QList<T*> items;
+		QList<TKey*> keys;
 
-		for (auto& map : m_itemData)
+		for (auto& map : m_keyValues)
 			for (auto it = map.begin(); it != map.end(); ++it)
-				if (it.value() == data) {
+				if (it.value() == value) {
 					auto key = it.key();
 
-					if (!items.contains(key))
-						items << key;
+					if (!keys.contains(key))
+						keys << key;
 				}
 
-		return items;
+		return keys;
 	}
 
 	QString name() const
@@ -76,101 +75,101 @@ public:
 		m_name = name;
 	}
 
-	U data() const
+	TMapData data() const
 	{
 		return m_data;
 	}
 
-	void setData(const U& data)
+	void setData(const TMapData& data)
 	{
 		m_data = data;
 	}
 
-	QString itemName(T* item) const
+	QString keyName(TKey* key) const
 	{
-		if (contains(item))
-			return m_itemNames[item];
+		if (contains(key))
+			return m_keyNames[key];
 
 		return QString();
 	}
 
-	void setItemName(T* item, const QString& name)
+	void setKeyName(TKey* key, const QString& name)
 	{
-		if (contains(item))
-			m_itemNames[item] = name;
+		if (contains(key))
+			m_keyNames[key] = name;
 	}
 
-	U itemData(T* item, int itemDataSlot = 0) const
+	TValue keyValue(TKey* key, int keyValueSlot = 0) const
 	{
-		if (contains(item)) {
-			auto index = bound(itemDataSlot);
+		if (contains(key)) {
+			auto index = bound(keyValueSlot);
 
-			return m_itemData[index][item];
+			return m_keyValues[index][key];
 		}
 
-		return U();
+		return TValue();
 	}
 
-	void setItemData(T* item, const U& data, int itemDataSlot = 0)
+	void setKeyValue(TKey* key, const TValue& value, int keyValueSlot = 0)
 	{
-		if (!contains(item)) return;
+		if (!contains(key)) return;
 
-		auto index = bound(itemDataSlot);
-		m_itemData[index][item] = data;
+		auto index = bound(keyValueSlot);
+		m_keyValues[index][key] = value;
 	}
 
-	T* add(T* item)
+	TKey* add(TKey* key)
 	{
-		if (contains(item))
-			return item;
+		if (contains(key))
+			return key;
 
-		item->setParent(this);
-		m_items << item;
-		m_itemsOrdered << item;
+		key->setParent(this);
+		m_keys << key;
+		m_keysOrdered << key;
 
-		return item;
+		return key;
 	}
 
-	T* add()
+	TKey* add()
 	{
-		return add(new T(nullptr));
+		return add(new TKey(nullptr));
 	}
 
-	T* add(const QString& name)
+	TKey* add(const QString& name)
 	{
-		auto item = add();
-		setItemName(item, name);
+		auto key = add();
+		setKeyName(key, name);
 
-		return item;
+		return key;
 	}
 
-	T* add(const QString& name, const U& data, int itemDataSlot = 0)
+	TKey* add(const QString& name, const TValue& value, int keyValueSlot = 0)
 	{
-		auto item = add(name);
-		setItemData(item, data, itemDataSlot);
+		auto key = add(name);
+		setKeyValue(key, value, keyValueSlot);
 
-		return item;
+		return key;
 	}
 
 private:
 	QString m_name;
-	U m_data;
-	QSet<T*> m_items;
-	QList<T*> m_itemsOrdered;
-	QMap<T*, QString> m_itemNames;
-	QList<QMap<T*, U>> m_itemData; // Switch to QMap<T*, QList<U>>?
+	TMapData m_data;
+	QSet<TKey*> m_keys;
+	QList<TKey*> m_keysOrdered;
+	QMap<TKey*, QString> m_keyNames;
+	QList<QMap<TKey*, TValue>> m_keyValues; // Switch to `QMap<TKey*, QList<TValue>>`?
 
-	void setup(int itemDataSlots)
+	void setup(int keyValueSlots)
 	{
-		auto max_slots = qBound(1, itemDataSlots, 5);
+		auto max_slots = qBound(1, keyValueSlots, 5);
 
-		m_itemData.resize(max_slots);
+		m_keyValues.resize(max_slots);
 	}
 
-	constexpr const int bound(int itemDataSlot) const
+	constexpr const int bound(int keyValueSlot) const
 	{
-		int max_item_data_index = m_itemData.size() - 1;
+		int max_value_index = m_keyValues.size() - 1;
 
-		return qBound(0, itemDataSlot, max_item_data_index);
+		return qBound(0, keyValueSlot, max_value_index);
 	}
 };

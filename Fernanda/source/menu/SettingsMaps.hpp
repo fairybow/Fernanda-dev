@@ -16,7 +16,7 @@ public:
 		: WeirdMap<T, QVariant>(parent, name, 2)
 	{}
 
-	virtual ~SettingsMap() noexcept
+	virtual ~SettingsMap()
 	{}
 
 	virtual QVariant state(T* item) const = 0;
@@ -25,22 +25,22 @@ public:
 
 	QVariant itemData(T* item) const
 	{
-		return WeirdMap<T, QVariant>::itemData(item, 0);
+		return WeirdMap<T, QVariant>::keyValue(item, 0);
 	}
 
 	void setItemData(T* item, const QVariant& data)
 	{
-		WeirdMap<T, QVariant>::setItemData(item, data, 0);
+		WeirdMap<T, QVariant>::setKeyValue(item, data, 0);
 	}
 
 	QVariant fallback(T* item) const
 	{
-		return WeirdMap<T, QVariant>::itemData(item, 1);
+		return WeirdMap<T, QVariant>::keyValue(item, 1);
 	}
 
 	void setFallback(T* item, const QVariant& fallback)
 	{
-		WeirdMap<T, QVariant>::setItemData(item, fallback, 1);
+		WeirdMap<T, QVariant>::setKeyValue(item, fallback, 1);
 	}
 
 	T* add(const QString& name, const QVariant& data, const QVariant& fallback)
@@ -59,6 +59,11 @@ class ActionsMap : public SettingsMap<QAction>
 public:
 	using SettingsMap::SettingsMap;
 
+	~ActionsMap()
+	{
+		qDebug() << __FUNCTION__;
+	}
+
 	QVariant state(QAction* action) const override
 	{
 		return action->isChecked();
@@ -71,17 +76,17 @@ public:
 
 	QList<QAction*> actions() const
 	{
-		return items();
+		return keys();
 	}
 
 	QString actionName(QAction* action) const
 	{
-		return itemName(action);
+		return keyName(action);
 	}
 
 	void setActionName(QAction* action, const QString& name)
 	{
-		setItemName(action, name);
+		setKeyName(action, name);
 	}
 
 	QVariant actionData(QAction* action) const
@@ -96,7 +101,7 @@ public:
 
 	void setAllCheckable(bool checkable)
 	{
-		for (auto& action : items())
+		for (auto& action : keys())
 			action->setCheckable(checkable);
 	}
 
@@ -117,6 +122,11 @@ class ActionGroupsMap : public SettingsMap<QActionGroup>
 public:
 	using SettingsMap::SettingsMap;
 
+	~ActionGroupsMap()
+	{
+		qDebug() << __FUNCTION__;
+	}
+
 	QVariant state(QActionGroup* group) const override
 	{
 		return group->checkedAction()->data();
@@ -134,17 +144,17 @@ public:
 
 	QList<QActionGroup*> groups() const
 	{
-		return items();
+		return keys();
 	}
 
 	QString groupName(QActionGroup* group) const
 	{
-		return itemName(group);
+		return keyName(group);
 	}
 
 	void setGroupName(QActionGroup* group, const QString& name)
 	{
-		setItemName(group, name);
+		setKeyName(group, name);
 	}
 
 	QVariant groupData(QActionGroup* group) const
@@ -159,7 +169,7 @@ public:
 
 	void setAllExclusive(bool exclusive)
 	{
-		for (auto& group : items())
+		for (auto& group : keys())
 			group->setExclusive(exclusive);
 	}
 };

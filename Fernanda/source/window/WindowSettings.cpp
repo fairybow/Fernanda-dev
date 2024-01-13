@@ -1,5 +1,5 @@
 #include "../common/Connect.hpp"
-#include "../menu/ActionsUIBoxes.hpp"
+#include "../menu/ActionsUiBoxes.hpp"
 #include "WindowSettings.h"
 
 #include <QGridLayout>
@@ -25,8 +25,8 @@ WindowSettings::~WindowSettings()
 	for (auto& actions_map : actionsMaps())
 		saveActionsMapValues(actions_map);
 
-	for (auto& groups_map : groupsMaps())
-		saveGroupsMapValues(groups_map);
+	/*for (auto& groups_map : groupsMaps())
+		saveGroupsMapValues(groups_map);*/
 }
 
 void WindowSettings::openDialog()
@@ -110,8 +110,7 @@ void WindowSettings::setupMeterActionsMap()
 	loadActionsMapValues(m_meterActionsMap);
 
 	for (auto& action : m_meterActionsMap->actions())
-		connect(action, &QAction::toggled,
-			this, &WindowSettings::onQActionToggled);
+		connect(action, &QAction::toggled, this, &WindowSettings::onQActionToggled);
 }
 
 void WindowSettings::loadActionsMapValues(ActionsMap* actionsMap)
@@ -145,7 +144,7 @@ void WindowSettings::saveActionsMapValues(ActionsMap* actionsMap)
 	m_iniWriter->end();
 }
 
-void WindowSettings::loadGroupsMapValues(ActionGroupsMap* groupsMap)
+/*void WindowSettings::loadGroupsMapValues(ActionGroupsMap* groupsMap)
 {
 	// Test with new ActionGroupDropDown
 
@@ -176,7 +175,7 @@ void WindowSettings::saveGroupsMapValues(ActionGroupsMap* groupsMap)
 	}
 
 	m_iniWriter->end();
-}
+}*/
 
 QString WindowSettings::iniKeyName(QString text)
 {
@@ -223,14 +222,14 @@ QVariant WindowSettings::currentValue(Type type)
 	auto type_variant = toVariant(type);
 
 	for (auto& actions_map : actionsMaps()) {
-		auto action = actions_map->itemWith(type_variant);
+		auto action = actions_map->keyWith(type_variant);
 
 		if (action)
 			return actions_map->state(action);
 	}
 
 	for (auto& groups_map : groupsMaps()) {
-		auto group = groups_map->itemWith(type_variant);
+		auto group = groups_map->keyWith(type_variant);
 
 		if (group)
 			return groups_map->state(group);

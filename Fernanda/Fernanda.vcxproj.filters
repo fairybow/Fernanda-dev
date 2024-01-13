@@ -146,7 +146,7 @@
     <QtMoc Include="source\menu\SettingsMaps.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
-    <QtMoc Include="source\menu\ActionsUIBoxes.hpp">
+    <QtMoc Include="source\menu\ActionsUiBoxes.hpp">
       <Filter>Source\Menu</Filter>
     </QtMoc>
   </ItemGroup>
