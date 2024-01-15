@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QLabel>
 #include <QPlainTextEdit>
+#include <QWidget>
 
 class Meter : public QWidget
 {

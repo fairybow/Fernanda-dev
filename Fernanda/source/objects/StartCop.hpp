@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QObject>
 #include <QString>
 #include <QTimer>
 

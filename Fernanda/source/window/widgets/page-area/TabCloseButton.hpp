@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../common/UiButton.hpp"
+#include "../../../common/UiButton.hpp"
 
 #include <QPoint>
 #include <QTabBar>

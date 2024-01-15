@@ -1,14 +1,15 @@
 #pragma once
 
-#include "../common/Path.hpp"
+#include "Path.hpp"
 
 #include <QAnyStringView>
 #include <QDebug>
+#include <QObject>
 #include <QSettings>
 #include <QString>
 #include <QVariant>
 
-#include <functional>
+//#include <functional>
 
 class IniWriter : public QObject
 {
@@ -58,7 +59,8 @@ public:
 		return m_settings->value(key, fallback);
 	}
 
-	/*template <typename T>
+	/*
+	template <typename T>
 	T load(QAnyStringView key, QVariant fallback = QVariant())
 	{
 		auto key_value = m_settings->value(key, fallback);
@@ -82,7 +84,8 @@ public:
 		setter(value);
 
 		return value;
-	}*/
+	}
+	*/
 
 private:
 	Path m_ini;

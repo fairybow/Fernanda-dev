@@ -2,13 +2,14 @@
 
 #include "../common/IniWriter.hpp"
 #include "../common/Path.hpp"
-#include "../menu/SettingsMaps.hpp"
+#include "settings-objects/SettingsMaps.hpp"
 #include "Window.h"
 
 #include <QDebug>
 #include <QDialog>
 #include <QFont>
 #include <QList>
+#include <QObject>
 #include <QVariant>
 
 class WindowSettings : public QObject
@@ -21,8 +22,8 @@ public:
 
 	enum class Type {
 		Font, // QFont
-		EditorTheme, // path (one of a group)
-		WindowTheme, // path (one of a group)
+		//EditorTheme, // path (one of a group)
+		//WindowTheme, // path (one of a group)
 		MeterLinePos, // bool
 		MeterColPos, // bool
 		MeterLineCount, // bool
@@ -40,7 +41,7 @@ public:
 private:
 	IniWriter* m_iniWriter;
 	QDialog* m_dialog = nullptr;
-	QFont m_font = QFont();
+	QFont m_currentFont = QFont();
 	ActionGroupsMap* m_themesGroupsMap = new ActionGroupsMap(this, "Themes");
 	ActionsMap* m_meterActionsMap = new ActionsMap(this, "Meter");
 
@@ -49,8 +50,12 @@ private:
 	void setupMeterActionsMap();
 	void loadActionsMapValues(ActionsMap* actionsMap);
 	void saveActionsMapValues(ActionsMap* actionsMap);
+	void saveAllMapsValues();
 	//void loadGroupsMapValues(ActionGroupsMap* groupsMap);
 	//void saveGroupsMapValues(ActionGroupsMap* groupsMap);
+	void loadFont();
+	void saveFont();
+	void applyFont(Window* window, QFont font);
 	QString iniKeyName(QString text);
 	QVariant toVariant(Type type);
 	void setupDialog(QDialog* dialog);
@@ -60,8 +65,8 @@ private:
 private slots:
 	void onQActionToggled(bool);
 	void onQDialogFinished();
+	void onFontSelectorFontChanged(const QFont& font);
 
 signals:
 	void settingChanged(Type type);
-	//void currentFontChanged(const QFont& font);
 };

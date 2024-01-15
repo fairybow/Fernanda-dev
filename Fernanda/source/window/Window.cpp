@@ -56,7 +56,12 @@ void Window::closeEvent(QCloseEvent* event)
 
 QList<PageArea*> Window::pageAreas() const
 {
-	return m_splitter->findChildren<PageArea*>();
+	return m_splitter->findChildren<PageArea*>(Qt::FindDirectChildrenOnly);
+}
+
+QList<Editor*> Window::editors() const
+{
+	return m_editors;
 }
 
 Window::PageIndex Window::pageIndexOf(Editor* editor) const
@@ -183,7 +188,10 @@ Document* Window::newDocument(const Path& path)
 Editor* Window::newEditor(Document* document)
 {
 	auto editor = new Editor;
+	m_editors << editor;
+
 	editor->setDocument(document);
+	editor->setFont(m_editorFont);
 
 	connect(editor, &Editor::textChanged, this, &Window::onEditorTextChanged);
 	connect(editor, &Editor::modificationChanged, this, &Window::onEditorModificationChanged);
@@ -218,8 +226,11 @@ void Window::onPageAreaCloseRequested(int index)
 	auto editor = removeCurrentPageAreaEditor(index);
 	auto document = documentOf(editor);
 
-	if (editor)
+	if (editor) {
+		m_editors.removeAll(editor);
+
 		delete editor;
+	}
 
 	// What to do with Document?
 

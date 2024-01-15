@@ -8,13 +8,9 @@
 #include <QString>
 #include <QVariant>
 
-#include <type_traits>
-
 template <typename TKey, typename TValue, typename TMapData = QVariant>
 class WeirdMap : public QObject
 {
-	static_assert(std::is_base_of<QObject, TKey>::value, "TKey must derive from QObject");
-
 public:
 	WeirdMap(QObject* parent, const QString& name, int keyValueSlots = 1)
 		: QObject(parent), m_name(name)
@@ -29,29 +25,44 @@ public:
 	virtual ~WeirdMap()
 	{}
 
-	QList<TKey*> keys() const
+	QList<TKey> keys() const
 	{
 		return m_keysOrdered;
 	}
 
-	bool contains(TKey* key) const
+	bool contains(const TKey& key) const
 	{
 		return m_keys.contains(key);
 	}
 
-	TKey* keyWith(const TValue& value) const
+	TKey keyWith(const TValue& value) const
 	{
 		for (auto& map : m_keyValues)
 			for (auto it = map.begin(); it != map.end(); ++it)
 				if (it.value() == value)
 					return it.key();
 
-		return nullptr;
+		return TKey();
+
+		/*
+		// Direct retrieval (faster, but assumes that each
+		// value is associated with exactly one key, which
+		// might not always be the case?):
+
+		for (auto& map : m_keyValues) {
+			auto key = map.key(value);
+
+			if (map.contains(key))
+				return key;
+		}
+		
+		return TKey();
+		*/
 	}
 
-	QList<TKey*> keysWith(const TValue& value) const
+	QList<TKey> keysWith(const TValue& value) const
 	{
-		QList<TKey*> keys;
+		QList<TKey> keys;
 
 		for (auto& map : m_keyValues)
 			for (auto it = map.begin(); it != map.end(); ++it)
@@ -85,7 +96,7 @@ public:
 		m_data = data;
 	}
 
-	QString keyName(TKey* key) const
+	QString nameOf(const TKey& key) const
 	{
 		if (contains(key))
 			return m_keyNames[key];
@@ -93,13 +104,13 @@ public:
 		return QString();
 	}
 
-	void setKeyName(TKey* key, const QString& name)
+	void setNameOf(const TKey& key, const QString& name)
 	{
 		if (contains(key))
 			m_keyNames[key] = name;
 	}
 
-	TValue keyValue(TKey* key, int keyValueSlot = 0) const
+	TValue valueOf(const TKey& key, int keyValueSlot = 0) const
 	{
 		if (contains(key)) {
 			auto index = bound(keyValueSlot);
@@ -110,7 +121,7 @@ public:
 		return TValue();
 	}
 
-	void setKeyValue(TKey* key, const TValue& value, int keyValueSlot = 0)
+	void setValueOf(const TKey& key, const TValue& value, int keyValueSlot = 0)
 	{
 		if (!contains(key)) return;
 
@@ -118,35 +129,29 @@ public:
 		m_keyValues[index][key] = value;
 	}
 
-	TKey* add(TKey* key)
+	TKey add(const TKey& key)
 	{
 		if (contains(key))
 			return key;
 
-		key->setParent(this);
 		m_keys << key;
 		m_keysOrdered << key;
 
 		return key;
 	}
 
-	TKey* add()
+	TKey add(const TKey& key, const QString& name)
 	{
-		return add(new TKey(nullptr));
-	}
-
-	TKey* add(const QString& name)
-	{
-		auto key = add();
-		setKeyName(key, name);
+		add(key);
+		setNameOf(key, name);
 
 		return key;
 	}
 
-	TKey* add(const QString& name, const TValue& value, int keyValueSlot = 0)
+	TKey add(const TKey& key, const QString& name, const TValue& value, int keyValueSlot = 0)
 	{
-		auto key = add(name);
-		setKeyValue(key, value, keyValueSlot);
+		add(key, name);
+		setValueOf(key, value, keyValueSlot);
 
 		return key;
 	}
@@ -154,10 +159,10 @@ public:
 private:
 	QString m_name;
 	TMapData m_data;
-	QSet<TKey*> m_keys;
-	QList<TKey*> m_keysOrdered;
-	QMap<TKey*, QString> m_keyNames;
-	QList<QMap<TKey*, TValue>> m_keyValues; // Switch to `QMap<TKey*, QList<TValue>>`?
+	QSet<TKey> m_keys;
+	QList<TKey> m_keysOrdered;
+	QMap<TKey, QString> m_keyNames;
+	QList<QMap<TKey, TValue>> m_keyValues; // Switch to `QMap<TKey, QList<TValue>>`?
 
 	void setup(int keyValueSlots)
 	{

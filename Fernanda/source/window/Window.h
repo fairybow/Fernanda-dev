@@ -1,14 +1,15 @@
 #pragma once
 
 #include "../common/Path.hpp"
-#include "../documents/Document.h" // Removed from structure (above)--so maybe a sign we should do without it
-#include "editor/Editor.h"
-#include "meter/Meter.h"
-#include "page-area/PageArea.h"
-#include "tree-view/TreeView.h"
+#include "../objects/Document.h" // Removed from structure (above)--so maybe a sign we should do without it
+#include "widgets/Editor.h"
+#include "widgets/Meter.h"
+#include "widgets/page-area/PageArea.h"
+#include "widgets/TreeView.h"
 
 #include <QCloseEvent>
 #include <QDebug>
+#include <QFont>
 #include <QList>
 #include <QMainWindow>
 #include <QSplitter>
@@ -56,8 +57,13 @@ private:
 	QSplitter* m_splitter = new QSplitter(this);
 	mutable PageArea* m_currentPageArea = nullptr;
 	Meter* m_meter = new Meter;
+	//EditorSettings* m_editorSettings = new EditorSettings(m_iniPath, this);
+	// ^ Probably not, since do we really want multiple of these? No need, if shared across Windows
+	QList<Editor*> m_editors;
+	QFont m_editorFont = QFont();
 
 	QList<PageArea*> pageAreas() const;
+	QList<Editor*> editors() const;
 	PageIndex pageIndexOf(Editor* editor) const;
 	PageIndex pageIndexOf(const Path& path) const;
 	Editor* editorAt(PageIndex pageIndex) const;
@@ -71,6 +77,7 @@ private:
 	Document* newDocument(const Path& path = Path());
 	Editor* newEditor(Document* document);
 	Editor* removeCurrentPageAreaEditor(int index);
+
 
 private slots:
 	void onPageAreaAddRequested();

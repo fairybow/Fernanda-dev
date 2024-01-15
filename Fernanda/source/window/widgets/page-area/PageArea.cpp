@@ -1,8 +1,5 @@
-#include "../../common/Layout.hpp"
+#include "../../../common/Layout.hpp"
 #include "PageArea.h"
-
-#include <QList>
-#include <QVariant>
 
 constexpr char HIDE_DEFAULT_SCROLLERS[] = "TabBar::scroller{ width: 0px; }";
 
@@ -41,6 +38,11 @@ int PageArea::currentIndex() const
 QWidget* PageArea::currentWidget() const
 {
 	return widgetAt(currentIndex());
+}
+
+QWidgetList PageArea::widgets() const
+{
+	return m_widgets;
 }
 
 Qt::TextElideMode PageArea::tabsElideMode() const
@@ -203,6 +205,7 @@ void PageArea::setupTabBar()
 int PageArea::addNewPage(QWidget* widget, const QString& tabText, int insertIndex)
 {
 	m_widgetsStack->addWidget(widget);
+	m_widgets << widget;
 
 	auto index = m_tabBar->insertTab(insertIndex, tabText);
 	m_tabBar->setTabData(index, QVariant::fromValue(widget));
@@ -224,6 +227,8 @@ QWidget* PageArea::dismantlePage(int index)
 {
 	auto widget = widgetAt(index);
 	m_widgetsStack->removeWidget(widget);
+	m_widgets.removeAll(widget);
+
 	auto close_button = tabCloseButton(index);
 
 	m_tabBar->removeTab(index);

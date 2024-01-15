@@ -1,20 +1,26 @@
 #include "../common/Connect.hpp"
-#include "../menu/ActionsUiBoxes.hpp"
+#include "settings-widgets/ActionsUiBoxes.h"
+#include "settings-widgets/FontSelector.h"
 #include "WindowSettings.h"
 
 #include <QGridLayout>
 #include <QMargins>
 
+// For testing
+#include <QFontDialog>
+
+constexpr char FONT[] = "Font";
+constexpr char INI_FILLER[] = "_";
 constexpr char METER_LINE_POS[] = "Line position";
 constexpr char METER_COL_POS[] = "Column position";
 constexpr char METER_LINES[] = "Line count";
 constexpr char METER_WORDS[] = "Word count";
 constexpr char METER_CHARS[] = "Character count";
-constexpr char INI_FILLER[] = "_";
 
 WindowSettings::WindowSettings(const Path& config, QObject* parent)
 	: QObject(parent), m_iniWriter(new IniWriter(config, this))
 {
+	loadFont();
 	setupMeterActionsMap();
 }
 
@@ -22,11 +28,8 @@ WindowSettings::~WindowSettings()
 {
 	qDebug() << __FUNCTION__;
 
-	for (auto& actions_map : actionsMaps())
-		saveActionsMapValues(actions_map);
-
-	/*for (auto& groups_map : groupsMaps())
-		saveGroupsMapValues(groups_map);*/
+	saveFont();
+	saveAllMapsValues();
 }
 
 void WindowSettings::openDialog()
@@ -46,26 +49,27 @@ void WindowSettings::openDialog()
 
 void WindowSettings::applySetting(Window* window, Type type)
 {
-	auto value = currentValue(type);
-	if (!value.isValid()) return;
-
-	// Will this work for font?
+	auto variant = currentValue(type);
+	if (!variant.isValid()) return;
 
 	switch (type) {
-	case WindowSettings::Type::MeterLinePos:
-		window->m_meter->setHasLinePosition(value.toBool());
+	case Type::Font:
+		applyFont(window, variant.value<QFont>());
 		break;
-	case WindowSettings::Type::MeterColPos:
-		window->m_meter->setHasColumnPosition(value.toBool());
+	case Type::MeterLinePos:
+		window->m_meter->setHasLinePosition(variant.toBool());
 		break;
-	case WindowSettings::Type::MeterLineCount:
-		window->m_meter->setHasLineCount(value.toBool());
+	case Type::MeterColPos:
+		window->m_meter->setHasColumnPosition(variant.toBool());
 		break;
-	case WindowSettings::Type::MeterWordCount:
-		window->m_meter->setHasWordCount(value.toBool());
+	case Type::MeterLineCount:
+		window->m_meter->setHasLineCount(variant.toBool());
 		break;
-	case WindowSettings::Type::MeterCharCount:
-		window->m_meter->setHasCharCount(value.toBool());
+	case Type::MeterWordCount:
+		window->m_meter->setHasWordCount(variant.toBool());
+		break;
+	case Type::MeterCharCount:
+		window->m_meter->setHasCharCount(variant.toBool());
 		break;
 	}
 }
@@ -90,12 +94,12 @@ void WindowSettings::applyAll(QList<Window*>& windows)
 
 QList<ActionsMap*> WindowSettings::actionsMaps() const
 {
-	return findChildren<ActionsMap*>();
+	return findChildren<ActionsMap*>(Qt::FindDirectChildrenOnly);
 }
 
 QList<ActionGroupsMap*> WindowSettings::groupsMaps() const
 {
-	return findChildren<ActionGroupsMap*>();
+	return findChildren<ActionGroupsMap*>(Qt::FindDirectChildrenOnly);
 }
 
 void WindowSettings::setupMeterActionsMap()
@@ -118,7 +122,7 @@ void WindowSettings::loadActionsMapValues(ActionsMap* actionsMap)
 	m_iniWriter->begin(actionsMap->name());
 
 	for (auto& action : actionsMap->actions()) {
-		auto name = actionsMap->actionName(action);
+		auto name = actionsMap->nameOf(action);
 		auto key = iniKeyName(name);
 		auto fallback = actionsMap->fallback(action);
 
@@ -134,7 +138,7 @@ void WindowSettings::saveActionsMapValues(ActionsMap* actionsMap)
 	m_iniWriter->begin(actionsMap->name());
 
 	for (auto& action : actionsMap->actions()) {
-		auto name = actionsMap->actionName(action);
+		auto name = actionsMap->nameOf(action);
 		auto key = iniKeyName(name);
 
 		auto state = actionsMap->state(action);
@@ -144,14 +148,26 @@ void WindowSettings::saveActionsMapValues(ActionsMap* actionsMap)
 	m_iniWriter->end();
 }
 
-/*void WindowSettings::loadGroupsMapValues(ActionGroupsMap* groupsMap)
+void WindowSettings::saveAllMapsValues()
+{
+	for (auto& actions_map : actionsMaps())
+		saveActionsMapValues(actions_map);
+
+	/*
+	for (auto& groups_map : groupsMaps())
+		saveGroupsMapValues(groups_map);
+		*/
+}
+
+/*
+void WindowSettings::loadGroupsMapValues(ActionGroupsMap* groupsMap)
 {
 	// Test with new ActionGroupDropDown
 
 	m_iniWriter->begin(groupsMap->name());
 
 	for (auto& group : groupsMap->groups()) {
-		auto name = groupsMap->groupName(group);
+		auto name = groupsMap->nameOf(group);
 		auto key = iniKeyName(name);
 		auto fallback = groupsMap->fallback(group);
 
@@ -167,7 +183,7 @@ void WindowSettings::saveGroupsMapValues(ActionGroupsMap* groupsMap)
 	m_iniWriter->begin(groupsMap->name());
 
 	for (auto& group : groupsMap->groups()) {
-		auto name = groupsMap->groupName(group);
+		auto name = groupsMap->nameOf(group);
 		auto key = iniKeyName(name);
 
 		auto state = groupsMap->state(group);
@@ -175,7 +191,33 @@ void WindowSettings::saveGroupsMapValues(ActionGroupsMap* groupsMap)
 	}
 
 	m_iniWriter->end();
-}*/
+}
+*/
+
+void WindowSettings::loadFont()
+{
+	m_iniWriter->begin(FONT);
+	auto font = m_iniWriter->load(FONT, QFont("Mononoki", 12));
+	m_currentFont = font.value<QFont>();
+
+	m_iniWriter->end();
+}
+
+void WindowSettings::saveFont()
+{
+	m_iniWriter->begin(FONT);
+	m_iniWriter->save(FONT, m_currentFont);
+
+	m_iniWriter->end();
+}
+
+void WindowSettings::applyFont(Window* window, QFont font)
+{
+	window->m_editorFont = font;
+
+	for (auto& editor : window->editors())
+		editor->setFont(font);
+}
 
 QString WindowSettings::iniKeyName(QString text)
 {
@@ -196,6 +238,23 @@ void WindowSettings::setupDialog(QDialog* dialog)
 	dialog->setLayout(grid);
 	dialog->setFixedSize(800, 500);
 
+	// TESTING
+
+	auto font_box = new QGroupBox(dialog);
+	auto font_selector = new FontSelector(m_currentFont, font_box);
+	font_box->setTitle(FONT);
+	Layout::box(Box::Horizontal, font_box, QWidgetList{ font_selector });
+	// ^-- Overload to take 1 widget/object
+	grid->addWidget(font_box);
+	connect(font_selector, &FontSelector::currentFontChanged, this, &WindowSettings::onFontSelectorFontChanged);
+
+	// For testing
+	//auto debug_font_dialog = new QFontDialog(dialog);
+	//debug_font_dialog->show();
+	//connect(debug_font_dialog, &QFontDialog::currentFontChanged, this, &WindowSettings::onFontSelectorFontChanged);
+
+	// TESTING
+
 	auto meter_actions = m_meterActionsMap->actions();
 	auto meter_box = new ActionsChecksBox(meter_actions, ActionsChecksBox::Align::Horizontal, dialog);
 	meter_box->setTitle(m_meterActionsMap->name());
@@ -210,14 +269,17 @@ WindowSettings::Type WindowSettings::typeData(QAction* action)
 
 	for (auto& actions_map : actionsMaps())
 		if (actions_map->contains(action))
-			return actions_map->actionData(action).value<Type>();
+			return actions_map->dataOf(action).value<Type>();
 
 	return Type();
 }
 
 QVariant WindowSettings::currentValue(Type type)
 {
-	// The shared base and pure virtual `state` probably means these loops can be combined
+	// This sucks.
+
+	if (type == Type::Font)
+		return m_currentFont;
 
 	auto type_variant = toVariant(type);
 
@@ -255,4 +317,13 @@ void WindowSettings::onQDialogFinished()
 	delete m_dialog;
 
 	m_dialog = nullptr;
+}
+
+void WindowSettings::onFontSelectorFontChanged(const QFont& font)
+{
+	qDebug() << __FUNCTION__ << m_currentFont << ", to: " << font;
+
+	m_currentFont = font;
+
+	emit settingChanged(Type::Font);
 }

@@ -30,8 +30,6 @@ void Fernanda::setupWindow(Window* window)
 {
 	m_windowSettings->applyAll(window);
 
-	window->setAttribute(Qt::WA_DeleteOnClose);
-
 	addMenuBar(window);
 
 	connect(window, &Window::treeViewFileDoubleClicked, this, &Fernanda::onWindowFileDoubleClicked);
@@ -50,8 +48,6 @@ void Fernanda::addMenuBar(Window* window)
 		bar->addMenu(dev(bar, window));
 
 	window->setMenuBar(bar);
-
-	qDebug() << bar->parent();
 }
 
 QMenu* Fernanda::file(QMenuBar* menuBar, Window* window)
@@ -65,9 +61,7 @@ QMenu* Fernanda::file(QMenuBar* menuBar, Window* window)
 	menu->addAction(new_window);
 
 	connect(test, &QAction::triggered, this, [=] { qDebug() << window; });
-	connect(new_window, &QAction::triggered, this, [&] {
-		newWindow();
-		});
+	connect(new_window, &QAction::triggered, this, [&] { newWindow(); });
 
 	return menu;
 }
@@ -125,6 +119,8 @@ void Fernanda::onWindowClosing()
 	if (!window) return;
 
 	m_windows.removeAll(window);
+
+	delete window;
 }
 
 void Fernanda::onWindowSettingsSettingChanged(WindowSettings::Type type)

@@ -9,6 +9,7 @@
 #include <QList>
 #include <QMenu>
 #include <QMenuBar>
+#include <QObject>
 
 class Fernanda : public QObject
 {

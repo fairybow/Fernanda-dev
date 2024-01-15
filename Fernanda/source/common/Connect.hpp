@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-#define sender_cast(T) qobject_cast<T*>(QObject::sender())
+#define sender_cast(TSenderType) qobject_cast<TSenderType*>(QObject::sender())
 
 namespace Connect
 {
