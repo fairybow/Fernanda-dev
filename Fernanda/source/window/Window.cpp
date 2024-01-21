@@ -249,6 +249,7 @@ void Window::onPageAreaCurrentChanged(int index)
 
 	if (index < 0) {
 		m_meter->reset();
+
 		return;
 	}
 

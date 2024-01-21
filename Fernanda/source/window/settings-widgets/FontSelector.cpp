@@ -1,15 +1,21 @@
 #include "../../common/Layout.hpp"
+#include "../../common/StringTools.hpp"
 #include "FontSelector.h"
 
+#include <QFontMetrics>
 #include <QList>
-#include <QRandomGenerator>
-
-#include <array>
 
 FontSelector::FontSelector(const QFont& initialFont, QWidget* parent)
 	: QWidget(parent), m_currentFont(initialFont)
 {
 	setup();
+}
+
+void FontSelector::showEvent(QShowEvent* event)
+{
+	QWidget::showEvent(event);
+
+	resizeSampleText();
 }
 
 void FontSelector::setup()
@@ -20,7 +26,7 @@ void FontSelector::setup()
 	setupSampleText();
 	sizing();
 
-	syncFamiliesBox();
+	syncFontsBox();
 }
 
 void FontSelector::setupFontsBox()
@@ -36,8 +42,9 @@ void FontSelector::setupFontsBox()
 void FontSelector::setupSizesBox()
 {
 	auto sizes = {
-		8, 9, 10, 11, 12, 14, 16, 18,
-		20, 22, 24, 26, 28, 36, 48, 72
+		144, 72, 48, 36, 28, 26,
+		24, 22, 20, 18, 16, 14,
+		12, 11, 10, 9, 8, 6
 	};
 
 	for (auto& size : sizes)
@@ -55,36 +62,32 @@ void FontSelector::setupCheckBoxes()
 	m_italicCheck->setChecked(m_currentFont.italic());
 
 	connect(m_boldCheck, &QCheckBox::stateChanged, this, [&](int state) {
-
 		m_currentFont.setBold(state);
 		emit currentFontChanged(m_currentFont);
-
 		});
-	connect(m_italicCheck, &QCheckBox::stateChanged, this, [&](int state) {
 
+	connect(m_italicCheck, &QCheckBox::stateChanged, this, [&](int state) {
 		m_currentFont.setItalic(state);
 		emit currentFontChanged(m_currentFont);
-
 		});
 }
 
 void FontSelector::setupSampleText()
 {
 	m_sampleText->setAlignment(Qt::AlignCenter);
-	m_sampleText->setText(sampleText());
+	m_sampleText->setWordWrap(true);
+	m_sampleText->setText(StringTools::pangram());
 
-	auto slot = [&](const QFont&) {
-		QFont sample_text_font = m_currentFont;
-		sample_text_font.setPointSizeF(22);
-		m_sampleText->setFont(sample_text_font);
-		};
-
-	connect(this, &FontSelector::currentFontChanged, m_sampleText, slot);
+	connect(this, &FontSelector::currentFontChanged, this, [&](const QFont& font) {
+		qDebug() << __FUNCTION__;
+		resizeSampleText();
+		});
 }
 
 void FontSelector::sizing()
 {
-	setContentsMargins(5, 5, 5, 5);
+	auto space = 5;
+	setContentsMargins(space, space, space, space);
 
 	QWidgetList boxes = { m_fontsBox, m_sizesBox, m_boldCheck, m_italicCheck };
 	auto top_layout = Layout::box(Box::Horizontal, boxes);
@@ -92,12 +95,12 @@ void FontSelector::sizing()
 	top_layout->setStretch(1, 0);
 	top_layout->setStretch(2, 0);
 	top_layout->setStretch(3, 0);
-	top_layout->setSpacing(5);
+	top_layout->setSpacing(8);
 
 	Layout::box(Box::Vertical, this, QObjectList{ top_layout, m_sampleText });
 }
 
-void FontSelector::syncFamiliesBox()
+void FontSelector::syncFontsBox()
 {
 	auto last_index = m_fontsBox->currentIndex();
 	auto text = m_currentFont.family();
@@ -107,23 +110,24 @@ void FontSelector::syncFamiliesBox()
 		onFontsBoxCurrentTextChanged(text);
 }
 
-QString FontSelector::sampleText()
+void FontSelector::resizeSampleText()
 {
-	// Resize on font change?
+	QFont sample_text_font = m_currentFont;
+	auto max_point_size = 48;
+	sample_text_font.setPointSizeF(max_point_size);
 
-	static constexpr const char* pangrams[] = {
-		"The quick brown fox jumps over the lazy dog.",
-		"Waltz, bad nymph, for quick jigs vex.",
-		"Sphinx of black quartz, judge my vow.",
-		"How vexingly quick daft zebras jump!",
-		"Pack my box with five dozen liquor jugs."
-	};
+	QFontMetrics metrics(sample_text_font);
 
-	auto highest_pangram = std::size(pangrams);
-	auto index = QRandomGenerator::global()->bounded(highest_pangram);
-	auto random_line = pangrams[index];
+	while (max_point_size > 0
+		&& (metrics.horizontalAdvance(m_sampleText->text()) > m_sampleText->width()
+			|| metrics.height() > m_sampleText->height())) {
+		max_point_size--;
+		sample_text_font.setPointSizeF(max_point_size);
 
-	return QString::fromUtf8(random_line);
+		metrics = QFontMetrics(sample_text_font);
+	}
+
+	m_sampleText->setFont(sample_text_font);
 }
 
 void FontSelector::onFontsBoxCurrentTextChanged(const QString& text)

@@ -6,6 +6,7 @@
 #include <QFont>
 #include <QFontDatabase>
 #include <QLabel>
+#include <QShowEvent>
 #include <QString>
 #include <QWidget>
 
@@ -16,6 +17,9 @@ class FontSelector : public QWidget
 public:
 	FontSelector(const QFont& initialFont = QFont(), QWidget* parent = nullptr);
 	~FontSelector() { qDebug() << __FUNCTION__; }
+
+protected:
+	void showEvent(QShowEvent* event) override;
 
 private:
 	QFont m_currentFont;
@@ -32,8 +36,8 @@ private:
 	void setupCheckBoxes();
 	void setupSampleText();
 	void sizing();
-	void syncFamiliesBox();
-	QString sampleText();
+	void syncFontsBox();
+	void resizeSampleText();
 
 private slots:
 	void onFontsBoxCurrentTextChanged(const QString& text);

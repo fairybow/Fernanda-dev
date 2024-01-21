@@ -23,13 +23,12 @@ public:
 
 private:
 	static constexpr char SETTINGS_INI[] = ".fernanda/Settings.ini";
-	const Path& m_iniPath = Path(QDir::homePath()) / SETTINGS_INI;
 
 	bool m_isDev;
+	const Path& m_iniPath = Path(QDir::homePath()) / SETTINGS_INI;
 	WindowSettings* m_windowSettings = new WindowSettings(m_iniPath, this);
 	QList<Window*> m_windows;
 
-	void setup();
 	void setupWindow(Window* window);
 
 	void addMenuBar(Window* window);
@@ -41,5 +40,4 @@ private:
 private slots:
 	void onWindowFileDoubleClicked(const Path& path);
 	void onWindowClosing();
-	void onWindowSettingsSettingChanged(WindowSettings::Type type);
 };

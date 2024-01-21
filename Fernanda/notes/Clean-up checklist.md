@@ -37,6 +37,7 @@
 			- setup functions
 			- same as above
 - `constexpr`s kept to implementation, between includes and class, where possible
-- Slots should use the naming scheme `on[ChildObject]Signalled`, such as `onCurrentChanged` for a `QTabBar` self-connection to the `currentChanged` signal, or `onQTabBarCurrentChanged` for a `PageArea`'s slot for its `QTabBar`'s signal.
+- Slots should use the naming scheme `on[Member name or class]Signalled`, such as `onCurrentChanged` for a `QTabBar` self-connection to the `currentChanged` signal, or `onTabBarCurrentChanged` for a `PageArea`'s slot for its `QTabBar`'s signal.
 - Public slots may vary, like `setCurrentIndex(int index)`.
 - Prefer using readable enums over bools for arguments where logical. That is, reading `updateCounts(true)` provides no context outside of an IDE, whereas `updateCounts(Force::Yes)` is pretty clear; however, things like `setVisible(true)` are plenty good.
+- Places where you may have to use a `QTimer` to delay: find a solution where you don't do that. For example, putting the execution of something within the `showEvent` if you need it executed just after the constructor.

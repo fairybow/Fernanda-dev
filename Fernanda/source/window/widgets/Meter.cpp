@@ -1,5 +1,6 @@
 #include "../../common/Fx.hpp"
 #include "../../common/Layout.hpp"
+#include "../../common/StringTools.hpp"
 #include "Meter.h"
 
 #include <QChar>
@@ -16,7 +17,6 @@ constexpr char WORDS_LABEL[] = " words";
 constexpr char CHARS_LABEL[] = " chars";
 constexpr char SEPARATOR[] = " / ";
 constexpr char JOINER[] = ", ";
-constexpr char CAPTURE_LEADING_WHITESPACE[] = "(\\s|\\n|\\r|\U00002029|^)+";
 
 Meter::Meter(QWidget* parent, int autoCountCharLimit)
 	: QWidget(parent), m_autoCountCharLimit(autoCountCharLimit)
@@ -222,12 +222,8 @@ QString Meter::counts()
 		elements << QString::number(block_count) + LINES_LABEL;
 	}
 
-	if (m_hasWordCount) {
-		auto regex = QRegularExpression(CAPTURE_LEADING_WHITESPACE);
-		auto words = text.split(regex, Qt::SkipEmptyParts);
-
-		elements << QString::number(words.count()) + WORDS_LABEL;
-	}
+	if (m_hasWordCount)
+		elements << StringTools::wordCountString(text) + WORDS_LABEL;
 
 	auto char_count = text.count();
 

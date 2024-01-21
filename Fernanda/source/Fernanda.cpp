@@ -6,9 +6,7 @@
 
 Fernanda::Fernanda(bool isDev)
 	: m_isDev(isDev)
-{
-	setup();
-}
+{}
 
 Window* Fernanda::newWindow()
 {
@@ -21,14 +19,9 @@ Window* Fernanda::newWindow()
 	return window;
 }
 
-void Fernanda::setup()
-{
-	connect(m_windowSettings, &WindowSettings::settingChanged, this, &Fernanda::onWindowSettingsSettingChanged);
-}
-
 void Fernanda::setupWindow(Window* window)
 {
-	m_windowSettings->applyAll(window);
+	m_windowSettings->yoke(window);
 
 	addMenuBar(window);
 
@@ -118,12 +111,8 @@ void Fernanda::onWindowClosing()
 	auto window = sender_cast(Window);
 	if (!window) return;
 
+	m_windowSettings->detach(window);
 	m_windows.removeAll(window);
 
 	delete window;
-}
-
-void Fernanda::onWindowSettingsSettingChanged(WindowSettings::Type type)
-{
-	m_windowSettings->applySetting(m_windows, type);
 }

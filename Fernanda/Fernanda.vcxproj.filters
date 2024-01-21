@@ -25,9 +25,6 @@
     <Filter Include="Source\Window\Settings Widgets">
       <UniqueIdentifier>{fe6e0680-20c7-4d2c-9d62-76002e4c9ed5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Window\Settings Objects">
-      <UniqueIdentifier>{7d78f197-6642-4e39-adbc-79452c7bf283}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Window\Widgets\Page Area">
       <UniqueIdentifier>{b1ccfa4e-2f85-49b2-be42-79c263393f60}</UniqueIdentifier>
     </Filter>
@@ -75,9 +72,6 @@
     <ClCompile Include="source\window\Window.cpp">
       <Filter>Source\Window</Filter>
     </ClCompile>
-    <ClCompile Include="source\window\WindowSettings.cpp">
-      <Filter>Source\Window</Filter>
-    </ClCompile>
     <ClCompile Include="source\window\widgets\Editor.cpp">
       <Filter>Source\Window\Widgets</Filter>
     </ClCompile>
@@ -96,11 +90,11 @@
     <ClCompile Include="source\window\widgets\page-area\TabControlBox.cpp">
       <Filter>Source\Window\Widgets\Page Area</Filter>
     </ClCompile>
-    <ClCompile Include="source\window\settings-widgets\ActionsUiBoxes.cpp">
-      <Filter>Source\Window\Settings Widgets</Filter>
-    </ClCompile>
     <ClCompile Include="source\window\settings-widgets\FontSelector.cpp">
       <Filter>Source\Window\Settings Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window\WindowSettings.cpp">
+      <Filter>Source\Window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,12 +112,6 @@
     </QtMoc>
     <QtMoc Include="source\window\Window.h">
       <Filter>Source\Window</Filter>
-    </QtMoc>
-    <QtMoc Include="source\window\WindowSettings.h">
-      <Filter>Source\Window</Filter>
-    </QtMoc>
-    <QtMoc Include="source\window\settings-objects\SettingsMaps.hpp">
-      <Filter>Source\Window\Settings Objects</Filter>
     </QtMoc>
     <QtMoc Include="source\window\widgets\Editor.h">
       <Filter>Source\Window\Widgets</Filter>
@@ -149,11 +137,11 @@
     <QtMoc Include="source\window\widgets\page-area\TabControlBox.h">
       <Filter>Source\Window\Widgets\Page Area</Filter>
     </QtMoc>
-    <QtMoc Include="source\window\settings-widgets\ActionsUiBoxes.h">
-      <Filter>Source\Window\Settings Widgets</Filter>
-    </QtMoc>
     <QtMoc Include="source\window\settings-widgets\FontSelector.h">
       <Filter>Source\Window\Settings Widgets</Filter>
+    </QtMoc>
+    <QtMoc Include="source\window\WindowSettings.h">
+      <Filter>Source\Window</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -178,7 +166,7 @@
     <ClInclude Include="source\common\UiButton.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\WeirdMap.hpp">
+    <ClInclude Include="source\common\StringTools.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
   </ItemGroup>

@@ -38,7 +38,6 @@
     <ClCompile Include="source\Fernanda.cpp" />
     <ClCompile Include="source\Main.cpp" />
     <ClCompile Include="source\objects\Document.cpp" />
-    <ClCompile Include="source\window\settings-widgets\ActionsUiBoxes.cpp" />
     <ClCompile Include="source\window\settings-widgets\FontSelector.cpp" />
     <ClCompile Include="source\window\widgets\Editor.cpp" />
     <ClCompile Include="source\window\widgets\Meter.cpp" />
@@ -55,10 +54,10 @@
     <ClInclude Include="source\common\Image.hpp" />
     <ClInclude Include="source\common\Io.hpp" />
     <ClInclude Include="source\common\Layout.hpp" />
-    <ClInclude Include="source\common\WeirdMap.hpp" />
+    <ClInclude Include="source\common\StringTools.hpp" />
     <ClInclude Include="source\common\Path.hpp" />
     <ClInclude Include="source\common\UiButton.hpp" />
-    <QtMoc Include="source\window\settings-widgets\ActionsUiBoxes.h" />
+    <QtMoc Include="source\window\WindowSettings.h" />
     <QtMoc Include="source\window\settings-widgets\FontSelector.h" />
     <QtMoc Include="source\window\widgets\page-area\TabControlBox.h" />
     <QtMoc Include="source\window\widgets\page-area\TabCloseButton.hpp" />
@@ -68,8 +67,6 @@
     <QtMoc Include="source\window\widgets\TreeView.h" />
     <QtMoc Include="source\window\widgets\Meter.h" />
     <QtMoc Include="source\window\widgets\Editor.h" />
-    <QtMoc Include="source\window\settings-objects\SettingsMaps.hpp" />
-    <QtMoc Include="source\window\WindowSettings.h" />
     <QtMoc Include="source\window\Window.h" />
     <QtMoc Include="source\objects\Document.h" />
     <QtMoc Include="source\objects\StartCop.hpp" />

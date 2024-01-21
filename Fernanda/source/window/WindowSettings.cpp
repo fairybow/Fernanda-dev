@@ -1,35 +1,47 @@
-#include "../common/Connect.hpp"
-#include "settings-widgets/ActionsUiBoxes.h"
+#include "../common/Layout.hpp"
 #include "settings-widgets/FontSelector.h"
 #include "WindowSettings.h"
 
 #include <QGridLayout>
-#include <QMargins>
+#include <QGroupBox>
 
-// For testing
-#include <QFontDialog>
-
-constexpr char FONT[] = "Font";
 constexpr char INI_FILLER[] = "_";
+constexpr char EDITOR[] = "Editor";
+constexpr char EDITOR_FONT[] = "Font";
+constexpr char EDITOR_FONT_DEFAULT[] = "mononoki";
+constexpr int EDITOR_FONTSIZE_DEFAULT = 12;
+constexpr char METER[] = "Meter";
 constexpr char METER_LINE_POS[] = "Line position";
 constexpr char METER_COL_POS[] = "Column position";
 constexpr char METER_LINES[] = "Line count";
 constexpr char METER_WORDS[] = "Word count";
 constexpr char METER_CHARS[] = "Character count";
+constexpr char WINDOW[] = "Window";
+constexpr char WINDOW_GEOMETRY[] = "Geometry";
 
 WindowSettings::WindowSettings(const Path& config, QObject* parent)
 	: QObject(parent), m_iniWriter(new IniWriter(config, this))
 {
-	loadFont();
-	setupMeterActionsMap();
+	loadAll();
 }
 
 WindowSettings::~WindowSettings()
 {
 	qDebug() << __FUNCTION__;
 
-	saveFont();
-	saveAllMapsValues();
+	saveAll();
+}
+
+void WindowSettings::yoke(Window* window)
+{
+	m_windows << window;
+
+	applyAll(window);
+}
+
+void WindowSettings::detach(Window* window)
+{
+	m_windows.removeAll(window);
 }
 
 void WindowSettings::openDialog()
@@ -47,283 +59,194 @@ void WindowSettings::openDialog()
 	m_dialog->open();
 }
 
-void WindowSettings::applySetting(Window* window, Type type)
+void WindowSettings::loadAll()
 {
-	auto variant = currentValue(type);
-	if (!variant.isValid()) return;
-
-	switch (type) {
-	case Type::Font:
-		applyFont(window, variant.value<QFont>());
-		break;
-	case Type::MeterLinePos:
-		window->m_meter->setHasLinePosition(variant.toBool());
-		break;
-	case Type::MeterColPos:
-		window->m_meter->setHasColumnPosition(variant.toBool());
-		break;
-	case Type::MeterLineCount:
-		window->m_meter->setHasLineCount(variant.toBool());
-		break;
-	case Type::MeterWordCount:
-		window->m_meter->setHasWordCount(variant.toBool());
-		break;
-	case Type::MeterCharCount:
-		window->m_meter->setHasCharCount(variant.toBool());
-		break;
-	}
+	loadEditorSettings();
+	loadMeterSettings();
 }
 
-void WindowSettings::applySetting(QList<Window*>& windows, Type type)
+void WindowSettings::loadEditorSettings()
 {
-	for (auto& window : windows)
-		applySetting(window, type);
+	m_iniWriter->begin(EDITOR);
+	QMap<QString, Action> editor_settings;
+
+	editor_settings[EDITOR_FONT] = {
+		m_iniWriter->load(iniName(EDITOR_FONT), QFont(EDITOR_FONT_DEFAULT, EDITOR_FONTSIZE_DEFAULT)),
+
+		[action = &editor_settings[EDITOR_FONT]](Window* window) {
+			window->m_editorFont = action->variant.value<QFont>();
+
+			for (auto& editor : window->editors())
+				editor->setFont(window->m_editorFont);
+		}
+	};
+
+	//...
+
+	m_settings[EDITOR] = editor_settings;
+	m_iniWriter->end();
+}
+
+void WindowSettings::loadMeterSettings()
+{
+	m_iniWriter->begin(METER);
+	QMap<QString, Action> meter_settings;
+
+	meter_settings[METER_LINE_POS] = {
+		m_iniWriter->load(iniName(METER_LINE_POS), true),
+
+		[action = &meter_settings[METER_LINE_POS]](Window* window) {
+			window->m_meter->setHasLinePosition(action->variant.toBool());
+		}
+	};
+
+	meter_settings[METER_COL_POS] = {
+		m_iniWriter->load(iniName(METER_COL_POS), true),
+
+		[action = &meter_settings[METER_COL_POS]](Window* window) {
+			window->m_meter->setHasColumnPosition(action->variant.toBool());
+		}
+	};
+
+	meter_settings[METER_LINES] = {
+		m_iniWriter->load(iniName(METER_LINES), false),
+
+		[action = &meter_settings[METER_LINES]](Window* window) {
+			window->m_meter->setHasLineCount(action->variant.toBool());
+		}
+	};
+
+	meter_settings[METER_WORDS] = {
+		m_iniWriter->load(iniName(METER_WORDS), false),
+
+		[action = &meter_settings[METER_WORDS]](Window* window) {
+			window->m_meter->setHasWordCount(action->variant.toBool());
+		}
+	};
+
+	meter_settings[METER_CHARS] = {
+		m_iniWriter->load(iniName(METER_CHARS), false),
+
+		[action = &meter_settings[METER_CHARS]](Window* window) {
+			window->m_meter->setHasCharCount(action->variant.toBool());
+		}
+	};
+
+	m_settings[METER] = meter_settings;
+	m_iniWriter->end();
+}
+
+void WindowSettings::saveAll()
+{
+	saveEditorSettings();
+	saveMeterSettings();
+}
+
+void WindowSettings::saveEditorSettings()
+{
+	m_iniWriter->begin(EDITOR);
+
+	m_iniWriter->save(iniName(EDITOR_FONT), m_settings[EDITOR][EDITOR_FONT].variant);
+	//...
+
+	m_iniWriter->end();
+}
+
+void WindowSettings::saveMeterSettings()
+{
+	m_iniWriter->begin(METER);
+
+	m_iniWriter->save(iniName(METER_LINE_POS), m_settings[METER][METER_LINE_POS].variant);
+	m_iniWriter->save(iniName(METER_COL_POS), m_settings[METER][METER_COL_POS].variant);
+	m_iniWriter->save(iniName(METER_LINES), m_settings[METER][METER_LINES].variant);
+	m_iniWriter->save(iniName(METER_WORDS), m_settings[METER][METER_WORDS].variant);
+	m_iniWriter->save(iniName(METER_CHARS), m_settings[METER][METER_CHARS].variant);
+
+	m_iniWriter->end();
 }
 
 void WindowSettings::applyAll(Window* window)
 {
-	for (auto i = 0; i < static_cast<int>(Type::End); ++i)
-		applySetting(window, static_cast<Type>(i));
+	for (auto it = m_settings.begin(); it != m_settings.end(); ++it)
+		for (auto sub_it = it.value().begin(); sub_it != it.value().end(); ++sub_it)
+			sub_it.value().action(window);
 }
 
-void WindowSettings::applyAll(QList<Window*>& windows)
-{
-	for (auto& window : windows)
-		applyAll(window);
-}
-
-QList<ActionsMap*> WindowSettings::actionsMaps() const
-{
-	return findChildren<ActionsMap*>(Qt::FindDirectChildrenOnly);
-}
-
-QList<ActionGroupsMap*> WindowSettings::groupsMaps() const
-{
-	return findChildren<ActionGroupsMap*>(Qt::FindDirectChildrenOnly);
-}
-
-void WindowSettings::setupMeterActionsMap()
-{
-	m_meterActionsMap->add(METER_LINE_POS, toVariant(Type::MeterLinePos), true);
-	m_meterActionsMap->add(METER_COL_POS, toVariant(Type::MeterColPos), true);
-	m_meterActionsMap->add(METER_LINES, toVariant(Type::MeterLineCount), false);
-	m_meterActionsMap->add(METER_WORDS, toVariant(Type::MeterWordCount), false);
-	m_meterActionsMap->add(METER_CHARS, toVariant(Type::MeterCharCount), false);
-
-	m_meterActionsMap->setAllCheckable(true);
-	loadActionsMapValues(m_meterActionsMap);
-
-	for (auto& action : m_meterActionsMap->actions())
-		connect(action, &QAction::toggled, this, &WindowSettings::onQActionToggled);
-}
-
-void WindowSettings::loadActionsMapValues(ActionsMap* actionsMap)
-{
-	m_iniWriter->begin(actionsMap->name());
-
-	for (auto& action : actionsMap->actions()) {
-		auto name = actionsMap->nameOf(action);
-		auto key = iniKeyName(name);
-		auto fallback = actionsMap->fallback(action);
-
-		auto state = m_iniWriter->load(key, fallback);
-		actionsMap->setState(action, state);
-	}
-
-	m_iniWriter->end();
-}
-
-void WindowSettings::saveActionsMapValues(ActionsMap* actionsMap)
-{
-	m_iniWriter->begin(actionsMap->name());
-
-	for (auto& action : actionsMap->actions()) {
-		auto name = actionsMap->nameOf(action);
-		auto key = iniKeyName(name);
-
-		auto state = actionsMap->state(action);
-		m_iniWriter->save(key, state);
-	}
-
-	m_iniWriter->end();
-}
-
-void WindowSettings::saveAllMapsValues()
-{
-	for (auto& actions_map : actionsMaps())
-		saveActionsMapValues(actions_map);
-
-	/*
-	for (auto& groups_map : groupsMaps())
-		saveGroupsMapValues(groups_map);
-		*/
-}
-
-/*
-void WindowSettings::loadGroupsMapValues(ActionGroupsMap* groupsMap)
-{
-	// Test with new ActionGroupDropDown
-
-	m_iniWriter->begin(groupsMap->name());
-
-	for (auto& group : groupsMap->groups()) {
-		auto name = groupsMap->nameOf(group);
-		auto key = iniKeyName(name);
-		auto fallback = groupsMap->fallback(group);
-
-		auto state = m_iniWriter->load(key, fallback);
-		groupsMap->setState(group, state);
-	}
-
-	m_iniWriter->end();
-}
-
-void WindowSettings::saveGroupsMapValues(ActionGroupsMap* groupsMap)
-{
-	m_iniWriter->begin(groupsMap->name());
-
-	for (auto& group : groupsMap->groups()) {
-		auto name = groupsMap->nameOf(group);
-		auto key = iniKeyName(name);
-
-		auto state = groupsMap->state(group);
-		m_iniWriter->save(key, state);
-	}
-
-	m_iniWriter->end();
-}
-*/
-
-void WindowSettings::loadFont()
-{
-	m_iniWriter->begin(FONT);
-	auto font = m_iniWriter->load(FONT, QFont("Mononoki", 12));
-	m_currentFont = font.value<QFont>();
-
-	m_iniWriter->end();
-}
-
-void WindowSettings::saveFont()
-{
-	m_iniWriter->begin(FONT);
-	m_iniWriter->save(FONT, m_currentFont);
-
-	m_iniWriter->end();
-}
-
-void WindowSettings::applyFont(Window* window, QFont font)
-{
-	window->m_editorFont = font;
-
-	for (auto& editor : window->editors())
-		editor->setFont(font);
-}
-
-QString WindowSettings::iniKeyName(QString text)
+QString WindowSettings::iniName(QString text)
 {
 	return text.replace(" ", INI_FILLER);
-}
-
-QVariant WindowSettings::toVariant(Type type)
-{
-	return QVariant::fromValue<Type>(type);
 }
 
 void WindowSettings::setupDialog(QDialog* dialog)
 {
 	auto grid = new QGridLayout(dialog);
-	grid->setContentsMargins(QMargins(5, 5, 5, 5));
-	grid->setSpacing(5);
+	auto space = 5;
+	grid->setContentsMargins(space, space, space, space);
+	grid->setSpacing(space);
 
 	dialog->setLayout(grid);
 	dialog->setFixedSize(800, 500);
 
-	// TESTING
-
 	auto font_box = new QGroupBox(dialog);
-	auto font_selector = new FontSelector(m_currentFont, font_box);
-	font_box->setTitle(FONT);
-	Layout::box(Box::Horizontal, font_box, QWidgetList{ font_selector });
-	// ^-- Overload to take 1 widget/object
+	auto font_selector = new FontSelector(m_settings[EDITOR][EDITOR_FONT].variant.value<QFont>(), font_box);
+	font_box->setTitle(EDITOR_FONT);
+	Layout::box(Box::Horizontal, font_box, QWidgetList{ font_selector }); // Overload to take 1 widget/object
 	grid->addWidget(font_box);
-	connect(font_selector, &FontSelector::currentFontChanged, this, &WindowSettings::onFontSelectorFontChanged);
+	connect(font_selector, &FontSelector::currentFontChanged, this, [&](const QFont& font) {
+		applySetting<QFont>(EDITOR, EDITOR_FONT, font);
+		});
 
-	// For testing
-	//auto debug_font_dialog = new QFontDialog(dialog);
-	//debug_font_dialog->show();
-	//connect(debug_font_dialog, &QFontDialog::currentFontChanged, this, &WindowSettings::onFontSelectorFontChanged);
+	auto meter_box = new QGroupBox(dialog);
+	meter_box->setTitle(METER);
+	auto action1 = new QCheckBox(METER_LINE_POS, meter_box);
+	auto action2 = new QCheckBox(METER_COL_POS, meter_box);
+	auto action3 = new QCheckBox(METER_LINES, meter_box);
+	auto action4 = new QCheckBox(METER_WORDS, meter_box);
+	auto action5 = new QCheckBox(METER_CHARS, meter_box);
 
-	// TESTING
+	action1->setChecked(m_settings[METER][METER_LINE_POS].variant.value<bool>());
+	action2->setChecked(m_settings[METER][METER_COL_POS].variant.value<bool>());
+	action3->setChecked(m_settings[METER][METER_LINES].variant.value<bool>());
+	action4->setChecked(m_settings[METER][METER_WORDS].variant.value<bool>());
+	action5->setChecked(m_settings[METER][METER_CHARS].variant.value<bool>());
 
-	auto meter_actions = m_meterActionsMap->actions();
-	auto meter_box = new ActionsChecksBox(meter_actions, ActionsChecksBox::Align::Horizontal, dialog);
-	meter_box->setTitle(m_meterActionsMap->name());
+	connect(action1, &QCheckBox::stateChanged, this, [=](int state) {
+		applySetting<bool>(METER, METER_LINE_POS, state);
+		});
+	connect(action2, &QCheckBox::stateChanged, this, [=](int state) {
+		applySetting<bool>(METER, METER_COL_POS, state);
+		});
+	connect(action3, &QCheckBox::stateChanged, this, [=](int state) {
+		applySetting<bool>(METER, METER_LINES, state);
+		});
+	connect(action4, &QCheckBox::stateChanged, this, [=](int state) {
+		applySetting<bool>(METER, METER_WORDS, state);
+		});
+	connect(action5, &QCheckBox::stateChanged, this, [=](int state) {
+		applySetting<bool>(METER, METER_CHARS, state);
+		});
+
+	auto layout = Layout::box(Box::Horizontal, meter_box, QWidgetList{ action1, action2, action3, action4, action5 });
+	layout->setContentsMargins(5, 5, 5, 5);
+
 	grid->addWidget(meter_box);
 
-	connect(m_dialog, &QDialog::finished, this, &WindowSettings::onQDialogFinished);
-}
+	connect(m_dialog, &QDialog::finished, this, &WindowSettings::onDialogFinished);
 
-WindowSettings::Type WindowSettings::typeData(QAction* action)
-{
-	// Overload for groups type data?
+	// v--- Filler
 
-	for (auto& actions_map : actionsMaps())
-		if (actions_map->contains(action))
-			return actions_map->dataOf(action).value<Type>();
-
-	return Type();
-}
-
-QVariant WindowSettings::currentValue(Type type)
-{
-	// This sucks.
-
-	if (type == Type::Font)
-		return m_currentFont;
-
-	auto type_variant = toVariant(type);
-
-	for (auto& actions_map : actionsMaps()) {
-		auto action = actions_map->keyWith(type_variant);
-
-		if (action)
-			return actions_map->state(action);
+	for (auto i = 0; i < 3; ++i) {
+		auto groupBox = new QGroupBox(dialog);
+		auto comboBox = new QComboBox(groupBox);
+		groupBox->setTitle(QString("Group Box %1").arg(i + 1));
+		Layout::box(Box::Horizontal, groupBox, QWidgetList{ comboBox });
+		grid->addWidget(groupBox);
 	}
-
-	for (auto& groups_map : groupsMaps()) {
-		auto group = groups_map->keyWith(type_variant);
-
-		if (group)
-			return groups_map->state(group);
-	}
-
-	return QVariant();
 }
 
-void WindowSettings::onQActionToggled(bool)
-{
-	auto action = sender_cast(QAction);
-	if (!action) return;
-
-	// Notify Fernanda and then have Fernanda send list of current Windows to have the setting applied
-
-	auto type = typeData(action);
-
-	emit settingChanged(type);
-}
-
-void WindowSettings::onQDialogFinished()
+void WindowSettings::onDialogFinished()
 {
 	delete m_dialog;
 
 	m_dialog = nullptr;
-}
-
-void WindowSettings::onFontSelectorFontChanged(const QFont& font)
-{
-	qDebug() << __FUNCTION__ << m_currentFont << ", to: " << font;
-
-	m_currentFont = font;
-
-	emit settingChanged(Type::Font);
 }

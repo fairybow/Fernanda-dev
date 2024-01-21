@@ -2,15 +2,18 @@
 
 #include "../common/IniWriter.hpp"
 #include "../common/Path.hpp"
-#include "settings-objects/SettingsMaps.hpp"
 #include "Window.h"
 
 #include <QDebug>
 #include <QDialog>
 #include <QFont>
 #include <QList>
+#include <QMap>
 #include <QObject>
+#include <QString>
 #include <QVariant>
+
+#include <functional>
 
 class WindowSettings : public QObject
 {
@@ -20,53 +23,40 @@ public:
 	WindowSettings(const Path& config, QObject* parent = nullptr);
 	~WindowSettings();
 
-	enum class Type {
-		Font, // QFont
-		//EditorTheme, // path (one of a group)
-		//WindowTheme, // path (one of a group)
-		MeterLinePos, // bool
-		MeterColPos, // bool
-		MeterLineCount, // bool
-		MeterWordCount, // bool
-		MeterCharCount, // bool
-		End
-	};
-
+	void yoke(Window* window);
+	void detach(Window* window);
 	void openDialog();
-	void applySetting(Window* window, Type type);
-	void applySetting(QList<Window*>& windows, Type type);
-	void applyAll(Window* window);
-	void applyAll(QList<Window*>& windows);
 
 private:
+	struct Action {
+		QVariant variant;
+		std::function<void(Window*)> action;
+	};
+
 	IniWriter* m_iniWriter;
 	QDialog* m_dialog = nullptr;
-	QFont m_currentFont = QFont();
-	ActionGroupsMap* m_themesGroupsMap = new ActionGroupsMap(this, "Themes");
-	ActionsMap* m_meterActionsMap = new ActionsMap(this, "Meter");
+	QList<Window*> m_windows;
+	QMap<QString, QMap<QString, Action>> m_settings;
 
-	QList<ActionsMap*> actionsMaps() const;
-	QList<ActionGroupsMap*> groupsMaps() const;
-	void setupMeterActionsMap();
-	void loadActionsMapValues(ActionsMap* actionsMap);
-	void saveActionsMapValues(ActionsMap* actionsMap);
-	void saveAllMapsValues();
-	//void loadGroupsMapValues(ActionGroupsMap* groupsMap);
-	//void saveGroupsMapValues(ActionGroupsMap* groupsMap);
-	void loadFont();
-	void saveFont();
-	void applyFont(Window* window, QFont font);
-	QString iniKeyName(QString text);
-	QVariant toVariant(Type type);
+	void loadAll();
+	void loadEditorSettings();
+	void loadMeterSettings();
+	void saveAll();
+	void saveEditorSettings();
+	void saveMeterSettings();
+	void applyAll(Window* window);
+	QString iniName(QString text);
 	void setupDialog(QDialog* dialog);
-	Type typeData(QAction* action);
-	QVariant currentValue(Type type);
+
+	template <typename T>
+	void applySetting(const QString& prefix, const QString& key, T value)
+	{
+		m_settings[prefix][key].variant = QVariant::fromValue<T>(value);
+
+		for (auto& window : m_windows)
+			m_settings[prefix][key].action(window);
+	}
 
 private slots:
-	void onQActionToggled(bool);
-	void onQDialogFinished();
-	void onFontSelectorFontChanged(const QFont& font);
-
-signals:
-	void settingChanged(Type type);
+	void onDialogFinished();
 };

@@ -2,33 +2,33 @@
 
 #include <QString>
 
-ActionsUiBox::ActionsUiBox(Align alignment, QWidget* parent)
+ActionGroupUiBox::ActionGroupUiBox(Align alignment, QWidget* parent)
 	: QGroupBox(parent), m_alignment(alignment)
 {}
 
-Box ActionsUiBox::boxAlignment() const
+Box ActionGroupUiBox::boxAlignment() const
 {
 	return (m_alignment == Align::Horizontal) ? Box::Horizontal : Box::Vertical;
 }
 
-ActionsChecksBox::ActionsChecksBox(QList<QAction*>& actions, Align alignment, QWidget* parent)
-	: ActionsUiBox(alignment, parent)
+ActionGroupChecksBox::ActionGroupChecksBox(QActionGroup* actionGroup, Align alignment, QWidget* parent)
+	: ActionGroupUiBox(alignment, parent)
 {
-	setup(actions);
+	setup(actionGroup);
 }
 
-void ActionsChecksBox::setup(QList<QAction*>& actions)
+void ActionGroupChecksBox::setup(QActionGroup* actionGroup)
 {
 	QWidgetList check_boxes;
 
-	for (auto& action : actions)
-		check_boxes << makeCheckBox(action);
+	//for (auto& action : actionGroup)
+		//check_boxes << makeCheckBox(action);
 
-	auto layout = Layout::box(boxAlignment(), this, check_boxes);
-	layout->setContentsMargins(5, 5, 5, 5);
+	//auto layout = Layout::box(boxAlignment(), this, check_boxes);
+	//layout->setContentsMargins(5, 5, 5, 5);
 }
 
-QCheckBox* ActionsChecksBox::makeCheckBox(QAction* action)
+QCheckBox* ActionGroupChecksBox::makeCheckBox(QAction* action)
 {
 	auto check_box = new QCheckBox(action->text(), this);
 	check_box->setTristate(false);
@@ -41,24 +41,24 @@ QCheckBox* ActionsChecksBox::makeCheckBox(QAction* action)
 	return check_box;
 }
 
-ActionGroupsDropdownsBox::ActionGroupsDropdownsBox(QList<QActionGroup*>& groups, Align alignment, QWidget* parent)
-	: ActionsUiBox(alignment, parent)
+ActionGroupDropdownsBox::ActionGroupDropdownsBox(QList<QActionGroup*>& actionGroups, Align alignment, QWidget* parent)
+	: ActionGroupUiBox(alignment, parent)
 {
-	setup(groups);
+	setup(actionGroups);
 }
 
-void ActionGroupsDropdownsBox::setup(QList<QActionGroup*>& groups)
+void ActionGroupDropdownsBox::setup(QList<QActionGroup*>& actionGroups)
 {
 	QWidgetList combo_boxes;
 
-	for (auto& group : groups)
+	for (auto& group : actionGroups)
 		combo_boxes << makeComboBox(group);
 
 	auto layout = Layout::box(boxAlignment(), this, combo_boxes);
 	layout->setContentsMargins(5, 5, 5, 5);
 }
 
-QComboBox* ActionGroupsDropdownsBox::makeComboBox(QActionGroup* group)
+QComboBox* ActionGroupDropdownsBox::makeComboBox(QActionGroup* group)
 {
 	auto combo_box = new QComboBox(this);
 

@@ -9,8 +9,6 @@
 #include <QString>
 #include <QVariant>
 
-//#include <functional>
-
 class IniWriter : public QObject
 {
 	Q_OBJECT
@@ -54,38 +52,26 @@ public:
 		m_settings->setValue(key, value);
 	}
 
+	void saveFrom(QAnyStringView prefix, QAnyStringView key, const QVariant& value)
+	{
+		begin(prefix);
+		save(key, value);
+		end();
+	}
+
 	QVariant load(QAnyStringView key, const QVariant& fallback = QVariant())
 	{
 		return m_settings->value(key, fallback);
 	}
 
-	/*
-	template <typename T>
-	T load(QAnyStringView key, QVariant fallback = QVariant())
+	QVariant loadFrom(QAnyStringView prefix, QAnyStringView key, const QVariant& fallback = QVariant())
 	{
-		auto key_value = m_settings->value(key, fallback);
-
-		if (!key_value.isValid())
-			return fallback.value<T>();
-
-		return key_value.value<T>();
-	}
-
-	template <typename T>
-	T load(QAnyStringView key, T fallback)
-	{
-		return load<T>(key, QVariant::fromValue<T>(fallback));
-	}
-
-	template <typename T>
-	T load(QAnyStringView key, std::function<void(T)> setter, T fallback = T())
-	{
-		auto value = load<T>(key, fallback);
-		setter(value);
+		begin(prefix);
+		auto value = load(key, fallback);
+		end();
 
 		return value;
 	}
-	*/
 
 private:
 	Path m_ini;

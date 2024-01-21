@@ -57,8 +57,6 @@ private:
 	QSplitter* m_splitter = new QSplitter(this);
 	mutable PageArea* m_currentPageArea = nullptr;
 	Meter* m_meter = new Meter;
-	//EditorSettings* m_editorSettings = new EditorSettings(m_iniPath, this);
-	// ^ Probably not, since do we really want multiple of these? No need, if shared across Windows
 	QList<Editor*> m_editors;
 	QFont m_editorFont = QFont();
 
