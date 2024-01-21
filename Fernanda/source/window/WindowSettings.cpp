@@ -69,7 +69,7 @@ bool WindowSettings::eventFilter(QObject* watched, QEvent* event)
 	if (event->type() == QEvent::Resize || event->type() == QEvent::Move)
 	{
 		auto window = qobject_cast<Window*>(watched);
-		saveSetting<QByteArray>(WINDOW, WINDOW_GEOMETRY, window->saveGeometry());
+		passiveApply<QByteArray>(WINDOW, WINDOW_GEOMETRY, window->saveGeometry());
 
 		return true;
 	}
@@ -87,13 +87,13 @@ void WindowSettings::loadAll()
 void WindowSettings::loadEditorSettings()
 {
 	m_iniWriter->begin(EDITOR);
-	QMap<QString, Action> editor_settings;
+	QMap<QString, Setting> editor_settings;
 
 	editor_settings[EDITOR_FONT] = {
 		m_iniWriter->load(iniName(EDITOR_FONT), QFont(EDITOR_FONT_DEFAULT, EDITOR_FONTSIZE_DEFAULT)),
 
-		[action = &editor_settings[EDITOR_FONT]](Window* window) {
-			window->m_editorFont = action->variant.value<QFont>();
+		[setting = &editor_settings[EDITOR_FONT]](Window* window) {
+			window->m_editorFont = setting->value<QFont>();
 
 			for (auto& editor : window->editors())
 				editor->setFont(window->m_editorFont);
@@ -109,45 +109,45 @@ void WindowSettings::loadEditorSettings()
 void WindowSettings::loadMeterSettings()
 {
 	m_iniWriter->begin(METER);
-	QMap<QString, Action> meter_settings;
+	QMap<QString, Setting> meter_settings;
 
 	meter_settings[METER_LINE_POS] = {
 		m_iniWriter->load(iniName(METER_LINE_POS), true),
 
-		[action = &meter_settings[METER_LINE_POS]](Window* window) {
-			window->m_meter->setHasLinePosition(action->variant.toBool());
+		[setting = &meter_settings[METER_LINE_POS]](Window* window) {
+			window->m_meter->setHasLinePosition(setting->value<bool>());
 		}
 	};
 
 	meter_settings[METER_COL_POS] = {
 		m_iniWriter->load(iniName(METER_COL_POS), true),
 
-		[action = &meter_settings[METER_COL_POS]](Window* window) {
-			window->m_meter->setHasColumnPosition(action->variant.toBool());
+		[setting = &meter_settings[METER_COL_POS]](Window* window) {
+			window->m_meter->setHasColumnPosition(setting->value<bool>());
 		}
 	};
 
 	meter_settings[METER_LINES] = {
 		m_iniWriter->load(iniName(METER_LINES), false),
 
-		[action = &meter_settings[METER_LINES]](Window* window) {
-			window->m_meter->setHasLineCount(action->variant.toBool());
+		[setting = &meter_settings[METER_LINES]](Window* window) {
+			window->m_meter->setHasLineCount(setting->value<bool>());
 		}
 	};
 
 	meter_settings[METER_WORDS] = {
 		m_iniWriter->load(iniName(METER_WORDS), false),
 
-		[action = &meter_settings[METER_WORDS]](Window* window) {
-			window->m_meter->setHasWordCount(action->variant.toBool());
+		[setting = &meter_settings[METER_WORDS]](Window* window) {
+			window->m_meter->setHasWordCount(setting->value<bool>());
 		}
 	};
 
 	meter_settings[METER_CHARS] = {
 		m_iniWriter->load(iniName(METER_CHARS), false),
 
-		[action = &meter_settings[METER_CHARS]](Window* window) {
-			window->m_meter->setHasCharCount(action->variant.toBool());
+		[setting = &meter_settings[METER_CHARS]](Window* window) {
+			window->m_meter->setHasCharCount(setting->value<bool>());
 		}
 	};
 
@@ -158,14 +158,14 @@ void WindowSettings::loadMeterSettings()
 void WindowSettings::loadWindowSettings()
 {
 	m_iniWriter->begin(WINDOW);
-	QMap<QString, Action> window_settings;
+	QMap<QString, Setting> window_settings;
 
 	window_settings[WINDOW_GEOMETRY] = {
 		m_iniWriter->load(iniName(WINDOW_GEOMETRY)),
 
-		[action = &window_settings[WINDOW_GEOMETRY]](Window* window) {
+		[setting = &window_settings[WINDOW_GEOMETRY]](Window* window) {
 
-			auto byte_array = action->variant.toByteArray();
+			auto byte_array = setting->value<QByteArray>();
 
 			if (byte_array.isNull())
 				window->setGeometry(QRect(0, 0, 1000, 600));
@@ -189,7 +189,7 @@ void WindowSettings::saveEditorSettings()
 {
 	m_iniWriter->begin(EDITOR);
 
-	m_iniWriter->save(iniName(EDITOR_FONT), m_settings[EDITOR][EDITOR_FONT].variant);
+	m_iniWriter->save(iniName(EDITOR_FONT), variantAt(EDITOR, EDITOR_FONT));
 	//...
 
 	m_iniWriter->end();
@@ -199,11 +199,11 @@ void WindowSettings::saveMeterSettings()
 {
 	m_iniWriter->begin(METER);
 
-	m_iniWriter->save(iniName(METER_LINE_POS), m_settings[METER][METER_LINE_POS].variant);
-	m_iniWriter->save(iniName(METER_COL_POS), m_settings[METER][METER_COL_POS].variant);
-	m_iniWriter->save(iniName(METER_LINES), m_settings[METER][METER_LINES].variant);
-	m_iniWriter->save(iniName(METER_WORDS), m_settings[METER][METER_WORDS].variant);
-	m_iniWriter->save(iniName(METER_CHARS), m_settings[METER][METER_CHARS].variant);
+	m_iniWriter->save(iniName(METER_LINE_POS), variantAt(METER, METER_LINE_POS));
+	m_iniWriter->save(iniName(METER_COL_POS), variantAt(METER, METER_COL_POS));
+	m_iniWriter->save(iniName(METER_LINES), variantAt(METER, METER_LINES));
+	m_iniWriter->save(iniName(METER_WORDS), variantAt(METER, METER_WORDS));
+	m_iniWriter->save(iniName(METER_CHARS), variantAt(METER, METER_CHARS));
 
 	m_iniWriter->end();
 }
@@ -216,19 +216,6 @@ void WindowSettings::saveWindowSettings()
 	//...
 
 	m_iniWriter->end();
-}
-
-void WindowSettings::applySetting(const QString& prefix, const QString& key)
-{
-	for (auto& window : m_windows)
-		m_settings[prefix][key].action(window);
-}
-
-void WindowSettings::applyAll(Window* window)
-{
-	for (auto it = m_settings.begin(); it != m_settings.end(); ++it)
-		for (auto sub_it = it.value().begin(); sub_it != it.value().end(); ++sub_it)
-			sub_it.value().action(window);
 }
 
 QString WindowSettings::iniName(QString text)
@@ -247,12 +234,12 @@ void WindowSettings::setupDialog(QDialog* dialog)
 	dialog->setFixedSize(800, 500);
 
 	auto font_box = new QGroupBox(dialog);
-	auto font_selector = new FontSelector(m_settings[EDITOR][EDITOR_FONT].variant.value<QFont>(), font_box);
+	auto font_selector = new FontSelector(valueAt<QFont>(EDITOR, EDITOR_FONT), font_box);
 	font_box->setTitle(EDITOR_FONT);
 	Layout::box(Box::Horizontal, font_box, QWidgetList{ font_selector }); // Overload to take 1 widget/object
 	grid->addWidget(font_box);
 	connect(font_selector, &FontSelector::currentFontChanged, this, [&](const QFont& font) {
-		saveAndApplySetting<QFont>(EDITOR, EDITOR_FONT, font);
+		activeApply<QFont>(EDITOR, EDITOR_FONT, font);
 		});
 
 	auto meter_box = new QGroupBox(dialog);
@@ -263,26 +250,26 @@ void WindowSettings::setupDialog(QDialog* dialog)
 	auto action4 = new QCheckBox(METER_WORDS, meter_box);
 	auto action5 = new QCheckBox(METER_CHARS, meter_box);
 
-	action1->setChecked(m_settings[METER][METER_LINE_POS].variant.value<bool>());
-	action2->setChecked(m_settings[METER][METER_COL_POS].variant.value<bool>());
-	action3->setChecked(m_settings[METER][METER_LINES].variant.value<bool>());
-	action4->setChecked(m_settings[METER][METER_WORDS].variant.value<bool>());
-	action5->setChecked(m_settings[METER][METER_CHARS].variant.value<bool>());
+	action1->setChecked(valueAt<bool>(METER, METER_LINE_POS));
+	action2->setChecked(valueAt<bool>(METER, METER_COL_POS));
+	action3->setChecked(valueAt<bool>(METER, METER_LINES));
+	action4->setChecked(valueAt<bool>(METER, METER_WORDS));
+	action5->setChecked(valueAt<bool>(METER, METER_CHARS));
 
-	connect(action1, &QCheckBox::stateChanged, this, [=](int state) {
-		saveAndApplySetting<bool>(METER, METER_LINE_POS, state);
+	connect(action1, &QCheckBox::stateChanged, this, [&](int state) {
+		activeApply<bool>(METER, METER_LINE_POS, state);
 		});
-	connect(action2, &QCheckBox::stateChanged, this, [=](int state) {
-		saveAndApplySetting<bool>(METER, METER_COL_POS, state);
+	connect(action2, &QCheckBox::stateChanged, this, [&](int state) {
+		activeApply<bool>(METER, METER_COL_POS, state);
 		});
-	connect(action3, &QCheckBox::stateChanged, this, [=](int state) {
-		saveAndApplySetting<bool>(METER, METER_LINES, state);
+	connect(action3, &QCheckBox::stateChanged, this, [&](int state) {
+		activeApply<bool>(METER, METER_LINES, state);
 		});
-	connect(action4, &QCheckBox::stateChanged, this, [=](int state) {
-		saveAndApplySetting<bool>(METER, METER_WORDS, state);
+	connect(action4, &QCheckBox::stateChanged, this, [&](int state) {
+		activeApply<bool>(METER, METER_WORDS, state);
 		});
-	connect(action5, &QCheckBox::stateChanged, this, [=](int state) {
-		saveAndApplySetting<bool>(METER, METER_CHARS, state);
+	connect(action5, &QCheckBox::stateChanged, this, [&](int state) {
+		activeApply<bool>(METER, METER_CHARS, state);
 		});
 
 	auto layout = Layout::box(Box::Horizontal, meter_box, QWidgetList{ action1, action2, action3, action4, action5 });
@@ -301,6 +288,24 @@ void WindowSettings::setupDialog(QDialog* dialog)
 		Layout::box(Box::Horizontal, groupBox, QWidgetList{ comboBox });
 		grid->addWidget(groupBox);
 	}
+}
+
+void WindowSettings::syncUp(const QString& prefix, const QString& key)
+{
+	for (auto& window : m_windows)
+		m_settings[prefix][key].action(window);
+}
+
+void WindowSettings::applyAll(Window* window)
+{
+	for (auto it = m_settings.begin(); it != m_settings.end(); ++it)
+		for (auto sub_it = it.value().begin(); sub_it != it.value().end(); ++sub_it)
+			sub_it.value().action(window);
+}
+
+QVariant WindowSettings::variantAt(const QString& prefix, const QString& key)
+{
+	return m_settings[prefix][key].variant;
 }
 
 void WindowSettings::onDialogFinished()

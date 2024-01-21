@@ -30,15 +30,21 @@ public:
 	bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
-	struct Action {
+	struct Setting {
 		QVariant variant;
 		std::function<void(Window*)> action;
+
+		template <typename T>
+		T value()
+		{
+			return variant.value<T>();
+		}
 	};
 
 	IniWriter* m_iniWriter;
 	QDialog* m_dialog = nullptr;
 	QList<Window*> m_windows;
-	QMap<QString, QMap<QString, Action>> m_settings;
+	QMap<QString, QMap<QString, Setting>> m_settings;
 
 	void loadAll();
 	void loadEditorSettings();
@@ -48,23 +54,31 @@ private:
 	void saveEditorSettings();
 	void saveMeterSettings();
 	void saveWindowSettings();
-	void applySetting(const QString& prefix, const QString& key);
-	void applyAll(Window* window);
 	QString iniName(QString text);
 	void setupDialog(QDialog* dialog);
 
+	void syncUp(const QString& prefix, const QString& key);
+	void applyAll(Window* window);
+	QVariant variantAt(const QString& prefix, const QString& key);
+
 	template <typename T>
-	void saveSetting(const QString& prefix, const QString& key, T value)
+	void passiveApply(const QString& prefix, const QString& key, T value)
 	{
 		m_settings[prefix][key].variant = QVariant::fromValue<T>(value);
 	}
 
 	template <typename T>
-	void saveAndApplySetting(const QString& prefix, const QString& key, T value)
+	void activeApply(const QString& prefix, const QString& key, T value)
 	{
-		saveSetting<T>(prefix, key, value);
+		passiveApply<T>(prefix, key, value);
 
-		applySetting(prefix, key);
+		syncUp(prefix, key);
+	}
+
+	template <typename T>
+	T valueAt(const QString& prefix, const QString& key)
+	{
+		return m_settings[prefix][key].value<T>();
 	}
 
 private slots:

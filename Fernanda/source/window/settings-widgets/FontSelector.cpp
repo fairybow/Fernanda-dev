@@ -5,6 +5,8 @@
 #include <QFontMetrics>
 #include <QList>
 
+constexpr int SIZES[] = { 144, 72, 48, 36, 28, 26, 24, 22, 20, 18, 16, 14, 12, 11, 10, 9, 8, 6 };
+
 FontSelector::FontSelector(const QFont& initialFont, QWidget* parent)
 	: QWidget(parent), m_currentFont(initialFont)
 {
@@ -41,13 +43,7 @@ void FontSelector::setupFontsBox()
 
 void FontSelector::setupSizesBox()
 {
-	auto sizes = {
-		144, 72, 48, 36, 28, 26,
-		24, 22, 20, 18, 16, 14,
-		12, 11, 10, 9, 8, 6
-	};
-
-	for (auto& size : sizes)
+	for (auto& size : SIZES)
 		m_sizesBox->addItem(QString::number(size));
 
 	connect(m_sizesBox, &QComboBox::currentTextChanged, this, &FontSelector::onSizesBoxCurrentTextChanged);

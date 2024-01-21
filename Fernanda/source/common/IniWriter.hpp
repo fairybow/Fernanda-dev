@@ -52,7 +52,7 @@ public:
 		m_settings->setValue(key, value);
 	}
 
-	void saveFrom(QAnyStringView prefix, QAnyStringView key, const QVariant& value)
+	void saveIn(QAnyStringView prefix, QAnyStringView key, const QVariant& value)
 	{
 		begin(prefix);
 		save(key, value);
