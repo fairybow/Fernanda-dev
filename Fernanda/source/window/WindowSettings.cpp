@@ -2,8 +2,10 @@
 #include "settings-widgets/FontSelector.h"
 #include "WindowSettings.h"
 
+#include <QByteArray>
 #include <QGridLayout>
 #include <QGroupBox>
+#include <QRect>
 
 constexpr char INI_FILLER[] = "_";
 constexpr char EDITOR[] = "Editor";
@@ -37,11 +39,14 @@ void WindowSettings::yoke(Window* window)
 	m_windows << window;
 
 	applyAll(window);
+	window->installEventFilter(this);
 }
 
 void WindowSettings::detach(Window* window)
 {
 	m_windows.removeAll(window);
+
+	window->removeEventFilter(this);
 }
 
 void WindowSettings::openDialog()
@@ -59,10 +64,24 @@ void WindowSettings::openDialog()
 	m_dialog->open();
 }
 
+bool WindowSettings::eventFilter(QObject* watched, QEvent* event)
+{
+	if (event->type() == QEvent::Resize || event->type() == QEvent::Move)
+	{
+		auto window = qobject_cast<Window*>(watched);
+		saveSetting<QByteArray>(WINDOW, WINDOW_GEOMETRY, window->saveGeometry());
+
+		return true;
+	}
+
+	return false;
+}
+
 void WindowSettings::loadAll()
 {
 	loadEditorSettings();
 	loadMeterSettings();
+	loadWindowSettings();
 }
 
 void WindowSettings::loadEditorSettings()
@@ -136,10 +155,34 @@ void WindowSettings::loadMeterSettings()
 	m_iniWriter->end();
 }
 
+void WindowSettings::loadWindowSettings()
+{
+	m_iniWriter->begin(WINDOW);
+	QMap<QString, Action> window_settings;
+
+	window_settings[WINDOW_GEOMETRY] = {
+		m_iniWriter->load(iniName(WINDOW_GEOMETRY)),
+
+		[action = &window_settings[WINDOW_GEOMETRY]](Window* window) {
+
+			auto byte_array = action->variant.toByteArray();
+
+			if (byte_array.isNull())
+				window->setGeometry(QRect(0, 0, 1000, 600));
+			else
+				window->restoreGeometry(byte_array);
+		}
+	};
+
+	m_settings[WINDOW] = window_settings;
+	m_iniWriter->end();
+}
+
 void WindowSettings::saveAll()
 {
 	saveEditorSettings();
 	saveMeterSettings();
+	saveWindowSettings();
 }
 
 void WindowSettings::saveEditorSettings()
@@ -163,6 +206,22 @@ void WindowSettings::saveMeterSettings()
 	m_iniWriter->save(iniName(METER_CHARS), m_settings[METER][METER_CHARS].variant);
 
 	m_iniWriter->end();
+}
+
+void WindowSettings::saveWindowSettings()
+{
+	m_iniWriter->begin(WINDOW);
+
+	m_iniWriter->save(iniName(WINDOW_GEOMETRY), m_settings[WINDOW][WINDOW_GEOMETRY].variant);
+	//...
+
+	m_iniWriter->end();
+}
+
+void WindowSettings::applySetting(const QString& prefix, const QString& key)
+{
+	for (auto& window : m_windows)
+		m_settings[prefix][key].action(window);
 }
 
 void WindowSettings::applyAll(Window* window)
@@ -193,7 +252,7 @@ void WindowSettings::setupDialog(QDialog* dialog)
 	Layout::box(Box::Horizontal, font_box, QWidgetList{ font_selector }); // Overload to take 1 widget/object
 	grid->addWidget(font_box);
 	connect(font_selector, &FontSelector::currentFontChanged, this, [&](const QFont& font) {
-		applySetting<QFont>(EDITOR, EDITOR_FONT, font);
+		saveAndApplySetting<QFont>(EDITOR, EDITOR_FONT, font);
 		});
 
 	auto meter_box = new QGroupBox(dialog);
@@ -211,19 +270,19 @@ void WindowSettings::setupDialog(QDialog* dialog)
 	action5->setChecked(m_settings[METER][METER_CHARS].variant.value<bool>());
 
 	connect(action1, &QCheckBox::stateChanged, this, [=](int state) {
-		applySetting<bool>(METER, METER_LINE_POS, state);
+		saveAndApplySetting<bool>(METER, METER_LINE_POS, state);
 		});
 	connect(action2, &QCheckBox::stateChanged, this, [=](int state) {
-		applySetting<bool>(METER, METER_COL_POS, state);
+		saveAndApplySetting<bool>(METER, METER_COL_POS, state);
 		});
 	connect(action3, &QCheckBox::stateChanged, this, [=](int state) {
-		applySetting<bool>(METER, METER_LINES, state);
+		saveAndApplySetting<bool>(METER, METER_LINES, state);
 		});
 	connect(action4, &QCheckBox::stateChanged, this, [=](int state) {
-		applySetting<bool>(METER, METER_WORDS, state);
+		saveAndApplySetting<bool>(METER, METER_WORDS, state);
 		});
 	connect(action5, &QCheckBox::stateChanged, this, [=](int state) {
-		applySetting<bool>(METER, METER_CHARS, state);
+		saveAndApplySetting<bool>(METER, METER_CHARS, state);
 		});
 
 	auto layout = Layout::box(Box::Horizontal, meter_box, QWidgetList{ action1, action2, action3, action4, action5 });

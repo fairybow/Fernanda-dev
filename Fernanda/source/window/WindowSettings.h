@@ -6,6 +6,7 @@
 
 #include <QDebug>
 #include <QDialog>
+#include <QEvent>
 #include <QFont>
 #include <QList>
 #include <QMap>
@@ -26,6 +27,7 @@ public:
 	void yoke(Window* window);
 	void detach(Window* window);
 	void openDialog();
+	bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
 	struct Action {
@@ -41,20 +43,28 @@ private:
 	void loadAll();
 	void loadEditorSettings();
 	void loadMeterSettings();
+	void loadWindowSettings();
 	void saveAll();
 	void saveEditorSettings();
 	void saveMeterSettings();
+	void saveWindowSettings();
+	void applySetting(const QString& prefix, const QString& key);
 	void applyAll(Window* window);
 	QString iniName(QString text);
 	void setupDialog(QDialog* dialog);
 
 	template <typename T>
-	void applySetting(const QString& prefix, const QString& key, T value)
+	void saveSetting(const QString& prefix, const QString& key, T value)
 	{
 		m_settings[prefix][key].variant = QVariant::fromValue<T>(value);
+	}
 
-		for (auto& window : m_windows)
-			m_settings[prefix][key].action(window);
+	template <typename T>
+	void saveAndApplySetting(const QString& prefix, const QString& key, T value)
+	{
+		saveSetting<T>(prefix, key, value);
+
+		applySetting(prefix, key);
 	}
 
 private slots:
