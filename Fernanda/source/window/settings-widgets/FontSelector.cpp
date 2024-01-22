@@ -74,10 +74,7 @@ void FontSelector::setupSampleText()
 	m_sampleText->setWordWrap(true);
 	m_sampleText->setText(StringTools::pangram());
 
-	connect(this, &FontSelector::currentFontChanged, this, [&](const QFont& font) {
-		qDebug() << __FUNCTION__;
-		resizeSampleText();
-		});
+	connect(this, &FontSelector::currentFontChanged, this, [&](const QFont& font) { resizeSampleText(); });
 }
 
 void FontSelector::sizing()

@@ -76,7 +76,9 @@ QMenu* Fernanda::help(QMenuBar* menuBar, Window* window)
 {
 	auto menu = new QMenu("Help", menuBar);
 
-	//
+	//auto test = new QAction("Print window memory address", menu);
+	//menu->addAction(test);
+	//connect(test, &QAction::triggered, this, [=] { qDebug() << window; });
 
 	return menu;
 }
@@ -85,7 +87,9 @@ QMenu* Fernanda::dev(QMenuBar* menuBar, Window* window)
 {
 	auto menu = new QMenu("Dev", menuBar);
 
-	//
+	//auto test = new QAction("Print window memory address", menu);
+	//menu->addAction(test);
+	//connect(test, &QAction::triggered, this, [=] { qDebug() << window; });
 
 	return menu;
 }

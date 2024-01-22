@@ -56,6 +56,7 @@ private:
 	void saveWindowSettings();
 	QString iniName(QString text);
 	void setupDialog(QDialog* dialog);
+	void moveXYIfTaken(Window* window);
 
 	void syncUp(const QString& prefix, const QString& key);
 	void applyAll(Window* window);

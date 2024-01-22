@@ -2,10 +2,12 @@
 #include "settings-widgets/FontSelector.h"
 #include "WindowSettings.h"
 
+#include <QApplication>
 #include <QByteArray>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QRect>
+#include <QStyle>
 
 constexpr char INI_FILLER[] = "_";
 constexpr char EDITOR[] = "Editor";
@@ -89,10 +91,18 @@ void WindowSettings::loadEditorSettings()
 	m_iniWriter->begin(EDITOR);
 	QMap<QString, Setting> editor_settings;
 
-	editor_settings[EDITOR_FONT] = {
-		m_iniWriter->load(iniName(EDITOR_FONT), QFont(EDITOR_FONT_DEFAULT, EDITOR_FONTSIZE_DEFAULT)),
+	auto default_font = QFont(EDITOR_FONT_DEFAULT, EDITOR_FONTSIZE_DEFAULT);
 
-		[setting = &editor_settings[EDITOR_FONT]](Window* window) {
+	editor_settings[EDITOR_FONT] = {
+		m_iniWriter->load(iniName(EDITOR_FONT), default_font),
+
+		[setting = &editor_settings[EDITOR_FONT], default_font](Window* window) {
+			auto font = setting->value<QFont>();
+			auto point_size = font.pointSize();
+
+			if (!font.exactMatch() && (point_size < 6 || point_size > 144))
+				setting->variant = default_font;
+
 			window->m_editorFont = setting->value<QFont>();
 
 			for (auto& editor : window->editors())
@@ -163,14 +173,14 @@ void WindowSettings::loadWindowSettings()
 	window_settings[WINDOW_GEOMETRY] = {
 		m_iniWriter->load(iniName(WINDOW_GEOMETRY)),
 
-		[setting = &window_settings[WINDOW_GEOMETRY]](Window* window) {
+		[setting = &window_settings[WINDOW_GEOMETRY], this](Window* window) {
 
 			auto byte_array = setting->value<QByteArray>();
 
-			if (byte_array.isNull())
+			if (!window->restoreGeometry(byte_array))
 				window->setGeometry(QRect(0, 0, 1000, 600));
-			else
-				window->restoreGeometry(byte_array);
+
+			moveXYIfTaken(window);
 		}
 	};
 
@@ -287,6 +297,22 @@ void WindowSettings::setupDialog(QDialog* dialog)
 		groupBox->setTitle(QString("Group Box %1").arg(i + 1));
 		Layout::box(Box::Horizontal, groupBox, QWidgetList{ comboBox });
 		grid->addWidget(groupBox);
+	}
+}
+
+void WindowSettings::moveXYIfTaken(Window* window)
+{
+	for (auto& other : m_windows) {
+		if (other == window) continue;
+
+		auto x = window->x();
+		auto y = window->y();
+
+		auto d = 6;
+		auto title_bar_height = QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight);
+
+		if (x == other->x() /*&& y == other->y()*/)
+			window->move(x + d + title_bar_height, y + d);
 	}
 }
 
