@@ -4,10 +4,12 @@
 #include "../common/Path.hpp"
 #include "Window.h"
 
+#include <QCheckBox>
 #include <QDebug>
 #include <QDialog>
 #include <QEvent>
 #include <QFont>
+#include <QGroupBox>
 #include <QList>
 #include <QMap>
 #include <QObject>
@@ -47,15 +49,21 @@ private:
 	QMap<QString, QMap<QString, Setting>> m_settings;
 
 	void loadAll();
+	void loadDataSettings();
 	void loadEditorSettings();
 	void loadMeterSettings();
 	void loadWindowSettings();
 	void saveAll();
+	void saveDataSettings();
 	void saveEditorSettings();
 	void saveMeterSettings();
 	void saveWindowSettings();
 	QString iniName(QString text);
 	void setupDialog(QDialog* dialog);
+	QGroupBox* fontBox(QDialog* dialog);
+	QGroupBox* meterBox(QDialog* dialog);
+	QGroupBox* defaultProjectPathBox(QDialog* dialog);
+	QCheckBox* newCheckBox(const QString& prefix, const QString& key, QWidget* parent);
 	void moveXYIfTaken(Window* window);
 
 	void syncUp(const QString& prefix, const QString& key);

@@ -108,8 +108,8 @@ Document* Window::documentOf(Editor* editor) const
 void Window::setup()
 {
 	setCentralWidget(m_splitter);
+	setupTreeView();
 
-	addTreeView();
 	addPageArea();
 
 	// Temporary
@@ -118,23 +118,20 @@ void Window::setup()
 	status_bar->addWidget(m_meter);
 }
 
-void Window::addTreeView()
+void Window::setupTreeView()
 {
-	auto tree_view = new TreeView;
-
 	auto dock_widget = new QDockWidget;
-	dock_widget->setWidget(tree_view);
+	dock_widget->setWidget(m_treeView);
 	addDockWidget(Qt::LeftDockWidgetArea, dock_widget);
 
-	setupTreeView(tree_view);
-}
+	// Note:
+	// "Closing" a dock widget, I believe, hides it (and its child).
+	// Toggle tree view on and off how? Best UX?
 
-void Window::setupTreeView(TreeView* treeView)
-{
-	connect(treeView, &TreeView::fileClicked, this, [&](const Path& path) {
+	connect(m_treeView, &TreeView::fileClicked, this, [&](const Path& path) {
 		find(path);
 		});
-	connect(treeView, &TreeView::fileDoubleClicked, this, [&](const Path& path) {
+	connect(m_treeView, &TreeView::fileDoubleClicked, this, [&](const Path& path) {
 		emit treeViewFileDoubleClicked(path);
 		});
 }

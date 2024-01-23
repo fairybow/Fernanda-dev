@@ -58,6 +58,7 @@ private:
 	mutable PageArea* m_currentPageArea = nullptr;
 	Meter* m_meter = new Meter;
 	QList<Editor*> m_editors;
+	TreeView* m_treeView = new TreeView;
 	QFont m_editorFont = QFont();
 
 	QList<PageArea*> pageAreas() const;
@@ -68,8 +69,7 @@ private:
 	Document* documentOf(Editor* editor) const;
 
 	void setup();
-	void addTreeView();
-	void setupTreeView(TreeView* treeView);
+	void setupTreeView();
 	void addPageArea();
 	void setupPageArea(PageArea* pageArea);
 	Document* newDocument(const Path& path = Path());

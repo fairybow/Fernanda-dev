@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../common/StringTools.hpp"
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDebug>
@@ -15,7 +17,7 @@ class FontSelector : public QWidget
 	Q_OBJECT
 
 public:
-	FontSelector(const QFont& initialFont = QFont(), QWidget* parent = nullptr);
+	FontSelector(QWidget* parent = nullptr, const QFont& initialFont = QFont());
 	~FontSelector() { qDebug() << __FUNCTION__; }
 
 protected:
@@ -28,7 +30,7 @@ private:
 	QComboBox* m_sizesBox = new QComboBox(this);
 	QCheckBox* m_boldCheck = new QCheckBox("Bold", this);
 	QCheckBox* m_italicCheck = new QCheckBox("Italic", this);
-	QLabel* m_sampleText = new QLabel(this);
+	QLabel* m_sampleText = new QLabel(StringTools::pangram(), this);
 
 	void setup();
 	void setupFontsBox();

@@ -174,9 +174,9 @@ void PageArea::setCurrentWidget(QWidget* widget)
 void PageArea::setup()
 {
 	QObjectList top_widgets{ m_controls, m_tabBar };
-	auto top_layout = Layout::box(Box::Horizontal, top_widgets);
+	auto top_layout = Layout::box(Layout::Box::Horizontal, top_widgets);
 	QObjectList layouts{ top_layout, m_mainStack };
-	Layout::box(Box::Vertical, this, layouts);
+	Layout::box(Layout::Box::Vertical, this, layouts);
 
 	m_underlay->setAlignment(Qt::AlignCenter);
 	m_mainStack->addWidget(m_underlay);
@@ -236,7 +236,9 @@ QWidget* PageArea::dismantlePage(int index)
 	if (close_button)
 		delete close_button;
 
-	return widget; // Does widget need to be reparented?
+	widget->setParent(nullptr);
+
+	return widget;
 }
 
 void PageArea::addTabCloseButton(int index)
@@ -277,6 +279,7 @@ void PageArea::removePageData(int index)
 void PageArea::onTabBarCurrentChanged(int index)
 {
 	if (index < 0) {
+		// Note:
 		// In the event the last tab is removed, we still need
 		// to emit the signal with an `index` of `-1`.
 		emit currentChanged(index);

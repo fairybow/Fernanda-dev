@@ -57,6 +57,7 @@
     <ClInclude Include="source\common\StringTools.hpp" />
     <ClInclude Include="source\common\Path.hpp" />
     <ClInclude Include="source\common\UiButton.hpp" />
+    <QtMoc Include="source\window\settings-widgets\DirectorySelector.hpp" />
     <QtMoc Include="source\window\WindowSettings.h" />
     <QtMoc Include="source\window\settings-widgets\FontSelector.h" />
     <QtMoc Include="source\window\widgets\page-area\TabControlBox.h" />

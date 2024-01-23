@@ -142,7 +142,7 @@ bool Meter::hasAnyCount() const
 void Meter::setup()
 {
 	QWidgetList widgets{ m_positions, m_separator, m_counts, m_refreshCounts };
-	Layout::box(Box::Horizontal, this, widgets);
+	Layout::box(Layout::Box::Horizontal, this, widgets);
 
 	m_separator->setText(SEPARATOR);
 	hideAll();
@@ -285,6 +285,7 @@ void Meter::onSelectionChanged()
 
 	if (selection.toPlainText() == previous_selection.toPlainText()) return;
 
+	// Note:
 	// If `!m_autoCount`, then delay recalculating on selection release?
 	// I think performance spike and issues may be inevitable with very large texts,
 	// but this function mitigates the issues that arise with `QPlainTextEdit`'s 

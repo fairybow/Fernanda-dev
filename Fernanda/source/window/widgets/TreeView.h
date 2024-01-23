@@ -15,12 +15,12 @@ public:
 	TreeView(QWidget* parent = nullptr);
 	~TreeView() { qDebug() << __FUNCTION__; }
 
+	void setRoot(const Path& path);
+
 private:
 	QFileSystemModel* m_fileSystemModel = new QFileSystemModel(this);
 
 	void setup();
-	void connections();
-	void setDefaultRoot(); //<- Temporary.
 
 private slots:
 	void onClicked(const QModelIndex& index);

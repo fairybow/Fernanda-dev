@@ -1,9 +1,6 @@
 #include "common/Connect.hpp"
 #include "Fernanda.h"
 
-//#include <QByteArray>
-#include <QStandardPaths>
-
 Fernanda::Fernanda(bool isDev)
 	: m_isDev(isDev)
 {}

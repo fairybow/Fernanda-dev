@@ -1,15 +1,19 @@
 #include "../common/Layout.hpp"
+#include "settings-widgets/DirectorySelector.hpp"
 #include "settings-widgets/FontSelector.h"
 #include "WindowSettings.h"
 
 #include <QApplication>
 #include <QByteArray>
+#include <QFileDialog>
 #include <QGridLayout>
-#include <QGroupBox>
 #include <QRect>
 #include <QStyle>
 
 constexpr char INI_FILLER[] = "_";
+constexpr char DATA[] = "Data";
+constexpr char DATA_PROJECTS[] = "Projects path";
+constexpr char DATA_PROJECTS_DEFAULT[] = "Fernanda";
 constexpr char EDITOR[] = "Editor";
 constexpr char EDITOR_FONT[] = "Font";
 constexpr char EDITOR_FONT_DEFAULT[] = "mononoki";
@@ -81,9 +85,33 @@ bool WindowSettings::eventFilter(QObject* watched, QEvent* event)
 
 void WindowSettings::loadAll()
 {
+	loadDataSettings();
 	loadEditorSettings();
 	loadMeterSettings();
 	loadWindowSettings();
+}
+
+void WindowSettings::loadDataSettings()
+{
+	m_iniWriter->begin(DATA);
+	QMap<QString, Setting> data_settings;
+
+	auto default_projects_path = Path::system(Path::System::Documents) / DATA_PROJECTS_DEFAULT;
+
+	// If saved dir doesn't exist, switch to default, and if default doesn't exist, make it
+
+	data_settings[DATA_PROJECTS] = {
+		m_iniWriter->load(iniName(DATA_PROJECTS), default_projects_path),
+
+		[setting = &data_settings[DATA_PROJECTS]](Window* window) {
+			window->m_treeView->setRoot(setting->value<Path>());
+		}
+	};
+
+	//...
+
+	m_settings[DATA] = data_settings;
+	m_iniWriter->end();
 }
 
 void WindowSettings::loadEditorSettings()
@@ -106,7 +134,8 @@ void WindowSettings::loadEditorSettings()
 			window->m_editorFont = setting->value<QFont>();
 
 			for (auto& editor : window->editors())
-				editor->setFont(window->m_editorFont);
+				if (editor)
+					editor->setFont(window->m_editorFont);
 		}
 	};
 
@@ -190,9 +219,20 @@ void WindowSettings::loadWindowSettings()
 
 void WindowSettings::saveAll()
 {
+	saveDataSettings();
 	saveEditorSettings();
 	saveMeterSettings();
 	saveWindowSettings();
+}
+
+void WindowSettings::saveDataSettings()
+{
+	m_iniWriter->begin(DATA);
+
+	m_iniWriter->save(iniName(DATA_PROJECTS), variantAt(DATA, DATA_PROJECTS));
+	//...
+
+	m_iniWriter->end();
 }
 
 void WindowSettings::saveEditorSettings()
@@ -235,69 +275,104 @@ QString WindowSettings::iniName(QString text)
 
 void WindowSettings::setupDialog(QDialog* dialog)
 {
+	// Set uniform sizing for all of these QGroupBoxes
+
 	auto grid = new QGridLayout(dialog);
 	auto space = 5;
-	grid->setContentsMargins(space, space, space, space);
-	grid->setSpacing(space);
+	//grid->setContentsMargins(space, space, space, space);
+	//grid->setSpacing(space);
 
 	dialog->setLayout(grid);
 	dialog->setFixedSize(800, 500);
 
-	auto font_box = new QGroupBox(dialog);
-	auto font_selector = new FontSelector(valueAt<QFont>(EDITOR, EDITOR_FONT), font_box);
-	font_box->setTitle(EDITOR_FONT);
-	Layout::box(Box::Horizontal, font_box, QWidgetList{ font_selector }); // Overload to take 1 widget/object
-	grid->addWidget(font_box);
-	connect(font_selector, &FontSelector::currentFontChanged, this, [&](const QFont& font) {
-		activeApply<QFont>(EDITOR, EDITOR_FONT, font);
-		});
+	grid->addWidget(fontBox(dialog));
+	grid->addWidget(meterBox(dialog));
+	grid->addWidget(defaultProjectPathBox(dialog));
 
-	auto meter_box = new QGroupBox(dialog);
-	meter_box->setTitle(METER);
-	auto action1 = new QCheckBox(METER_LINE_POS, meter_box);
-	auto action2 = new QCheckBox(METER_COL_POS, meter_box);
-	auto action3 = new QCheckBox(METER_LINES, meter_box);
-	auto action4 = new QCheckBox(METER_WORDS, meter_box);
-	auto action5 = new QCheckBox(METER_CHARS, meter_box);
-
-	action1->setChecked(valueAt<bool>(METER, METER_LINE_POS));
-	action2->setChecked(valueAt<bool>(METER, METER_COL_POS));
-	action3->setChecked(valueAt<bool>(METER, METER_LINES));
-	action4->setChecked(valueAt<bool>(METER, METER_WORDS));
-	action5->setChecked(valueAt<bool>(METER, METER_CHARS));
-
-	connect(action1, &QCheckBox::stateChanged, this, [&](int state) {
-		activeApply<bool>(METER, METER_LINE_POS, state);
-		});
-	connect(action2, &QCheckBox::stateChanged, this, [&](int state) {
-		activeApply<bool>(METER, METER_COL_POS, state);
-		});
-	connect(action3, &QCheckBox::stateChanged, this, [&](int state) {
-		activeApply<bool>(METER, METER_LINES, state);
-		});
-	connect(action4, &QCheckBox::stateChanged, this, [&](int state) {
-		activeApply<bool>(METER, METER_WORDS, state);
-		});
-	connect(action5, &QCheckBox::stateChanged, this, [&](int state) {
-		activeApply<bool>(METER, METER_CHARS, state);
-		});
-
-	auto layout = Layout::box(Box::Horizontal, meter_box, QWidgetList{ action1, action2, action3, action4, action5 });
-	layout->setContentsMargins(5, 5, 5, 5);
-
-	grid->addWidget(meter_box);
+	grid->setContentsMargins(space, space, space, space);
+	grid->setSpacing(space);
 
 	connect(m_dialog, &QDialog::finished, this, &WindowSettings::onDialogFinished);
 
 	// v--- Filler
 
-	for (auto i = 0; i < 3; ++i) {
-		auto groupBox = new QGroupBox(dialog);
-		auto comboBox = new QComboBox(groupBox);
-		groupBox->setTitle(QString("Group Box %1").arg(i + 1));
-		Layout::box(Box::Horizontal, groupBox, QWidgetList{ comboBox });
-		grid->addWidget(groupBox);
+	for (auto i = 0; i < 2; ++i) {
+		auto group_box = new QGroupBox(dialog);
+		auto combo_box = new QComboBox(group_box);
+		group_box->setTitle(QString("Group Box %1").arg(i + 1));
+		Layout::box(Layout::Box::Horizontal, group_box, QWidgetList{ combo_box });
+		grid->addWidget(group_box);
 	}
+}
+
+QGroupBox* WindowSettings::fontBox(QDialog* dialog)
+{
+	auto box = new QGroupBox(dialog);
+	box->setTitle(EDITOR_FONT);
+
+	auto initial_font = valueAt<QFont>(EDITOR, EDITOR_FONT);
+	auto font_selector = new FontSelector(box, initial_font);
+	
+	Layout::box(Layout::Box::Horizontal, box, QWidgetList{ font_selector }); // Overload to take 1 widget/object
+
+	connect(font_selector, &FontSelector::currentFontChanged, this, [&](const QFont& font) {
+		activeApply<QFont>(EDITOR, EDITOR_FONT, font);
+		});
+
+	return box;
+}
+
+QGroupBox* WindowSettings::meterBox(QDialog* dialog)
+{
+	auto box = new QGroupBox(dialog);
+	box->setTitle(METER);
+
+	QWidgetList check_boxes = {
+		newCheckBox(METER, METER_LINE_POS, box),
+		newCheckBox(METER, METER_COL_POS, box),
+		newCheckBox(METER, METER_LINES, box),
+		newCheckBox(METER, METER_WORDS, box),
+		newCheckBox(METER, METER_CHARS, box)
+	};
+
+	//auto space = 5;
+	//box->setContentsMargins(space, space, space, space);
+	auto layout = Layout::box(Layout::Box::Horizontal, box, check_boxes);
+	//layout->setContentsMargins(space, space, space, space);
+
+	return box;
+}
+
+QGroupBox* WindowSettings::defaultProjectPathBox(QDialog* dialog)
+{
+	auto box = new QGroupBox(dialog);
+	box->setTitle(DATA_PROJECTS);
+
+	auto initial_dir = valueAt<Path>(DATA, DATA_PROJECTS);
+	auto dir_selector = new DirectorySelector(dialog, initial_dir);
+
+	auto layout = Layout::box(Layout::Box::Horizontal, box, QWidgetList{ dir_selector });
+	//layout->setContentsMargins(5, 5, 5, 5);
+
+	connect(dir_selector, &DirectorySelector::selected, this, [&](const Path& directory) {
+		activeApply<Path>(DATA, DATA_PROJECTS, directory);
+		});
+
+	return box;
+}
+
+QCheckBox* WindowSettings::newCheckBox(const QString& prefix, const QString& key, QWidget* parent)
+{
+	auto check_box = new QCheckBox(key, parent);
+
+	check_box->setTristate(false);
+	check_box->setChecked(valueAt<bool>(prefix, key));
+
+	connect(check_box, &QCheckBox::stateChanged, this, [=](int state) {
+		activeApply<bool>(prefix, key, state);
+		});
+
+	return check_box;
 }
 
 void WindowSettings::moveXYIfTaken(Window* window)

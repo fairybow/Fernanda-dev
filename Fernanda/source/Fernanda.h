@@ -5,7 +5,6 @@
 #include "window/WindowSettings.h"
 
 #include <QDebug>
-#include <QDir>
 #include <QList>
 #include <QMenu>
 #include <QMenuBar>
@@ -25,7 +24,7 @@ private:
 	static constexpr char SETTINGS_INI[] = ".fernanda/Settings.ini";
 
 	bool m_isDev;
-	const Path& m_iniPath = Path(QDir::homePath()) / SETTINGS_INI;
+	const Path& m_iniPath = Path::system(Path::System::Home) / SETTINGS_INI;
 	WindowSettings* m_windowSettings = new WindowSettings(m_iniPath, this);
 	QList<Window*> m_windows;
 

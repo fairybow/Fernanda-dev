@@ -143,6 +143,9 @@
     <QtMoc Include="source\window\WindowSettings.h">
       <Filter>Source\Window</Filter>
     </QtMoc>
+    <QtMoc Include="source\window\settings-widgets\DirectorySelector.hpp">
+      <Filter>Source\Window\Settings Widgets</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Connect.hpp">
@@ -160,13 +163,13 @@
     <ClInclude Include="source\common\Layout.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\Path.hpp">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\UiButton.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="source\common\StringTools.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\Path.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
   </ItemGroup>

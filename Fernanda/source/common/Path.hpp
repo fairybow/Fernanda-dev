@@ -1,12 +1,15 @@
 #pragma once
 
+//#include <QDataStream>
 #include <QDebug>
+#include <QStandardPaths>
 #include <QString>
 #include <QVariant>
 
 #include <filesystem>
 #include <ostream>
 #include <string>
+#include <unordered_map>
 
 class Path
 {
@@ -17,6 +20,41 @@ public:
 	Path(const std::string& stringPath) : m_path(stringPath) {}
 	Path(const QString& qStringPath) : m_path(qStringPath.toStdString()) {}
 	Path(const QVariant& qVariantPath) : m_path(qVariantPath.toString().toStdString()) {}
+
+	enum class System {
+		AppConfig,
+		AppData,
+		AppLocalData,
+		Applications,
+		Cache,
+		Config,
+		Desktop,
+		Download,
+		Documents,
+		Fonts,
+		GenericCache,
+		GenericConfig,
+		GenericData,
+		Home,
+		Movies,
+		Music,
+		Pictures,
+		PublicShare,
+		Runtime,
+		Temp,
+		Templates,
+		End
+	};
+
+	operator std::filesystem::path() const
+	{
+		return m_path;
+	}
+
+	operator QVariant() const
+	{
+		return toQVariant();
+	}
 
 	explicit operator bool() const
 	{
@@ -70,6 +108,22 @@ public:
 		return debug.maybeSpace();
 	}
 
+	/*friend QDataStream& operator<<(QDataStream& out, const Path& path)
+	{
+		out << path.toQString();
+
+		return out;
+	}
+
+	friend QDataStream& operator>>(QDataStream& in, Path& path)
+	{
+		QString serialized;
+		in >> serialized;
+		path = Path(serialized);
+
+		return in;
+	}*/
+
 	bool isFile() const
 	{
 		return std::filesystem::is_regular_file(m_path);
@@ -90,6 +144,27 @@ public:
 		return std::filesystem::create_directories(path.toStd());
 	}
 
+	static Path system(System type)
+	{
+		auto qt_types = qtTypes();
+		auto it = qt_types.find(type);
+
+		if (it != qt_types.end())
+			return Path(QStandardPaths::locate(it->second, QString(), QStandardPaths::LocateDirectory));
+
+		return Path();
+	}
+
+	static QList<Path> systemDirs()
+	{
+		QList<Path> paths;
+
+		for (auto i = 0; i < static_cast<int>(System::End); ++i)
+			paths << system(static_cast<System>(i));
+
+		return paths;
+	}
+
 	std::filesystem::path toStd() const
 	{
 		return m_path;
@@ -107,7 +182,8 @@ public:
 
 	QVariant toQVariant() const
 	{
-		return QVariant(toQString());
+		//return QVariant::fromValue(*this);
+		return QVariant::fromValue(toQString());
 	}
 
 	Path stem() const
@@ -172,4 +248,54 @@ public:
 
 private:
 	std::filesystem::path m_path;
+
+	static const std::unordered_map<System, QStandardPaths::StandardLocation> qtTypes()
+	{
+		static const std::unordered_map<System, QStandardPaths::StandardLocation> qt_types = {
+			{ System::AppConfig, QStandardPaths::AppConfigLocation },
+			{ System::AppData, QStandardPaths::AppDataLocation },
+			{ System::AppLocalData, QStandardPaths::AppLocalDataLocation },
+			{ System::Applications, QStandardPaths::ApplicationsLocation },
+			{ System::Cache, QStandardPaths::CacheLocation },
+			{ System::Config, QStandardPaths::ConfigLocation },
+			{ System::Desktop, QStandardPaths::DesktopLocation },
+			{ System::Download, QStandardPaths::DownloadLocation },
+			{ System::Documents, QStandardPaths::DocumentsLocation },
+			{ System::Fonts, QStandardPaths::FontsLocation },
+			{ System::GenericCache, QStandardPaths::GenericCacheLocation },
+			{ System::GenericConfig, QStandardPaths::GenericConfigLocation },
+			{ System::GenericData, QStandardPaths::GenericDataLocation },
+			{ System::Home, QStandardPaths::HomeLocation },
+			{ System::Movies, QStandardPaths::MoviesLocation },
+			{ System::Music, QStandardPaths::MusicLocation },
+			{ System::Pictures, QStandardPaths::PicturesLocation },
+			{ System::PublicShare, QStandardPaths::PublicShareLocation },
+			{ System::Runtime, QStandardPaths::RuntimeLocation },
+			{ System::Temp, QStandardPaths::TempLocation },
+			{ System::Templates, QStandardPaths::TemplatesLocation }
+		};
+
+		return qt_types;
+	}
 };
+
+template<>
+static inline QVariant QVariant::fromValue<Path>(const Path& value)
+{
+	return QVariant::fromValue(value.toQString());
+}
+
+template<>
+static inline QVariant QVariant::fromValue<Path>(Path&& value)
+{
+	return QVariant::fromValue(value.toQString());
+}
+
+template<>
+inline Path QVariant::value<Path>() const
+{
+	if (canConvert<QString>())
+		return Path(toString());
+
+	return Path();
+}

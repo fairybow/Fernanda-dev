@@ -6,11 +6,6 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-enum class Box {
-	Horizontal,
-	Vertical
-};
-
 namespace Layout
 {
 	namespace
@@ -41,10 +36,15 @@ namespace Layout
 		}
 	}
 
+	enum class Box {
+		Horizontal,
+		Vertical
+	};
+
 	inline QBoxLayout* box(Box type, QWidget* parent = nullptr, QObjectList objects = {}, QMargins margins = QMargins())
 	{
 		QBoxLayout* layout = nullptr;
-		(type == Box::Horizontal)
+		(type == Layout::Box::Horizontal)
 			? layout = new QHBoxLayout
 			: layout = new QVBoxLayout;
 

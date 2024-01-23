@@ -1,5 +1,4 @@
 #include "../../common/Layout.hpp"
-#include "../../common/StringTools.hpp"
 #include "FontSelector.h"
 
 #include <QFontMetrics>
@@ -7,7 +6,7 @@
 
 constexpr int SIZES[] = { 144, 72, 48, 36, 28, 26, 24, 22, 20, 18, 16, 14, 12, 11, 10, 9, 8, 6 };
 
-FontSelector::FontSelector(const QFont& initialFont, QWidget* parent)
+FontSelector::FontSelector(QWidget* parent, const QFont& initialFont)
 	: QWidget(parent), m_currentFont(initialFont)
 {
 	setup();
@@ -72,25 +71,25 @@ void FontSelector::setupSampleText()
 {
 	m_sampleText->setAlignment(Qt::AlignCenter);
 	m_sampleText->setWordWrap(true);
-	m_sampleText->setText(StringTools::pangram());
 
 	connect(this, &FontSelector::currentFontChanged, this, [&](const QFont& font) { resizeSampleText(); });
 }
 
 void FontSelector::sizing()
 {
-	auto space = 5;
-	setContentsMargins(space, space, space, space);
+	//auto space = 5;
+	//setContentsMargins(space, space, space, space);
 
 	QWidgetList boxes = { m_fontsBox, m_sizesBox, m_boldCheck, m_italicCheck };
-	auto top_layout = Layout::box(Box::Horizontal, boxes);
+	auto top_layout = Layout::box(Layout::Box::Horizontal, boxes);
 	top_layout->setStretch(0, 1);
 	top_layout->setStretch(1, 0);
 	top_layout->setStretch(2, 0);
 	top_layout->setStretch(3, 0);
-	top_layout->setSpacing(8);
+	//top_layout->setSpacing(8);
 
-	Layout::box(Box::Vertical, this, QObjectList{ top_layout, m_sampleText });
+	auto layout = Layout::box(Layout::Box::Vertical, this, QObjectList{ top_layout, m_sampleText });
+	//layout->setSpacing(8);
 }
 
 void FontSelector::syncFontsBox()

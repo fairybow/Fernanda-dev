@@ -13,6 +13,8 @@
 - Check that `#include`s are kept to the `.cpp` file where possible.
 - Includes should be grouped into 3 A-Z groups: **Me**, **You**, and **Them**. **Me** means files like `Fernanda.h`; **You** means from outside libraries, as in `<QWidget>` or `<Windows.h>`; and **Them** means from the C/C++ standard library.
 - Use `Q_OBJECT` for, obviously, signals/slots, but also if you want: a function like `QWidget::parent()`, where the `parent` is a custom subclass, to output the subclass's name (instead of the inherited class's name) in console; or to allow subclasses to be found by `QObject::findChildren`.
+- Lambdas with no parameters, omit `()`.
+- Slots that don't use the arg (lambda and otherwise) should still name the type, i.e. `onSignalReceived(bool)`.
 - Order of access specifiers:
 	- `public`
 	- `public slots`

@@ -9,7 +9,7 @@
 #include <QStyle>
 #include <QToolButton>
 
-#include <map>
+#include <unordered_map>
 
 constexpr char UI_FONT_QRC_PATH[] = ":/external/material-icons/MaterialIcons-Regular.ttf";
 
@@ -115,18 +115,20 @@ private:
 	bool m_flagged = false;
 	bool m_hoveredOver = false;
 
-	const std::map<Ui, QChar> iconHexMap() const
+	const std::unordered_map<Ui, QChar> iconHexMap() const
 	{
-		return {
-		{ Ui::Add, QChar(0xe145) },
-		{ Ui::ChevronLeft, QChar(0xe5cb) },
-		{ Ui::ChevronDown, QChar(0xe5cf) },
-		{ Ui::ChevronRight, QChar(0xe5cc) },
-		{ Ui::ChevronUp, QChar(0xe5ce) },
-		{ Ui::Close, QChar(0xe5cd) },
-		{ Ui::Ellipse, QChar(0xe061) },
-		{ Ui::Refresh, QChar(0xe5d5) }
+		static const std::unordered_map<Ui, QChar> map = {
+			{ Ui::Add, QChar(0xe145) },
+			{ Ui::ChevronLeft, QChar(0xe5cb) },
+			{ Ui::ChevronDown, QChar(0xe5cf) },
+			{ Ui::ChevronRight, QChar(0xe5cc) },
+			{ Ui::ChevronUp, QChar(0xe5ce) },
+			{ Ui::Close, QChar(0xe5cd) },
+			{ Ui::Ellipse, QChar(0xe061) },
+			{ Ui::Refresh, QChar(0xe5d5) }
 		};
+
+		return map;
 	}
 
 	const QString iconLabel(Ui icon) const

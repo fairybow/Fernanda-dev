@@ -1,35 +1,23 @@
 #include "TreeView.h"
 
-#include <QStandardPaths> //<- Temporary.
-
 TreeView::TreeView(QWidget* parent)
 	: QTreeView(parent)
 {
 	setup();
 }
 
+void TreeView::setRoot(const Path& path)
+{
+	auto root_index = m_fileSystemModel->setRootPath(path.toQString());
+	setRootIndex(root_index);
+}
+
 void TreeView::setup()
 {
 	setModel(m_fileSystemModel);
-	setDefaultRoot(); //<- Temporary.
 
-	connections();
-}
-
-void TreeView::connections()
-{
 	connect(this, &QTreeView::clicked, this, &TreeView::onClicked);
 	connect(this, &QTreeView::doubleClicked, this, &TreeView::onDoubleClicked);
-}
-
-void TreeView::setDefaultRoot()
-{
-	auto root_path = QStandardPaths::locate(QStandardPaths::DocumentsLocation, nullptr, QStandardPaths::LocateDirectory);
-	root_path += "/Fernanda";
-	//^ Get `root_path` from settings.
-
-	auto root_index = m_fileSystemModel->setRootPath(root_path);
-	setRootIndex(root_index);
 }
 
 void TreeView::onClicked(const QModelIndex& index)

@@ -32,7 +32,7 @@ public:
 		return m_ini;
 	}
 
-	Path setIni(const Path& ini)
+	void setIni(const Path& ini)
 	{
 		m_ini = ini;
 	}
