@@ -5,27 +5,38 @@
 
 #include <QApplication>
 #include <QByteArray>
-#include <QFileDialog>
+#include <QDockWidget>
 #include <QGridLayout>
 #include <QRect>
 #include <QStyle>
+//#include <QTextOption>
 
-constexpr char INI_FILLER[] = "_";
 constexpr char DATA[] = "Data";
 constexpr char DATA_PROJECTS[] = "Projects path";
-constexpr char DATA_PROJECTS_DEFAULT[] = "Fernanda";
+
 constexpr char EDITOR[] = "Editor";
 constexpr char EDITOR_FONT[] = "Font";
-constexpr char EDITOR_FONT_DEFAULT[] = "mononoki";
-constexpr int EDITOR_FONTSIZE_DEFAULT = 12;
+//constexpr char EDITOR_TAB_STOP[] = "Tab stop distance (px)";
+constexpr char EDITOR_TYPEWRITER[] = "Typewriter";
+//constexpr char EDITOR_WRAP[] = "Wrap";
+
 constexpr char METER[] = "Meter";
 constexpr char METER_LINE_POS[] = "Line position";
 constexpr char METER_COL_POS[] = "Column position";
 constexpr char METER_LINES[] = "Line count";
 constexpr char METER_WORDS[] = "Word count";
 constexpr char METER_CHARS[] = "Character count";
+
 constexpr char WINDOW[] = "Window";
+constexpr char WINDOW_DOCK_POS[] = "Dock position";
+constexpr char WINDOW_DOCK_VIS[] = "Dock visibile";
 constexpr char WINDOW_GEOMETRY[] = "Geometry";
+
+constexpr char INI_FILLER[] = "_";
+
+constexpr char EDITOR_FONT_DEFAULT[] = "mononoki";
+constexpr int EDITOR_FONTSIZE_DEFAULT = 12;
+constexpr char DATA_PROJECTS_DEFAULT[] = "Fernanda";
 
 WindowSettings::WindowSettings(const Path& config, QObject* parent)
 	: QObject(parent), m_iniWriter(new IniWriter(config, this))
@@ -46,6 +57,14 @@ void WindowSettings::yoke(Window* window)
 
 	applyAll(window);
 	window->installEventFilter(this);
+
+	connect(window->m_dockWidget, &QDockWidget::dockLocationChanged, this, [&](Qt::DockWidgetArea area) {
+		passiveApply(WINDOW, WINDOW_DOCK_POS, static_cast<int>(area));
+		});
+	connect(window->m_dockWidget, &QDockWidget::visibilityChanged, this, [=](bool visible) {
+		if (window->isVisible())
+			passiveApply<bool>(WINDOW, WINDOW_DOCK_VIS, visible);
+		});
 }
 
 void WindowSettings::detach(Window* window)
@@ -98,13 +117,21 @@ void WindowSettings::loadDataSettings()
 
 	auto default_projects_path = Path::system(Path::System::Documents) / DATA_PROJECTS_DEFAULT;
 
-	// If saved dir doesn't exist, switch to default, and if default doesn't exist, make it
-
 	data_settings[DATA_PROJECTS] = {
 		m_iniWriter->load(iniName(DATA_PROJECTS), default_projects_path),
 
-		[setting = &data_settings[DATA_PROJECTS]](Window* window) {
-			window->m_treeView->setRoot(setting->value<Path>());
+		[setting = &data_settings[DATA_PROJECTS], default_projects_path](Window* window) {
+			auto dir = setting->value<Path>();
+
+			if (!dir.isValid()) {
+				setting->variant = default_projects_path;
+				dir = default_projects_path;
+			}
+
+			if (dir == default_projects_path && !dir.isValid())
+				Path::createDirs(dir);
+
+			window->m_treeView->setRoot(dir);
 		}
 	};
 
@@ -128,18 +155,30 @@ void WindowSettings::loadEditorSettings()
 			auto font = setting->value<QFont>();
 			auto point_size = font.pointSize();
 
-			if (!font.exactMatch() && (point_size < 6 || point_size > 144))
+			if (!font.exactMatch() && (point_size < 6 || point_size > 144)) {
 				setting->variant = default_font;
+				font = default_font;
+			}
 
-			window->m_editorFont = setting->value<QFont>();
+			window->m_editorsFont = font;
 
 			for (auto& editor : window->editors())
-				if (editor)
-					editor->setFont(window->m_editorFont);
+				editor->setFont(font);
 		}
 	};
 
-	//...
+	editor_settings[EDITOR_TYPEWRITER] = {
+		m_iniWriter->load(iniName(EDITOR_TYPEWRITER), false),
+
+		[setting = &editor_settings[EDITOR_TYPEWRITER]](Window* window) {
+			auto is_typewriter = setting->value<bool>();
+
+			window->m_editorsIsTypewriter = is_typewriter;
+
+			for (auto& editor : window->editors())
+				editor->setIsTypewriter(is_typewriter);
+		}
+	};
 
 	m_settings[EDITOR] = editor_settings;
 	m_iniWriter->end();
@@ -199,11 +238,35 @@ void WindowSettings::loadWindowSettings()
 	m_iniWriter->begin(WINDOW);
 	QMap<QString, Setting> window_settings;
 
+	auto dock_pos_fallback = static_cast<int>(Qt::LeftDockWidgetArea);
+
+	window_settings[WINDOW_DOCK_POS] = {
+		m_iniWriter->load(iniName(WINDOW_DOCK_POS), dock_pos_fallback),
+
+		[setting = &window_settings[WINDOW_DOCK_POS], dock_pos_fallback](Window* window) {
+			auto area = static_cast<Qt::DockWidgetArea>(setting->value<int>());
+
+			if (area == Qt::NoDockWidgetArea) {
+				setting->variant = dock_pos_fallback;
+				area = static_cast<Qt::DockWidgetArea>(dock_pos_fallback);
+			}
+
+			window->addDockWidget(area, window->m_dockWidget);
+		}
+	};
+
+	window_settings[WINDOW_DOCK_VIS] = {
+		m_iniWriter->load(iniName(WINDOW_DOCK_VIS), true),
+
+		[setting = &window_settings[WINDOW_DOCK_VIS]](Window* window) {
+			window->m_dockWidget->setVisible(setting->value<bool>());
+		}
+	};
+
 	window_settings[WINDOW_GEOMETRY] = {
 		m_iniWriter->load(iniName(WINDOW_GEOMETRY)),
 
 		[setting = &window_settings[WINDOW_GEOMETRY], this](Window* window) {
-
 			auto byte_array = setting->value<QByteArray>();
 
 			if (!window->restoreGeometry(byte_array))
@@ -219,51 +282,31 @@ void WindowSettings::loadWindowSettings()
 
 void WindowSettings::saveAll()
 {
-	saveDataSettings();
-	saveEditorSettings();
-	saveMeterSettings();
-	saveWindowSettings();
+	saveSettings(DATA, { DATA_PROJECTS });
+	saveSettings(EDITOR, { EDITOR_FONT, EDITOR_TYPEWRITER });
+	saveSettings(METER, { METER_LINE_POS, METER_COL_POS, METER_LINES, METER_WORDS, METER_CHARS });
+	saveSettings(WINDOW, { WINDOW_DOCK_POS, WINDOW_DOCK_VIS, WINDOW_GEOMETRY });
 }
 
-void WindowSettings::saveDataSettings()
+void WindowSettings::saveSetting(const QString& prefix, const QString& key, AppendPrefix usePrefix)
 {
-	m_iniWriter->begin(DATA);
+	auto use_prefix = (usePrefix == AppendPrefix::Yes);
 
-	m_iniWriter->save(iniName(DATA_PROJECTS), variantAt(DATA, DATA_PROJECTS));
-	//...
+	if (use_prefix)
+		m_iniWriter->begin(prefix);
 
-	m_iniWriter->end();
+	m_iniWriter->save(iniName(key), variantAt(prefix, key));
+
+	if (use_prefix)
+		m_iniWriter->end();
 }
 
-void WindowSettings::saveEditorSettings()
+void WindowSettings::saveSettings(const QString& prefix, QStringList keys)
 {
-	m_iniWriter->begin(EDITOR);
+	m_iniWriter->begin(prefix);
 
-	m_iniWriter->save(iniName(EDITOR_FONT), variantAt(EDITOR, EDITOR_FONT));
-	//...
-
-	m_iniWriter->end();
-}
-
-void WindowSettings::saveMeterSettings()
-{
-	m_iniWriter->begin(METER);
-
-	m_iniWriter->save(iniName(METER_LINE_POS), variantAt(METER, METER_LINE_POS));
-	m_iniWriter->save(iniName(METER_COL_POS), variantAt(METER, METER_COL_POS));
-	m_iniWriter->save(iniName(METER_LINES), variantAt(METER, METER_LINES));
-	m_iniWriter->save(iniName(METER_WORDS), variantAt(METER, METER_WORDS));
-	m_iniWriter->save(iniName(METER_CHARS), variantAt(METER, METER_CHARS));
-
-	m_iniWriter->end();
-}
-
-void WindowSettings::saveWindowSettings()
-{
-	m_iniWriter->begin(WINDOW);
-
-	m_iniWriter->save(iniName(WINDOW_GEOMETRY), m_settings[WINDOW][WINDOW_GEOMETRY].variant);
-	//...
+	for (auto& key : keys)
+		saveSetting(prefix, key, AppendPrefix::No);
 
 	m_iniWriter->end();
 }
@@ -286,8 +329,9 @@ void WindowSettings::setupDialog(QDialog* dialog)
 	dialog->setFixedSize(800, 500);
 
 	grid->addWidget(fontBox(dialog));
-	grid->addWidget(meterBox(dialog));
 	grid->addWidget(defaultProjectPathBox(dialog));
+	grid->addWidget(editorBox(dialog));
+	grid->addWidget(meterBox(dialog));
 
 	grid->setContentsMargins(space, space, space, space);
 	grid->setSpacing(space);
@@ -312,33 +356,12 @@ QGroupBox* WindowSettings::fontBox(QDialog* dialog)
 
 	auto initial_font = valueAt<QFont>(EDITOR, EDITOR_FONT);
 	auto font_selector = new FontSelector(box, initial_font);
-	
+
 	Layout::box(Layout::Box::Horizontal, box, QWidgetList{ font_selector }); // Overload to take 1 widget/object
 
 	connect(font_selector, &FontSelector::currentFontChanged, this, [&](const QFont& font) {
 		activeApply<QFont>(EDITOR, EDITOR_FONT, font);
 		});
-
-	return box;
-}
-
-QGroupBox* WindowSettings::meterBox(QDialog* dialog)
-{
-	auto box = new QGroupBox(dialog);
-	box->setTitle(METER);
-
-	QWidgetList check_boxes = {
-		newCheckBox(METER, METER_LINE_POS, box),
-		newCheckBox(METER, METER_COL_POS, box),
-		newCheckBox(METER, METER_LINES, box),
-		newCheckBox(METER, METER_WORDS, box),
-		newCheckBox(METER, METER_CHARS, box)
-	};
-
-	//auto space = 5;
-	//box->setContentsMargins(space, space, space, space);
-	auto layout = Layout::box(Layout::Box::Horizontal, box, check_boxes);
-	//layout->setContentsMargins(space, space, space, space);
 
 	return box;
 }
@@ -357,6 +380,46 @@ QGroupBox* WindowSettings::defaultProjectPathBox(QDialog* dialog)
 	connect(dir_selector, &DirectorySelector::selected, this, [&](const Path& directory) {
 		activeApply<Path>(DATA, DATA_PROJECTS, directory);
 		});
+
+	return box;
+}
+
+QGroupBox* WindowSettings::editorBox(QDialog* dialog)
+{
+	auto box = new QGroupBox(dialog);
+	box->setTitle(EDITOR);
+
+	QWidgetList check_boxes = {
+		newCheckBox(EDITOR, EDITOR_TYPEWRITER, box)
+	};
+
+	//auto space = 5;
+	//box->setContentsMargins(space, space, space, space);
+	auto layout = Layout::box(Layout::Box::Horizontal, box, check_boxes);
+	//layout->setContentsMargins(space, space, space, space);
+
+	return box;
+}
+
+QGroupBox* WindowSettings::meterBox(QDialog* dialog)
+{
+	auto box = new QGroupBox(dialog);
+	box->setTitle(METER);
+
+	// Toggle/untoggle all button.
+
+	QWidgetList check_boxes = {
+		newCheckBox(METER, METER_LINE_POS, box),
+		newCheckBox(METER, METER_COL_POS, box),
+		newCheckBox(METER, METER_LINES, box),
+		newCheckBox(METER, METER_WORDS, box),
+		newCheckBox(METER, METER_CHARS, box)
+	};
+
+	//auto space = 5;
+	//box->setContentsMargins(space, space, space, space);
+	auto layout = Layout::box(Layout::Box::Horizontal, box, check_boxes);
+	//layout->setContentsMargins(space, space, space, space);
 
 	return box;
 }
@@ -383,11 +446,11 @@ void WindowSettings::moveXYIfTaken(Window* window)
 		auto x = window->x();
 		auto y = window->y();
 
-		auto d = 6;
+		auto distance = 6;
 		auto title_bar_height = QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight);
 
 		if (x == other->x() /*&& y == other->y()*/)
-			window->move(x + d + title_bar_height, y + d);
+			window->move(x + distance + title_bar_height, y + distance);
 	}
 }
 

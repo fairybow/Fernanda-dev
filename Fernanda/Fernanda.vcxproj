@@ -51,6 +51,7 @@
   <ItemGroup>
     <ClInclude Include="source\common\Connect.hpp" />
     <ClInclude Include="source\common\Fx.hpp" />
+    <ClInclude Include="source\common\HtmlString.hpp" />
     <ClInclude Include="source\common\Image.hpp" />
     <ClInclude Include="source\common\Io.hpp" />
     <ClInclude Include="source\common\Layout.hpp" />

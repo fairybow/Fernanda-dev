@@ -3,7 +3,6 @@
 #include "../common/Io.hpp"
 #include "Window.h"
 
-#include <QDockWidget>
 #include <QStatusBar>
 #include <QTextBlock>
 
@@ -116,17 +115,18 @@ void Window::setup()
 	auto status_bar = new QStatusBar;
 	setStatusBar(status_bar);
 	status_bar->addWidget(m_meter);
+	status_bar->addPermanentWidget(m_treeViewToggle);
+	// ^ Instead, if m_treeView present, show button on TreeView, else show on Window
 }
 
 void Window::setupTreeView()
 {
-	auto dock_widget = new QDockWidget;
-	dock_widget->setWidget(m_treeView);
-	addDockWidget(Qt::LeftDockWidgetArea, dock_widget);
+	m_dockWidget->setWidget(m_treeView);
+	addDockWidget(Qt::LeftDockWidgetArea, m_dockWidget);
 
-	// Note:
-	// "Closing" a dock widget, I believe, hides it (and its child).
-	// Toggle tree view on and off how? Best UX?
+	connect(m_treeViewToggle, &UiButton::clicked, this, [=] {
+		m_dockWidget->toggleViewAction()->trigger();
+		});
 
 	connect(m_treeView, &TreeView::fileClicked, this, [&](const Path& path) {
 		find(path);
@@ -188,7 +188,8 @@ Editor* Window::newEditor(Document* document)
 	m_editors << editor;
 
 	editor->setDocument(document);
-	editor->setFont(m_editorFont);
+	editor->setFont(m_editorsFont);
+	editor->setIsTypewriter(m_editorsIsTypewriter);
 
 	connect(editor, &Editor::textChanged, this, &Window::onEditorTextChanged);
 	connect(editor, &Editor::modificationChanged, this, &Window::onEditorModificationChanged);

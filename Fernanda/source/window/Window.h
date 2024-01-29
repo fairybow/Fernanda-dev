@@ -9,10 +9,13 @@
 
 #include <QCloseEvent>
 #include <QDebug>
+#include <QDockWidget>
 #include <QFont>
 #include <QList>
 #include <QMainWindow>
 #include <QSplitter>
+//
+#include "../common/UiButton.hpp"
 
 class WindowSettings;
 
@@ -58,8 +61,11 @@ private:
 	mutable PageArea* m_currentPageArea = nullptr;
 	Meter* m_meter = new Meter;
 	QList<Editor*> m_editors;
+	QFont m_editorsFont = QFont();
+	bool m_editorsIsTypewriter = false;
+	QDockWidget* m_dockWidget = new QDockWidget;
 	TreeView* m_treeView = new TreeView;
-	QFont m_editorFont = QFont();
+	UiButton* m_treeViewToggle = new UiButton(UiButton::Ui::MenuOpen, this);
 
 	QList<PageArea*> pageAreas() const;
 	QList<Editor*> editors() const;

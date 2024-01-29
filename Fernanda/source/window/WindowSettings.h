@@ -32,6 +32,11 @@ public:
 	bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
+	enum class AppendPrefix {
+		No,
+		Yes
+	};
+
 	struct Setting {
 		QVariant variant;
 		std::function<void(Window*)> action;
@@ -54,15 +59,14 @@ private:
 	void loadMeterSettings();
 	void loadWindowSettings();
 	void saveAll();
-	void saveDataSettings();
-	void saveEditorSettings();
-	void saveMeterSettings();
-	void saveWindowSettings();
+	void saveSetting(const QString& prefix, const QString& key, AppendPrefix usePrefix = AppendPrefix::Yes);
+	void saveSettings(const QString& prefix, QStringList keys);
 	QString iniName(QString text);
 	void setupDialog(QDialog* dialog);
 	QGroupBox* fontBox(QDialog* dialog);
-	QGroupBox* meterBox(QDialog* dialog);
 	QGroupBox* defaultProjectPathBox(QDialog* dialog);
+	QGroupBox* editorBox(QDialog* dialog);
+	QGroupBox* meterBox(QDialog* dialog);
 	QCheckBox* newCheckBox(const QString& prefix, const QString& key, QWidget* parent);
 	void moveXYIfTaken(Window* window);
 

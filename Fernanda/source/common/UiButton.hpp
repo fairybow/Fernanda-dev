@@ -25,6 +25,8 @@ public:
 		ChevronUp,
 		Close,
 		Ellipse,
+		Menu,
+		MenuOpen,
 		Refresh
 	};
 
@@ -125,6 +127,8 @@ private:
 			{ Ui::ChevronUp, QChar(0xe5ce) },
 			{ Ui::Close, QChar(0xe5cd) },
 			{ Ui::Ellipse, QChar(0xe061) },
+			{ Ui::Menu, QChar(0xe5d2) },
+			{ Ui::MenuOpen, QChar(0xe9bd) },
 			{ Ui::Refresh, QChar(0xe5d5) }
 		};
 

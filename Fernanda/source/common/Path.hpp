@@ -43,7 +43,7 @@ public:
 		Runtime,
 		Temp,
 		Templates,
-		End
+		END
 	};
 
 	operator std::filesystem::path() const
@@ -68,7 +68,7 @@ public:
 
 	bool operator!=(const Path& other) const
 	{
-		return m_path != other.m_path;
+		return !(*this == other);
 	}
 
 	Path& operator=(const Path& other)
@@ -159,7 +159,7 @@ public:
 	{
 		QList<Path> paths;
 
-		for (auto i = 0; i < static_cast<int>(System::End); ++i)
+		for (auto i = 0; i < static_cast<int>(System::END); ++i)
 			paths << system(static_cast<System>(i));
 
 		return paths;

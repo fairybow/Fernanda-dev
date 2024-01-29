@@ -72,7 +72,7 @@ void FontSelector::setupSampleText()
 	m_sampleText->setAlignment(Qt::AlignCenter);
 	m_sampleText->setWordWrap(true);
 
-	connect(this, &FontSelector::currentFontChanged, this, [&](const QFont& font) { resizeSampleText(); });
+	connect(this, &FontSelector::currentFontChanged, this, [&](const QFont&) { resizeSampleText(); });
 }
 
 void FontSelector::sizing()
