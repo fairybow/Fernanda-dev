@@ -3,8 +3,8 @@
 Editor::Editor(QWidget* parent)
 	: QPlainTextEdit(parent)
 {
-	connect(this, &Editor::cursorPositionChanged, this, &Editor::typewriter);
-	connect(this, &Editor::textChanged, this, &Editor::typewriter);
+	connect(this, &Editor::cursorPositionChanged, this, [&] { typewriter(); });
+	connect(this, &Editor::textChanged, this, [&] { typewriter(); });
 }
 
 bool Editor::isTypewriter() const
@@ -15,6 +15,13 @@ bool Editor::isTypewriter() const
 void Editor::setIsTypewriter(bool isTypewriter)
 {
 	m_isTypewriter = isTypewriter;
+
+	if (isTypewriter) {
+		m_previousCos = centerOnScroll();
+		setCenterOnScroll(true);
+	}
+	else
+		setCenterOnScroll(m_previousCos);
 
 	typewriter();
 }

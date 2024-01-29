@@ -16,7 +16,7 @@ namespace Layout
 		inline bool isWidget(QObject* object) { return toWidget(object); }
 		inline bool isSublayout(QObject* object) { return toSublayout(object); }
 
-		inline void setProperties(QLayout* layout, QMargins margins)
+		inline void setProperties(QLayout* layout, const QMargins& margins)
 		{
 			layout->setContentsMargins(margins);
 			layout->setSpacing(0);
@@ -41,7 +41,7 @@ namespace Layout
 		Vertical
 	};
 
-	inline QBoxLayout* box(Box type, QWidget* parent = nullptr, QObjectList objects = {}, QMargins margins = QMargins())
+	inline QBoxLayout* box(Box type, QWidget* parent = nullptr, QObjectList objects = {}, const QMargins& margins = QMargins())
 	{
 		QBoxLayout* layout = nullptr;
 		(type == Layout::Box::Horizontal)
@@ -57,12 +57,12 @@ namespace Layout
 		return layout;
 	}
 
-	inline QBoxLayout* box(Box type, QObjectList objects = {}, QMargins margins = QMargins())
+	inline QBoxLayout* box(Box type, QObjectList objects = {}, const QMargins& margins = QMargins())
 	{
 		return box(type, nullptr, objects, margins);
 	}
 
-	inline QBoxLayout* box(Box type, QWidget* parent = nullptr, QWidgetList widgets = {}, QMargins margins = QMargins())
+	inline QBoxLayout* box(Box type, QWidget* parent = nullptr, QWidgetList widgets = {}, const QMargins& margins = QMargins())
 	{
 		QObjectList objects;
 
@@ -72,7 +72,7 @@ namespace Layout
 		return box(type, parent, objects, margins);
 	}
 
-	inline QBoxLayout* box(Box type, QWidgetList widgets = {}, QMargins margins = QMargins())
+	inline QBoxLayout* box(Box type, QWidgetList widgets = {}, const QMargins& margins = QMargins())
 	{
 		return box(type, nullptr, widgets, margins);
 	}

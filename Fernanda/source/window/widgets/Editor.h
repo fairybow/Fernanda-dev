@@ -16,7 +16,7 @@ public:
 
 private:
 	bool m_isTypewriter = false;
+	bool m_previousCos = centerOnScroll();
 
-private slots:
 	void typewriter();
 };

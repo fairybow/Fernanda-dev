@@ -44,13 +44,13 @@
 		static std::vector<std::string> strings() \
 		{ \
 			static std::vector<std::string> strings; \
-			static auto whitespace = " \t\r\n"; \
 			\
 			if (strings.empty()) { \
 				std::string string = #__VA_ARGS__; \
 				auto length = string.length(); \
 				std::stringstream stream(string); \
 				std::string item; \
+				auto whitespace = " \t\r\n"; \
 				\
 				while (std::getline(stream, item, ',')) { \
 					auto start = item.find_first_not_of(whitespace); \

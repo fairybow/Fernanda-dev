@@ -12,6 +12,7 @@
 #include <QGroupBox>
 #include <QList>
 #include <QMap>
+#include <QMargins>
 #include <QObject>
 #include <QString>
 #include <QVariant>
@@ -63,13 +64,13 @@ private:
 	void saveSettings(const QString& prefix, QStringList keys);
 	QString iniName(QString text);
 	void setupDialog(QDialog* dialog);
-	QGroupBox* fontBox(QDialog* dialog);
-	QGroupBox* defaultProjectPathBox(QDialog* dialog);
-	QGroupBox* editorBox(QDialog* dialog);
-	QGroupBox* meterBox(QDialog* dialog);
+	QGroupBox* newGroupBox(QDialog* dialog, QLayout* layout, const QMargins& margins, int spacing);
+	QGroupBox* newDataBox(QDialog* dialog, const QMargins& margins, int spacing);
+	QGroupBox* newEditorBox(QDialog* dialog, const QMargins& margins, int spacing);
+	QGroupBox* newFontBox(QDialog* dialog, const QMargins& margins, int spacing);
+	QGroupBox* newMeterBox(QDialog* dialog, const QMargins& margins, int spacing);
 	QCheckBox* newCheckBox(const QString& prefix, const QString& key, QWidget* parent);
 	void moveXYIfTaken(Window* window);
-
 	void syncUp(const QString& prefix, const QString& key);
 	void applyAll(Window* window);
 	QVariant variantAt(const QString& prefix, const QString& key);

@@ -318,108 +318,119 @@ QString WindowSettings::iniName(QString text)
 
 void WindowSettings::setupDialog(QDialog* dialog)
 {
-	// Set uniform sizing for all of these QGroupBoxes
-
 	auto grid = new QGridLayout(dialog);
-	auto space = 5;
-	//grid->setContentsMargins(space, space, space, space);
-	//grid->setSpacing(space);
 
 	dialog->setLayout(grid);
 	dialog->setFixedSize(800, 500);
 
-	grid->addWidget(fontBox(dialog));
-	grid->addWidget(defaultProjectPathBox(dialog));
-	grid->addWidget(editorBox(dialog));
-	grid->addWidget(meterBox(dialog));
+	auto margins = QMargins(5, 5, 5, 5);
+	auto spacing = 5;
 
-	grid->setContentsMargins(space, space, space, space);
-	grid->setSpacing(space);
+	grid->addWidget(newDataBox(dialog, margins, spacing));
+	grid->addWidget(newEditorBox(dialog, margins, spacing));
+	grid->addWidget(newMeterBox(dialog, margins, spacing));
+
+	grid->setContentsMargins(margins);
+	grid->setSpacing(spacing);
 
 	connect(m_dialog, &QDialog::finished, this, &WindowSettings::onDialogFinished);
 
 	// v--- Filler
 
-	for (auto i = 0; i < 2; ++i) {
+	/*for (auto i = 0; i < 2; ++i) {
 		auto group_box = new QGroupBox(dialog);
 		auto combo_box = new QComboBox(group_box);
 		group_box->setTitle(QString("Group Box %1").arg(i + 1));
 		Layout::box(Layout::Box::Horizontal, group_box, QWidgetList{ combo_box });
 		grid->addWidget(group_box);
-	}
+	}*/
 }
 
-QGroupBox* WindowSettings::fontBox(QDialog* dialog)
+QGroupBox* WindowSettings::newGroupBox(QDialog* dialog, QLayout* layout, const QMargins& margins, int spacing)
 {
 	auto box = new QGroupBox(dialog);
-	box->setTitle(EDITOR_FONT);
 
-	auto initial_font = valueAt<QFont>(EDITOR, EDITOR_FONT);
-	auto font_selector = new FontSelector(box, initial_font);
+	box->setContentsMargins(margins);
+	layout->setContentsMargins(margins);
+	layout->setSpacing(spacing);
 
-	Layout::box(Layout::Box::Horizontal, box, QWidgetList{ font_selector }); // Overload to take 1 widget/object
-
-	connect(font_selector, &FontSelector::currentFontChanged, this, [&](const QFont& font) {
-		activeApply<QFont>(EDITOR, EDITOR_FONT, font);
-		});
+	box->setLayout(layout);
 
 	return box;
 }
 
-QGroupBox* WindowSettings::defaultProjectPathBox(QDialog* dialog)
+QGroupBox* WindowSettings::newDataBox(QDialog* dialog, const QMargins& margins, int spacing)
 {
-	auto box = new QGroupBox(dialog);
-	box->setTitle(DATA_PROJECTS);
-
 	auto initial_dir = valueAt<Path>(DATA, DATA_PROJECTS);
 	auto dir_selector = new DirectorySelector(dialog, initial_dir);
-
-	auto layout = Layout::box(Layout::Box::Horizontal, box, QWidgetList{ dir_selector });
-	//layout->setContentsMargins(5, 5, 5, 5);
 
 	connect(dir_selector, &DirectorySelector::selected, this, [&](const Path& directory) {
 		activeApply<Path>(DATA, DATA_PROJECTS, directory);
 		});
 
+	auto layout = Layout::box(Layout::Box::Horizontal, QWidgetList{ dir_selector });
+
+	auto box = newGroupBox(dialog, layout, margins, spacing);
+	box->setTitle(DATA_PROJECTS);
+
 	return box;
 }
 
-QGroupBox* WindowSettings::editorBox(QDialog* dialog)
+QGroupBox* WindowSettings::newEditorBox(QDialog* dialog, const QMargins& margins, int spacing)
 {
-	auto box = new QGroupBox(dialog);
-	box->setTitle(EDITOR);
-
 	QWidgetList check_boxes = {
-		newCheckBox(EDITOR, EDITOR_TYPEWRITER, box)
+		newCheckBox(EDITOR, EDITOR_TYPEWRITER, dialog)
 	};
 
-	//auto space = 5;
-	//box->setContentsMargins(space, space, space, space);
-	auto layout = Layout::box(Layout::Box::Horizontal, box, check_boxes);
-	//layout->setContentsMargins(space, space, space, space);
+	auto bottom_layout = Layout::box(Layout::Box::Horizontal, check_boxes);
+
+	QObjectList objects = {
+		newFontBox(dialog, margins, spacing),
+		bottom_layout
+	};
+
+	auto layout = Layout::box(Layout::Box::Vertical, objects);
+
+	auto box = newGroupBox(dialog, layout, margins, spacing);
+	box->setTitle(EDITOR);
 
 	return box;
 }
 
-QGroupBox* WindowSettings::meterBox(QDialog* dialog)
+QGroupBox* WindowSettings::newFontBox(QDialog* dialog, const QMargins& margins, int spacing)
 {
-	auto box = new QGroupBox(dialog);
-	box->setTitle(METER);
+	auto initial_font = valueAt<QFont>(EDITOR, EDITOR_FONT);
+	auto font_selector = new FontSelector(dialog, initial_font);
 
+	connect(font_selector, &FontSelector::currentFontChanged, this, [&](const QFont& font) {
+		activeApply<QFont>(EDITOR, EDITOR_FONT, font);
+		});
+
+	auto layout = Layout::box(Layout::Box::Horizontal, QWidgetList{ font_selector });
+	// ^ Overload to take 1 widget/object
+
+	auto box = newGroupBox(dialog, layout, margins, spacing);
+	box->setTitle(EDITOR_FONT);
+
+	return box;
+}
+
+QGroupBox* WindowSettings::newMeterBox(QDialog* dialog, const QMargins& margins, int spacing)
+{
 	// Toggle/untoggle all button.
 
 	QWidgetList check_boxes = {
-		newCheckBox(METER, METER_LINE_POS, box),
-		newCheckBox(METER, METER_COL_POS, box),
-		newCheckBox(METER, METER_LINES, box),
-		newCheckBox(METER, METER_WORDS, box),
-		newCheckBox(METER, METER_CHARS, box)
+		newCheckBox(METER, METER_LINE_POS, dialog),
+		newCheckBox(METER, METER_COL_POS, dialog),
+		newCheckBox(METER, METER_LINES, dialog),
+		newCheckBox(METER, METER_WORDS, dialog),
+		newCheckBox(METER, METER_CHARS, dialog)
 	};
 
-	//auto space = 5;
-	//box->setContentsMargins(space, space, space, space);
-	auto layout = Layout::box(Layout::Box::Horizontal, box, check_boxes);
-	//layout->setContentsMargins(space, space, space, space);
+	auto layout = Layout::box(Layout::Box::Horizontal, check_boxes);
+
+	auto box = newGroupBox(dialog, layout, margins, spacing);
+	box->setTitle(EDITOR_FONT);
 
 	return box;
 }
