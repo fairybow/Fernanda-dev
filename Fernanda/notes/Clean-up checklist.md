@@ -15,6 +15,7 @@
 - Use `Q_OBJECT` for, obviously, signals/slots, but also if you want: a function like `QWidget::parent()`, where the `parent` is a custom subclass, to output the subclass's name (instead of the inherited class's name) in console; or to allow subclasses to be found by `QObject::findChildren`.
 - Lambdas with no parameters, omit `()`.
 - Slots that don't use the arg (lambda and otherwise) should still name the type, i.e. `onSignalReceived(bool)`.
+- Maybe: Use the `static` version of `QObject::connect` when none of the parameters have to do with the current class?
 - Order of access specifiers:
 	- `public`
 	- `public slots`

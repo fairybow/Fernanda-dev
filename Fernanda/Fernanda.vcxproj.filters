@@ -96,6 +96,9 @@
     <ClCompile Include="source\window\WindowSettings.cpp">
       <Filter>Source\Window</Filter>
     </ClCompile>
+    <ClCompile Include="source\window\widgets\Indicator.cpp">
+      <Filter>Source\Window\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="source\common\IniWriter.hpp">
@@ -145,6 +148,9 @@
     </QtMoc>
     <QtMoc Include="source\window\settings-widgets\DirectorySelector.hpp">
       <Filter>Source\Window\Settings Widgets</Filter>
+    </QtMoc>
+    <QtMoc Include="source\window\widgets\Indicator.h">
+      <Filter>Source\Window\Widgets</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

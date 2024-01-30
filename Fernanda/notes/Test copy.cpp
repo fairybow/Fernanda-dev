@@ -47,6 +47,24 @@ connect(m_windowMenu, &WindowMenu::newWindowRequested, this, [&] {
 
 // Window
 
+auto button1 = new UiButton("1", this);
+auto button2 = new UiButton("2", this);
+auto button3 = new UiButton("3", this);
+
+connect(button1, &UiButton::pressed, this, [&] {
+	m_indicator->green();
+	});
+connect(button2, &UiButton::pressed, this, [&] {
+	m_indicator->pastel();
+	});
+connect(button3, &UiButton::pressed, this, [&] {
+	m_indicator->red();
+	});
+
+status_bar->addPermanentWidget(button1);
+status_bar->addPermanentWidget(button2);
+status_bar->addPermanentWidget(button3);
+
 // Testing
 QTimer::singleShot(0, [=]() {
 

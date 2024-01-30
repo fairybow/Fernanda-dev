@@ -3,6 +3,7 @@
 #include "../common/Path.hpp"
 #include "../objects/Document.h" // Removed from structure (above)--so maybe a sign we should do without it
 #include "widgets/Editor.h"
+#include "widgets/Indicator.h"
 #include "widgets/Meter.h"
 #include "widgets/page-area/PageArea.h"
 #include "widgets/TreeView.h"
@@ -58,11 +59,13 @@ private:
 	};
 
 	QSplitter* m_splitter = new QSplitter(this);
+	Indicator* m_indicator = new Indicator(this);
 	mutable PageArea* m_currentPageArea = nullptr;
 	Meter* m_meter = new Meter;
 	QList<Editor*> m_editors;
 	QFont m_editorsFont = QFont();
 	bool m_editorsIsTypewriter = false;
+	bool m_editorsCos = false;
 	QDockWidget* m_dockWidget = new QDockWidget;
 	TreeView* m_treeView = new TreeView;
 	UiButton* m_treeViewToggle = new UiButton(UiButton::Ui::MenuOpen, this);

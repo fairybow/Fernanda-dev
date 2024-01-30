@@ -40,6 +40,7 @@
     <ClCompile Include="source\objects\Document.cpp" />
     <ClCompile Include="source\window\settings-widgets\FontSelector.cpp" />
     <ClCompile Include="source\window\widgets\Editor.cpp" />
+    <ClCompile Include="source\window\widgets\Indicator.cpp" />
     <ClCompile Include="source\window\widgets\Meter.cpp" />
     <ClCompile Include="source\window\widgets\page-area\PageArea.cpp" />
     <ClCompile Include="source\window\widgets\page-area\TabBar.cpp" />
@@ -58,6 +59,7 @@
     <ClInclude Include="source\common\StringTools.hpp" />
     <ClInclude Include="source\common\Path.hpp" />
     <ClInclude Include="source\common\UiButton.hpp" />
+    <QtMoc Include="source\window\widgets\Indicator.h" />
     <QtMoc Include="source\window\settings-widgets\DirectorySelector.hpp" />
     <QtMoc Include="source\window\WindowSettings.h" />
     <QtMoc Include="source\window\settings-widgets\FontSelector.h" />

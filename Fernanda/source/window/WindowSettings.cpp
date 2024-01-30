@@ -15,6 +15,7 @@ constexpr char DATA[] = "Data";
 constexpr char DATA_PROJECTS[] = "Projects path";
 
 constexpr char EDITOR[] = "Editor";
+constexpr char EDITOR_CENTER_ON_SCROLL[] = "Center on scroll";
 constexpr char EDITOR_FONT[] = "Font";
 //constexpr char EDITOR_TAB_STOP[] = "Tab stop distance (px)";
 constexpr char EDITOR_TYPEWRITER[] = "Typewriter";
@@ -100,6 +101,8 @@ bool WindowSettings::eventFilter(QObject* watched, QEvent* event)
 	}
 
 	return false;
+
+	//return QObject::eventFilter(watched, event); // Necessary?
 }
 
 void WindowSettings::loadAll()
@@ -145,6 +148,21 @@ void WindowSettings::loadEditorSettings()
 {
 	m_iniWriter->begin(EDITOR);
 	QMap<QString, Setting> editor_settings;
+
+	EDITOR_CENTER_ON_SCROLL;
+
+	editor_settings[EDITOR_CENTER_ON_SCROLL] = {
+		m_iniWriter->load(iniName(EDITOR_CENTER_ON_SCROLL), false),
+
+		[setting = &editor_settings[EDITOR_CENTER_ON_SCROLL]](Window* window) {
+			auto cos = setting->value<bool>();
+
+			window->m_editorsCos = cos;
+
+			for (auto& editor : window->editors())
+				editor->setCenterOnScroll(cos);
+		}
+	};
 
 	auto default_font = QFont(EDITOR_FONT_DEFAULT, EDITOR_FONTSIZE_DEFAULT);
 
@@ -283,7 +301,7 @@ void WindowSettings::loadWindowSettings()
 void WindowSettings::saveAll()
 {
 	saveSettings(DATA, { DATA_PROJECTS });
-	saveSettings(EDITOR, { EDITOR_FONT, EDITOR_TYPEWRITER });
+	saveSettings(EDITOR, { EDITOR_CENTER_ON_SCROLL, EDITOR_FONT, EDITOR_TYPEWRITER });
 	saveSettings(METER, { METER_LINE_POS, METER_COL_POS, METER_LINES, METER_WORDS, METER_CHARS });
 	saveSettings(WINDOW, { WINDOW_DOCK_POS, WINDOW_DOCK_VIS, WINDOW_GEOMETRY });
 }
@@ -319,8 +337,8 @@ QString WindowSettings::iniName(QString text)
 void WindowSettings::setupDialog(QDialog* dialog)
 {
 	auto grid = new QGridLayout(dialog);
-
 	dialog->setLayout(grid);
+
 	dialog->setFixedSize(800, 500);
 
 	auto margins = QMargins(5, 5, 5, 5);
@@ -379,6 +397,7 @@ QGroupBox* WindowSettings::newDataBox(QDialog* dialog, const QMargins& margins, 
 QGroupBox* WindowSettings::newEditorBox(QDialog* dialog, const QMargins& margins, int spacing)
 {
 	QWidgetList check_boxes = {
+		newCheckBox(EDITOR, EDITOR_CENTER_ON_SCROLL, dialog),
 		newCheckBox(EDITOR, EDITOR_TYPEWRITER, dialog)
 	};
 

@@ -190,6 +190,7 @@ Editor* Window::newEditor(Document* document)
 	editor->setDocument(document);
 	editor->setFont(m_editorsFont);
 	editor->setIsTypewriter(m_editorsIsTypewriter);
+	editor->setCenterOnScroll(m_editorsCos);
 
 	connect(editor, &Editor::textChanged, this, &Window::onEditorTextChanged);
 	connect(editor, &Editor::modificationChanged, this, &Window::onEditorModificationChanged);
