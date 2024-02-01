@@ -10,14 +10,11 @@
 #include <QTextCursor>
 #include <QTextDocumentFragment>
 
-constexpr char LINE_POS_LABEL[] = "line ";
-constexpr char LINE_POS_LABEL_SHORT[] = "ln ";
-constexpr char COL_POS_LABEL[] = "column ";
-constexpr char COL_POS_LABEL_SHORT[] = "col ";
-constexpr char LINES_LABEL[] = " lines";
-constexpr char WORDS_LABEL[] = " words";
-constexpr char CHARS_LABEL[] = " characters";
-constexpr char CHARS_LABEL_SHORT[] = " chars";
+constexpr char LINE_POS_LABEL[] = "line";
+constexpr char COL_POS_LABEL[] = "column";
+constexpr char LINES_LABEL[] = "lines";
+constexpr char WORDS_LABEL[] = "words";
+constexpr char CHARS_LABEL[] = "characters";
 constexpr char SEPARATOR[] = " / ";
 constexpr char JOINER[] = ", ";
 
@@ -51,9 +48,7 @@ int Meter::autoCountCharLimit() const
 
 void Meter::setAutoCountCharLimit(int limit)
 {
-	m_autoCountCharLimit = limit;
-
-	run();
+	setMember(m_autoCountCharLimit, limit, Run::Yes);
 }
 
 bool Meter::hasPositionLabels() const
@@ -63,9 +58,7 @@ bool Meter::hasPositionLabels() const
 
 void Meter::setHasPositionLabels(bool has)
 {
-	m_hasPositionLabels = has;
-
-	run();
+	setMember(m_hasPositionLabels, has);
 }
 
 bool Meter::hasCountLabels() const
@@ -75,21 +68,7 @@ bool Meter::hasCountLabels() const
 
 void Meter::setHasCountLabels(bool has)
 {
-	m_hasCountLabels = has;
-
-	run();
-}
-
-bool Meter::useShortLabels() const
-{
-	return m_useShortLabels;
-}
-
-void Meter::setUseShortLabels(bool use)
-{
-	m_useShortLabels = use;
-
-	run();
+	setMember(m_hasCountLabels, has);
 }
 
 bool Meter::hasLinePosition() const
@@ -99,9 +78,7 @@ bool Meter::hasLinePosition() const
 
 void Meter::setHasLinePosition(bool has)
 {
-	m_hasLinePosition = has;
-
-	run();
+	setMember(m_hasLinePosition, has, Run::Yes);
 }
 
 bool Meter::hasColumnPosition() const
@@ -111,9 +88,7 @@ bool Meter::hasColumnPosition() const
 
 void Meter::setHasColumnPosition(bool has)
 {
-	m_hasColumnPosition = has;
-
-	run();
+	setMember(m_hasColumnPosition, has, Run::Yes);
 }
 
 bool Meter::hasLineCount() const
@@ -123,9 +98,7 @@ bool Meter::hasLineCount() const
 
 void Meter::setHasLineCount(bool has)
 {
-	m_hasLineCount = has;
-
-	run();
+	setMember(m_hasLineCount, has, Run::Yes);
 }
 
 bool Meter::hasWordCount() const
@@ -135,9 +108,7 @@ bool Meter::hasWordCount() const
 
 void Meter::setHasWordCount(bool has)
 {
-	m_hasWordCount = has;
-
-	run();
+	setMember(m_hasWordCount, has, Run::Yes);
 }
 
 bool Meter::hasCharCount() const
@@ -147,9 +118,57 @@ bool Meter::hasCharCount() const
 
 void Meter::setHasCharCount(bool has)
 {
-	m_hasCharCount = has;
+	setMember(m_hasCharCount, has, Run::Yes);
+}
 
-	run();
+QString Meter::linePositionLabel() const
+{
+	return m_linePositionLabel;
+}
+
+void Meter::setLinePositionLabel(const QString& text)
+{
+	setMember(m_linePositionLabel, text);
+}
+
+QString Meter::columnPositionLabel() const
+{
+	return m_columnPositionLabel;
+}
+
+void Meter::setColumnPositionLabel(const QString& text)
+{
+	setMember(m_columnPositionLabel, text);
+}
+
+QString Meter::lineCountLabel() const
+{
+	return m_lineCountLabel;
+}
+
+void Meter::setLineCountLabel(const QString& text)
+{
+	setMember(m_lineCountLabel, text);
+}
+
+QString Meter::wordCountLabel() const
+{
+	return m_wordCountLabel;
+}
+
+void Meter::setWordCountLabel(const QString& text)
+{
+	setMember(m_wordCountLabel, text);
+}
+
+QString Meter::charCountLabel() const
+{
+	return m_charCountLabel;
+}
+
+void Meter::setCharCountLabel(const QString& text)
+{
+	setMember(m_charCountLabel, text);
 }
 
 void Meter::run()
@@ -277,27 +296,41 @@ QString Meter::counts()
 QString Meter::label(Label type) const
 {
 	QString text;
-	auto blank = "";
 
 	switch (type) {
 	case Label::CharCount:
-		text = m_hasCountLabels ? m_useShortLabels ? CHARS_LABEL_SHORT : CHARS_LABEL : blank;
+		text = labelText(m_hasCountLabels, m_charCountLabel, CHARS_LABEL);
 		break;
 	case Label::ColPos:
-		text = m_hasPositionLabels ? m_useShortLabels ? COL_POS_LABEL_SHORT : COL_POS_LABEL : blank;
+		text = labelText(m_hasPositionLabels, m_columnPositionLabel, COL_POS_LABEL);
 		break;
 	case Label::LineCount:
-		text = m_hasCountLabels ? LINES_LABEL : blank;
+		text = labelText(m_hasCountLabels, m_lineCountLabel, LINES_LABEL);
 		break;
 	case Label::LinePos:
-		text = m_hasPositionLabels ? m_useShortLabels ? LINE_POS_LABEL_SHORT : LINE_POS_LABEL : blank;
+		text = labelText(m_hasPositionLabels, m_linePositionLabel, LINE_POS_LABEL);
 		break;
 	case Label::WordCount:
-		text = m_hasCountLabels ? WORDS_LABEL : blank;
+		text = labelText(m_hasCountLabels, m_wordCountLabel, WORDS_LABEL);
 		break;
 	}
 
+	if (!text.isEmpty()) {
+		(type == Label::ColPos || type == Label::LinePos)
+			? text += " "
+			: text = " " + text;
+	}
+
 	return text;
+}
+
+QString Meter::labelText(bool has, const QString& customLabel, const QString& defaultLabel) const
+{
+	return has
+		? (customLabel.isEmpty()
+			? defaultLabel
+			: customLabel)
+		: QString();
 }
 
 void Meter::maybeShowSubWidget(QLabel* label, bool show)

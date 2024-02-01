@@ -29,7 +29,12 @@ constexpr char METER_WORDS[] = "Word count";
 constexpr char METER_CHARS[] = "Character count";
 constexpr char METER_POS_LABELS[] = "Position labels";
 constexpr char METER_COUNT_LABELS[] = "Count labels";
-constexpr char METER_SHORT_LABELS[] = "Use short labels";
+constexpr char METER_SHORT[] = "Use short labels";
+constexpr char METER_LINE_POS_SHORT[] = "ln";
+constexpr char METER_COL_POS_SHORT[] = "col";
+constexpr char METER_LINES_SHORT[] = "lines";
+constexpr char METER_WORDS_SHORT[] = "words";
+constexpr char METER_CHARS_SHORT[] = "chars";
 
 constexpr char WINDOW[] = "Window";
 constexpr char WINDOW_DOCK_POS[] = "Dock position";
@@ -253,6 +258,8 @@ void WindowSettings::loadMeterSettings()
 
 		[setting = &meter_settings[METER_POS_LABELS]](Window* window) {
 			window->m_meter->setHasPositionLabels(setting->value<bool>());
+
+			window->m_meter->run();
 		}
 	};
 
@@ -261,14 +268,28 @@ void WindowSettings::loadMeterSettings()
 
 		[setting = &meter_settings[METER_COUNT_LABELS]](Window* window) {
 			window->m_meter->setHasCountLabels(setting->value<bool>());
+
+			window->m_meter->run();
 		}
 	};
 
-	meter_settings[METER_SHORT_LABELS] = {
-		m_iniWriter->load(iniName(METER_SHORT_LABELS), true),
+	meter_settings[METER_SHORT] = {
+		m_iniWriter->load(iniName(METER_SHORT), false),
 
-		[setting = &meter_settings[METER_SHORT_LABELS]](Window* window) {
-			window->m_meter->setUseShortLabels(setting->value<bool>());
+		[setting = &meter_settings[METER_SHORT]](Window* window) {
+			auto value = setting->value<bool>();
+
+			auto text = [&](const QString& shortLabel) {
+				return value ? shortLabel : QString();
+				};
+
+			window->m_meter->setLinePositionLabel(text(METER_LINE_POS_SHORT));
+			window->m_meter->setColumnPositionLabel(text(METER_COL_POS_SHORT));
+			window->m_meter->setLineCountLabel(text(METER_LINES_SHORT));
+			window->m_meter->setWordCountLabel(text(METER_WORDS_SHORT));
+			window->m_meter->setCharCountLabel(text(METER_CHARS_SHORT));
+
+			window->m_meter->run();
 		}
 	};
 
@@ -325,10 +346,32 @@ void WindowSettings::loadWindowSettings()
 
 void WindowSettings::saveAll()
 {
-	saveSettings(DATA, { DATA_PROJECTS });
-	saveSettings(EDITOR, { EDITOR_CENTER_ON_SCROLL, EDITOR_FONT, EDITOR_TYPEWRITER });
-	saveSettings(METER, { METER_LINE_POS, METER_COL_POS, METER_LINES, METER_WORDS, METER_CHARS, METER_POS_LABELS, METER_COUNT_LABELS, METER_SHORT_LABELS });
-	saveSettings(WINDOW, { WINDOW_DOCK_POS, WINDOW_DOCK_VIS, WINDOW_GEOMETRY });
+	saveSettings(DATA, {
+		DATA_PROJECTS
+		});
+
+	saveSettings(EDITOR, {
+		EDITOR_CENTER_ON_SCROLL,
+		EDITOR_FONT,
+		EDITOR_TYPEWRITER
+		});
+
+	saveSettings(METER, {
+		METER_LINE_POS,
+		METER_COL_POS,
+		METER_LINES,
+		METER_WORDS,
+		METER_CHARS,
+		METER_POS_LABELS,
+		METER_COUNT_LABELS,
+		METER_SHORT
+		});
+
+	saveSettings(WINDOW, {
+		WINDOW_DOCK_POS,
+		WINDOW_DOCK_VIS,
+		WINDOW_GEOMETRY
+		});
 }
 
 void WindowSettings::saveSetting(const QString& prefix, const QString& key, AppendPrefix usePrefix)
@@ -471,7 +514,7 @@ QGroupBox* WindowSettings::newMeterBox(QDialog* dialog, const QMargins& margins,
 		newCheckBox(METER, METER_CHARS, dialog),
 		newCheckBox(METER, METER_POS_LABELS, dialog),
 		newCheckBox(METER, METER_COUNT_LABELS, dialog),
-		newCheckBox(METER, METER_SHORT_LABELS, dialog)
+		newCheckBox(METER, METER_SHORT, dialog)
 	};
 	
 	auto grid = new QGridLayout;

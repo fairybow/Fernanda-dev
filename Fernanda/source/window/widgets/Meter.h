@@ -23,8 +23,6 @@ public:
 	void setHasPositionLabels(bool has);
 	bool hasCountLabels() const;
 	void setHasCountLabels(bool has);
-	bool useShortLabels() const;
-	void setUseShortLabels(bool use);
 	bool hasLinePosition() const;
 	void setHasLinePosition(bool has);
 	bool hasColumnPosition() const;
@@ -35,6 +33,16 @@ public:
 	void setHasWordCount(bool has);
 	bool hasCharCount() const;
 	void setHasCharCount(bool has);
+	QString linePositionLabel() const;
+	void setLinePositionLabel(const QString& text);
+	QString columnPositionLabel() const;
+	void setColumnPositionLabel(const QString& text);
+	QString lineCountLabel() const;
+	void setLineCountLabel(const QString& text);
+	QString wordCountLabel() const;
+	void setWordCountLabel(const QString& text);
+	QString charCountLabel() const;
+	void setCharCountLabel(const QString& text);
 
 	void run();
 	void reset();
@@ -53,16 +61,24 @@ private:
 		WordCount
 	};
 
+	enum class Run {
+		No,
+		Yes
+	};
+
 	QPlainTextEdit* m_currentEditor = nullptr;
 	QLabel* m_positions = new QLabel(this);
 	QLabel* m_counts = new QLabel(this);
 	QLabel* m_separator = new QLabel(this);
 	UiButton* m_refreshCounts = new UiButton(UiButton::Ui::Refresh, this);
-
+	QString m_linePositionLabel;
+	QString m_columnPositionLabel;
+	QString m_lineCountLabel;
+	QString m_wordCountLabel;
+	QString m_charCountLabel;
 	int m_autoCountCharLimit;
 	bool m_hasPositionLabels = true;
 	bool m_hasCountLabels = true;
-	bool m_useShortLabels = true;
 	bool m_hasLinePosition = true;
 	bool m_hasColumnPosition = true;
 	bool m_hasLineCount = true;
@@ -82,11 +98,23 @@ private:
 	QString positions();
 	QString counts();
 	QString label(Label type) const;
+	QString labelText(bool has, const QString& customLabel, const QString& defaultLabel) const;
 	void maybeShowSubWidget(QLabel* label, bool show);
 	void maybeToggleAutoCount(int characters);
 	void maybeToggleRefreshCounts();
 	int selectedLineCount() const;
 	void hideAll();
+
+	template <typename T>
+	void setMember(T& memberValue, const T& newValue, Run runAfterward = Run::No)
+	{
+		if (memberValue == newValue) return;
+
+		memberValue = newValue;
+
+		if (runAfterward == Run::Yes)
+			run();
+	}
 
 private slots:
 	void onRefreshCountsClicked();
