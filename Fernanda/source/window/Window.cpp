@@ -48,9 +48,16 @@ void Window::open(const Path& path)
 
 void Window::closeEvent(QCloseEvent* event)
 {
-	emit closing();
+	emit closing(); // Needed?
 
 	QMainWindow::closeEvent(event);
+}
+
+void Window::showEvent(QShowEvent* event)
+{
+	QMainWindow::showEvent(event);
+
+	m_indicator->pastel(); // Temporary
 }
 
 QList<PageArea*> Window::pageAreas() const

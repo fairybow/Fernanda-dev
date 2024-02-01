@@ -114,18 +114,9 @@ void Indicator::start(int delay, Scheme colorScheme)
 
 void Indicator::setBarStyle(Scheme colorScheme)
 {
-	static auto initialized = false;
-	static Scheme last_scheme;
+	auto qss = styleSheet(colorScheme);
 
-	if (!initialized || last_scheme != colorScheme) {
-		last_scheme = colorScheme;
-
-		auto qss = styleSheet(colorScheme);
-		m_progressBar->setStyleSheet(qss);
-
-		if (!initialized)
-			initialized = true;
-	}
+	m_progressBar->setStyleSheet(qss);
 }
 
 QString Indicator::styleSheet(Scheme colorScheme) const

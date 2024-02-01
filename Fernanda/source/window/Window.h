@@ -14,6 +14,7 @@
 #include <QFont>
 #include <QList>
 #include <QMainWindow>
+#include <QShowEvent>
 #include <QSplitter>
 //
 #include "../common/UiButton.hpp"
@@ -42,6 +43,7 @@ public:
 
 protected:
 	void closeEvent(QCloseEvent* event) override;
+	void showEvent(QShowEvent* event) override;
 
 private:
 	struct PageIndex {

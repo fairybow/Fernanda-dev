@@ -19,6 +19,12 @@ public:
 	void setCurrentEditor(QPlainTextEdit* editor);
 	int autoCountCharLimit() const;
 	void setAutoCountCharLimit(int limit);
+	bool hasPositionLabels() const;
+	void setHasPositionLabels(bool has);
+	bool hasCountLabels() const;
+	void setHasCountLabels(bool has);
+	bool useShortLabels() const;
+	void setUseShortLabels(bool use);
 	bool hasLinePosition() const;
 	void setHasLinePosition(bool has);
 	bool hasColumnPosition() const;
@@ -39,6 +45,14 @@ private:
 		Yes
 	};
 
+	enum class Label {
+		CharCount,
+		ColPos,
+		LineCount,
+		LinePos,
+		WordCount
+	};
+
 	QPlainTextEdit* m_currentEditor = nullptr;
 	QLabel* m_positions = new QLabel(this);
 	QLabel* m_counts = new QLabel(this);
@@ -46,6 +60,9 @@ private:
 	UiButton* m_refreshCounts = new UiButton(UiButton::Ui::Refresh, this);
 
 	int m_autoCountCharLimit;
+	bool m_hasPositionLabels = true;
+	bool m_hasCountLabels = true;
+	bool m_useShortLabels = true;
 	bool m_hasLinePosition = true;
 	bool m_hasColumnPosition = true;
 	bool m_hasLineCount = true;
@@ -64,7 +81,8 @@ private:
 	void updateCounts(Force force = Force::No);
 	QString positions();
 	QString counts();
-	void maybeShowLabel(QLabel* label, bool show);
+	QString label(Label type) const;
+	void maybeShowSubWidget(QLabel* label, bool show);
 	void maybeToggleAutoCount(int characters);
 	void maybeToggleRefreshCounts();
 	int selectedLineCount() const;

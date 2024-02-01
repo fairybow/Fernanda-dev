@@ -10,11 +10,14 @@
 #include <QTextCursor>
 #include <QTextDocumentFragment>
 
-constexpr char LINE_POS_LABEL[] = "ln ";
-constexpr char COL_POS_LABEL[] = "col ";
+constexpr char LINE_POS_LABEL[] = "line ";
+constexpr char LINE_POS_LABEL_SHORT[] = "ln ";
+constexpr char COL_POS_LABEL[] = "column ";
+constexpr char COL_POS_LABEL_SHORT[] = "col ";
 constexpr char LINES_LABEL[] = " lines";
 constexpr char WORDS_LABEL[] = " words";
-constexpr char CHARS_LABEL[] = " chars";
+constexpr char CHARS_LABEL[] = " characters";
+constexpr char CHARS_LABEL_SHORT[] = " chars";
 constexpr char SEPARATOR[] = " / ";
 constexpr char JOINER[] = ", ";
 
@@ -49,6 +52,42 @@ int Meter::autoCountCharLimit() const
 void Meter::setAutoCountCharLimit(int limit)
 {
 	m_autoCountCharLimit = limit;
+
+	run();
+}
+
+bool Meter::hasPositionLabels() const
+{
+	return m_hasPositionLabels;
+}
+
+void Meter::setHasPositionLabels(bool has)
+{
+	m_hasPositionLabels = has;
+
+	run();
+}
+
+bool Meter::hasCountLabels() const
+{
+	return m_hasCountLabels;
+}
+
+void Meter::setHasCountLabels(bool has)
+{
+	m_hasCountLabels = has;
+
+	run();
+}
+
+bool Meter::useShortLabels() const
+{
+	return m_useShortLabels;
+}
+
+void Meter::setUseShortLabels(bool use)
+{
+	m_useShortLabels = use;
 
 	run();
 }
@@ -171,7 +210,7 @@ void Meter::updatePositions()
 	if (!m_currentEditor) return;
 
 	auto is_needed = hasAnyPosition();
-	maybeShowLabel(m_positions, is_needed);
+	maybeShowSubWidget(m_positions, is_needed);
 
 	if (is_needed)
 		m_positions->setText(positions());
@@ -182,7 +221,7 @@ void Meter::updateCounts(Force force)
 	if (!m_currentEditor || (!m_autoCount && force == Force::No)) return;
 
 	auto is_needed = hasAnyCount();
-	maybeShowLabel(m_counts, is_needed);
+	maybeShowSubWidget(m_counts, is_needed);
 
 	if (is_needed)
 		m_counts->setText(counts());
@@ -196,10 +235,10 @@ QString Meter::positions()
 	auto cursor = m_currentEditor->textCursor();
 
 	if (m_hasLinePosition)
-		elements << LINE_POS_LABEL + QString::number(cursor.blockNumber() + 1);
+		elements << label(Label::LinePos) + QString::number(cursor.blockNumber() + 1);
 
 	if (m_hasColumnPosition)
-		elements << COL_POS_LABEL + QString::number(cursor.positionInBlock() + 1);
+		elements << label(Label::ColPos) + QString::number(cursor.positionInBlock() + 1);
 
 	return elements.join(JOINER);
 }
@@ -219,23 +258,49 @@ QString Meter::counts()
 			? selectedLineCount()
 			: m_currentEditor->blockCount();
 
-		elements << QString::number(block_count) + LINES_LABEL;
+		elements << QString::number(block_count) + label(Label::LineCount);
 	}
 
 	if (m_hasWordCount)
-		elements << StringTools::wordCountString(text) + WORDS_LABEL;
+		elements << StringTools::wordCountString(text) + label(Label::WordCount);
 
 	auto char_count = text.count();
 
 	if (m_hasCharCount)
-		elements << QString::number(char_count) + CHARS_LABEL;
+		elements << QString::number(char_count) + label(Label::CharCount);
 
 	maybeToggleAutoCount(char_count);
 
 	return elements.join(JOINER);
 }
 
-void Meter::maybeShowLabel(QLabel* label, bool show)
+QString Meter::label(Label type) const
+{
+	QString text;
+	auto blank = "";
+
+	switch (type) {
+	case Label::CharCount:
+		text = m_hasCountLabels ? m_useShortLabels ? CHARS_LABEL_SHORT : CHARS_LABEL : blank;
+		break;
+	case Label::ColPos:
+		text = m_hasPositionLabels ? m_useShortLabels ? COL_POS_LABEL_SHORT : COL_POS_LABEL : blank;
+		break;
+	case Label::LineCount:
+		text = m_hasCountLabels ? LINES_LABEL : blank;
+		break;
+	case Label::LinePos:
+		text = m_hasPositionLabels ? m_useShortLabels ? LINE_POS_LABEL_SHORT : LINE_POS_LABEL : blank;
+		break;
+	case Label::WordCount:
+		text = m_hasCountLabels ? WORDS_LABEL : blank;
+		break;
+	}
+
+	return text;
+}
+
+void Meter::maybeShowSubWidget(QLabel* label, bool show)
 {
 	label->setVisible(show);
 

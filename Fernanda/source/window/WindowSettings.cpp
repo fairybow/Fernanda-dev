@@ -27,6 +27,9 @@ constexpr char METER_COL_POS[] = "Column position";
 constexpr char METER_LINES[] = "Line count";
 constexpr char METER_WORDS[] = "Word count";
 constexpr char METER_CHARS[] = "Character count";
+constexpr char METER_POS_LABELS[] = "Position labels";
+constexpr char METER_COUNT_LABELS[] = "Count labels";
+constexpr char METER_SHORT_LABELS[] = "Use short labels";
 
 constexpr char WINDOW[] = "Window";
 constexpr char WINDOW_DOCK_POS[] = "Dock position";
@@ -101,8 +104,6 @@ bool WindowSettings::eventFilter(QObject* watched, QEvent* event)
 	}
 
 	return false;
-
-	//return QObject::eventFilter(watched, event); // Necessary?
 }
 
 void WindowSettings::loadAll()
@@ -247,6 +248,30 @@ void WindowSettings::loadMeterSettings()
 		}
 	};
 
+	meter_settings[METER_POS_LABELS] = {
+		m_iniWriter->load(iniName(METER_POS_LABELS), true),
+
+		[setting = &meter_settings[METER_POS_LABELS]](Window* window) {
+			window->m_meter->setHasPositionLabels(setting->value<bool>());
+		}
+	};
+
+	meter_settings[METER_COUNT_LABELS] = {
+		m_iniWriter->load(iniName(METER_COUNT_LABELS), true),
+
+		[setting = &meter_settings[METER_COUNT_LABELS]](Window* window) {
+			window->m_meter->setHasCountLabels(setting->value<bool>());
+		}
+	};
+
+	meter_settings[METER_SHORT_LABELS] = {
+		m_iniWriter->load(iniName(METER_SHORT_LABELS), true),
+
+		[setting = &meter_settings[METER_SHORT_LABELS]](Window* window) {
+			window->m_meter->setUseShortLabels(setting->value<bool>());
+		}
+	};
+
 	m_settings[METER] = meter_settings;
 	m_iniWriter->end();
 }
@@ -302,7 +327,7 @@ void WindowSettings::saveAll()
 {
 	saveSettings(DATA, { DATA_PROJECTS });
 	saveSettings(EDITOR, { EDITOR_CENTER_ON_SCROLL, EDITOR_FONT, EDITOR_TYPEWRITER });
-	saveSettings(METER, { METER_LINE_POS, METER_COL_POS, METER_LINES, METER_WORDS, METER_CHARS });
+	saveSettings(METER, { METER_LINE_POS, METER_COL_POS, METER_LINES, METER_WORDS, METER_CHARS, METER_POS_LABELS, METER_COUNT_LABELS, METER_SHORT_LABELS });
 	saveSettings(WINDOW, { WINDOW_DOCK_POS, WINDOW_DOCK_VIS, WINDOW_GEOMETRY });
 }
 
@@ -438,18 +463,34 @@ QGroupBox* WindowSettings::newMeterBox(QDialog* dialog, const QMargins& margins,
 {
 	// Toggle/untoggle all button.
 
-	QWidgetList check_boxes = {
+	QList<QCheckBox*> check_boxes = {
 		newCheckBox(METER, METER_LINE_POS, dialog),
 		newCheckBox(METER, METER_COL_POS, dialog),
 		newCheckBox(METER, METER_LINES, dialog),
 		newCheckBox(METER, METER_WORDS, dialog),
-		newCheckBox(METER, METER_CHARS, dialog)
+		newCheckBox(METER, METER_CHARS, dialog),
+		newCheckBox(METER, METER_POS_LABELS, dialog),
+		newCheckBox(METER, METER_COUNT_LABELS, dialog),
+		newCheckBox(METER, METER_SHORT_LABELS, dialog)
 	};
+	
+	auto grid = new QGridLayout;
 
-	auto layout = Layout::box(Layout::Box::Horizontal, check_boxes);
+	auto row = 0;
+	auto column = 0;
+	auto total_columns = 3;
 
-	auto box = newGroupBox(dialog, layout, margins, spacing);
-	box->setTitle(EDITOR_FONT);
+	for (auto& check_box : check_boxes) {
+		grid->addWidget(check_box, row, column++);
+
+		if (column == total_columns) {
+			column = 0;
+			row++;
+		}
+	}
+
+	auto box = newGroupBox(dialog, grid, margins, spacing);
+	box->setTitle(METER);
 
 	return box;
 }

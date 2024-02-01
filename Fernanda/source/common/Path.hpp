@@ -279,19 +279,19 @@ private:
 	}
 };
 
-template<>
+template <>
 static inline QVariant QVariant::fromValue<Path>(const Path& value)
 {
 	return QVariant::fromValue(value.toQString());
 }
 
-template<>
+template <>
 static inline QVariant QVariant::fromValue<Path>(Path&& value)
 {
 	return QVariant::fromValue(value.toQString());
 }
 
-template<>
+template <>
 inline Path QVariant::value<Path>() const
 {
 	if (canConvert<QString>())
