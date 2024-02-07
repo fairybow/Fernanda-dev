@@ -16,8 +16,8 @@ public:
 	{}
 
 	template <typename T, typename TClass>
-	Setting(const T& value, TClass* context, void (TClass::* setAction)(TSubject))
-		: m_variant(QVariant::fromValue<T>(value)), m_setAction(lambdaWrap<TClass>(context, setAction))
+	Setting(const T& value, TClass* context, void (TClass::* memberFuncPtr)(TSubject))
+		: Setting(value, lambdaWrap<TClass>(context, memberFuncPtr))
 	{}
 
 	QVariant variant() const
@@ -53,8 +53,8 @@ private:
 	//QList<QVariant> m_pool;
 
 	template <typename TClass>
-	auto lambdaWrap(TClass* context, void (TClass::* setAction)(TSubject))
+	auto lambdaWrap(TClass* context, void (TClass::* memberFuncPtr)(TSubject))
 	{
-		return [=](TSubject subject) { std::invoke(setAction, context, subject); };
+		return [=](TSubject subject) { (context->*memberFuncPtr)(subject); };
 	}
 };

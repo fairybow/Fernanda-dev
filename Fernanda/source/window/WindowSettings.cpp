@@ -135,119 +135,98 @@ void WindowSettings::loadAllIniValues()
 void WindowSettings::loadDataIniValues()
 {
 	m_iniWriter->begin(DATA);
-	QMap<QString, Setting<Window*>> data_settings;
+	QMap<QString, Setting<Window*>> map;
 	
-	data_settings[PROJECTS] = { loadIniValue(PROJECTS, PROJECTS_FALLBACK), this, &WindowSettings::setDataProjectsPath };
+	addSetting(map, PROJECTS, PROJECTS_FALLBACK, &WindowSettings::setDataProjectsPath);
 
-	//...
-
-	m_settings[DATA] = data_settings;
+	m_settings[DATA] = map;
 	m_iniWriter->end();
 }
 
 void WindowSettings::loadEditorIniValues()
 {
 	m_iniWriter->begin(EDITOR);
-	QMap<QString, Setting<Window*>> editor_settings;
+	QMap<QString, Setting<Window*>> map;
 
-	editor_settings[COS] = { loadIniValue(COS, COS_FALLBACK), this, &WindowSettings::setEditorCenterOnScroll };
-	editor_settings[FONT] = { loadIniValue(FONT, FONT_FALLBACK), this, &WindowSettings::setEditorFont };
-	editor_settings[TYPEWRITER] = { loadIniValue(TYPEWRITER, TYPEWRITER_FALLBACK), this, &WindowSettings::setEditorTypewriter };
+	addSetting(map, COS, COS_FALLBACK, &WindowSettings::setEditorCenterOnScroll);
+	addSetting(map, FONT, FONT_FALLBACK, &WindowSettings::setEditorFont);
+	addSetting(map, TYPEWRITER, TYPEWRITER_FALLBACK, &WindowSettings::setEditorTypewriter);
 
-	editor_settings[WRAP] = {
-		loadIniValue(WRAP, WRAP_FALLBACK),
-		[setting = &editor_settings[WRAP]](Window* window) {
-			auto wrap_mode = static_cast<QTextOption::WrapMode>(setting->value<int>());
+	addSetting(map, WRAP, WRAP_FALLBACK, [setting = &map[WRAP]](Window* window) {
+		
+		auto wrap_mode = static_cast<QTextOption::WrapMode>(setting->value<int>());
 
-			if (wrap_mode == QTextOption::ManualWrap) {
-				setting->setValue(static_cast<int>(QTextOption::NoWrap));
-				wrap_mode = QTextOption::NoWrap;
-			}
-
-			/* UNFINISHED */
-
-			/*Need a way to reset to fallback if int != an enum value?*/
-
-			/*Pool only needed to compare against and populate drop downs.*/
-
-			/*Need an isInPool() function to replace some of these checks, like the above.*/
-
-			window->m_editorsWrapPolicy = wrap_mode;
-
-			for (auto& editor : window->editors())
-				editor->setWordWrapMode(wrap_mode);
+		if (wrap_mode == QTextOption::ManualWrap) {
+			setting->setValue(static_cast<int>(QTextOption::NoWrap));
+			wrap_mode = QTextOption::NoWrap;
 		}
-	};
 
-	m_settings[EDITOR] = editor_settings;
+		/* UNFINISHED */
+
+		/*Need a way to reset to fallback if int != an enum value?*/
+
+		/*Pool only needed to compare against and populate drop downs.*/
+
+		/*Need an isInPool() function to replace some of these checks, like the above.*/
+
+		window->m_editorsWrapPolicy = wrap_mode;
+
+		for (auto& editor : window->editors())
+			editor->setWordWrapMode(wrap_mode);
+
+		});
+
+	m_settings[EDITOR] = map;
 	m_iniWriter->end();
 }
 
 void WindowSettings::loadMeterIniValues()
 {
 	m_iniWriter->begin(METER);
-	QMap<QString, Setting<Window*>> meter_settings;
+	QMap<QString, Setting<Window*>> map;
 
-	meter_settings[LINE_POS] = {
-		loadIniValue(LINE_POS, LINE_POS_FALLBACK),
-		[setting = &meter_settings[LINE_POS]](Window* window) {
-			window->m_meter->setHasLinePosition(setting->value<bool>());
-		}
-	};
+	addSetting(map, LINE_POS, LINE_POS_FALLBACK, [setting = &map[LINE_POS]](Window* window) {
+		window->m_meter->setHasLinePosition(setting->value<bool>());
+		});
 
-	meter_settings[COL_POS] = {
-		loadIniValue(COL_POS, COL_POS_FALLBACK),
-		[setting = &meter_settings[COL_POS]](Window* window) {
-			window->m_meter->setHasColumnPosition(setting->value<bool>());
-		}
-	};
+	addSetting(map, COL_POS, COL_POS_FALLBACK, [setting = &map[COL_POS]](Window* window) {
+		window->m_meter->setHasColumnPosition(setting->value<bool>());
+		});
 
-	meter_settings[LINES] = {
-		loadIniValue(LINES, LINES_FALLBACK),
-		[setting = &meter_settings[LINES]](Window* window) {
-			window->m_meter->setHasLineCount(setting->value<bool>());
-		}
-	};
+	addSetting(map, LINES, LINES_FALLBACK, [setting = &map[LINES]](Window* window) {
+		window->m_meter->setHasLineCount(setting->value<bool>());
+		});
 
-	meter_settings[WORDS] = {
-		loadIniValue(WORDS, WORDS_FALLBACK),
-		[setting = &meter_settings[WORDS]](Window* window) {
-			window->m_meter->setHasWordCount(setting->value<bool>());
-		}
-	};
+	addSetting(map, WORDS, WORDS_FALLBACK, [setting = &map[WORDS]](Window* window) {
+		window->m_meter->setHasWordCount(setting->value<bool>());
+		});
 
-	meter_settings[CHARS] = {
-		loadIniValue(CHARS, CHARS_FALLBACK),
-		[setting = &meter_settings[CHARS]](Window* window) {
-			window->m_meter->setHasCharCount(setting->value<bool>());
-		}
-	};
+	addSetting(map, CHARS, CHARS_FALLBACK, [setting = &map[CHARS]](Window* window) {
+		window->m_meter->setHasCharCount(setting->value<bool>());
+		});
 
-	meter_settings[POS_LABELS] = { loadIniValue(POS_LABELS, POS_LABELS_FALLBACK), this, &WindowSettings::setMeterPositionLabels };
-	meter_settings[COUNT_LABELS] = { loadIniValue(COUNT_LABELS, COUNT_LABELS_FALLBACK), this, &WindowSettings::setMeterCountLabels };
-	meter_settings[SHORT_LABELS] = { loadIniValue(SHORT_LABELS, SHORT_LABELS_FALLBACK), this, &WindowSettings::setMeterShortLabels };
+	addSetting(map, POS_LABELS, POS_LABELS_FALLBACK, &WindowSettings::setMeterPositionLabels);
+	addSetting(map, COUNT_LABELS, COUNT_LABELS_FALLBACK, &WindowSettings::setMeterCountLabels);
+	addSetting(map, SHORT_LABELS, SHORT_LABELS_FALLBACK, &WindowSettings::setMeterShortLabels);
 
-	m_settings[METER] = meter_settings;
+	m_settings[METER] = map;
 	m_iniWriter->end();
 }
 
 void WindowSettings::loadWindowIniValues()
 {
 	m_iniWriter->begin(WINDOW);
-	QMap<QString, Setting<Window*>> window_settings;
+	QMap<QString, Setting<Window*>> map;
 
-	window_settings[DOCK_POS] = { loadIniValue(DOCK_POS, DOCK_POS_FALLBACK), this, &WindowSettings::setWindowDockPosition };
+	addSetting(map, DOCK_POS, DOCK_POS_FALLBACK, &WindowSettings::setWindowDockPosition);
 
-	window_settings[DOCK_VIS] = {
-		loadIniValue(DOCK_VIS, DOCK_VIS_FALLBACK),
-		[setting = &window_settings[DOCK_VIS]](Window* window) {
-			window->m_dockWidget->setVisible(setting->value<bool>());
-		}
-	};
+	addSetting(map, DOCK_VIS, DOCK_VIS_FALLBACK, [setting = &map[DOCK_VIS]](Window* window) {
+		window->m_dockWidget->setVisible(setting->value<bool>());
+		});
 
-	window_settings[GEOMETRY] = { loadIniValue(GEOMETRY), this, &WindowSettings::setWindowGeometry };
+	addSetting(map, GEOMETRY, &WindowSettings::setWindowGeometry);
 
-	m_settings[WINDOW] = window_settings;
+	m_settings[WINDOW] = map;
 	m_iniWriter->end();
 }
 
@@ -304,6 +283,135 @@ QVariant WindowSettings::loadIniValue(const QString& key, const QVariant& fallba
 QString WindowSettings::iniName(QString text) const
 {
 	return text.replace(" ", INI_FILLER);
+}
+
+void WindowSettings::applyToAll(const QString& prefix, const QString& key)
+{
+	for (auto& window : m_windows)
+		m_settings[prefix][key].set(window);
+}
+
+void WindowSettings::applyAllTo(Window* window)
+{
+	for (auto it = m_settings.begin(); it != m_settings.end(); ++it)
+		for (auto sub_it = it.value().begin(); sub_it != it.value().end(); ++sub_it)
+			sub_it.value().set(window);
+}
+
+QVariant WindowSettings::variantAt(const QString& prefix, const QString& key) const
+{
+	return m_settings[prefix][key].variant();
+}
+
+void WindowSettings::setDataProjectsPath(Window* window)
+{
+	auto& setting = m_settings[DATA][PROJECTS];
+	auto dir = setting.value<Path>();
+
+	if (!dir.isValid()) {
+		setting.setValue<Path>(PROJECTS_FALLBACK);
+		dir = PROJECTS_FALLBACK;
+	}
+
+	if (dir == PROJECTS_FALLBACK && !dir.isValid())
+		Path::createDirs(dir);
+
+	window->m_treeView->setRoot(dir);
+}
+
+void WindowSettings::setEditorCenterOnScroll(Window* window)
+{
+	auto& setting = m_settings[EDITOR][COS];
+	auto cos = setting.value<bool>();
+
+	window->m_editorsCos = cos;
+
+	for (auto& editor : window->editors())
+		editor->setCenterOnScroll(cos);
+}
+
+void WindowSettings::setEditorFont(Window* window)
+{
+	auto& setting = m_settings[EDITOR][FONT];
+	auto font = setting.value<QFont>();
+	auto point_size = font.pointSize();
+
+	if (!font.exactMatch() && (point_size < 6 || point_size > 144)) {
+		setting.setValue<QFont>(FONT_FALLBACK);
+		font = FONT_FALLBACK;
+	}
+
+	window->m_editorsFont = font;
+
+	for (auto& editor : window->editors())
+		editor->setFont(font);
+}
+
+void WindowSettings::setEditorTypewriter(Window* window)
+{
+	auto& setting = m_settings[EDITOR][TYPEWRITER];
+	auto is_typewriter = setting.value<bool>();
+
+	window->m_editorsIsTypewriter = is_typewriter;
+
+	for (auto& editor : window->editors())
+		editor->setIsTypewriter(is_typewriter);
+}
+
+void WindowSettings::setMeterPositionLabels(Window* window)
+{
+	auto& setting = m_settings[METER][POS_LABELS];
+	window->m_meter->setHasPositionLabels(setting.value<bool>());
+
+	window->m_meter->run();
+}
+
+void WindowSettings::setMeterCountLabels(Window* window)
+{
+	auto& setting = m_settings[METER][COUNT_LABELS];
+	window->m_meter->setHasCountLabels(setting.value<bool>());
+
+	window->m_meter->run();
+}
+
+void WindowSettings::setMeterShortLabels(Window* window)
+{
+	auto& setting = m_settings[METER][SHORT_LABELS];
+	auto value = setting.value<bool>();
+
+	auto set_text = [&](const QString& shortLabel) { return value ? shortLabel : QString(); };
+
+	window->m_meter->setLinePositionLabel(set_text(METER_LINE_POS_SHORT));
+	window->m_meter->setColumnPositionLabel(set_text(METER_COL_POS_SHORT));
+	window->m_meter->setLineCountLabel(set_text(METER_LINES_SHORT));
+	window->m_meter->setWordCountLabel(set_text(METER_WORDS_SHORT));
+	window->m_meter->setCharCountLabel(set_text(METER_CHARS_SHORT));
+
+	window->m_meter->run();
+}
+
+void WindowSettings::setWindowDockPosition(Window* window)
+{
+	auto& setting = m_settings[WINDOW][DOCK_POS];
+	auto area = static_cast<Qt::DockWidgetArea>(setting.value<int>());
+
+	if (area == Qt::NoDockWidgetArea) {
+		setting.setValue<int>(DOCK_POS_FALLBACK);
+		area = static_cast<Qt::DockWidgetArea>(DOCK_POS_FALLBACK);
+	}
+
+	window->addDockWidget(area, window->m_dockWidget);
+}
+
+void WindowSettings::setWindowGeometry(Window* window)
+{
+	auto& setting = m_settings[WINDOW][GEOMETRY];
+	auto byte_array = setting.value<QByteArray>();
+
+	if (!window->restoreGeometry(byte_array))
+		window->setGeometry(QRect(0, 0, 1000, 600));
+
+	WindowTools::moveXYIfTaken(window, m_windows);
 }
 
 void WindowSettings::setupDialog(QDialog* dialog)
@@ -420,7 +528,7 @@ QGroupBox* WindowSettings::newMeterBox(QDialog* dialog, const QMargins& margins,
 		newCheckBox(METER, COUNT_LABELS, dialog),
 		newCheckBox(METER, SHORT_LABELS, dialog)
 	};
-	
+
 	auto grid = new QGridLayout;
 	Layout::evenlyAddToGrid(grid, check_boxes, 5);
 
@@ -442,137 +550,6 @@ QCheckBox* WindowSettings::newCheckBox(const QString& prefix, const QString& key
 		});
 
 	return check_box;
-}
-
-void WindowSettings::applyToAll(const QString& prefix, const QString& key)
-{
-	for (auto& window : m_windows)
-		m_settings[prefix][key].set(window);
-}
-
-void WindowSettings::applyAllTo(Window* window)
-{
-	for (auto it = m_settings.begin(); it != m_settings.end(); ++it)
-		for (auto sub_it = it.value().begin(); sub_it != it.value().end(); ++sub_it)
-			sub_it.value().set(window);
-}
-
-QVariant WindowSettings::variantAt(const QString& prefix, const QString& key)
-{
-	return m_settings[prefix][key].variant();
-}
-
-void WindowSettings::setDataProjectsPath(Window* window)
-{
-	auto& setting = m_settings[DATA][PROJECTS];
-	auto dir = setting.value<Path>();
-
-	if (!dir.isValid()) {
-		setting.setValue<Path>(PROJECTS_FALLBACK);
-		dir = PROJECTS_FALLBACK;
-	}
-
-	if (dir == PROJECTS_FALLBACK && !dir.isValid())
-		Path::createDirs(dir);
-
-	window->m_treeView->setRoot(dir);
-}
-
-void WindowSettings::setEditorCenterOnScroll(Window* window)
-{
-	auto& setting = m_settings[EDITOR][COS];
-	auto cos = setting.value<bool>();
-
-	window->m_editorsCos = cos;
-
-	for (auto& editor : window->editors())
-		editor->setCenterOnScroll(cos);
-}
-
-void WindowSettings::setEditorFont(Window* window)
-{
-	auto& setting = m_settings[EDITOR][FONT];
-	auto font = setting.value<QFont>();
-	auto point_size = font.pointSize();
-
-	if (!font.exactMatch() && (point_size < 6 || point_size > 144)) {
-		setting.setValue<QFont>(FONT_FALLBACK);
-		font = FONT_FALLBACK;
-	}
-
-	window->m_editorsFont = font;
-
-	for (auto& editor : window->editors())
-		editor->setFont(font);
-}
-
-void WindowSettings::setEditorTypewriter(Window* window)
-{
-	auto& setting = m_settings[EDITOR][TYPEWRITER];
-	auto is_typewriter = setting.value<bool>();
-
-	window->m_editorsIsTypewriter = is_typewriter;
-
-	for (auto& editor : window->editors())
-		editor->setIsTypewriter(is_typewriter);
-}
-
-void WindowSettings::setMeterPositionLabels(Window* window)
-{
-	auto& setting = m_settings[METER][POS_LABELS];
-	window->m_meter->setHasPositionLabels(setting.value<bool>());
-
-	window->m_meter->run();
-}
-
-void WindowSettings::setMeterCountLabels(Window* window)
-{
-	auto& setting = m_settings[METER][COUNT_LABELS];
-	window->m_meter->setHasCountLabels(setting.value<bool>());
-
-	window->m_meter->run();
-}
-
-void WindowSettings::setMeterShortLabels(Window* window)
-{
-	auto& setting = m_settings[METER][SHORT_LABELS];
-	auto value = setting.value<bool>();
-
-	auto set_text = [&](const QString& shortLabel) {
-		return value ? shortLabel : QString();
-		};
-
-	window->m_meter->setLinePositionLabel(set_text(METER_LINE_POS_SHORT));
-	window->m_meter->setColumnPositionLabel(set_text(METER_COL_POS_SHORT));
-	window->m_meter->setLineCountLabel(set_text(METER_LINES_SHORT));
-	window->m_meter->setWordCountLabel(set_text(METER_WORDS_SHORT));
-	window->m_meter->setCharCountLabel(set_text(METER_CHARS_SHORT));
-
-	window->m_meter->run();
-}
-
-void WindowSettings::setWindowDockPosition(Window* window)
-{
-	auto& setting = m_settings[WINDOW][DOCK_POS];
-	auto area = static_cast<Qt::DockWidgetArea>(setting.value<int>());
-
-	if (area == Qt::NoDockWidgetArea) {
-		setting.setValue<int>(DOCK_POS_FALLBACK);
-		area = static_cast<Qt::DockWidgetArea>(DOCK_POS_FALLBACK);
-	}
-
-	window->addDockWidget(area, window->m_dockWidget);
-}
-
-void WindowSettings::setWindowGeometry(Window* window)
-{
-	auto& setting = m_settings[WINDOW][GEOMETRY];
-	auto byte_array = setting.value<QByteArray>();
-
-	if (!window->restoreGeometry(byte_array))
-		window->setGeometry(QRect(0, 0, 1000, 600));
-
-	WindowTools::moveXYIfTaken(window, m_windows);
 }
 
 void WindowSettings::onDialogFinished()

@@ -12,9 +12,11 @@
 #include <QList>
 #include <QMap>
 #include <QMargins>
-#include <QObject>
 #include <QString>
 #include <QVariant>
+
+#include <functional>
+#include <type_traits>
 
 class WindowSettings : public QObject
 {
@@ -51,16 +53,9 @@ private:
 	QVariant loadIniValue(const QString& key, const QVariant& fallback = QVariant()) const;
 	QString iniName(QString text) const;
 
-	void setupDialog(QDialog* dialog);
-	QGroupBox* newGroupBox(QDialog* dialog, QLayout* layout, const QMargins& margins, int spacing);
-	QGroupBox* newDataBox(QDialog* dialog, const QMargins& margins, int spacing);
-	QGroupBox* newEditorBox(QDialog* dialog, const QMargins& margins, int spacing);
-	QGroupBox* newFontBox(QDialog* dialog, const QMargins& margins, int spacing);
-	QGroupBox* newMeterBox(QDialog* dialog, const QMargins& margins, int spacing);
-	QCheckBox* newCheckBox(const QString& prefix, const QString& key, QWidget* parent);
 	void applyToAll(const QString& prefix, const QString& key);
 	void applyAllTo(Window* window);
-	QVariant variantAt(const QString& prefix, const QString& key);
+	QVariant variantAt(const QString& prefix, const QString& key) const;
 
 	void setDataProjectsPath(Window* window);
 	void setEditorCenterOnScroll(Window* window);
@@ -71,6 +66,29 @@ private:
 	void setMeterShortLabels(Window* window);
 	void setWindowDockPosition(Window* window);
 	void setWindowGeometry(Window* window);
+
+	void setupDialog(QDialog* dialog);
+	QGroupBox* newGroupBox(QDialog* dialog, QLayout* layout, const QMargins& margins, int spacing);
+	QGroupBox* newDataBox(QDialog* dialog, const QMargins& margins, int spacing);
+	QGroupBox* newEditorBox(QDialog* dialog, const QMargins& margins, int spacing);
+	QGroupBox* newFontBox(QDialog* dialog, const QMargins& margins, int spacing);
+	QGroupBox* newMeterBox(QDialog* dialog, const QMargins& margins, int spacing);
+	QCheckBox* newCheckBox(const QString& prefix, const QString& key, QWidget* parent);
+
+	template<typename T>
+	void addSetting(QMap<QString, Setting<Window*>>& map, const QString& key, const QVariant& fallback, T action)
+	{
+		if constexpr (std::is_same_v<T, void(WindowSettings::*)(Window*)>)
+			map[key] = { loadIniValue(key, fallback), this, action };
+		else
+			map[key] = { loadIniValue(key, fallback), action };
+	}
+
+	template<typename T>
+	void addSetting(QMap<QString, Setting<Window*>>& map, const QString& key, T action)
+	{
+		addSetting<T>(map, key, QVariant(), action);
+	}
 
 	template <typename T>
 	void passiveApply(const QString& prefix, const QString& key, const T& value)
@@ -87,7 +105,7 @@ private:
 	}
 
 	template <typename T>
-	T valueAt(const QString& prefix, const QString& key)
+	T valueAt(const QString& prefix, const QString& key) const
 	{
 		return m_settings[prefix][key].value<T>();
 	}
