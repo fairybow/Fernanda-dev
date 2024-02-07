@@ -16,8 +16,9 @@
 #include <QMainWindow>
 #include <QShowEvent>
 #include <QSplitter>
+#include <QTextOption>
 //
-#include "../common/UiButton.hpp"
+#include "../common/UiButton.hpp" // Button placement not decided.
 
 class WindowSettings;
 
@@ -68,6 +69,7 @@ private:
 	QFont m_editorsFont = QFont();
 	bool m_editorsIsTypewriter = false;
 	bool m_editorsCos = false;
+	QTextOption::WrapMode m_editorsWrapPolicy = QTextOption::WrapAtWordBoundaryOrAnywhere;
 	QDockWidget* m_dockWidget = new QDockWidget;
 	TreeView* m_treeView = new TreeView;
 	UiButton* m_treeViewToggle = new UiButton(UiButton::Ui::MenuOpen, this);

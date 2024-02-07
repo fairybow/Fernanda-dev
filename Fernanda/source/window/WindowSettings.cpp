@@ -1,54 +1,68 @@
 #include "../common/Layout.hpp"
+#include "../common/WindowTools.hpp"
 #include "settings-widgets/DirectorySelector.hpp"
 #include "settings-widgets/FontSelector.h"
 #include "WindowSettings.h"
 
-#include <QApplication>
 #include <QByteArray>
+#include <QDebug>
 #include <QDockWidget>
+#include <QFont>
 #include <QGridLayout>
 #include <QRect>
-#include <QStyle>
-//#include <QTextOption>
+#include <QTextOption>
 
 constexpr char DATA[] = "Data";
-constexpr char DATA_PROJECTS[] = "Projects path";
+constexpr char PROJECTS[] = "Projects path";
+const auto PROJECTS_FALLBACK = Path::system(Path::System::Documents) / "Fernanda";
 
 constexpr char EDITOR[] = "Editor";
-constexpr char EDITOR_CENTER_ON_SCROLL[] = "Center on scroll";
-constexpr char EDITOR_FONT[] = "Font";
-//constexpr char EDITOR_TAB_STOP[] = "Tab stop distance (px)";
-constexpr char EDITOR_TYPEWRITER[] = "Typewriter";
-//constexpr char EDITOR_WRAP[] = "Wrap";
+constexpr char COS[] = "Center on scroll";
+constexpr bool COS_FALLBACK = false;
+constexpr char FONT[] = "Font";
+const auto FONT_FALLBACK = QFont("mononoki", 12);
+//constexpr char TAB_STOP[] = "Tab stop distance (px)";
+//constexpr int TAB_STOP_FALLBACK = 40;
+constexpr char TYPEWRITER[] = "Typewriter";
+constexpr bool TYPEWRITER_FALLBACK = false;
+constexpr char WRAP[] = "Wrap";
+const auto WRAP_FALLBACK = static_cast<int>(QTextOption::WrapAtWordBoundaryOrAnywhere);
 
 constexpr char METER[] = "Meter";
-constexpr char METER_LINE_POS[] = "Line position";
-constexpr char METER_COL_POS[] = "Column position";
-constexpr char METER_LINES[] = "Line count";
-constexpr char METER_WORDS[] = "Word count";
-constexpr char METER_CHARS[] = "Character count";
-constexpr char METER_POS_LABELS[] = "Position labels";
-constexpr char METER_COUNT_LABELS[] = "Count labels";
-constexpr char METER_SHORT[] = "Use short labels";
+constexpr char LINE_POS[] = "Line position";
+constexpr bool LINE_POS_FALLBACK = true;
+constexpr char COL_POS[] = "Column position";
+constexpr bool COL_POS_FALLBACK = true;
+constexpr char LINES[] = "Line count";
+constexpr bool LINES_FALLBACK = false;
+constexpr char WORDS[] = "Word count";
+constexpr bool WORDS_FALLBACK = false;
+constexpr char CHARS[] = "Character count";
+constexpr bool CHARS_FALLBACK = false;
+constexpr char POS_LABELS[] = "Position labels";
+constexpr bool POS_LABELS_FALLBACK = true;
+constexpr char COUNT_LABELS[] = "Count labels";
+constexpr bool COUNT_LABELS_FALLBACK = true;
+constexpr char SHORT_LABELS[] = "Use short labels";
+constexpr bool SHORT_LABELS_FALLBACK = true;
+
+constexpr char WINDOW[] = "Window";
+constexpr char DOCK_POS[] = "Dock position";
+const auto DOCK_POS_FALLBACK = static_cast<int>(Qt::LeftDockWidgetArea);
+constexpr char DOCK_VIS[] = "Dock visibile";
+constexpr bool DOCK_VIS_FALLBACK = true;
+constexpr char GEOMETRY[] = "Geometry";
+
+constexpr char INI_FILLER[] = "_";
 constexpr char METER_LINE_POS_SHORT[] = "ln";
 constexpr char METER_COL_POS_SHORT[] = "col";
 constexpr char METER_LINES_SHORT[] = "lines";
 constexpr char METER_WORDS_SHORT[] = "words";
 constexpr char METER_CHARS_SHORT[] = "chars";
 
-constexpr char WINDOW[] = "Window";
-constexpr char WINDOW_DOCK_POS[] = "Dock position";
-constexpr char WINDOW_DOCK_VIS[] = "Dock visibile";
-constexpr char WINDOW_GEOMETRY[] = "Geometry";
-
-constexpr char INI_FILLER[] = "_";
-
-constexpr char EDITOR_FONT_DEFAULT[] = "mononoki";
-constexpr int EDITOR_FONTSIZE_DEFAULT = 12;
-constexpr char DATA_PROJECTS_DEFAULT[] = "Fernanda";
-
 WindowSettings::WindowSettings(const Path& config, QObject* parent)
-	: QObject(parent), m_iniWriter(new IniWriter(config, this))
+	: QObject(parent),
+	m_iniWriter(new IniWriter(config, this))
 {
 	loadAll();
 }
@@ -68,11 +82,11 @@ void WindowSettings::yoke(Window* window)
 	window->installEventFilter(this);
 
 	connect(window->m_dockWidget, &QDockWidget::dockLocationChanged, this, [&](Qt::DockWidgetArea area) {
-		passiveApply(WINDOW, WINDOW_DOCK_POS, static_cast<int>(area));
+		passiveApply(WINDOW, DOCK_POS, static_cast<int>(area));
 		});
 	connect(window->m_dockWidget, &QDockWidget::visibilityChanged, this, [=](bool visible) {
 		if (window->isVisible())
-			passiveApply<bool>(WINDOW, WINDOW_DOCK_VIS, visible);
+			passiveApply<bool>(WINDOW, DOCK_VIS, visible);
 		});
 }
 
@@ -103,7 +117,7 @@ bool WindowSettings::eventFilter(QObject* watched, QEvent* event)
 	if (event->type() == QEvent::Resize || event->type() == QEvent::Move)
 	{
 		auto window = qobject_cast<Window*>(watched);
-		passiveApply<QByteArray>(WINDOW, WINDOW_GEOMETRY, window->saveGeometry());
+		passiveApply<QByteArray>(WINDOW, GEOMETRY, window->saveGeometry());
 
 		return true;
 	}
@@ -123,26 +137,8 @@ void WindowSettings::loadDataSettings()
 {
 	m_iniWriter->begin(DATA);
 	QMap<QString, Setting> data_settings;
-
-	auto default_projects_path = Path::system(Path::System::Documents) / DATA_PROJECTS_DEFAULT;
-
-	data_settings[DATA_PROJECTS] = {
-		m_iniWriter->load(iniName(DATA_PROJECTS), default_projects_path),
-
-		[setting = &data_settings[DATA_PROJECTS], default_projects_path](Window* window) {
-			auto dir = setting->value<Path>();
-
-			if (!dir.isValid()) {
-				setting->variant = default_projects_path;
-				dir = default_projects_path;
-			}
-
-			if (dir == default_projects_path && !dir.isValid())
-				Path::createDirs(dir);
-
-			window->m_treeView->setRoot(dir);
-		}
-	};
+	
+	data_settings[PROJECTS] = { loadSetting(PROJECTS, PROJECTS_FALLBACK), this, &WindowSettings::setDataProjectsPath };
 
 	//...
 
@@ -155,52 +151,32 @@ void WindowSettings::loadEditorSettings()
 	m_iniWriter->begin(EDITOR);
 	QMap<QString, Setting> editor_settings;
 
-	EDITOR_CENTER_ON_SCROLL;
+	editor_settings[COS] = { loadSetting(COS, COS_FALLBACK), this, &WindowSettings::setEditorCenterOnScroll };
+	editor_settings[FONT] = { loadSetting(FONT, FONT_FALLBACK), this, &WindowSettings::setEditorFont };
+	editor_settings[TYPEWRITER] = { loadSetting(TYPEWRITER, TYPEWRITER_FALLBACK), this, &WindowSettings::setEditorTypewriter };
 
-	editor_settings[EDITOR_CENTER_ON_SCROLL] = {
-		m_iniWriter->load(iniName(EDITOR_CENTER_ON_SCROLL), false),
+	editor_settings[WRAP] = {
+		loadSetting(WRAP, WRAP_FALLBACK),
+		[setting = &editor_settings[WRAP]](Window* window) {
+			auto wrap_mode = static_cast<QTextOption::WrapMode>(setting->value<int>());
 
-		[setting = &editor_settings[EDITOR_CENTER_ON_SCROLL]](Window* window) {
-			auto cos = setting->value<bool>();
-
-			window->m_editorsCos = cos;
-
-			for (auto& editor : window->editors())
-				editor->setCenterOnScroll(cos);
-		}
-	};
-
-	auto default_font = QFont(EDITOR_FONT_DEFAULT, EDITOR_FONTSIZE_DEFAULT);
-
-	editor_settings[EDITOR_FONT] = {
-		m_iniWriter->load(iniName(EDITOR_FONT), default_font),
-
-		[setting = &editor_settings[EDITOR_FONT], default_font](Window* window) {
-			auto font = setting->value<QFont>();
-			auto point_size = font.pointSize();
-
-			if (!font.exactMatch() && (point_size < 6 || point_size > 144)) {
-				setting->variant = default_font;
-				font = default_font;
+			if (wrap_mode == QTextOption::ManualWrap) {
+				setting->setValue(static_cast<int>(QTextOption::NoWrap));
+				wrap_mode = QTextOption::NoWrap;
 			}
 
-			window->m_editorsFont = font;
+			/* UNFINISHED */
+
+			/*Need a way to reset to fallback if int != an enum value?*/
+
+			/*Pool only needed to compare against and populate drop downs.*/
+
+			/*Need an isInPool() function to replace some of these checks, like the above.*/
+
+			window->m_editorsWrapPolicy = wrap_mode;
 
 			for (auto& editor : window->editors())
-				editor->setFont(font);
-		}
-	};
-
-	editor_settings[EDITOR_TYPEWRITER] = {
-		m_iniWriter->load(iniName(EDITOR_TYPEWRITER), false),
-
-		[setting = &editor_settings[EDITOR_TYPEWRITER]](Window* window) {
-			auto is_typewriter = setting->value<bool>();
-
-			window->m_editorsIsTypewriter = is_typewriter;
-
-			for (auto& editor : window->editors())
-				editor->setIsTypewriter(is_typewriter);
+				editor->setWordWrapMode(wrap_mode);
 		}
 	};
 
@@ -213,85 +189,44 @@ void WindowSettings::loadMeterSettings()
 	m_iniWriter->begin(METER);
 	QMap<QString, Setting> meter_settings;
 
-	meter_settings[METER_LINE_POS] = {
-		m_iniWriter->load(iniName(METER_LINE_POS), true),
-
-		[setting = &meter_settings[METER_LINE_POS]](Window* window) {
+	meter_settings[LINE_POS] = {
+		loadSetting(LINE_POS, LINE_POS_FALLBACK),
+		[setting = &meter_settings[LINE_POS]](Window* window) {
 			window->m_meter->setHasLinePosition(setting->value<bool>());
 		}
 	};
 
-	meter_settings[METER_COL_POS] = {
-		m_iniWriter->load(iniName(METER_COL_POS), true),
-
-		[setting = &meter_settings[METER_COL_POS]](Window* window) {
+	meter_settings[COL_POS] = {
+		loadSetting(COL_POS, COL_POS_FALLBACK),
+		[setting = &meter_settings[COL_POS]](Window* window) {
 			window->m_meter->setHasColumnPosition(setting->value<bool>());
 		}
 	};
 
-	meter_settings[METER_LINES] = {
-		m_iniWriter->load(iniName(METER_LINES), false),
-
-		[setting = &meter_settings[METER_LINES]](Window* window) {
+	meter_settings[LINES] = {
+		loadSetting(LINES, LINES_FALLBACK),
+		[setting = &meter_settings[LINES]](Window* window) {
 			window->m_meter->setHasLineCount(setting->value<bool>());
 		}
 	};
 
-	meter_settings[METER_WORDS] = {
-		m_iniWriter->load(iniName(METER_WORDS), false),
-
-		[setting = &meter_settings[METER_WORDS]](Window* window) {
+	meter_settings[WORDS] = {
+		loadSetting(WORDS, WORDS_FALLBACK),
+		[setting = &meter_settings[WORDS]](Window* window) {
 			window->m_meter->setHasWordCount(setting->value<bool>());
 		}
 	};
 
-	meter_settings[METER_CHARS] = {
-		m_iniWriter->load(iniName(METER_CHARS), false),
-
-		[setting = &meter_settings[METER_CHARS]](Window* window) {
+	meter_settings[CHARS] = {
+		loadSetting(CHARS, CHARS_FALLBACK),
+		[setting = &meter_settings[CHARS]](Window* window) {
 			window->m_meter->setHasCharCount(setting->value<bool>());
 		}
 	};
 
-	meter_settings[METER_POS_LABELS] = {
-		m_iniWriter->load(iniName(METER_POS_LABELS), true),
-
-		[setting = &meter_settings[METER_POS_LABELS]](Window* window) {
-			window->m_meter->setHasPositionLabels(setting->value<bool>());
-
-			window->m_meter->run();
-		}
-	};
-
-	meter_settings[METER_COUNT_LABELS] = {
-		m_iniWriter->load(iniName(METER_COUNT_LABELS), true),
-
-		[setting = &meter_settings[METER_COUNT_LABELS]](Window* window) {
-			window->m_meter->setHasCountLabels(setting->value<bool>());
-
-			window->m_meter->run();
-		}
-	};
-
-	meter_settings[METER_SHORT] = {
-		m_iniWriter->load(iniName(METER_SHORT), false),
-
-		[setting = &meter_settings[METER_SHORT]](Window* window) {
-			auto value = setting->value<bool>();
-
-			auto text = [&](const QString& shortLabel) {
-				return value ? shortLabel : QString();
-				};
-
-			window->m_meter->setLinePositionLabel(text(METER_LINE_POS_SHORT));
-			window->m_meter->setColumnPositionLabel(text(METER_COL_POS_SHORT));
-			window->m_meter->setLineCountLabel(text(METER_LINES_SHORT));
-			window->m_meter->setWordCountLabel(text(METER_WORDS_SHORT));
-			window->m_meter->setCharCountLabel(text(METER_CHARS_SHORT));
-
-			window->m_meter->run();
-		}
-	};
+	meter_settings[POS_LABELS] = { loadSetting(POS_LABELS, POS_LABELS_FALLBACK), this, &WindowSettings::setMeterPositionLabels };
+	meter_settings[COUNT_LABELS] = { loadSetting(COUNT_LABELS, COUNT_LABELS_FALLBACK), this, &WindowSettings::setMeterCountLabels };
+	meter_settings[SHORT_LABELS] = { loadSetting(SHORT_LABELS, SHORT_LABELS_FALLBACK), this, &WindowSettings::setMeterShortLabels };
 
 	m_settings[METER] = meter_settings;
 	m_iniWriter->end();
@@ -302,43 +237,16 @@ void WindowSettings::loadWindowSettings()
 	m_iniWriter->begin(WINDOW);
 	QMap<QString, Setting> window_settings;
 
-	auto dock_pos_fallback = static_cast<int>(Qt::LeftDockWidgetArea);
+	window_settings[DOCK_POS] = { loadSetting(DOCK_POS, DOCK_POS_FALLBACK), this, &WindowSettings::setWindowDockPosition };
 
-	window_settings[WINDOW_DOCK_POS] = {
-		m_iniWriter->load(iniName(WINDOW_DOCK_POS), dock_pos_fallback),
-
-		[setting = &window_settings[WINDOW_DOCK_POS], dock_pos_fallback](Window* window) {
-			auto area = static_cast<Qt::DockWidgetArea>(setting->value<int>());
-
-			if (area == Qt::NoDockWidgetArea) {
-				setting->variant = dock_pos_fallback;
-				area = static_cast<Qt::DockWidgetArea>(dock_pos_fallback);
-			}
-
-			window->addDockWidget(area, window->m_dockWidget);
-		}
-	};
-
-	window_settings[WINDOW_DOCK_VIS] = {
-		m_iniWriter->load(iniName(WINDOW_DOCK_VIS), true),
-
-		[setting = &window_settings[WINDOW_DOCK_VIS]](Window* window) {
+	window_settings[DOCK_VIS] = {
+		loadSetting(DOCK_VIS, DOCK_VIS_FALLBACK),
+		[setting = &window_settings[DOCK_VIS]](Window* window) {
 			window->m_dockWidget->setVisible(setting->value<bool>());
 		}
 	};
 
-	window_settings[WINDOW_GEOMETRY] = {
-		m_iniWriter->load(iniName(WINDOW_GEOMETRY)),
-
-		[setting = &window_settings[WINDOW_GEOMETRY], this](Window* window) {
-			auto byte_array = setting->value<QByteArray>();
-
-			if (!window->restoreGeometry(byte_array))
-				window->setGeometry(QRect(0, 0, 1000, 600));
-
-			moveXYIfTaken(window);
-		}
-	};
+	window_settings[GEOMETRY] = { loadSetting(GEOMETRY), this, &WindowSettings::setWindowGeometry };
 
 	m_settings[WINDOW] = window_settings;
 	m_iniWriter->end();
@@ -347,44 +255,36 @@ void WindowSettings::loadWindowSettings()
 void WindowSettings::saveAll()
 {
 	saveSettings(DATA, {
-		DATA_PROJECTS
+		PROJECTS
 		});
 
 	saveSettings(EDITOR, {
-		EDITOR_CENTER_ON_SCROLL,
-		EDITOR_FONT,
-		EDITOR_TYPEWRITER
+		COS,
+		FONT,
+		TYPEWRITER
 		});
 
 	saveSettings(METER, {
-		METER_LINE_POS,
-		METER_COL_POS,
-		METER_LINES,
-		METER_WORDS,
-		METER_CHARS,
-		METER_POS_LABELS,
-		METER_COUNT_LABELS,
-		METER_SHORT
+		LINE_POS,
+		COL_POS,
+		LINES,
+		WORDS,
+		CHARS,
+		POS_LABELS,
+		COUNT_LABELS,
+		SHORT_LABELS
 		});
 
 	saveSettings(WINDOW, {
-		WINDOW_DOCK_POS,
-		WINDOW_DOCK_VIS,
-		WINDOW_GEOMETRY
+		DOCK_POS,
+		DOCK_VIS,
+		GEOMETRY
 		});
 }
 
-void WindowSettings::saveSetting(const QString& prefix, const QString& key, AppendPrefix usePrefix)
+void WindowSettings::saveSetting(const QString& prefix, const QString& key)
 {
-	auto use_prefix = (usePrefix == AppendPrefix::Yes);
-
-	if (use_prefix)
-		m_iniWriter->begin(prefix);
-
 	m_iniWriter->save(iniName(key), variantAt(prefix, key));
-
-	if (use_prefix)
-		m_iniWriter->end();
 }
 
 void WindowSettings::saveSettings(const QString& prefix, QStringList keys)
@@ -392,12 +292,17 @@ void WindowSettings::saveSettings(const QString& prefix, QStringList keys)
 	m_iniWriter->begin(prefix);
 
 	for (auto& key : keys)
-		saveSetting(prefix, key, AppendPrefix::No);
+		saveSetting(prefix, key);
 
 	m_iniWriter->end();
 }
 
-QString WindowSettings::iniName(QString text)
+QVariant WindowSettings::loadSetting(const QString& key, const QVariant& fallback) const
+{
+	return m_iniWriter->load(iniName(key), fallback);
+}
+
+QString WindowSettings::iniName(QString text) const
 {
 	return text.replace(" ", INI_FILLER);
 }
@@ -427,7 +332,7 @@ void WindowSettings::setupDialog(QDialog* dialog)
 		auto group_box = new QGroupBox(dialog);
 		auto combo_box = new QComboBox(group_box);
 		group_box->setTitle(QString("Group Box %1").arg(i + 1));
-		Layout::box(Layout::Box::Horizontal, group_box, QWidgetList{ combo_box });
+		Layout::box(Layout::Orientation::Horizontal, group_box, QWidgetList{ combo_box });
 		grid->addWidget(group_box);
 	}*/
 }
@@ -447,17 +352,17 @@ QGroupBox* WindowSettings::newGroupBox(QDialog* dialog, QLayout* layout, const Q
 
 QGroupBox* WindowSettings::newDataBox(QDialog* dialog, const QMargins& margins, int spacing)
 {
-	auto initial_dir = valueAt<Path>(DATA, DATA_PROJECTS);
+	auto initial_dir = valueAt<Path>(DATA, PROJECTS);
 	auto dir_selector = new DirectorySelector(dialog, initial_dir);
 
 	connect(dir_selector, &DirectorySelector::selected, this, [&](const Path& directory) {
-		activeApply<Path>(DATA, DATA_PROJECTS, directory);
+		activeApply<Path>(DATA, PROJECTS, directory);
 		});
 
-	auto layout = Layout::box(Layout::Box::Horizontal, QWidgetList{ dir_selector });
+	auto layout = Layout::box(Layout::Orientation::Horizontal, QWidgetList{ dir_selector });
 
 	auto box = newGroupBox(dialog, layout, margins, spacing);
-	box->setTitle(DATA_PROJECTS);
+	box->setTitle(PROJECTS);
 
 	return box;
 }
@@ -465,18 +370,18 @@ QGroupBox* WindowSettings::newDataBox(QDialog* dialog, const QMargins& margins, 
 QGroupBox* WindowSettings::newEditorBox(QDialog* dialog, const QMargins& margins, int spacing)
 {
 	QWidgetList check_boxes = {
-		newCheckBox(EDITOR, EDITOR_CENTER_ON_SCROLL, dialog),
-		newCheckBox(EDITOR, EDITOR_TYPEWRITER, dialog)
+		newCheckBox(EDITOR, COS, dialog),
+		newCheckBox(EDITOR, TYPEWRITER, dialog)
 	};
 
-	auto bottom_layout = Layout::box(Layout::Box::Horizontal, check_boxes);
+	auto bottom_layout = Layout::box(Layout::Orientation::Horizontal, check_boxes);
 
 	QObjectList objects = {
 		newFontBox(dialog, margins, spacing),
 		bottom_layout
 	};
 
-	auto layout = Layout::box(Layout::Box::Vertical, objects);
+	auto layout = Layout::box(Layout::Orientation::Vertical, objects);
 
 	auto box = newGroupBox(dialog, layout, margins, spacing);
 	box->setTitle(EDITOR);
@@ -486,18 +391,18 @@ QGroupBox* WindowSettings::newEditorBox(QDialog* dialog, const QMargins& margins
 
 QGroupBox* WindowSettings::newFontBox(QDialog* dialog, const QMargins& margins, int spacing)
 {
-	auto initial_font = valueAt<QFont>(EDITOR, EDITOR_FONT);
+	auto initial_font = valueAt<QFont>(EDITOR, FONT);
 	auto font_selector = new FontSelector(dialog, initial_font);
 
 	connect(font_selector, &FontSelector::currentFontChanged, this, [&](const QFont& font) {
-		activeApply<QFont>(EDITOR, EDITOR_FONT, font);
+		activeApply<QFont>(EDITOR, FONT, font);
 		});
 
-	auto layout = Layout::box(Layout::Box::Horizontal, QWidgetList{ font_selector });
+	auto layout = Layout::box(Layout::Orientation::Horizontal, QWidgetList{ font_selector });
 	// ^ Overload to take 1 widget/object
 
 	auto box = newGroupBox(dialog, layout, margins, spacing);
-	box->setTitle(EDITOR_FONT);
+	box->setTitle(FONT);
 
 	return box;
 }
@@ -506,31 +411,19 @@ QGroupBox* WindowSettings::newMeterBox(QDialog* dialog, const QMargins& margins,
 {
 	// Toggle/untoggle all button.
 
-	QList<QCheckBox*> check_boxes = {
-		newCheckBox(METER, METER_LINE_POS, dialog),
-		newCheckBox(METER, METER_COL_POS, dialog),
-		newCheckBox(METER, METER_LINES, dialog),
-		newCheckBox(METER, METER_WORDS, dialog),
-		newCheckBox(METER, METER_CHARS, dialog),
-		newCheckBox(METER, METER_POS_LABELS, dialog),
-		newCheckBox(METER, METER_COUNT_LABELS, dialog),
-		newCheckBox(METER, METER_SHORT, dialog)
+	QWidgetList check_boxes = {
+		newCheckBox(METER, LINE_POS, dialog),
+		newCheckBox(METER, COL_POS, dialog),
+		newCheckBox(METER, LINES, dialog),
+		newCheckBox(METER, WORDS, dialog),
+		newCheckBox(METER, CHARS, dialog),
+		newCheckBox(METER, POS_LABELS, dialog),
+		newCheckBox(METER, COUNT_LABELS, dialog),
+		newCheckBox(METER, SHORT_LABELS, dialog)
 	};
 	
 	auto grid = new QGridLayout;
-
-	auto row = 0;
-	auto column = 0;
-	auto total_columns = 3;
-
-	for (auto& check_box : check_boxes) {
-		grid->addWidget(check_box, row, column++);
-
-		if (column == total_columns) {
-			column = 0;
-			row++;
-		}
-	}
+	Layout::evenlyAddToGrid(grid, check_boxes, 5);
 
 	auto box = newGroupBox(dialog, grid, margins, spacing);
 	box->setTitle(METER);
@@ -552,22 +445,6 @@ QCheckBox* WindowSettings::newCheckBox(const QString& prefix, const QString& key
 	return check_box;
 }
 
-void WindowSettings::moveXYIfTaken(Window* window)
-{
-	for (auto& other : m_windows) {
-		if (other == window) continue;
-
-		auto x = window->x();
-		auto y = window->y();
-
-		auto distance = 6;
-		auto title_bar_height = QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight);
-
-		if (x == other->x() /*&& y == other->y()*/)
-			window->move(x + distance + title_bar_height, y + distance);
-	}
-}
-
 void WindowSettings::syncUp(const QString& prefix, const QString& key)
 {
 	for (auto& window : m_windows)
@@ -583,7 +460,120 @@ void WindowSettings::applyAll(Window* window)
 
 QVariant WindowSettings::variantAt(const QString& prefix, const QString& key)
 {
-	return m_settings[prefix][key].variant;
+	return m_settings[prefix][key].variant();
+}
+
+void WindowSettings::setDataProjectsPath(Window* window)
+{
+	auto& setting = m_settings[DATA][PROJECTS];
+	auto dir = setting.value<Path>();
+
+	if (!dir.isValid()) {
+		setting.setValue<Path>(PROJECTS_FALLBACK);
+		dir = PROJECTS_FALLBACK;
+	}
+
+	if (dir == PROJECTS_FALLBACK && !dir.isValid())
+		Path::createDirs(dir);
+
+	window->m_treeView->setRoot(dir);
+}
+
+void WindowSettings::setEditorCenterOnScroll(Window* window)
+{
+	auto& setting = m_settings[EDITOR][COS];
+	auto cos = setting.value<bool>();
+
+	window->m_editorsCos = cos;
+
+	for (auto& editor : window->editors())
+		editor->setCenterOnScroll(cos);
+}
+
+void WindowSettings::setEditorFont(Window* window)
+{
+	auto& setting = m_settings[EDITOR][FONT];
+	auto font = setting.value<QFont>();
+	auto point_size = font.pointSize();
+
+	if (!font.exactMatch() && (point_size < 6 || point_size > 144)) {
+		setting.setValue<QFont>(FONT_FALLBACK);
+		font = FONT_FALLBACK;
+	}
+
+	window->m_editorsFont = font;
+
+	for (auto& editor : window->editors())
+		editor->setFont(font);
+}
+
+void WindowSettings::setEditorTypewriter(Window* window)
+{
+	auto& setting = m_settings[EDITOR][TYPEWRITER];
+	auto is_typewriter = setting.value<bool>();
+
+	window->m_editorsIsTypewriter = is_typewriter;
+
+	for (auto& editor : window->editors())
+		editor->setIsTypewriter(is_typewriter);
+}
+
+void WindowSettings::setMeterPositionLabels(Window* window)
+{
+	auto& setting = m_settings[METER][POS_LABELS];
+	window->m_meter->setHasPositionLabels(setting.value<bool>());
+
+	window->m_meter->run();
+}
+
+void WindowSettings::setMeterCountLabels(Window* window)
+{
+	auto& setting = m_settings[METER][COUNT_LABELS];
+	window->m_meter->setHasCountLabels(setting.value<bool>());
+
+	window->m_meter->run();
+}
+
+void WindowSettings::setMeterShortLabels(Window* window)
+{
+	auto& setting = m_settings[METER][SHORT_LABELS];
+	auto value = setting.value<bool>();
+
+	auto set_text = [&](const QString& shortLabel) {
+		return value ? shortLabel : QString();
+		};
+
+	window->m_meter->setLinePositionLabel(set_text(METER_LINE_POS_SHORT));
+	window->m_meter->setColumnPositionLabel(set_text(METER_COL_POS_SHORT));
+	window->m_meter->setLineCountLabel(set_text(METER_LINES_SHORT));
+	window->m_meter->setWordCountLabel(set_text(METER_WORDS_SHORT));
+	window->m_meter->setCharCountLabel(set_text(METER_CHARS_SHORT));
+
+	window->m_meter->run();
+}
+
+void WindowSettings::setWindowDockPosition(Window* window)
+{
+	auto& setting = m_settings[WINDOW][DOCK_POS];
+	auto area = static_cast<Qt::DockWidgetArea>(setting.value<int>());
+
+	if (area == Qt::NoDockWidgetArea) {
+		setting.setValue<int>(DOCK_POS_FALLBACK);
+		area = static_cast<Qt::DockWidgetArea>(DOCK_POS_FALLBACK);
+	}
+
+	window->addDockWidget(area, window->m_dockWidget);
+}
+
+void WindowSettings::setWindowGeometry(Window* window)
+{
+	auto& setting = m_settings[WINDOW][GEOMETRY];
+	auto byte_array = setting.value<QByteArray>();
+
+	if (!window->restoreGeometry(byte_array))
+		window->setGeometry(QRect(0, 0, 1000, 600));
+
+	WindowTools::moveXYIfTaken(window, m_windows);
 }
 
 void WindowSettings::onDialogFinished()

@@ -198,6 +198,7 @@ Editor* Window::newEditor(Document* document)
 	editor->setFont(m_editorsFont);
 	editor->setIsTypewriter(m_editorsIsTypewriter);
 	editor->setCenterOnScroll(m_editorsCos);
+	editor->setWordWrapMode(m_editorsWrapPolicy);
 
 	connect(editor, &Editor::textChanged, this, &Window::onEditorTextChanged);
 	connect(editor, &Editor::modificationChanged, this, &Window::onEditorModificationChanged);

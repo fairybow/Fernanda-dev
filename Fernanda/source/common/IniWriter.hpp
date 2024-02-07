@@ -59,7 +59,7 @@ public:
 		end();
 	}
 
-	QVariant load(QAnyStringView key, const QVariant& fallback = QVariant())
+	QVariant load(QAnyStringView key, const QVariant& fallback = QVariant()) const
 	{
 		return m_settings->value(key, fallback);
 	}

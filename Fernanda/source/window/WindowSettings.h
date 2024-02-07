@@ -5,10 +5,8 @@
 #include "Window.h"
 
 #include <QCheckBox>
-#include <QDebug>
 #include <QDialog>
 #include <QEvent>
-#include <QFont>
 #include <QGroupBox>
 #include <QList>
 #include <QMap>
@@ -18,6 +16,60 @@
 #include <QVariant>
 
 #include <functional>
+
+class Setting
+{
+public:
+	Setting() = default;
+
+	template <typename T>
+	Setting(const T& value, std::function<void(Window*)> action)
+		: m_variant(QVariant::fromValue<T>(value)), m_action(action)
+	{}
+
+	template <typename T, typename TClass>
+	Setting(const T& value, TClass* context, void (TClass::* action)(Window*))
+		: m_variant(QVariant::fromValue<T>(value)), m_action(lambdaWrap<TClass>(context, action))
+	{}
+
+	QVariant variant() const
+	{
+		return m_variant;
+	}
+
+	void setVariant(const QVariant& variant)
+	{
+		m_variant = variant;
+	}
+
+	template <typename T>
+	T value()
+	{
+		return m_variant.value<T>();
+	}
+
+	template <typename T>
+	void setValue(const T& value)
+	{
+		m_variant = QVariant::fromValue<T>(value);
+	}
+
+	void action(Window* window)
+	{
+		m_action(window);
+	}
+
+private:
+	QVariant m_variant;
+	std::function<void(Window*)> m_action;
+	//QList<QVariant> m_pool;
+
+	template <typename TClass>
+	auto lambdaWrap(TClass* context, void (TClass::* action)(Window*))
+	{
+		return [=](Window* window) { std::invoke(action, context, window); };
+	}
+};
 
 class WindowSettings : public QObject
 {
@@ -33,21 +85,22 @@ public:
 	bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
-	enum class AppendPrefix {
+	/*enum class AppendPrefix {
 		No,
 		Yes
-	};
+	};*/
 
-	struct Setting {
+	/*struct Setting {
 		QVariant variant;
 		std::function<void(Window*)> action;
+		QList<QVariant> pool;
 
 		template <typename T>
 		T value()
 		{
 			return variant.value<T>();
 		}
-	};
+	};*/
 
 	IniWriter* m_iniWriter;
 	QDialog* m_dialog = nullptr;
@@ -60,9 +113,10 @@ private:
 	void loadMeterSettings();
 	void loadWindowSettings();
 	void saveAll();
-	void saveSetting(const QString& prefix, const QString& key, AppendPrefix usePrefix = AppendPrefix::Yes);
+	void saveSetting(const QString& prefix, const QString& key);
 	void saveSettings(const QString& prefix, QStringList keys);
-	QString iniName(QString text);
+	QVariant loadSetting(const QString& key, const QVariant& fallback = QVariant()) const;
+	QString iniName(QString text) const;
 	void setupDialog(QDialog* dialog);
 	QGroupBox* newGroupBox(QDialog* dialog, QLayout* layout, const QMargins& margins, int spacing);
 	QGroupBox* newDataBox(QDialog* dialog, const QMargins& margins, int spacing);
@@ -70,19 +124,28 @@ private:
 	QGroupBox* newFontBox(QDialog* dialog, const QMargins& margins, int spacing);
 	QGroupBox* newMeterBox(QDialog* dialog, const QMargins& margins, int spacing);
 	QCheckBox* newCheckBox(const QString& prefix, const QString& key, QWidget* parent);
-	void moveXYIfTaken(Window* window);
 	void syncUp(const QString& prefix, const QString& key);
 	void applyAll(Window* window);
 	QVariant variantAt(const QString& prefix, const QString& key);
 
+	void setDataProjectsPath(Window* window);
+	void setEditorCenterOnScroll(Window* window);
+	void setEditorFont(Window* window);
+	void setEditorTypewriter(Window* window);
+	void setMeterPositionLabels(Window* window);
+	void setMeterCountLabels(Window* window);
+	void setMeterShortLabels(Window* window);
+	void setWindowDockPosition(Window* window);
+	void setWindowGeometry(Window* window);
+
 	template <typename T>
-	void passiveApply(const QString& prefix, const QString& key, T value)
+	void passiveApply(const QString& prefix, const QString& key, const T& value)
 	{
-		m_settings[prefix][key].variant = QVariant::fromValue<T>(value);
+		m_settings[prefix][key].setValue<T>(value);
 	}
 
 	template <typename T>
-	void activeApply(const QString& prefix, const QString& key, T value)
+	void activeApply(const QString& prefix, const QString& key, const T& value)
 	{
 		passiveApply<T>(prefix, key, value);
 

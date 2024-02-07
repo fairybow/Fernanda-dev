@@ -181,5 +181,8 @@
     <ClInclude Include="source\common\HtmlString.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
+    <ClInclude Include="source\common\WindowTools.hpp">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -174,9 +174,9 @@ void PageArea::setCurrentWidget(QWidget* widget)
 void PageArea::setup()
 {
 	QObjectList top_widgets{ m_controls, m_tabBar };
-	auto top_layout = Layout::box(Layout::Box::Horizontal, top_widgets);
+	auto top_layout = Layout::box(Layout::Orientation::Horizontal, top_widgets);
 	QObjectList layouts{ top_layout, m_mainStack };
-	Layout::box(Layout::Box::Vertical, this, layouts);
+	Layout::box(Layout::Orientation::Vertical, this, layouts);
 
 	m_underlay->setAlignment(Qt::AlignCenter);
 	m_mainStack->addWidget(m_underlay);

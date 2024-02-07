@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QList>
 #include <QMargins>
@@ -36,15 +37,15 @@ namespace Layout
 		}
 	}
 
-	enum class Box {
+	enum class Orientation {
 		Horizontal,
 		Vertical
 	};
 
-	inline QBoxLayout* box(Box type, QWidget* parent = nullptr, QObjectList objects = {}, const QMargins& margins = QMargins())
+	inline QBoxLayout* box(Orientation orientation, QWidget* parent = nullptr, QObjectList objects = {}, const QMargins& margins = QMargins())
 	{
 		QBoxLayout* layout = nullptr;
-		(type == Layout::Box::Horizontal)
+		(orientation == Orientation::Horizontal)
 			? layout = new QHBoxLayout
 			: layout = new QVBoxLayout;
 
@@ -57,23 +58,49 @@ namespace Layout
 		return layout;
 	}
 
-	inline QBoxLayout* box(Box type, QObjectList objects = {}, const QMargins& margins = QMargins())
+	inline QBoxLayout* box(Orientation orientation, QObjectList objects = {}, const QMargins& margins = QMargins())
 	{
-		return box(type, nullptr, objects, margins);
+		return box(orientation, nullptr, objects, margins);
 	}
 
-	inline QBoxLayout* box(Box type, QWidget* parent = nullptr, QWidgetList widgets = {}, const QMargins& margins = QMargins())
+	inline QBoxLayout* box(Orientation orientation, QWidget* parent = nullptr, QWidgetList widgets = {}, const QMargins& margins = QMargins())
 	{
 		QObjectList objects;
 
 		for (auto& widget : widgets)
 			objects << widget;
 
-		return box(type, parent, objects, margins);
+		return box(orientation, parent, objects, margins);
 	}
 
-	inline QBoxLayout* box(Box type, QWidgetList widgets = {}, const QMargins& margins = QMargins())
+	inline QBoxLayout* box(Orientation orientation, QWidgetList widgets = {}, const QMargins& margins = QMargins())
 	{
-		return box(type, nullptr, widgets, margins);
+		return box(orientation, nullptr, widgets, margins);
+	}
+
+	inline void evenlyAddToGrid(QGridLayout* grid, QWidgetList widgets, int maxColumnsOrRows = 4, Orientation orientation = Orientation::Horizontal)
+	{
+		if (maxColumnsOrRows < 1)
+			maxColumnsOrRows = 1;
+
+		auto row = 0;
+		auto column = 0;
+
+		for (auto& widget : widgets) {
+			if (orientation == Orientation::Horizontal) {
+				grid->addWidget(widget, row, column++);
+				if (column == maxColumnsOrRows) {
+					column = 0;
+					row++;
+				}
+			}
+			else {
+				grid->addWidget(widget, row++, column);
+				if (row == maxColumnsOrRows) {
+					row = 0;
+					column++;
+				}
+			}
+		}
 	}
 }

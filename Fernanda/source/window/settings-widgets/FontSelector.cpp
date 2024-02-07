@@ -79,19 +79,21 @@ void FontSelector::setupSampleText()
 
 void FontSelector::sizing()
 {
-	//auto space = 5;
-	//setContentsMargins(space, space, space, space);
+	auto space = 5;
+	setContentsMargins(space, space, space, space);
 
 	QWidgetList boxes = { m_fontsBox, m_sizesBox, m_boldCheck, m_italicCheck };
-	auto top_layout = Layout::box(Layout::Box::Horizontal, boxes);
+	auto top_layout = Layout::box(Layout::Orientation::Horizontal, boxes);
 	top_layout->setStretch(0, 1);
 	top_layout->setStretch(1, 0);
 	top_layout->setStretch(2, 0);
 	top_layout->setStretch(3, 0);
-	//top_layout->setSpacing(8);
 
-	auto layout = Layout::box(Layout::Box::Vertical, this, QObjectList{ top_layout, m_sampleText });
-	//layout->setSpacing(8);
+	auto layout = Layout::box(Layout::Orientation::Vertical, this, QObjectList{ top_layout, m_sampleText });
+
+	space = 8;
+	top_layout->setSpacing(space);
+	layout->setSpacing(space);
 }
 
 void FontSelector::syncFontsBox()

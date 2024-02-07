@@ -39,7 +39,7 @@ void TabControlBox::sizing()
 {
 	QObjectList buttons{ m_addTab, m_scrollLeft, m_scrollRight };
 	QMargins margins(4, 0, 4, 0);
-	Layout::box(Layout::Box::Horizontal, this, buttons, margins);
+	Layout::box(Layout::Orientation::Horizontal, this, buttons, margins);
 
 	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	setFixedHeight(m_tabBar->height());

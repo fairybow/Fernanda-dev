@@ -68,7 +68,7 @@ void Indicator::setup()
 	setupProgressBar();
 	setupTimers();
 	
-	Layout::box(Layout::Box::Vertical, this, QWidgetList{ m_progressBar });
+	Layout::box(Layout::Orientation::Vertical, this, QWidgetList{ m_progressBar });
 }
 
 void Indicator::setupProgressBar()

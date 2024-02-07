@@ -200,7 +200,7 @@ bool Meter::hasAnyCount() const
 void Meter::setup()
 {
 	QWidgetList widgets{ m_positions, m_separator, m_counts, m_refreshCounts };
-	Layout::box(Layout::Box::Horizontal, this, widgets);
+	Layout::box(Layout::Orientation::Horizontal, this, widgets);
 
 	m_separator->setText(SEPARATOR);
 	hideAll();

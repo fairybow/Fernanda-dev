@@ -34,8 +34,8 @@ private:
 
 	void setup()
 	{
-		//auto space = 5;
-		//setContentsMargins(space, space, space, space);
+		auto space = 5;
+		setContentsMargins(space, space, space, space);
 
 		auto button = new QPushButton(BUTTON_TEXT, this);
 
@@ -52,10 +52,10 @@ private:
 
 			});
 
-		auto layout = Layout::box(Layout::Box::Horizontal, this, QObjectList{ button, m_currentPathDisplay });
+		auto layout = Layout::box(Layout::Orientation::Horizontal, this, QWidgetList{ button, m_currentPathDisplay });
 		layout->setStretch(0, 0);
 		layout->setStretch(1, 1);
-		//layout->setSpacing(8);
+		layout->setSpacing(8);
 	}
 
 signals:
