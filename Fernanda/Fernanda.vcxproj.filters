@@ -28,6 +28,9 @@
     <Filter Include="Source\Window\Widgets\Page Area">
       <UniqueIdentifier>{b1ccfa4e-2f85-49b2-be42-79c263393f60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Window\Settings Objects">
+      <UniqueIdentifier>{462c0646-5527-4e0f-85e1-ad65ccc74c72}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="notes\Visual Studio settings.md">
@@ -183,6 +186,9 @@
     </ClInclude>
     <ClInclude Include="source\common\WindowTools.hpp">
       <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\window\settings-objects\Setting.hpp">
+      <Filter>Source\Window\Settings Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

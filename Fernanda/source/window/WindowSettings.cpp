@@ -61,24 +61,23 @@ constexpr char METER_WORDS_SHORT[] = "words";
 constexpr char METER_CHARS_SHORT[] = "chars";
 
 WindowSettings::WindowSettings(const Path& config, QObject* parent)
-	: QObject(parent),
-	m_iniWriter(new IniWriter(config, this))
+	: QObject(parent), m_iniWriter(new IniWriter(config, this))
 {
-	loadAll();
+	loadAllIniValues();
 }
 
 WindowSettings::~WindowSettings()
 {
 	qDebug() << __FUNCTION__;
 
-	saveAll();
+	saveAllIniValues();
 }
 
 void WindowSettings::yoke(Window* window)
 {
 	m_windows << window;
 
-	applyAll(window);
+	applyAllTo(window);
 	window->installEventFilter(this);
 
 	connect(window->m_dockWidget, &QDockWidget::dockLocationChanged, this, [&](Qt::DockWidgetArea area) {
@@ -125,20 +124,20 @@ bool WindowSettings::eventFilter(QObject* watched, QEvent* event)
 	return false;
 }
 
-void WindowSettings::loadAll()
+void WindowSettings::loadAllIniValues()
 {
-	loadDataSettings();
-	loadEditorSettings();
-	loadMeterSettings();
-	loadWindowSettings();
+	loadDataIniValues();
+	loadEditorIniValues();
+	loadMeterIniValues();
+	loadWindowIniValues();
 }
 
-void WindowSettings::loadDataSettings()
+void WindowSettings::loadDataIniValues()
 {
 	m_iniWriter->begin(DATA);
-	QMap<QString, Setting> data_settings;
+	QMap<QString, Setting<Window*>> data_settings;
 	
-	data_settings[PROJECTS] = { loadSetting(PROJECTS, PROJECTS_FALLBACK), this, &WindowSettings::setDataProjectsPath };
+	data_settings[PROJECTS] = { loadIniValue(PROJECTS, PROJECTS_FALLBACK), this, &WindowSettings::setDataProjectsPath };
 
 	//...
 
@@ -146,17 +145,17 @@ void WindowSettings::loadDataSettings()
 	m_iniWriter->end();
 }
 
-void WindowSettings::loadEditorSettings()
+void WindowSettings::loadEditorIniValues()
 {
 	m_iniWriter->begin(EDITOR);
-	QMap<QString, Setting> editor_settings;
+	QMap<QString, Setting<Window*>> editor_settings;
 
-	editor_settings[COS] = { loadSetting(COS, COS_FALLBACK), this, &WindowSettings::setEditorCenterOnScroll };
-	editor_settings[FONT] = { loadSetting(FONT, FONT_FALLBACK), this, &WindowSettings::setEditorFont };
-	editor_settings[TYPEWRITER] = { loadSetting(TYPEWRITER, TYPEWRITER_FALLBACK), this, &WindowSettings::setEditorTypewriter };
+	editor_settings[COS] = { loadIniValue(COS, COS_FALLBACK), this, &WindowSettings::setEditorCenterOnScroll };
+	editor_settings[FONT] = { loadIniValue(FONT, FONT_FALLBACK), this, &WindowSettings::setEditorFont };
+	editor_settings[TYPEWRITER] = { loadIniValue(TYPEWRITER, TYPEWRITER_FALLBACK), this, &WindowSettings::setEditorTypewriter };
 
 	editor_settings[WRAP] = {
-		loadSetting(WRAP, WRAP_FALLBACK),
+		loadIniValue(WRAP, WRAP_FALLBACK),
 		[setting = &editor_settings[WRAP]](Window* window) {
 			auto wrap_mode = static_cast<QTextOption::WrapMode>(setting->value<int>());
 
@@ -184,87 +183,87 @@ void WindowSettings::loadEditorSettings()
 	m_iniWriter->end();
 }
 
-void WindowSettings::loadMeterSettings()
+void WindowSettings::loadMeterIniValues()
 {
 	m_iniWriter->begin(METER);
-	QMap<QString, Setting> meter_settings;
+	QMap<QString, Setting<Window*>> meter_settings;
 
 	meter_settings[LINE_POS] = {
-		loadSetting(LINE_POS, LINE_POS_FALLBACK),
+		loadIniValue(LINE_POS, LINE_POS_FALLBACK),
 		[setting = &meter_settings[LINE_POS]](Window* window) {
 			window->m_meter->setHasLinePosition(setting->value<bool>());
 		}
 	};
 
 	meter_settings[COL_POS] = {
-		loadSetting(COL_POS, COL_POS_FALLBACK),
+		loadIniValue(COL_POS, COL_POS_FALLBACK),
 		[setting = &meter_settings[COL_POS]](Window* window) {
 			window->m_meter->setHasColumnPosition(setting->value<bool>());
 		}
 	};
 
 	meter_settings[LINES] = {
-		loadSetting(LINES, LINES_FALLBACK),
+		loadIniValue(LINES, LINES_FALLBACK),
 		[setting = &meter_settings[LINES]](Window* window) {
 			window->m_meter->setHasLineCount(setting->value<bool>());
 		}
 	};
 
 	meter_settings[WORDS] = {
-		loadSetting(WORDS, WORDS_FALLBACK),
+		loadIniValue(WORDS, WORDS_FALLBACK),
 		[setting = &meter_settings[WORDS]](Window* window) {
 			window->m_meter->setHasWordCount(setting->value<bool>());
 		}
 	};
 
 	meter_settings[CHARS] = {
-		loadSetting(CHARS, CHARS_FALLBACK),
+		loadIniValue(CHARS, CHARS_FALLBACK),
 		[setting = &meter_settings[CHARS]](Window* window) {
 			window->m_meter->setHasCharCount(setting->value<bool>());
 		}
 	};
 
-	meter_settings[POS_LABELS] = { loadSetting(POS_LABELS, POS_LABELS_FALLBACK), this, &WindowSettings::setMeterPositionLabels };
-	meter_settings[COUNT_LABELS] = { loadSetting(COUNT_LABELS, COUNT_LABELS_FALLBACK), this, &WindowSettings::setMeterCountLabels };
-	meter_settings[SHORT_LABELS] = { loadSetting(SHORT_LABELS, SHORT_LABELS_FALLBACK), this, &WindowSettings::setMeterShortLabels };
+	meter_settings[POS_LABELS] = { loadIniValue(POS_LABELS, POS_LABELS_FALLBACK), this, &WindowSettings::setMeterPositionLabels };
+	meter_settings[COUNT_LABELS] = { loadIniValue(COUNT_LABELS, COUNT_LABELS_FALLBACK), this, &WindowSettings::setMeterCountLabels };
+	meter_settings[SHORT_LABELS] = { loadIniValue(SHORT_LABELS, SHORT_LABELS_FALLBACK), this, &WindowSettings::setMeterShortLabels };
 
 	m_settings[METER] = meter_settings;
 	m_iniWriter->end();
 }
 
-void WindowSettings::loadWindowSettings()
+void WindowSettings::loadWindowIniValues()
 {
 	m_iniWriter->begin(WINDOW);
-	QMap<QString, Setting> window_settings;
+	QMap<QString, Setting<Window*>> window_settings;
 
-	window_settings[DOCK_POS] = { loadSetting(DOCK_POS, DOCK_POS_FALLBACK), this, &WindowSettings::setWindowDockPosition };
+	window_settings[DOCK_POS] = { loadIniValue(DOCK_POS, DOCK_POS_FALLBACK), this, &WindowSettings::setWindowDockPosition };
 
 	window_settings[DOCK_VIS] = {
-		loadSetting(DOCK_VIS, DOCK_VIS_FALLBACK),
+		loadIniValue(DOCK_VIS, DOCK_VIS_FALLBACK),
 		[setting = &window_settings[DOCK_VIS]](Window* window) {
 			window->m_dockWidget->setVisible(setting->value<bool>());
 		}
 	};
 
-	window_settings[GEOMETRY] = { loadSetting(GEOMETRY), this, &WindowSettings::setWindowGeometry };
+	window_settings[GEOMETRY] = { loadIniValue(GEOMETRY), this, &WindowSettings::setWindowGeometry };
 
 	m_settings[WINDOW] = window_settings;
 	m_iniWriter->end();
 }
 
-void WindowSettings::saveAll()
+void WindowSettings::saveAllIniValues()
 {
-	saveSettings(DATA, {
+	saveIniValues(DATA, {
 		PROJECTS
 		});
 
-	saveSettings(EDITOR, {
+	saveIniValues(EDITOR, {
 		COS,
 		FONT,
 		TYPEWRITER
 		});
 
-	saveSettings(METER, {
+	saveIniValues(METER, {
 		LINE_POS,
 		COL_POS,
 		LINES,
@@ -275,29 +274,29 @@ void WindowSettings::saveAll()
 		SHORT_LABELS
 		});
 
-	saveSettings(WINDOW, {
+	saveIniValues(WINDOW, {
 		DOCK_POS,
 		DOCK_VIS,
 		GEOMETRY
 		});
 }
 
-void WindowSettings::saveSetting(const QString& prefix, const QString& key)
+void WindowSettings::saveIniValue(const QString& prefix, const QString& key)
 {
 	m_iniWriter->save(iniName(key), variantAt(prefix, key));
 }
 
-void WindowSettings::saveSettings(const QString& prefix, QStringList keys)
+void WindowSettings::saveIniValues(const QString& prefix, QStringList keys)
 {
 	m_iniWriter->begin(prefix);
 
 	for (auto& key : keys)
-		saveSetting(prefix, key);
+		saveIniValue(prefix, key);
 
 	m_iniWriter->end();
 }
 
-QVariant WindowSettings::loadSetting(const QString& key, const QVariant& fallback) const
+QVariant WindowSettings::loadIniValue(const QString& key, const QVariant& fallback) const
 {
 	return m_iniWriter->load(iniName(key), fallback);
 }
@@ -445,17 +444,17 @@ QCheckBox* WindowSettings::newCheckBox(const QString& prefix, const QString& key
 	return check_box;
 }
 
-void WindowSettings::syncUp(const QString& prefix, const QString& key)
+void WindowSettings::applyToAll(const QString& prefix, const QString& key)
 {
 	for (auto& window : m_windows)
-		m_settings[prefix][key].action(window);
+		m_settings[prefix][key].set(window);
 }
 
-void WindowSettings::applyAll(Window* window)
+void WindowSettings::applyAllTo(Window* window)
 {
 	for (auto it = m_settings.begin(); it != m_settings.end(); ++it)
 		for (auto sub_it = it.value().begin(); sub_it != it.value().end(); ++sub_it)
-			sub_it.value().action(window);
+			sub_it.value().set(window);
 }
 
 QVariant WindowSettings::variantAt(const QString& prefix, const QString& key)

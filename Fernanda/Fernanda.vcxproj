@@ -60,6 +60,7 @@
     <ClInclude Include="source\common\Path.hpp" />
     <ClInclude Include="source\common\UiButton.hpp" />
     <ClInclude Include="source\common\WindowTools.hpp" />
+    <ClInclude Include="source\window\settings-objects\Setting.hpp" />
     <QtMoc Include="source\window\widgets\Indicator.h" />
     <QtMoc Include="source\window\settings-widgets\DirectorySelector.hpp" />
     <QtMoc Include="source\window\WindowSettings.h" />
