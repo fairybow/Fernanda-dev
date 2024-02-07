@@ -11,10 +11,10 @@
 
 #include <unordered_map>
 
-constexpr char UI_FONT_QRC_PATH[] = ":/external/material-icons/MaterialIcons-Regular.ttf";
-
 class UiButton : public QToolButton
 {
+	Q_OBJECT
+
 public:
 	enum class Ui {
 		None,
@@ -112,6 +112,8 @@ protected:
 	}
 
 private:
+	static constexpr char UI_FONT_QRC_PATH[] = ":/external/material-icons/MaterialIcons-Regular.ttf";
+
 	QString m_label;
 	QString m_flag;
 	bool m_flagged = false;

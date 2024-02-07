@@ -11,13 +11,13 @@ namespace StringTools
 {
 	namespace
 	{
-		constexpr char PANGRAM_1[] = "How vexingly quick daft zebras jump!";
-		constexpr char PANGRAM_2[] = "Pack my box with five dozen liquor jugs.";
-		constexpr char PANGRAM_3[] = "Sphinx of black quartz, judge my vow.";
-		constexpr char PANGRAM_4[] = "The quick brown fox jumps over the lazy dog.";
-		constexpr char PANGRAM_5[] = "Waltz, bad nymph, for quick jigs vex.";
-		constexpr char REGEX_FORBIDDEN[] = R"((<|>|:|\/|\\|\||\?|\*|\"))";
-		constexpr char REGEX_LEADING_WHITESPACE[] = "(\\s|\\n|\\r|\U00002029|^)+";
+		static constexpr char PANGRAM_1[] = "How vexingly quick daft zebras jump!";
+		static constexpr char PANGRAM_2[] = "Pack my box with five dozen liquor jugs.";
+		static constexpr char PANGRAM_3[] = "Sphinx of black quartz, judge my vow.";
+		static constexpr char PANGRAM_4[] = "The quick brown fox jumps over the lazy dog.";
+		static constexpr char PANGRAM_5[] = "Waltz, bad nymph, for quick jigs vex.";
+		static constexpr char REGEX_FORBIDDEN[] = R"((<|>|:|\/|\\|\||\?|\*|\"))";
+		static constexpr char REGEX_LEADING_WHITESPACE[] = "(\\s|\\n|\\r|\U00002029|^)+";
 	}
 
 	inline QString randomLine(QStringList lines)

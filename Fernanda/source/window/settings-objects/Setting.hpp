@@ -32,11 +32,12 @@ public:
 
 	void set(TSubject subject)
 	{
-		m_setAction(subject);
+		if (m_setAction)
+			m_setAction(subject);
 	}
 
 	template <typename T>
-	T value()
+	T value() const
 	{
 		return m_variant.value<T>();
 	}
@@ -48,8 +49,8 @@ public:
 	}
 
 private:
-	QVariant m_variant;
-	std::function<void(TSubject)> m_setAction;
+	QVariant m_variant = QVariant();
+	std::function<void(TSubject)> m_setAction = std::function<void(TSubject)>();
 	//QList<QVariant> m_pool;
 
 	template <typename TClass>

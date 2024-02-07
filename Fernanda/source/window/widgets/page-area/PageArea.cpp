@@ -1,7 +1,7 @@
 #include "../../../common/Layout.hpp"
 #include "PageArea.h"
 
-constexpr char HIDE_DEFAULT_SCROLLERS[] = "TabBar::scroller{ width: 0px; }";
+static constexpr char HIDE_DEFAULT_SCROLLERS[] = "TabBar::scroller{ width: 0px; }";
 
 PageArea::PageArea(QWidget* parent)
 	: QWidget(parent)

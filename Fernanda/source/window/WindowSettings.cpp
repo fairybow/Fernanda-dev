@@ -12,53 +12,53 @@
 #include <QRect>
 #include <QTextOption>
 
-constexpr char DATA[] = "Data";
-constexpr char PROJECTS[] = "Projects path";
-const auto PROJECTS_FALLBACK = Path::system(Path::System::Documents) / "Fernanda";
+static constexpr char DATA[] = "Data";
+static constexpr char PROJECTS[] = "Projects path";
+static const auto PROJECTS_FALLBACK = Path::system(Path::System::Documents) / "Fernanda";
 
-constexpr char EDITOR[] = "Editor";
-constexpr char COS[] = "Center on scroll";
-constexpr bool COS_FALLBACK = false;
-constexpr char FONT[] = "Font";
-const auto FONT_FALLBACK = QFont("mononoki", 12);
-//constexpr char TAB_STOP[] = "Tab stop distance (px)";
-//constexpr int TAB_STOP_FALLBACK = 40;
-constexpr char TYPEWRITER[] = "Typewriter";
-constexpr bool TYPEWRITER_FALLBACK = false;
-constexpr char WRAP[] = "Wrap";
-const auto WRAP_FALLBACK = static_cast<int>(QTextOption::WrapAtWordBoundaryOrAnywhere);
+static constexpr char EDITOR[] = "Editor";
+static constexpr char COS[] = "Center on scroll";
+static constexpr bool COS_FALLBACK = false;
+static constexpr char FONT[] = "Font";
+static const auto FONT_FALLBACK = QFont("mononoki", 12);
+//static constexpr char TAB_STOP[] = "Tab stop distance (px)";
+//static constexpr int TAB_STOP_FALLBACK = 40;
+static constexpr char TYPEWRITER[] = "Typewriter";
+static constexpr bool TYPEWRITER_FALLBACK = false;
+static constexpr char WRAP[] = "Wrap";
+static const auto WRAP_FALLBACK = static_cast<int>(QTextOption::WrapAtWordBoundaryOrAnywhere);
 
-constexpr char METER[] = "Meter";
-constexpr char LINE_POS[] = "Line position";
-constexpr bool LINE_POS_FALLBACK = true;
-constexpr char COL_POS[] = "Column position";
-constexpr bool COL_POS_FALLBACK = true;
-constexpr char LINES[] = "Line count";
-constexpr bool LINES_FALLBACK = false;
-constexpr char WORDS[] = "Word count";
-constexpr bool WORDS_FALLBACK = false;
-constexpr char CHARS[] = "Character count";
-constexpr bool CHARS_FALLBACK = false;
-constexpr char POS_LABELS[] = "Position labels";
-constexpr bool POS_LABELS_FALLBACK = true;
-constexpr char COUNT_LABELS[] = "Count labels";
-constexpr bool COUNT_LABELS_FALLBACK = true;
-constexpr char SHORT_LABELS[] = "Use short labels";
-constexpr bool SHORT_LABELS_FALLBACK = true;
+static constexpr char METER[] = "Meter";
+static constexpr char LINE_POS[] = "Line position";
+static constexpr bool LINE_POS_FALLBACK = true;
+static constexpr char COL_POS[] = "Column position";
+static constexpr bool COL_POS_FALLBACK = true;
+static constexpr char LINES[] = "Line count";
+static constexpr bool LINES_FALLBACK = false;
+static constexpr char WORDS[] = "Word count";
+static constexpr bool WORDS_FALLBACK = false;
+static constexpr char CHARS[] = "Character count";
+static constexpr bool CHARS_FALLBACK = false;
+static constexpr char POS_LABELS[] = "Position labels";
+static constexpr bool POS_LABELS_FALLBACK = true;
+static constexpr char COUNT_LABELS[] = "Count labels";
+static constexpr bool COUNT_LABELS_FALLBACK = true;
+static constexpr char SHORT_LABELS[] = "Use short labels";
+static constexpr bool SHORT_LABELS_FALLBACK = true;
 
-constexpr char WINDOW[] = "Window";
-constexpr char DOCK_POS[] = "Dock position";
-const auto DOCK_POS_FALLBACK = static_cast<int>(Qt::LeftDockWidgetArea);
-constexpr char DOCK_VIS[] = "Dock visibile";
-constexpr bool DOCK_VIS_FALLBACK = true;
-constexpr char GEOMETRY[] = "Geometry";
+static constexpr char WINDOW[] = "Window";
+static constexpr char DOCK_POS[] = "Dock position";
+static const auto DOCK_POS_FALLBACK = static_cast<int>(Qt::LeftDockWidgetArea);
+static constexpr char DOCK_VIS[] = "Dock visibile";
+static constexpr bool DOCK_VIS_FALLBACK = true;
+static constexpr char GEOMETRY[] = "Geometry";
 
-constexpr char INI_FILLER[] = "_";
-constexpr char METER_LINE_POS_SHORT[] = "ln";
-constexpr char METER_COL_POS_SHORT[] = "col";
-constexpr char METER_LINES_SHORT[] = "lines";
-constexpr char METER_WORDS_SHORT[] = "words";
-constexpr char METER_CHARS_SHORT[] = "chars";
+static constexpr char INI_FILLER[] = "_";
+static constexpr char METER_LINE_POS_SHORT[] = "ln";
+static constexpr char METER_COL_POS_SHORT[] = "col";
+static constexpr char METER_LINES_SHORT[] = "lines";
+static constexpr char METER_WORDS_SHORT[] = "words";
+static constexpr char METER_CHARS_SHORT[] = "chars";
 
 WindowSettings::WindowSettings(const Path& config, QObject* parent)
 	: QObject(parent), m_iniWriter(new IniWriter(config, this))
@@ -124,109 +124,55 @@ bool WindowSettings::eventFilter(QObject* watched, QEvent* event)
 	return false;
 }
 
+QString WindowSettings::iniName(QString text) const
+{
+	return text.replace(" ", INI_FILLER).toLower();
+}
+
 void WindowSettings::loadAllIniValues()
 {
-	loadDataIniValues();
-	loadEditorIniValues();
-	loadMeterIniValues();
-	loadWindowIniValues();
+	loadIniValues(DATA, {
+		SettingInfo(PROJECTS, PROJECTS_FALLBACK, &WindowSettings::setDataProjectsPath)
+		});
+
+	loadIniValues(EDITOR, {
+		SettingInfo(COS, COS_FALLBACK, &WindowSettings::setEditorCenterOnScroll),
+		SettingInfo(FONT, FONT_FALLBACK, &WindowSettings::setEditorFont),
+		SettingInfo(TYPEWRITER, TYPEWRITER_FALLBACK, &WindowSettings::setEditorTypewriter),
+		SettingInfo(WRAP, WRAP_FALLBACK, &WindowSettings::setEditorWrap)
+		});
+
+	loadIniValues(METER, {
+		SettingInfo(LINE_POS, LINE_POS_FALLBACK, &WindowSettings::setMeterLinePosition),
+		SettingInfo(COL_POS, COL_POS_FALLBACK, &WindowSettings::setMeterColumnPosition),
+		SettingInfo(LINES, LINES_FALLBACK, &WindowSettings::setMeterLineCount),
+		SettingInfo(WORDS, WORDS_FALLBACK, &WindowSettings::setMeterWordCount),
+		SettingInfo(CHARS, CHARS_FALLBACK, &WindowSettings::setMeterCharCount),
+		SettingInfo(POS_LABELS, POS_LABELS_FALLBACK, &WindowSettings::setMeterPositionLabels),
+		SettingInfo(COUNT_LABELS, COUNT_LABELS_FALLBACK, &WindowSettings::setMeterCountLabels),
+		SettingInfo(SHORT_LABELS, SHORT_LABELS_FALLBACK, &WindowSettings::setMeterShortLabels)
+		});
+
+	loadIniValues(WINDOW, {
+		SettingInfo(DOCK_POS, DOCK_POS_FALLBACK, &WindowSettings::setWindowDockPosition),
+		SettingInfo(DOCK_VIS, DOCK_VIS_FALLBACK, &WindowSettings::setWindowDockVisibility),
+		SettingInfo(GEOMETRY, &WindowSettings::setWindowGeometry)
+		});
 }
 
-void WindowSettings::loadDataIniValues()
+void WindowSettings::loadIniValues(const QString& prefix, QList<SettingInfo> infos)
 {
-	m_iniWriter->begin(DATA);
-	QMap<QString, Setting<Window*>> map;
-	
-	addSetting(map, PROJECTS, PROJECTS_FALLBACK, &WindowSettings::setDataProjectsPath);
+	m_iniWriter->begin(iniName(prefix));
+	QHash<QString, Setting<Window*>> hash;
 
-	m_settings[DATA] = map;
-	m_iniWriter->end();
-}
+	for (auto& info : infos) {
+		auto& key = info.key;
+		auto variant = m_iniWriter->load(iniName(key), info.fallback);
 
-void WindowSettings::loadEditorIniValues()
-{
-	m_iniWriter->begin(EDITOR);
-	QMap<QString, Setting<Window*>> map;
+		hash[key] = Setting<Window*>(variant, this, info.action);
+	}
 
-	addSetting(map, COS, COS_FALLBACK, &WindowSettings::setEditorCenterOnScroll);
-	addSetting(map, FONT, FONT_FALLBACK, &WindowSettings::setEditorFont);
-	addSetting(map, TYPEWRITER, TYPEWRITER_FALLBACK, &WindowSettings::setEditorTypewriter);
-
-	addSetting(map, WRAP, WRAP_FALLBACK, [setting = &map[WRAP]](Window* window) {
-		
-		auto wrap_mode = static_cast<QTextOption::WrapMode>(setting->value<int>());
-
-		if (wrap_mode == QTextOption::ManualWrap) {
-			setting->setValue(static_cast<int>(QTextOption::NoWrap));
-			wrap_mode = QTextOption::NoWrap;
-		}
-
-		/* UNFINISHED */
-
-		/*Need a way to reset to fallback if int != an enum value?*/
-
-		/*Pool only needed to compare against and populate drop downs.*/
-
-		/*Need an isInPool() function to replace some of these checks, like the above.*/
-
-		window->m_editorsWrapPolicy = wrap_mode;
-
-		for (auto& editor : window->editors())
-			editor->setWordWrapMode(wrap_mode);
-
-		});
-
-	m_settings[EDITOR] = map;
-	m_iniWriter->end();
-}
-
-void WindowSettings::loadMeterIniValues()
-{
-	m_iniWriter->begin(METER);
-	QMap<QString, Setting<Window*>> map;
-
-	addSetting(map, LINE_POS, LINE_POS_FALLBACK, [setting = &map[LINE_POS]](Window* window) {
-		window->m_meter->setHasLinePosition(setting->value<bool>());
-		});
-
-	addSetting(map, COL_POS, COL_POS_FALLBACK, [setting = &map[COL_POS]](Window* window) {
-		window->m_meter->setHasColumnPosition(setting->value<bool>());
-		});
-
-	addSetting(map, LINES, LINES_FALLBACK, [setting = &map[LINES]](Window* window) {
-		window->m_meter->setHasLineCount(setting->value<bool>());
-		});
-
-	addSetting(map, WORDS, WORDS_FALLBACK, [setting = &map[WORDS]](Window* window) {
-		window->m_meter->setHasWordCount(setting->value<bool>());
-		});
-
-	addSetting(map, CHARS, CHARS_FALLBACK, [setting = &map[CHARS]](Window* window) {
-		window->m_meter->setHasCharCount(setting->value<bool>());
-		});
-
-	addSetting(map, POS_LABELS, POS_LABELS_FALLBACK, &WindowSettings::setMeterPositionLabels);
-	addSetting(map, COUNT_LABELS, COUNT_LABELS_FALLBACK, &WindowSettings::setMeterCountLabels);
-	addSetting(map, SHORT_LABELS, SHORT_LABELS_FALLBACK, &WindowSettings::setMeterShortLabels);
-
-	m_settings[METER] = map;
-	m_iniWriter->end();
-}
-
-void WindowSettings::loadWindowIniValues()
-{
-	m_iniWriter->begin(WINDOW);
-	QMap<QString, Setting<Window*>> map;
-
-	addSetting(map, DOCK_POS, DOCK_POS_FALLBACK, &WindowSettings::setWindowDockPosition);
-
-	addSetting(map, DOCK_VIS, DOCK_VIS_FALLBACK, [setting = &map[DOCK_VIS]](Window* window) {
-		window->m_dockWidget->setVisible(setting->value<bool>());
-		});
-
-	addSetting(map, GEOMETRY, &WindowSettings::setWindowGeometry);
-
-	m_settings[WINDOW] = map;
+	m_settings[prefix] = hash;
 	m_iniWriter->end();
 }
 
@@ -260,29 +206,14 @@ void WindowSettings::saveAllIniValues()
 		});
 }
 
-void WindowSettings::saveIniValue(const QString& prefix, const QString& key)
-{
-	m_iniWriter->save(iniName(key), variantAt(prefix, key));
-}
-
 void WindowSettings::saveIniValues(const QString& prefix, QStringList keys)
 {
-	m_iniWriter->begin(prefix);
+	m_iniWriter->begin(iniName(prefix));
 
 	for (auto& key : keys)
-		saveIniValue(prefix, key);
+		m_iniWriter->save(iniName(key), variantAt(prefix, key));
 
 	m_iniWriter->end();
-}
-
-QVariant WindowSettings::loadIniValue(const QString& key, const QVariant& fallback) const
-{
-	return m_iniWriter->load(iniName(key), fallback);
-}
-
-QString WindowSettings::iniName(QString text) const
-{
-	return text.replace(" ", INI_FILLER);
 }
 
 void WindowSettings::applyToAll(const QString& prefix, const QString& key)
@@ -358,6 +289,55 @@ void WindowSettings::setEditorTypewriter(Window* window)
 		editor->setIsTypewriter(is_typewriter);
 }
 
+void WindowSettings::setEditorWrap(Window* window)
+{
+	auto& setting = m_settings[EDITOR][WRAP];
+	auto wrap_mode = static_cast<QTextOption::WrapMode>(setting.value<int>());
+
+	if (wrap_mode == QTextOption::ManualWrap) {
+		setting.setValue(static_cast<int>(QTextOption::NoWrap));
+		wrap_mode = QTextOption::NoWrap;
+	}
+
+	/* UNFINISHED */
+
+	/*Need a way to reset to fallback if int != an enum value?*/
+
+	/*Pool only needed to compare against and populate drop downs.*/
+
+	/*Need an isInPool() function to replace some of these checks, like the above.*/
+
+	window->m_editorsWrapPolicy = wrap_mode;
+
+	for (auto& editor : window->editors())
+		editor->setWordWrapMode(wrap_mode);
+}
+
+void WindowSettings::setMeterLinePosition(Window* window)
+{
+	window->m_meter->setHasLinePosition(valueAt<bool>(METER, LINE_POS));
+}
+
+void WindowSettings::setMeterColumnPosition(Window* window)
+{
+	window->m_meter->setHasColumnPosition(valueAt<bool>(METER, COL_POS));
+}
+
+void WindowSettings::setMeterLineCount(Window* window)
+{
+	window->m_meter->setHasLineCount(valueAt<bool>(METER, LINES));
+}
+
+void WindowSettings::setMeterWordCount(Window* window)
+{
+	window->m_meter->setHasWordCount(valueAt<bool>(METER, WORDS));
+}
+
+void WindowSettings::setMeterCharCount(Window* window)
+{
+	window->m_meter->setHasCharCount(valueAt<bool>(METER, CHARS));
+}
+
 void WindowSettings::setMeterPositionLabels(Window* window)
 {
 	auto& setting = m_settings[METER][POS_LABELS];
@@ -401,6 +381,11 @@ void WindowSettings::setWindowDockPosition(Window* window)
 	}
 
 	window->addDockWidget(area, window->m_dockWidget);
+}
+
+void WindowSettings::setWindowDockVisibility(Window* window)
+{
+	window->m_dockWidget->setVisible(valueAt<bool>(WINDOW, DOCK_VIS));
 }
 
 void WindowSettings::setWindowGeometry(Window* window)

@@ -6,7 +6,7 @@
 
 // FontTools? (Containing metrics, sizes, etc.)
 
-constexpr int SIZES[] = { 144, 72, 48, 36, 28, 26, 24, 22, 20, 18, 16, 14, 12, 11, 10, 9, 8, 6 };
+static constexpr int SIZES[] = { 144, 72, 48, 36, 28, 26, 24, 22, 20, 18, 16, 14, 12, 11, 10, 9, 8, 6 };
 
 FontSelector::FontSelector(QWidget* parent, const QFont& initialFont)
 	: QWidget(parent), m_currentFont(initialFont)

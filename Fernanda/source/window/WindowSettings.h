@@ -9,14 +9,11 @@
 #include <QDialog>
 #include <QEvent>
 #include <QGroupBox>
+#include <QHash>
 #include <QList>
-#include <QMap>
 #include <QMargins>
 #include <QString>
 #include <QVariant>
-
-#include <functional>
-#include <type_traits>
 
 class WindowSettings : public QObject
 {
@@ -32,26 +29,31 @@ public:
 	bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
-	/*enum class AppendPrefix {
-		No,
-		Yes
-	};*/
+	struct SettingInfo {
+		// How to handle lambda/std::function?
+		QString key;
+		QVariant fallback;
+		void(WindowSettings::* action)(Window*);
+
+		SettingInfo(const QString& key, const QVariant& fallback, void(WindowSettings::* action)(Window*))
+			: key(key), fallback(fallback), action(action)
+		{}
+
+		SettingInfo(const QString& key, void(WindowSettings::* action)(Window*))
+			: SettingInfo(key, QVariant(), action)
+		{}
+	};
 
 	IniWriter* m_iniWriter;
 	QDialog* m_dialog = nullptr;
 	QList<Window*> m_windows;
-	QMap<QString, QMap<QString, Setting<Window*>>> m_settings;
+	QHash<QString, QHash<QString, Setting<Window*>>> m_settings;
 
-	void loadAllIniValues();
-	void loadDataIniValues();
-	void loadEditorIniValues();
-	void loadMeterIniValues();
-	void loadWindowIniValues();
-	void saveAllIniValues();
-	void saveIniValue(const QString& prefix, const QString& key);
-	void saveIniValues(const QString& prefix, QStringList keys);
-	QVariant loadIniValue(const QString& key, const QVariant& fallback = QVariant()) const;
 	QString iniName(QString text) const;
+	void loadAllIniValues();
+	void loadIniValues(const QString& prefix, QList<SettingInfo> infos);
+	void saveAllIniValues();
+	void saveIniValues(const QString& prefix, QStringList keys);
 
 	void applyToAll(const QString& prefix, const QString& key);
 	void applyAllTo(Window* window);
@@ -61,10 +63,17 @@ private:
 	void setEditorCenterOnScroll(Window* window);
 	void setEditorFont(Window* window);
 	void setEditorTypewriter(Window* window);
+	void setEditorWrap(Window* window);
+	void setMeterLinePosition(Window* window);
+	void setMeterColumnPosition(Window* window);
+	void setMeterLineCount(Window* window);
+	void setMeterWordCount(Window* window);
+	void setMeterCharCount(Window* window);
 	void setMeterPositionLabels(Window* window);
 	void setMeterCountLabels(Window* window);
 	void setMeterShortLabels(Window* window);
 	void setWindowDockPosition(Window* window);
+	void setWindowDockVisibility(Window* window);
 	void setWindowGeometry(Window* window);
 
 	void setupDialog(QDialog* dialog);
@@ -74,21 +83,6 @@ private:
 	QGroupBox* newFontBox(QDialog* dialog, const QMargins& margins, int spacing);
 	QGroupBox* newMeterBox(QDialog* dialog, const QMargins& margins, int spacing);
 	QCheckBox* newCheckBox(const QString& prefix, const QString& key, QWidget* parent);
-
-	template<typename T>
-	void addSetting(QMap<QString, Setting<Window*>>& map, const QString& key, const QVariant& fallback, T action)
-	{
-		if constexpr (std::is_same_v<T, void(WindowSettings::*)(Window*)>)
-			map[key] = { loadIniValue(key, fallback), this, action };
-		else
-			map[key] = { loadIniValue(key, fallback), action };
-	}
-
-	template<typename T>
-	void addSetting(QMap<QString, Setting<Window*>>& map, const QString& key, T action)
-	{
-		addSetting<T>(map, key, QVariant(), action);
-	}
 
 	template <typename T>
 	void passiveApply(const QString& prefix, const QString& key, const T& value)

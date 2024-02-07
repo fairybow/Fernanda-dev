@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="external\External.qrc" />
+    <QtRcc Include="resources\icons\Icons.qrc" />
     <QtRcc Include="resources\test\Test.qrc" />
   </ItemGroup>
   <ItemGroup>
@@ -58,7 +59,7 @@
     <ClInclude Include="source\common\Layout.hpp" />
     <ClInclude Include="source\common\StringTools.hpp" />
     <ClInclude Include="source\common\Path.hpp" />
-    <ClInclude Include="source\common\UiButton.hpp" />
+    <QtMoc Include="source\common\UiButton.hpp" />
     <ClInclude Include="source\common\WindowTools.hpp" />
     <ClInclude Include="source\window\settings-objects\Setting.hpp" />
     <QtMoc Include="source\window\widgets\Indicator.h" />

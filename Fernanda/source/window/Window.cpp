@@ -6,7 +6,7 @@
 #include <QStatusBar>
 #include <QTextBlock>
 
-constexpr char LOGO_QRC_PATH[] = ":/test/Fernanda_64.png";
+static constexpr char LOGO_QRC_PATH[] = ":/icons/Fernanda_64.png";
 
 Window::Window()
 	: QMainWindow()

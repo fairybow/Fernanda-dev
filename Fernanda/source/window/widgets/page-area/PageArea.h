@@ -6,9 +6,9 @@
 #include "TabControlBox.h"
 
 #include <QDebug>
+#include <QHash>
 #include <QLabel>
 #include <QList>
-#include <QMap>
 #include <QPixmap>
 #include <QString>
 #include <QVariant>
@@ -63,7 +63,7 @@ private:
 	PageAreaStack* m_widgetsStack = new PageAreaStack;
 	QLabel* m_underlay = new QLabel;
 	QWidgetList m_widgets;
-	QMap<QWidget*, QVariant> m_data;
+	QHash<QWidget*, QVariant> m_data;
 	bool m_hasScrolls = true;
 
 	void setup();

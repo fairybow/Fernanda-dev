@@ -6,15 +6,15 @@
 #include <QStatusBar>
 #include <QTimeLine>
 
-constexpr int DEFAULT_HEIGHT = 3;
-constexpr int FILL_TIME = 300;
-constexpr int HOLD_TIME = 1500;
-constexpr int MAX_DELAY = 3000;
-constexpr int MAX_RANGE = 100;
-constexpr int MIN_RANGE = 0;
-constexpr int RESIZE_INTERVAL = 0;
+static constexpr int DEFAULT_HEIGHT = 3;
+static constexpr int FILL_TIME = 300;
+static constexpr int HOLD_TIME = 1500;
+static constexpr int MAX_DELAY = 3000;
+static constexpr int MAX_RANGE = 100;
+static constexpr int MIN_RANGE = 0;
+static constexpr int RESIZE_INTERVAL = 0;
 
-constexpr char QSS_FORMAT[] = "\
+static constexpr char QSS_FORMAT[] = "\
 QProgressBar::chunk \
 { \
 	background: qlineargradient( \

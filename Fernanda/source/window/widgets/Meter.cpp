@@ -10,13 +10,13 @@
 #include <QTextCursor>
 #include <QTextDocumentFragment>
 
-constexpr char LINE_POS_LABEL[] = "line";
-constexpr char COL_POS_LABEL[] = "column";
-constexpr char LINES_LABEL[] = "lines";
-constexpr char WORDS_LABEL[] = "words";
-constexpr char CHARS_LABEL[] = "characters";
-constexpr char SEPARATOR[] = " / ";
-constexpr char JOINER[] = ", ";
+static constexpr char LINE_POS_LABEL[] = "line";
+static constexpr char COL_POS_LABEL[] = "column";
+static constexpr char LINES_LABEL[] = "lines";
+static constexpr char WORDS_LABEL[] = "words";
+static constexpr char CHARS_LABEL[] = "characters";
+static constexpr char SEPARATOR[] = " / ";
+static constexpr char JOINER[] = ", ";
 
 Meter::Meter(QWidget* parent, int autoCountCharLimit)
 	: QWidget(parent), m_autoCountCharLimit(autoCountCharLimit)

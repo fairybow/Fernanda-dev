@@ -51,6 +51,9 @@
     <QtRcc Include="resources\test\Test.qrc">
       <Filter>Resources</Filter>
     </QtRcc>
+    <QtRcc Include="resources\icons\Icons.qrc">
+      <Filter>Resources</Filter>
+    </QtRcc>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Resources.rc">
@@ -155,6 +158,9 @@
     <QtMoc Include="source\window\widgets\Indicator.h">
       <Filter>Source\Window\Widgets</Filter>
     </QtMoc>
+    <QtMoc Include="source\common\UiButton.hpp">
+      <Filter>Source\Common</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\Connect.hpp">
@@ -170,9 +176,6 @@
       <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="source\common\Layout.hpp">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\UiButton.hpp">
       <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="source\common\StringTools.hpp">
